@@ -1,0 +1,174 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{% if problem_category %}
+Edit Problem Category
+{% else %}
+Add Problem Category
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+
+                    {% if problem_category %}
+                    Edit Problem Category
+                    {% else %}
+                    Add Problem Category
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        Master Data
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('problem_category.index') }}">
+
+                            Problem Category
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if problem_category %}
+                        Edit
+                        {% else %}
+                        Add
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-tags mr-2"></i>
+
+                    {% if problem_category %}
+                    Edit Problem Category
+                    {% else %}
+                    Add Problem Category
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+            <form id="problem-category-form" method="POST" class="needs-validation" novalidate>
+
+                <div class="card-body">
+
+                    <div class="form-group">
+
+                        <label>Problem Category Code</label>
+
+                        <input type="text" name="problem_category_code" class="form-control" maxlength="20" required
+                            data-label="Problem Category Code"
+                            value="{{ problem_category.problem_category_code if problem_category else '' }}" {% if
+                            problem_category %}readonly{% endif %}>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Problem Category Name</label>
+
+                        <input type="text" name="problem_category_name" class="form-control" maxlength="100" required
+                            data-label="Problem Category Name"
+                            value="{{ problem_category.problem_category_name if problem_category else '' }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Description</label>
+
+                        <textarea name="description" class="form-control"
+                            rows="3">{{ problem_category.description if problem_category else '' }}</textarea>
+                        </textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <button type="submit" class="btn btn-primary">
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+                    <a href="{{ url_for('problem_category.index') }}" class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

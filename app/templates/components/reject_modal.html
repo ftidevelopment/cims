@@ -1,0 +1,137 @@
+<!-- ==================================================
+     REJECT MODAL
+================================================== -->
+
+<div
+    class="modal fade"
+    id="rejectModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="rejectModalLabel"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal-dialog"
+        role="document"
+    >
+
+        <div class="modal-content">
+
+
+            <!-- ==========================================
+                 HEADER
+            =========================================== -->
+
+            <div class="modal-header bg-danger">
+
+                <h5
+                    class="modal-title text-white"
+                    id="rejectModalLabel"
+                >
+
+                    <i class="fas fa-times-circle mr-1"></i>
+
+                    Reject Kaizen
+
+                </h5>
+
+
+                <button
+                    type="button"
+                    class="close text-white"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- ==========================================
+                 FORM
+            =========================================== -->
+
+            <form
+                id="rejectModalForm"
+                method="POST"
+            >
+
+                <div class="modal-body">
+
+                    <p>
+                        Please enter the reason for rejecting this Kaizen.
+                    </p>
+
+
+                    <div class="form-group">
+
+                        <label for="rejection_reason">
+
+                            Rejection Reason
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <textarea
+                            id="rejection_reason"
+                            name="rejection_reason"
+                            class="form-control"
+                            rows="5"
+                            required
+                            placeholder="Enter rejection reason..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     FOOTER
+                =========================================== -->
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                    >
+
+                        <i class="fas fa-times mr-1"></i>
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+
+                        <i class="fas fa-times-circle mr-1"></i>
+
+                        Reject Kaizen
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

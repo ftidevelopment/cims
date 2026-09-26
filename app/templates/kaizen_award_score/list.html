@@ -1,0 +1,732 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Kaizen Award Scoring
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ================================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h1 class="h3 mb-0">
+                Kaizen Award Scoring
+            </h1>
+
+            <small class="text-muted">
+                Judge scoring for Kaizen Award
+            </small>
+        </div>
+
+        <div>
+
+            <a href="{{ url_for(
+                'kaizen_award_period.index'
+            ) }}" class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Award Period
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- AWARD PERIOD INFORMATION -->
+    <!-- ================================================== -->
+
+    <div class="card card-primary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-trophy"></i>
+
+                Award Period
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Award Code -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Award Code
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.award_code }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Award Name -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Award Name
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.award_name }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Start Date -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Start Date
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.start_date }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- End Date -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        End Date
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.end_date }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- SCORING INFORMATION -->
+    <!-- ================================================== -->
+
+    <div class="card card-info">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-user-tie"></i>
+
+                Judge
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Employee
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ current_user.nik }}
+                        -
+                        {{ current_user.full_name }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Department
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ current_user.department_name }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Role
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ current_user.role_name }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- KAIZEN LIST -->
+    <!-- ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-list"></i>
+
+                Kaizen to Score
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            {% if kaizens %}
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th
+                                style="width: 60px;"
+                                class="text-center"
+                            >
+                                No.
+                            </th>
+
+                            <th>
+                                Kaizen No.
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Title
+                            </th>
+
+                            <th
+                                class="text-center"
+                                style="width: 120px;"
+                            >
+                                Judges Scored
+                            </th>
+
+                            <th
+                                class="text-end"
+                                style="width: 120px;"
+                            >
+                                Total Score
+                            </th>
+
+                            <th
+                                class="text-end"
+                                style="width: 120px;"
+                            >
+                                Average Score
+                            </th>
+
+                            <th
+                                class="text-end"
+                                style="width: 100px;"
+                            >
+                                My Score
+                            </th>
+
+                            <th
+                                class="text-center"
+                                style="width: 100px;"
+                            >
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for kaizen in kaizens %}
+
+                        {% set summary = score_summary_map.get(kaizen.id) %}
+
+                        {% set current_score = score_map.get(kaizen.id) %}
+
+
+                        <tr>
+
+                            <!-- ================================================== -->
+                            <!-- No -->
+                            <!-- ================================================== -->
+
+                            <td class="text-center">
+
+                                {{ pagination.first + loop.index0 }}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Kaizen No -->
+                            <!-- ================================================== -->
+
+                            <td>
+
+                                <strong>
+                                    {{ kaizen.kaizen_no }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Category -->
+                            <!-- ================================================== -->
+
+                            <td>
+
+                                {% if kaizen.kaizen_category %}
+
+                                    {{ kaizen.kaizen_category.kaizen_category_name }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Department -->
+                            <!-- ================================================== -->
+
+                            <td>
+
+                                {% if kaizen.department %}
+
+                                    {{ kaizen.department.department_name }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Title -->
+                            <!-- ================================================== -->
+
+                            <td>
+
+                                {{ kaizen.title }}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Judges Scored -->
+                            <!-- ================================================== -->
+
+                            <td class="text-center">
+
+                                {% if summary %}
+
+                                    {{ summary.judges_scored }}
+
+                                {% else %}
+
+                                    0
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Total Score -->
+                            <!-- ================================================== -->
+
+                            <td class="text-end">
+
+                                {% if summary %}
+
+                                    <strong>
+                                        {{ "%.2f"|format(summary.total_score) }}
+                                    </strong>
+
+                                {% else %}
+
+                                    <strong>
+                                        0.00
+                                    </strong>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Average Score -->
+                            <!-- ================================================== -->
+
+                            <td class="text-end">
+
+                                {% if summary %}
+
+                                    {{ "%.2f"|format(summary.average_score) }}
+
+                                {% else %}
+
+                                    0.00
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- My Score -->
+                            <!-- ================================================== -->
+
+                            <td class="text-end">
+
+                                {% if current_score %}
+
+                                    <span class="badge badge-success">
+
+                                        {{ "%.2f"|format(current_score.score) }}
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ================================================== -->
+                            <!-- Action -->
+                            <!-- ================================================== -->
+
+                            <td class="text-center">
+
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen_award_score.score',
+                                        award_period_id=award_period.id,
+                                        kaizen_id=kaizen.id
+                                    ) }}"
+                                    class="btn btn-sm btn-primary"
+                                    title="Score Kaizen"
+                                >
+
+                                    <i class="fas fa-star"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ================================================== -->
+            <!-- PAGINATION -->
+            <!-- ================================================== -->
+
+            {% if pagination.pages > 1 %}
+
+                <div class="d-flex justify-content-between align-items-center p-3">
+
+                    <!-- Showing Information -->
+
+                    <div class="text-muted">
+
+                        Showing
+                        {{ pagination.first }}
+                        -
+                        {{ pagination.last }}
+                        of
+                        {{ pagination.total }}
+                        Kaizen
+
+                    </div>
+
+
+                    <!-- Pagination -->
+
+                    <nav>
+
+                        <ul class="pagination pagination-sm mb-0">
+
+
+                            <!-- ================================================== -->
+                            <!-- Previous -->
+                            <!-- ================================================== -->
+
+                            {% if pagination.has_prev %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="{{ url_for(
+                                            'kaizen_award_score.index',
+                                            award_period_id=award_period.id,
+                                            page=pagination.prev_num,
+                                            per_page=pagination.per_page
+                                        ) }}"
+                                    >
+
+                                        Previous
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+
+                                        Previous
+
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+
+                            <!-- ================================================== -->
+                            <!-- Page Numbers -->
+                            <!-- ================================================== -->
+
+                            {% for page_num in pagination.iter_pages(
+                                left_edge=1,
+                                right_edge=1,
+                                left_current=2,
+                                right_current=2
+                            ) %}
+
+
+                                {% if page_num %}
+
+
+                                    {% if page_num == pagination.page %}
+
+                                        <li class="page-item active">
+
+                                            <span class="page-link">
+
+                                                {{ page_num }}
+
+                                            </span>
+
+                                        </li>
+
+                                    {% else %}
+
+                                        <li class="page-item">
+
+                                            <a
+                                                class="page-link"
+                                                href="{{ url_for(
+                                                    'kaizen_award_score.index',
+                                                    award_period_id=award_period.id,
+                                                    page=page_num,
+                                                    per_page=pagination.per_page
+                                                ) }}"
+                                            >
+
+                                                {{ page_num }}
+
+                                            </a>
+
+                                        </li>
+
+                                    {% endif %}
+
+
+                                {% else %}
+
+                                    <li class="page-item disabled">
+
+                                        <span class="page-link">
+
+                                            ...
+
+                                        </span>
+
+                                    </li>
+
+                                {% endif %}
+
+
+                            {% endfor %}
+
+
+                            <!-- ================================================== -->
+                            <!-- Next -->
+                            <!-- ================================================== -->
+
+                            {% if pagination.has_next %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="{{ url_for(
+                                            'kaizen_award_score.index',
+                                            award_period_id=award_period.id,
+                                            page=pagination.next_num,
+                                            per_page=pagination.per_page
+                                        ) }}"
+                                    >
+
+                                        Next
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+
+                                        Next
+
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+            {% endif %}
+
+
+            {% else %}
+
+            <!-- ================================================== -->
+            <!-- NO DATA -->
+            <!-- ================================================== -->
+
+            <div class="text-center p-5">
+
+                <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
+
+                <h5>
+                    No Kaizen Found
+                </h5>
+
+                <p class="text-muted mb-0">
+
+                    There is no Kaizen registered
+                    for this Award Period.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

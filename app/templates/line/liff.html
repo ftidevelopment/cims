@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CIMS - Connect LINE</title>
+
+    <!-- ==================================================
+         LINE LIFF SDK
+         ================================================== -->
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            padding: 20px;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #f5f6f8;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+        }
+
+
+        .container {
+
+            width: 100%;
+
+            max-width: 420px;
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            padding: 30px 24px;
+
+            box-shadow:
+                0 4px 20px rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+
+            text-align: center;
+
+        }
+
+
+        .logo {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            background: #06c755;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #ffffff;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+        }
+
+
+        h1 {
+
+            margin: 0 0 10px;
+
+            font-size: 24px;
+
+            color: #222222;
+
+        }
+
+
+        .subtitle {
+
+            margin-bottom: 25px;
+
+            color: #666666;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .employee-card {
+
+            background: #f7f8fa;
+
+            border-radius: 10px;
+
+            padding: 15px;
+
+            margin-bottom: 20px;
+
+            text-align: left;
+
+        }
+
+
+        .employee-label {
+
+            font-size: 12px;
+
+            color: #888888;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .employee-name {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #222222;
+
+        }
+
+
+        .employee-id {
+
+            margin-top: 5px;
+
+            font-size: 13px;
+
+            color: #666666;
+
+        }
+
+
+        .status {
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .status.loading {
+
+            background: #f1f3f5;
+
+            color: #555555;
+
+        }
+
+
+        .status.success {
+
+            background: #eaf8ef;
+
+            color: #198754;
+
+        }
+
+
+        .status.error {
+
+            background: #fdecec;
+
+            color: #dc3545;
+
+        }
+
+
+        .spinner {
+
+            width: 28px;
+
+            height: 28px;
+
+            margin: 0 auto 12px;
+
+            border: 3px solid #dddddd;
+
+            border-top-color: #06c755;
+
+            border-radius: 50%;
+
+            animation: spin 0.8s linear infinite;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        .success-icon {
+
+            font-size: 42px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .error-icon {
+
+            font-size: 42px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .btn {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 8px;
+
+            padding: 12px 20px;
+
+            margin-top: 15px;
+
+            background: #06c755;
+
+            color: #ffffff;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .btn:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        .hidden {
+
+            display: none;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- ==================================================
+         Header
+         ================================================== -->
+
+    <div class="logo">
+        C
+    </div>
+
+
+    <h1>
+        Connect LINE
+    </h1>
+
+
+    <div class="subtitle">
+
+        Connecting your LINE account
+        to CIMS notification system.
+
+    </div>
+
+
+    <!-- ==================================================
+         Employee Information
+         ================================================== -->
+
+    {% if employee %}
+
+    <div class="employee-card">
+
+        <div class="employee-label">
+            Employee
+        </div>
+
+        <div class="employee-name">
+            {{ employee.full_name }}
+        </div>
+
+        <div class="employee-id">
+            NIK: {{ employee.nik }}
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ==================================================
+         Loading
+         ================================================== -->
+
+    <div
+        id="loading"
+        class="status loading"
+    >
+
+        <div class="spinner"></div>
+
+        <div id="loading-message">
+
+            Connecting to LINE...
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Success
+         ================================================== -->
+
+    <div
+        id="success"
+        class="status success hidden"
+    >
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <strong>
+            LINE Connected Successfully
+        </strong>
+
+        <div style="margin-top: 8px;">
+
+            Your LINE account has been
+            successfully connected to CIMS.
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Error
+         ================================================== -->
+
+    <div
+        id="error"
+        class="status error hidden"
+    >
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <strong>
+            Connection Failed
+        </strong>
+
+        <div
+            id="error-message"
+            style="margin-top: 8px;"
+        >
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Close Button
+         ================================================== -->
+
+    <button
+        id="close-button"
+        class="btn hidden"
+        type="button"
+        onclick="closeLiff()"
+    >
+
+        Close
+
+    </button>
+
+
+</div>
+
+
+<script>
+
+    // ==================================================
+    // Configuration
+    // ==================================================
+
+    const LIFF_ID = "{{ liff_id }}";
+
+    let CONNECT_TOKEN = null;
+
+
+    // ==================================================
+    // DOM Elements
+    // ==================================================
+
+    const loadingElement =
+        document.getElementById("loading");
+
+    const loadingMessage =
+        document.getElementById("loading-message");
+
+    const successElement =
+        document.getElementById("success");
+
+    const errorElement =
+        document.getElementById("error");
+
+    const errorMessageElement =
+        document.getElementById("error-message");
+
+    const closeButton =
+        document.getElementById("close-button");
+
+
+    // ==================================================
+    // Show Loading
+    // ==================================================
+
+    function showLoading(message) {
+
+        loadingElement.classList.remove(
+            "hidden"
+        );
+
+        successElement.classList.add(
+            "hidden"
+        );
+
+        errorElement.classList.add(
+            "hidden"
+        );
+
+        closeButton.classList.add(
+            "hidden"
+        );
+
+        loadingMessage.textContent =
+            message;
+
+    }
+
+
+    // ==================================================
+    // Show Success
+    // ==================================================
+
+    function showSuccess() {
+
+        loadingElement.classList.add(
+            "hidden"
+        );
+
+        errorElement.classList.add(
+            "hidden"
+        );
+
+        successElement.classList.remove(
+            "hidden"
+        );
+
+        closeButton.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    // ==================================================
+    // Show Error
+    // ==================================================
+
+    function showError(message) {
+
+        loadingElement.classList.add(
+            "hidden"
+        );
+
+        successElement.classList.add(
+            "hidden"
+        );
+
+        errorElement.classList.remove(
+            "hidden"
+        );
+
+        errorMessageElement.textContent =
+            message;
+
+        closeButton.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    // ==================================================
+    // Connect LINE
+    // ==================================================
+
+    async function connectLine() {
+
+    try {
+
+        // --------------------------------------------------
+        // Validate LIFF ID
+        // --------------------------------------------------
+
+        if (!LIFF_ID) {
+
+            throw new Error(
+                "LIFF ID is not configured."
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // Initialize LIFF
+        // --------------------------------------------------
+
+        showLoading(
+            "Initializing LINE..."
+        );
+
+        await liff.init({
+            liffId: LIFF_ID
+        });
+
+
+        // --------------------------------------------------
+        // IMPORTANT
+        //
+        // LINE may move additional parameters from
+        // the LIFF URL into liff.state during initialization.
+        //
+        // Therefore, read the URL AFTER liff.init().
+        // --------------------------------------------------
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        CONNECT_TOKEN =
+            urlParams.get(
+                "connect_token"
+            );
+
+
+        // --------------------------------------------------
+        // Validate Connect Token
+        // --------------------------------------------------
+
+        if (!CONNECT_TOKEN) {
+
+            throw new Error(
+                "Connection token is missing or expired."
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // Check LINE Login
+        // --------------------------------------------------
+
+        if (!liff.isLoggedIn()) {
+
+            showLoading(
+                "Opening LINE login..."
+            );
+
+            liff.login();
+
+            return;
+
+        }
+
+
+        // --------------------------------------------------
+        // Get LINE ID Token
+        // --------------------------------------------------
+
+        showLoading(
+            "Verifying your LINE account..."
+        );
+
+        const idToken =
+            liff.getIDToken();
+
+
+        if (!idToken) {
+
+            throw new Error(
+                "Unable to get LINE ID Token."
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // Send ID Token + Connect Token to CIMS
+        // --------------------------------------------------
+
+        showLoading(
+            "Connecting your LINE account to CIMS..."
+        );
+
+
+        const response =
+            await fetch(
+                "{{ url_for('line.liff_connect') }}",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        connect_token:
+                            CONNECT_TOKEN,
+
+                        id_token:
+                            idToken
+
+                    })
+                }
+            );
+
+
+        // --------------------------------------------------
+        // Read response
+        // --------------------------------------------------
+
+        const result =
+            await response.json();
+
+
+        // --------------------------------------------------
+        // Check response
+        // --------------------------------------------------
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.message ||
+                "LINE connection failed."
+            );
+
+        }
+
+
+        if (
+            result.status !==
+            "success"
+        ) {
+
+            throw new Error(
+                result.message ||
+                "LINE connection failed."
+            );
+
+        }
+
+
+        // --------------------------------------------------
+        // Success
+        // --------------------------------------------------
+
+        showSuccess();
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "LINE connection error:",
+            error
+        );
+
+        showError(
+            error.message ||
+            "An unexpected error occurred."
+        );
+
+    }
+
+}
+
+
+    // ==================================================
+    // Close LIFF
+    // ==================================================
+
+    function closeLiff() {
+
+        try {
+
+            if (
+                typeof liff !==
+                "undefined" &&
+                liff.isInClient()
+            ) {
+
+                liff.closeWindow();
+
+            }
+            else {
+
+                window.close();
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(
+                "Unable to close LIFF:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // Start
+    // ==================================================
+
+    connectLine();
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CIMS - New Improvement Created
+    </title>
+
+</head>
+
+
+<body
+    style="
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f9;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333333;
+    "
+>
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        background-color: #f4f6f9;
+        padding: 30px 15px;
+    "
+>
+
+<tr>
+
+<td align="center">
+
+<table
+    width="700"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        width: 100%;
+        max-width: 700px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+    "
+>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        background-color: #1f4e78;
+        padding: 24px 30px;
+        color: #ffffff;
+    "
+>
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+>
+
+<tr>
+
+<td>
+
+<div
+    style="
+        font-size: 22px;
+        font-weight: bold;
+    "
+>
+    CIMS
+</div>
+
+<div
+    style="
+        margin-top: 5px;
+        font-size: 13px;
+    "
+>
+    Continuous Improvement Management System
+</div>
+
+</td>
+
+<td
+    align="right"
+    valign="middle"
+>
+
+<div
+    style="
+        font-size: 12px;
+        font-weight: bold;
+    "
+>
+    NOTIFICATION
+</div>
+
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     TITLE
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 30px 30px 15px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 22px;
+        font-weight: bold;
+        color: #1f4e78;
+    "
+>
+    New Improvement Created
+</div>
+
+<p
+    style="
+        margin: 10px 0 0 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555555;
+    "
+>
+
+A new improvement has been created in CIMS
+and is now available for review.
+
+</p>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     IMPROVEMENT INFORMATION
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px 30px 20px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    "
+>
+    Improvement Information
+</div>
+
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+
+<!-- Improvement No -->
+
+<tr>
+
+<td
+    width="180"
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Improvement No
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+    {{ improvement.improvement_no }}
+</td>
+
+</tr>
+
+
+<!-- Title -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Title
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+    {{ improvement.title }}
+</td>
+
+</tr>
+
+
+<!-- Problem No -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Problem No
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+    {{ problem.problem_no }}
+</td>
+
+</tr>
+
+
+<!-- Problem Title -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Problem Title
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+    {{ problem.title }}
+</td>
+
+</tr>
+
+
+<!-- Department -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Department
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {% if problem.department %}
+
+        {{ problem.department.department_code }}
+        -
+        {{ problem.department.department_name }}
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+</td>
+
+</tr>
+
+
+<!-- Priority -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Priority
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {% if problem.priority %}
+
+        {{ problem.priority }}
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+</td>
+
+</tr>
+
+
+<!-- Problem Status -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Problem Status
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {% if problem.status %}
+
+        {{ problem.status }}
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+</td>
+
+</tr>
+
+
+<!-- Improvement Owner -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Improvement Owner
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {% if improvement.owner_employee %}
+
+        {{ improvement.owner_employee.full_name }}
+
+    {% else %}
+
+        Not assigned
+
+    {% endif %}
+
+</td>
+
+</tr>
+
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     DESCRIPTION
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 20px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    "
+>
+    Improvement Description
+</div>
+
+
+<div
+    style="
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #1f4e78;
+        font-size: 14px;
+        line-height: 1.7;
+    "
+>
+
+    {% if improvement.description %}
+
+        {{ improvement.description }}
+
+    {% else %}
+
+        <span style="color: #777777;">
+            No description provided.
+        </span>
+
+    {% endif %}
+
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     ROOT CAUSE
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 20px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    "
+>
+    Root Cause
+</div>
+
+
+<div
+    style="
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        font-size: 14px;
+        line-height: 1.7;
+    "
+>
+
+    {% if improvement.root_cause %}
+
+        {{ improvement.root_cause }}
+
+    {% else %}
+
+        <span style="color: #777777;">
+            No root cause has been provided.
+        </span>
+
+    {% endif %}
+
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     IMPROVEMENT PLAN
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 20px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    "
+>
+    Improvement Plan
+</div>
+
+
+<div
+    style="
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #1f4e78;
+        font-size: 14px;
+        line-height: 1.7;
+    "
+>
+
+    {% if improvement.improvement_plan %}
+
+        {{ improvement.improvement_plan }}
+
+    {% else %}
+
+        <span style="color: #777777;">
+            No improvement plan has been provided.
+        </span>
+
+    {% endif %}
+
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     COST & BENEFIT
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 20px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    "
+>
+    Estimated Cost & Benefit
+</div>
+
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+
+<!-- Improvement Cost -->
+
+<tr>
+
+<td
+    width="180"
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Improvement Cost
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {{ improvement.improvement_cost }}
+
+</td>
+
+</tr>
+
+
+<!-- Time Saving -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Estimated Time Saving
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {{ improvement.estimated_time_saving }}
+    minutes
+
+</td>
+
+</tr>
+
+
+<!-- Cost Saving -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Estimated Cost Saving
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {{ improvement.estimated_cost_saving }}
+
+</td>
+
+</tr>
+
+
+<!-- Benefit -->
+
+<tr>
+
+<td
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    Estimated Benefit
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+
+    {{ improvement.estimated_benefit }}
+
+</td>
+
+</tr>
+
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     IMPROVEMENT TEAM
+================================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 20px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    "
+>
+    Improvement Team
+</div>
+
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+<tr>
+
+<td
+    width="180"
+    style="
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    PIC
+</td>
+
+<td
+    style="
+        padding: 10px;
+        border: 1px solid #dddddd;
+    "
+>
+
+    {% if improvement.improvement_pics %}
+
+        {% for pic in improvement.improvement_pics %}
+
+            {{ pic.employee.full_name }}
+
+            {% if pic.is_leader %}
+                (Leader)
+            {% endif %}
+
+            {% if not loop.last %}
+                <br>
+            {% endif %}
+
+        {% endfor %}
+
+    {% else %}
+
+        Not assigned
+
+    {% endif %}
+
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     ACTION
+================================================== -->
+
+<tr>
+
+<td
+    align="center"
+    style="
+        padding: 10px 30px 30px 30px;
+    "
+>
+
+<a
+    href="{{ cims_url }}"
+    style="
+        display: inline-block;
+        padding: 12px 28px;
+        background-color: #1f4e78;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    "
+>
+    Open CIMS
+</a>
+
+</td>
+
+</tr>
+
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
+
+<tr>
+
+<td
+    align="center"
+    style="
+        padding: 20px 30px;
+        background-color: #f8f9fa;
+        color: #777777;
+        font-size: 12px;
+        line-height: 1.6;
+    "
+>
+
+This is an automated notification from CIMS.
+
+<br>
+
+Please do not reply directly to this email.
+
+<br>
+
+&copy; CIMS
+
+</td>
+
+</tr>
+
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{% if department %}
+Edit Department
+{% else %}
+Add Department
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<section class="content-header">
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+
+                    {% if department %}
+                        Edit Department
+                    {% else %}
+                        Add Department
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('department.index') }}">
+                            Department
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if department %}
+                            Edit
+                        {% else %}
+                            Add
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-building mr-2"></i>
+
+                    {% if department %}
+                        Edit Department
+                    {% else %}
+                        Add Department
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+            <form id="department-form" method="POST"
+                    class="needs-validation"
+                    novalidate>
+
+                <div class="card-body">
+
+                    <div class="form-group">
+
+                        <label>Department Code</label>
+
+                        <input
+                            type="text"
+                            name="department_code"
+                            class="form-control"
+                            maxlength="20"
+                            required
+                            data-label="Department Code"
+                            value="{{ department.department_code if department else '' }}"
+                            {% if department %}readonly{% endif %}
+                        >
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Department Name</label>
+
+                        <input
+                            type="text"
+                            name="department_name"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                            data-label="Department Name"
+                            value="{{ department.department_name if department else '' }}"
+                        >
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Description</label>
+
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="3"
+                        >{{ department.description if department else '' }}</textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+                    <a
+                        href="{{ url_for('department.index') }}"
+                        class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

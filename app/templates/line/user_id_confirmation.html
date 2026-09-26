@@ -1,0 +1,609 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    LINE User ID Confirmation
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ==================================================
+         PAGE HEADER
+         ================================================== -->
+
+    <div class="row mb-3">
+
+        <div class="col-12">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h1 class="h3 mb-1">
+                        <i class="fab fa-line text-success"></i>
+                        LINE User ID Confirmation
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Confirm LINE User ID for testing and employee registration.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         MAIN CONTENT
+         ================================================== -->
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-10 col-lg-8 col-xl-7">
+
+            <div class="card card-primary card-outline">
+
+
+                <!-- ==================================================
+                     CARD HEADER
+                     ================================================== -->
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fab fa-line mr-2"></i>
+
+                        LINE User ID Confirmation
+
+                    </h3>
+
+                </div>
+
+
+                <!-- ==================================================
+                     CARD BODY
+                     ================================================== -->
+
+                <div class="card-body">
+
+
+                    <!-- ==================================================
+                         WAITING STATUS
+                         ================================================== -->
+
+                    <div
+                        id="waitingStatus"
+                        class="alert alert-warning text-center"
+                    >
+
+                        <div class="mb-2">
+
+                            <i
+                                class="fas fa-hourglass-half fa-2x"
+                            ></i>
+
+                        </div>
+
+
+                        <h5>
+                            Waiting for LINE message...
+                        </h5>
+
+
+                        <p class="mb-0">
+
+                            Please send any message to the
+                            <strong>CIMS LINE Official Account</strong>.
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         SUCCESS STATUS
+                         ================================================== -->
+
+                    <div
+                        id="successStatus"
+                        class="alert alert-success text-center d-none"
+                    >
+
+                        <div class="mb-2">
+
+                            <i
+                                class="fas fa-check-circle fa-2x"
+                            ></i>
+
+                        </div>
+
+
+                        <h5>
+                            LINE User ID Found
+                        </h5>
+
+
+                        <p class="mb-0">
+
+                            The LINE User ID has been received successfully.
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         INSTRUCTIONS
+                         ================================================== -->
+
+                    <div
+                        id="instructionBox"
+                        class="callout callout-info"
+                    >
+
+                        <h5>
+
+                            <i class="fas fa-info-circle mr-1"></i>
+
+                            How to get the LINE User ID
+
+                        </h5>
+
+
+                        <ol class="mb-0">
+
+                            <li>
+                                Open the CIMS LINE Official Account.
+                            </li>
+
+                            <li>
+                                Send any text message, for example:
+                                <strong>TEST</strong>.
+                            </li>
+
+                            <li>
+                                Wait a few seconds.
+                            </li>
+
+                            <li>
+                                The LINE User ID will appear automatically below.
+                            </li>
+
+                        </ol>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         LINE USER ID
+                         ================================================== -->
+
+                    <div
+                        id="userIdContainer"
+                        class="d-none mt-4"
+                    >
+
+                        <label class="font-weight-bold">
+
+                            LINE User ID
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <input
+                                type="text"
+                                id="lineUserId"
+                                class="form-control"
+                                readonly
+                            >
+
+
+                            <div class="input-group-append">
+
+                                <button
+                                    type="button"
+                                    id="copyButton"
+                                    class="btn btn-primary"
+                                    onclick="copyUserId()"
+                                >
+
+                                    <i class="fas fa-copy"></i>
+
+                                    Copy
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <small class="form-text text-muted">
+
+                            Copy this LINE User ID and register it
+                            in the employee record.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         REFRESH BUTTON
+                         ================================================== -->
+
+                    <div class="text-center mt-4">
+
+                        <button
+                            type="button"
+                            id="refreshButton"
+                            class="btn btn-secondary"
+                            onclick="resetConfirmation()"
+                        >
+
+                            <i class="fas fa-sync-alt"></i>
+
+                            Refresh
+
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==================================================
+                     CARD FOOTER
+                     ================================================== -->
+
+                <div class="card-footer text-muted">
+
+                    <small>
+
+                        <i class="fas fa-info-circle mr-1"></i>
+
+                        The page automatically checks for new LINE
+                        messages every 2 seconds.
+
+                    </small>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+    // ==========================================================
+    // Configuration
+    // ==========================================================
+
+    const latestUserIdUrl =
+        "{{ url_for('line.latest_user_id') }}";
+
+
+    // Check every 2 seconds
+
+    const pollingInterval = 2000;
+
+
+    let pollingTimer = null;
+
+
+    // ==========================================================
+    // Check Latest LINE User ID
+    // ==========================================================
+
+    async function checkLatestUserId() {
+
+        try {
+
+            const response = await fetch(
+                latestUserIdUrl,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Accept": "application/json"
+                    },
+
+                    cache: "no-store"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                console.error(
+                    "Failed to get LINE User ID:",
+                    response.status
+                );
+
+                return;
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                result.status === "success"
+                &&
+                result.line_user_id
+            ) {
+
+                showUserId(
+                    result.line_user_id
+                );
+
+                stopPolling();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Error checking LINE User ID:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==========================================================
+    // Show LINE User ID
+    // ==========================================================
+
+    function showUserId(userId) {
+
+        const waitingStatus =
+            document.getElementById(
+                "waitingStatus"
+            );
+
+
+        const successStatus =
+            document.getElementById(
+                "successStatus"
+            );
+
+
+        const instructionBox =
+            document.getElementById(
+                "instructionBox"
+            );
+
+
+        const userIdContainer =
+            document.getElementById(
+                "userIdContainer"
+            );
+
+
+        const lineUserId =
+            document.getElementById(
+                "lineUserId"
+            );
+
+
+        // Hide waiting status
+
+        waitingStatus.classList.add(
+            "d-none"
+        );
+
+
+        // Show success status
+
+        successStatus.classList.remove(
+            "d-none"
+        );
+
+
+        // Hide instructions
+
+        instructionBox.classList.add(
+            "d-none"
+        );
+
+
+        // Show User ID
+
+        userIdContainer.classList.remove(
+            "d-none"
+        );
+
+
+        lineUserId.value =
+            userId;
+
+    }
+
+
+    // ==========================================================
+    // Copy LINE User ID
+    // ==========================================================
+
+    async function copyUserId() {
+
+        const lineUserId =
+            document.getElementById(
+                "lineUserId"
+            );
+
+
+        const copyButton =
+            document.getElementById(
+                "copyButton"
+            );
+
+
+        const userId =
+            lineUserId.value.trim();
+
+
+        if (!userId) {
+
+            return;
+
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                userId
+            );
+
+
+            copyButton.innerHTML =
+                '<i class="fas fa-check"></i> Copied';
+
+
+            setTimeout(
+                function () {
+
+                    copyButton.innerHTML =
+                        '<i class="fas fa-copy"></i> Copy';
+
+                },
+                2000
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Failed to copy LINE User ID:",
+                error
+            );
+
+
+            // Fallback
+
+            lineUserId.select();
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyButton.innerHTML =
+                '<i class="fas fa-check"></i> Copied';
+
+
+            setTimeout(
+                function () {
+
+                    copyButton.innerHTML =
+                        '<i class="fas fa-copy"></i> Copy';
+
+                },
+                2000
+            );
+
+        }
+
+    }
+
+
+    // ==========================================================
+    // Start Polling
+    // ==========================================================
+
+    function startPolling() {
+
+        stopPolling();
+
+
+        // Check immediately
+
+        checkLatestUserId();
+
+
+        // Continue checking
+
+        pollingTimer = setInterval(
+            checkLatestUserId,
+            pollingInterval
+        );
+
+    }
+
+
+    // ==========================================================
+    // Stop Polling
+    // ==========================================================
+
+    function stopPolling() {
+
+        if (pollingTimer) {
+
+            clearInterval(
+                pollingTimer
+            );
+
+            pollingTimer = null;
+
+        }
+
+    }
+
+
+    // ==========================================================
+    // Refresh
+    // ==========================================================
+
+    function resetConfirmation() {
+
+        window.location.reload();
+
+    }
+
+
+    // ==========================================================
+    // Initialize
+    // ==========================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            startPolling();
+
+        }
+    );
+
+</script>
+
+{% endblock %}

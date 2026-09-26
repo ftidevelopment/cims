@@ -1,0 +1,1165 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Improvement List
+{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.improvement-list-page {
+    width: 100%;
+    padding: 24px 25px 40px 25px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.improvement-list-page .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.improvement-list-page .dashboard-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #343a40;
+}
+
+.improvement-list-page .dashboard-period {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.improvement-list-page .dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.improvement-list-page .dashboard-actions-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.improvement-list-page .dashboard-actions-top .btn {
+    margin-left: 8px;
+    margin-bottom: 6px;
+}
+
+.improvement-list-page .dashboard-actions-list {
+    margin-top: 2px;
+}
+
+.improvement-list-page .dashboard-actions-list .btn {
+    margin-left: 8px;
+}
+
+
+/* =========================================================
+   LIST CARD
+   ========================================================= */
+
+.improvement-list-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+
+.improvement-list-card .section-title {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #343a40;
+}
+
+
+/* =========================================================
+   FILTER
+   ========================================================= */
+
+.improvement-filter-panel {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.improvement-filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.improvement-filter-item label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #343a40;
+    margin: 0;
+}
+
+.improvement-filter-item input,
+.improvement-filter-item select {
+    height: 38px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    background: #ffffff;
+    color: #343a40;
+}
+
+.improvement-filter-item input {
+    width: 300px;
+}
+
+.improvement-filter-item select {
+    width: 180px;
+}
+
+.improvement-filter-item input:focus,
+.improvement-filter-item select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.15rem rgba(0,123,255,.15);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.improvement-search-button {
+    height: 38px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 6px;
+    background: #0d6efd;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.improvement-search-button:hover {
+    background: #0b5ed7;
+}
+
+.improvement-reset-button {
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid #6c757d;
+    background: #ffffff;
+    color: #6c757d;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.improvement-reset-button:hover {
+    background: #f8f9fa;
+    color: #343a40;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.improvement-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.improvement-table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+    margin: 0;
+    background: #ffffff;
+}
+
+.improvement-table thead th {
+    background: #f8f9fa;
+    color: #343a40;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 10px;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.improvement-table tbody td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 13px;
+    color: #343a40;
+    vertical-align: middle;
+}
+
+.improvement-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.improvement-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+
+/* =========================================================
+   COLUMN WIDTH
+   ========================================================= */
+
+.improvement-table th:nth-child(1),
+.improvement-table td:nth-child(1) {
+    width: 155px;
+}
+
+.improvement-table th:nth-child(2),
+.improvement-table td:nth-child(2) {
+    width: 115px;
+    white-space: nowrap;
+}
+
+.improvement-table th:nth-child(3),
+.improvement-table td:nth-child(3) {
+    min-width: 280px;
+}
+
+.improvement-table th:nth-child(4),
+.improvement-table td:nth-child(4) {
+    min-width: 180px;
+}
+
+.improvement-table th:nth-child(5),
+.improvement-table td:nth-child(5) {
+    width: 120px;
+    text-align: center;
+}
+
+.improvement-table th:nth-child(6),
+.improvement-table td:nth-child(6) {
+    width: 135px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.improvement-table th:nth-child(7),
+.improvement-table td:nth-child(7) {
+    width: 135px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.improvement-table th:nth-child(8),
+.improvement-table td:nth-child(8) {
+    width: 75px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.improvement-number {
+    font-weight: 600;
+    color: #343a40;
+    white-space: nowrap;
+}
+
+.improvement-title {
+    font-weight: 600;
+    color: #343a40;
+    line-height: 1.4;
+}
+
+.improvement-department {
+    color: #495057;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.improvement-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.improvement-status-open {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.improvement-status-implemented {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.improvement-status-verified {
+    background: #cff4fc;
+    color: #055160;
+}
+
+.improvement-status-completed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+   ========================================================= */
+
+.improvement-view-button {
+    width: 40px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #17a2b8;
+    border: none;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.improvement-view-button:hover {
+    background: #138496;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   NO DATA
+   ========================================================= */
+
+.improvement-no-data {
+    text-align: center;
+    padding: 30px !important;
+    color: #6c757d !important;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.improvement-pagination-wrapper {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.improvement-pagination-info {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.improvement-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.improvement-pagination a,
+.improvement-pagination-dots {
+    min-width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.improvement-pagination a {
+    border: 1px solid #dee2e6;
+    color: #495057;
+    background: #ffffff;
+}
+
+.improvement-pagination a:hover {
+    background: #f8f9fa;
+    text-decoration: none;
+}
+
+.improvement-pagination a.active {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    color: #ffffff;
+}
+
+.improvement-pagination-dots {
+    color: #6c757d;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .improvement-list-page {
+        padding: 20px 15px 30px 15px;
+    }
+
+    .improvement-list-page .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .improvement-list-page .dashboard-actions {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .improvement-list-page .dashboard-actions-top {
+        width: 100%;
+    }
+
+    .improvement-list-page .dashboard-actions-top .btn {
+        margin-left: 0;
+        margin-right: 6px;
+    }
+
+    .improvement-list-page .dashboard-actions-list {
+        margin-top: 4px;
+    }
+
+    .improvement-list-page .dashboard-actions-list .btn {
+        margin-left: 0;
+    }
+
+    .improvement-list-page .dashboard-title {
+        font-size: 23px;
+    }
+
+    .improvement-filter-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .improvement-filter-item {
+        width: 100%;
+    }
+
+    .improvement-filter-item input,
+    .improvement-filter-item select {
+        width: 100%;
+    }
+
+    .improvement-search-button,
+    .improvement-reset-button {
+        width: 100%;
+    }
+
+    .improvement-pagination-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+
+<div class="improvement-list-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="dashboard-header">
+
+
+        <!-- TITLE -->
+
+        <div>
+
+            <h1 class="dashboard-title">
+
+                <i class="fas fa-list text-primary mr-1"></i>
+
+                Improvement List
+
+            </h1>
+
+            <div class="dashboard-period">
+
+                Public Improvement Monitoring
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <div class="dashboard-actions">
+
+
+            <!-- TOP NAVIGATION -->
+
+            <div class="dashboard-actions-top">
+
+
+                <!-- PROBLEM -->
+
+                <a
+                    href="{{ url_for('problem_dashboard.index') }}"
+                    class="btn btn-outline-danger btn-sm"
+                >
+
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+
+                    Problem
+
+                </a>
+
+
+                <!-- IMPROVEMENT -->
+
+                <a
+                    href="{{ url_for('improvement_dashboard.index') }}"
+                    class="btn btn-outline-success btn-sm"
+                >
+
+                    <i class="fas fa-tools mr-1"></i>
+
+                    Improvement
+
+                </a>
+
+
+                <!-- KAIZEN -->
+
+                <a
+                    href="{{ url_for('kaizen_dashboard.index') }}"
+                    class="btn btn-outline-warning btn-sm"
+                >
+
+                    <i class="fas fa-lightbulb mr-1"></i>
+
+                    Kaizen
+
+                </a>
+
+
+                <!-- LOGIN -->
+
+                <a
+                    href="{{ url_for('auth.login') }}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="fas fa-sign-in-alt mr-1"></i>
+
+                    Login
+
+                </a>
+
+            </div>
+
+
+            <!-- IMPROVEMENT LIST -->
+
+            <div class="dashboard-actions-list">
+
+                <a
+                    href="{{ url_for('improvement_dashboard.improvements') }}"
+                    class="btn btn-outline-primary btn-sm"
+                >
+
+                    <i class="fas fa-list mr-1"></i>
+
+                    Improvement List
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LIST CARD
+         ====================================================== -->
+
+    <div class="improvement-list-card">
+
+
+        <h3 class="section-title">
+
+            <i class="fas fa-list mr-1"></i>
+
+            Improvement List
+
+        </h3>
+
+
+        <!-- =================================================
+             FILTER
+             ================================================= -->
+
+        <form
+            method="GET"
+            action="{{ url_for('improvement_dashboard.improvements') }}"
+        >
+
+            <div class="improvement-filter-panel">
+
+
+                <!-- SEARCH -->
+
+                <div class="improvement-filter-item">
+
+                    <label>
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Improvement No, title, description..."
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="improvement-filter-item">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select name="status">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option
+                            value="Open"
+                            {% if status == "Open" %}
+                                selected
+                            {% endif %}
+                        >
+                            Open
+                        </option>
+
+                        <option
+                            value="Implemented"
+                            {% if status == "Implemented" %}
+                                selected
+                            {% endif %}
+                        >
+                            Implemented
+                        </option>
+
+                        <option
+                            value="Verified"
+                            {% if status == "Verified" %}
+                                selected
+                            {% endif %}
+                        >
+                            Verified
+                        </option>
+
+                        <option
+                            value="Completed"
+                            {% if status == "Completed" %}
+                                selected
+                            {% endif %}
+                        >
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="improvement-filter-item">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <select name="department">
+
+                        <option value="">
+                            All Department
+                        </option>
+
+                        {% for item in departments %}
+
+                        <option
+                            value="{{ item.id }}"
+                            {% if department == item.id|string %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item.department_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <button
+                    type="submit"
+                    class="improvement-search-button"
+                >
+
+                    <i class="fas fa-search mr-1"></i>
+
+                    Search
+
+                </button>
+
+
+                <!-- RESET -->
+
+                <a
+                    href="{{ url_for('improvement_dashboard.improvements') }}"
+                    class="improvement-reset-button"
+                >
+
+                    <i class="fas fa-sync-alt mr-1"></i>
+
+                    Reset
+
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <!-- =================================================
+             TABLE
+             ================================================= -->
+
+        <div class="improvement-table-wrapper">
+
+            <table class="improvement-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Improvement No
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Improvement
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Cost
+                        </th>
+
+                        <th>
+                            Saving
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for improvement in improvements %}
+
+                    <tr>
+
+
+                        <!-- IMPROVEMENT NO -->
+
+                        <td>
+
+                            <span class="improvement-number">
+
+                                {{ improvement.improvement_no }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {% if improvement.created_at %}
+
+                                {{ improvement.created_at.strftime(
+                                    "%d-%b-%Y"
+                                ) }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- TITLE -->
+
+                        <td>
+
+                            <div class="improvement-title">
+
+                                {{ improvement.title }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td>
+
+                            <span class="improvement-department">
+
+                                {{ improvement.department }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if improvement.status == "Open" %}
+
+                                <span class="improvement-status improvement-status-open">
+                                    Open
+                                </span>
+
+                            {% elif improvement.status == "Implemented" %}
+
+                                <span class="improvement-status improvement-status-implemented">
+                                    Implemented
+                                </span>
+
+                            {% elif improvement.status == "Verified" %}
+
+                                <span class="improvement-status improvement-status-verified">
+                                    Verified
+                                </span>
+
+                            {% elif improvement.status == "Completed" %}
+
+                                <span class="improvement-status improvement-status-completed">
+                                    Completed
+                                </span>
+
+                            {% else %}
+
+                                <span class="improvement-status">
+                                    {{ improvement.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- COST -->
+
+                        <td>
+
+                            Rp
+
+                            {{ "{:,.0f}".format(
+                                improvement.improvement_cost or 0
+                            ) }}
+
+                        </td>
+
+
+                        <!-- SAVING -->
+
+                        <td>
+
+                            Rp
+
+                            {{ "{:,.0f}".format(
+                                improvement.estimated_cost_saving or 0
+                            ) }}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'improvement_dashboard.detail',
+                                    improvement_id=improvement.id
+                                ) }}"
+                                class="improvement-view-button"
+                                title="View Improvement"
+                            >
+
+                                <i class="fas fa-eye"></i>
+
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="improvement-no-data"
+                        >
+
+                            <i class="fas fa-info-circle mr-1"></i>
+
+                            No improvement data found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGINATION
+             ================================================= -->
+
+        {% if pagination.total > 0 %}
+
+        <div class="improvement-pagination-wrapper">
+
+
+            <!-- INFORMATION -->
+
+            <div class="improvement-pagination-info">
+
+                Showing
+
+                <strong>
+                    {{ pagination.first }}
+                </strong>
+
+                -
+
+                <strong>
+                    {{ pagination.last }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ pagination.total }}
+                </strong>
+
+                improvements
+
+            </div>
+
+
+            <!-- PAGINATION -->
+
+            <div class="improvement-pagination">
+
+
+                {% if pagination.has_prev %}
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        page=pagination.prev_num,
+                        search=search,
+                        status=status,
+                        department=department
+                    ) }}"
+                >
+
+                    <i class="fas fa-chevron-left"></i>
+
+                </a>
+
+                {% endif %}
+
+
+                {% for page_num in pagination.iter_pages(
+                    left_edge=1,
+                    right_edge=1,
+                    left_current=2,
+                    right_current=2
+                ) %}
+
+
+                    {% if page_num %}
+
+                    <a
+                        href="{{ url_for(
+                            'improvement_dashboard.improvements',
+                            page=page_num,
+                            search=search,
+                            status=status,
+                            department=department
+                        ) }}"
+                        class="{% if page_num == pagination.page %}active{% endif %}"
+                    >
+
+                        {{ page_num }}
+
+                    </a>
+
+
+                    {% else %}
+
+                    <span class="improvement-pagination-dots">
+                        ...
+                    </span>
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+                {% if pagination.has_next %}
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        page=pagination.next_num,
+                        search=search,
+                        status=status,
+                        department=department
+                    ) }}"
+                >
+
+                    <i class="fas fa-chevron-right"></i>
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="text-center text-muted small mt-4">
+
+        CIMS - Continuous Improvement Management System
+
+    </div>
+
+</div>
+
+{% endblock %}

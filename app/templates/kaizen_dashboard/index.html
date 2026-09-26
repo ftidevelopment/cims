@@ -1,0 +1,2351 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Kaizen Dashboard
+{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   KAIZEN DASHBOARD - FULL WIDTH
+   ========================================================= */
+
+.kaizen-dashboard-page {
+
+    width: 100vw;
+
+    max-width: none;
+
+    min-height: 100vh;
+
+    margin-left: calc(50% - 50vw);
+
+    padding: 25px 35px 40px 35px;
+
+    box-sizing: border-box;
+
+    background: #f4f7fb;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.dashboard-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    padding: 22px 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7edf4;
+
+    border-radius: 14px;
+
+    box-shadow: 0 4px 16px rgba(15, 42, 67, 0.06);
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+}
+
+
+.dashboard-title-wrapper {
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.dashboard-title-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d68910,
+            #f1b51c
+        );
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 14px;
+
+    font-size: 21px;
+
+    box-shadow:
+        0 5px 12px rgba(
+            241,
+            181,
+            28,
+            0.25
+        );
+}
+
+
+.dashboard-title {
+
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #183247;
+
+    line-height: 1.2;
+}
+
+
+.dashboard-subtitle {
+
+    margin-top: 5px;
+
+    color: #71849a;
+
+    font-size: 14px;
+}
+
+
+.dashboard-period {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 8px;
+
+    padding: 5px 10px;
+
+    background: #fff7e3;
+
+    color: #c48600;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+.dashboard-period i {
+
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.dashboard-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+}
+
+
+.dashboard-actions-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    flex-wrap: wrap;
+}
+
+
+.dashboard-actions-top .btn {
+
+    margin-left: 7px;
+
+    margin-bottom: 6px;
+
+    border-radius: 7px;
+
+    font-weight: 500;
+}
+
+
+.dashboard-actions-list {
+
+    margin-top: 2px;
+}
+
+
+.dashboard-actions-list .btn {
+
+    margin-left: 7px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.summary-card {
+
+    display: block;
+
+    border: 1px solid #e7edf4;
+
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 14px rgba(
+            15,
+            42,
+            67,
+            0.06
+        );
+
+    height: 100%;
+
+    overflow: hidden;
+
+    text-decoration: none !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.summary-card:hover {
+
+    transform: translateY(-3px);
+
+    border-color: #d6e0e8;
+
+    box-shadow:
+        0 8px 22px rgba(
+            15,
+            42,
+            67,
+            0.12
+        );
+
+    text-decoration: none !important;
+}
+
+
+.summary-card-body {
+
+    padding: 20px;
+
+}
+
+
+.summary-label {
+
+    color: #6c757d;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 5px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .25px;
+}
+
+
+.summary-value {
+
+    color: #263746;
+
+    font-size: 26px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+.summary-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+
+    background: #f1f3f5;
+
+    color: #495057;
+}
+
+
+.summary-arrow {
+
+    margin-left: 5px;
+
+    color: #a5b1bc;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   SUMMARY COLORS
+   ========================================================= */
+
+.summary-total .summary-icon {
+
+    background: #fff7e3;
+
+    color: #d89b00;
+}
+
+
+.summary-approved .summary-icon {
+
+    background: #e9f7ef;
+
+    color: #28a745;
+}
+
+
+.summary-open .summary-icon {
+
+    background: #eaf4fb;
+
+    color: #1976b8;
+}
+
+
+.summary-rejected .summary-icon {
+
+    background: #fdebec;
+
+    color: #dc3545;
+}
+
+
+.summary-saving .summary-icon {
+
+    background: #e9f7ef;
+
+    color: #209447;
+}
+
+
+/* =========================================================
+   SECTION CARD
+   ========================================================= */
+
+.dashboard-card {
+
+    border: 1px solid #e7edf4;
+
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 14px rgba(
+            15,
+            42,
+            67,
+            0.06
+        );
+
+    margin-bottom: 20px;
+
+    overflow: hidden;
+}
+
+
+.dashboard-card-header {
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-weight: 700;
+
+    color: #263746;
+
+    font-size: 17px;
+
+    background: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+}
+
+
+.dashboard-card-header i {
+
+    margin-right: 8px;
+
+    color: #d89b00;
+}
+
+
+.dashboard-card-body {
+
+    padding: 20px;
+
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-item {
+
+    display: block;
+
+    border: 1px solid #e9ecef;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    height: 100%;
+
+    background: #ffffff;
+
+    text-decoration: none !important;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+
+.status-item:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #d8e1e8;
+
+    box-shadow:
+        0 5px 14px rgba(
+            15,
+            42,
+            67,
+            0.08
+        );
+
+    text-decoration: none !important;
+}
+
+
+.status-label {
+
+    color: #6c757d;
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+
+.status-number {
+
+    color: #263746;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+.status-arrow {
+
+    float: right;
+
+    color: #adb5bd;
+
+    font-size: 11px;
+
+    margin-top: 5px;
+}
+
+
+/* =========================================================
+   AGING
+   ========================================================= */
+
+.aging-item {
+
+    display: block;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    background: #f8f9fa;
+
+    height: 100%;
+
+    border: 1px solid #e9ecef;
+
+    text-decoration: none !important;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+
+.aging-item:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #d8e1e8;
+
+    box-shadow:
+        0 5px 14px rgba(
+            15,
+            42,
+            67,
+            0.08
+        );
+
+    text-decoration: none !important;
+}
+
+
+.aging-label {
+
+    color: #6c757d;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin-bottom: 5px;
+}
+
+
+.aging-value {
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    color: #263746;
+}
+
+
+.aging-arrow {
+
+    float: right;
+
+    color: #adb5bd;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+.chart-container {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 300px;
+}
+
+
+.chart-container canvas {
+
+    width: 100% !important;
+
+    height: 100% !important;
+}
+
+
+/* =========================================================
+   FINANCIAL SUMMARY
+   ========================================================= */
+
+.financial-clickable {
+
+    display: block;
+
+    padding: 14px;
+
+    border: 1px solid #e9ecef;
+
+    border-radius: 9px;
+
+    text-decoration: none !important;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+
+.financial-clickable:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #d8e1e8;
+
+    box-shadow:
+        0 5px 14px rgba(
+            15,
+            42,
+            67,
+            0.08
+        );
+
+    text-decoration: none !important;
+}
+
+
+.financial-value {
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    color: #263746;
+}
+
+
+.financial-label {
+
+    font-size: 13px;
+
+    color: #6c757d;
+
+    font-weight: 600;
+}
+
+
+.financial-arrow {
+
+    float: right;
+
+    color: #adb5bd;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   DEPARTMENT TABLE
+   ========================================================= */
+
+.department-table {
+
+    width: 100%;
+
+    margin-bottom: 0;
+}
+
+
+.department-table th {
+
+    background: #f8f9fa;
+
+    color: #495057;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    padding: 11px;
+
+}
+
+
+.department-table td {
+
+    font-size: 13px;
+
+    padding: 11px;
+
+    vertical-align: middle;
+}
+
+
+.department-link {
+
+    display: block;
+
+    color: #263746;
+
+    text-decoration: none !important;
+
+    transition: color .2s ease;
+}
+
+
+.department-link:hover {
+
+    color: #1976b8;
+
+    text-decoration: none !important;
+}
+
+
+.department-total {
+
+    display: inline-flex;
+
+    min-width: 36px;
+
+    justify-content: center;
+
+    padding: 4px 9px;
+
+    border-radius: 15px;
+
+    background: #fff7e3;
+
+    color: #c48600;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   EMPTY DATA
+   ========================================================= */
+
+.empty-data {
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+    color: #6c757d;
+}
+
+
+.empty-data i {
+
+    font-size: 35px;
+
+    margin-bottom: 10px;
+
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.dashboard-footer {
+
+    text-align: center;
+
+    color: #8a99a8;
+
+    font-size: 11px;
+
+    margin-top: 30px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e4eaf0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .kaizen-dashboard-page {
+
+        width: 100%;
+
+        margin-left: 0;
+
+        padding: 15px;
+
+    }
+
+
+    .dashboard-header {
+
+        padding: 18px;
+
+        align-items: flex-start;
+
+    }
+
+
+    .dashboard-title {
+
+        font-size: 22px;
+
+    }
+
+
+    .dashboard-title-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        font-size: 18px;
+
+    }
+
+
+    .dashboard-actions {
+
+        width: 100%;
+
+        align-items: flex-start;
+
+    }
+
+
+    .dashboard-actions-top {
+
+        width: 100%;
+
+        justify-content: flex-start;
+
+    }
+
+
+    .dashboard-actions-top .btn {
+
+        margin-left: 0;
+
+        margin-right: 6px;
+
+    }
+
+
+    .dashboard-actions-list .btn {
+
+        margin-left: 0;
+
+    }
+
+
+    .chart-container {
+
+        height: 250px;
+
+    }
+
+}
+
+</style>
+
+
+<div class="kaizen-dashboard-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="dashboard-header">
+
+
+        <!-- TITLE -->
+
+        <div class="dashboard-title-wrapper">
+
+
+            <div class="dashboard-title-icon">
+
+                <i class="fas fa-lightbulb"></i>
+
+            </div>
+
+
+            <div>
+
+                <h1 class="dashboard-title">
+
+                    Kaizen Dashboard
+
+                </h1>
+
+
+                <div class="dashboard-subtitle">
+
+                    Continuous Improvement Management System
+
+                </div>
+
+
+                {% if dashboard.period %}
+
+                <div class="dashboard-period">
+
+                    <i class="far fa-calendar-alt"></i>
+
+                    {{ dashboard.period.start_date.strftime(
+                        '%d %b %Y'
+                    ) }}
+
+                    <span class="mx-1">
+                        -
+                    </span>
+
+                    {{ dashboard.period.end_date.strftime(
+                        '%d %b %Y'
+                    ) }}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="dashboard-actions">
+
+
+            <div class="dashboard-actions-top">
+
+
+    <!-- PERFORMANCE -->
+
+    <a
+        href="{{ url_for(
+            'dashboard.index'
+        ) }}"
+        class="btn btn-outline-primary btn-sm"
+    >
+
+        <i class="fas fa-chart-line mr-1"></i>
+
+        Performance
+
+    </a>
+
+
+    <!-- PROBLEM -->
+
+    <a
+        href="{{ url_for(
+            'problem_dashboard.index'
+        ) }}"
+        class="btn btn-outline-danger btn-sm"
+    >
+
+        <i class="fas fa-exclamation-triangle mr-1"></i>
+
+        Problem
+
+    </a>
+
+
+    <!-- IMPROVEMENT -->
+
+    <a
+        href="{{ url_for(
+            'improvement_dashboard.index'
+        ) }}"
+        class="btn btn-outline-success btn-sm"
+    >
+
+        <i class="fas fa-tools mr-1"></i>
+
+        Improvement
+
+    </a>
+
+
+    <!-- KAIZEN - ACTIVE -->
+
+    <a
+        href="{{ url_for(
+            'kaizen_dashboard.index'
+        ) }}"
+        class="btn btn-warning btn-sm text-white"
+    >
+
+        <i class="fas fa-lightbulb mr-1"></i>
+
+        Kaizen
+
+    </a>
+
+
+    <!-- LOGIN -->
+
+    <a
+        href="{{ url_for(
+            'auth.login'
+        ) }}"
+        class="btn btn-primary btn-sm"
+    >
+
+        <i class="fas fa-sign-in-alt mr-1"></i>
+
+        Login
+
+    </a>
+
+</div>
+
+            <div class="dashboard-actions-list">
+
+                <a
+                    href="{{ url_for(
+                        'kaizen_dashboard.kaizens'
+                    ) }}"
+                    class="btn btn-outline-primary btn-sm"
+                >
+
+                    <i class="fas fa-list mr-1"></i>
+
+                    Kaizen List
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUMMARY
+         ====================================================== -->
+
+    <div class="row mb-4">
+
+
+        <!-- TOTAL -->
+
+        <div class="col-xl-3 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'kaizen_dashboard.kaizens',
+                    period='6_months'
+                ) }}"
+                class="summary-card summary-total"
+            >
+
+                <div class="summary-card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="summary-label">
+                                Total Kaizen
+                            </div>
+
+                            <div class="summary-value">
+                                {{ dashboard.summary.total }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-lightbulb"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-2 text-muted small">
+
+                        Last 6 months
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- APPROVED -->
+
+        <div class="col-xl-3 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'kaizen_dashboard.kaizens',
+                    status='Approved',
+                    period='6_months'
+                ) }}"
+                class="summary-card summary-approved"
+            >
+
+                <div class="summary-card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="summary-label">
+                                Approved
+                            </div>
+
+                            <div class="summary-value text-success">
+                                {{ dashboard.summary.approved }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-check-circle"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-2 text-muted small">
+
+                        Approved Kaizen
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- OPEN / PENDING -->
+
+        <div class="col-xl-3 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'kaizen_dashboard.kaizens',
+                    open_only='true'
+                ) }}"
+                class="summary-card summary-open"
+            >
+
+                <div class="summary-card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="summary-label">
+                                Open / Pending
+                            </div>
+
+                            <div class="summary-value text-primary">
+                                {{ dashboard.summary.open }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-hourglass-half"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-2 text-muted small">
+
+                        All active pending Kaizen
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- COST SAVING -->
+
+        <div class="col-xl-3 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'kaizen_dashboard.kaizens',
+                    period='6_months'
+                ) }}"
+                class="summary-card summary-saving"
+            >
+
+                <div class="summary-card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <div class="summary-label">
+                                Total Cost Saving
+                            </div>
+
+                            <div class="summary-value text-success">
+
+                                Rp {{ "{:,.0f}".format(
+                                    dashboard.summary.cost_saving or 0
+                                ) }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-coins"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-2 text-muted small">
+
+                        Last 6 months
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATUS + AGING
+         ====================================================== -->
+
+    <div class="row">
+
+
+        <!-- STATUS -->
+
+        <div class="col-lg-6 mb-3">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-header">
+
+                    <i class="fas fa-chart-pie"></i>
+
+                    Kaizen Status
+
+                </div>
+
+
+                <div class="dashboard-card-body">
+
+                    <div class="row">
+
+                        {% if dashboard.status %}
+
+                            {% for item in dashboard.status %}
+
+                                <div class="col-md-6 mb-3">
+
+                                    <a
+                                        href="{{ url_for(
+                                            'kaizen_dashboard.kaizens',
+                                            status=item.status,
+                                            period='6_months'
+                                        ) }}"
+                                        class="status-item"
+                                    >
+
+                                        <div class="status-label">
+
+                                            {{ item.status }}
+
+                                            <i class="fas fa-chevron-right status-arrow"></i>
+
+                                        </div>
+
+
+                                        <div class="status-number">
+
+                                            {{ item.total }}
+
+                                        </div>
+
+
+                                        <small class="text-muted">
+
+                                            View Kaizen
+
+                                        </small>
+
+                                    </a>
+
+                                </div>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <div class="col-12">
+
+                                <div class="empty-data">
+
+                                    <i class="fas fa-chart-pie d-block"></i>
+
+                                    No status data available.
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AGING -->
+
+        <div class="col-lg-6 mb-3">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-header">
+
+                    <i class="fas fa-clock"></i>
+
+                    Open Kaizen Aging
+
+                </div>
+
+
+                <div class="dashboard-card-body">
+
+                    <div class="row">
+
+
+                        <!-- 0 - 7 -->
+
+                        <div class="col-6 col-md mb-3">
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_dashboard.kaizens',
+                                    aging='0_7'
+                                ) }}"
+                                class="aging-item"
+                            >
+
+                                <div class="aging-label">
+
+                                    0 - 7 Days
+
+                                    <i class="fas fa-chevron-right aging-arrow"></i>
+
+                                </div>
+
+                                <div class="aging-value">
+
+                                    {{ dashboard.aging["0_7"] }}
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <!-- 8 - 14 -->
+
+                        <div class="col-6 col-md mb-3">
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_dashboard.kaizens',
+                                    aging='8_14'
+                                ) }}"
+                                class="aging-item"
+                            >
+
+                                <div class="aging-label">
+
+                                    8 - 14 Days
+
+                                    <i class="fas fa-chevron-right aging-arrow"></i>
+
+                                </div>
+
+                                <div class="aging-value">
+
+                                    {{ dashboard.aging["8_14"] }}
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <!-- 15 - 30 -->
+
+                        <div class="col-6 col-md mb-3">
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_dashboard.kaizens',
+                                    aging='15_30'
+                                ) }}"
+                                class="aging-item"
+                            >
+
+                                <div class="aging-label">
+
+                                    15 - 30 Days
+
+                                    <i class="fas fa-chevron-right aging-arrow"></i>
+
+                                </div>
+
+                                <div class="aging-value">
+
+                                    {{ dashboard.aging["15_30"] }}
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <!-- 31 - 60 -->
+
+                        <div class="col-6 col-md mb-3">
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_dashboard.kaizens',
+                                    aging='31_60'
+                                ) }}"
+                                class="aging-item"
+                            >
+
+                                <div class="aging-label">
+
+                                    31 - 60 Days
+
+                                    <i class="fas fa-chevron-right aging-arrow"></i>
+
+                                </div>
+
+                                <div class="aging-value">
+
+                                    {{ dashboard.aging["31_60"] }}
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <!-- > 60 -->
+
+                        <div class="col-6 col-md mb-3">
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_dashboard.kaizens',
+                                    aging='over_60'
+                                ) }}"
+                                class="aging-item"
+                            >
+
+                                <div class="aging-label">
+
+                                    &gt; 60 Days
+
+                                    <i class="fas fa-chevron-right aging-arrow"></i>
+
+                                </div>
+
+                                <div class="aging-value text-danger">
+
+                                    {{ dashboard.aging["over_60"] }}
+
+                                </div>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CHARTS
+         ====================================================== -->
+
+    <div class="row">
+
+
+        <!-- KAIZEN TREND -->
+
+        <div class="col-lg-6 mb-3">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-header">
+
+                    <i class="fas fa-chart-line"></i>
+
+                    Kaizen Trend
+
+                </div>
+
+
+                <div class="dashboard-card-body">
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="kaizenTrendChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COST SAVING -->
+
+        <div class="col-lg-6 mb-3">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-header">
+
+                    <i class="fas fa-chart-area"></i>
+
+                    Cost Saving Trend
+
+                </div>
+
+
+                <div class="dashboard-card-body">
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="savingTrendChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    
+
+
+    <!-- =====================================================
+         KAIZEN BY DEPARTMENT
+         ====================================================== -->
+
+    <div class="dashboard-card">
+
+        <div class="dashboard-card-header">
+
+            <i class="fas fa-building"></i>
+
+            <div>
+
+                <div>
+                    Kaizen by Department
+                </div>
+
+                {% if dashboard.period %}
+
+                <small
+                    style="
+                        font-weight: normal;
+                        opacity: 0.8;
+                    "
+                >
+
+                    {{ dashboard.period.name
+                        if dashboard.period.name
+                        else "Last 6 Months"
+                    }}
+
+                    |
+
+                    {{ dashboard.period.start_date.strftime(
+                        '%d %b %Y'
+                    ) }}
+
+                    -
+
+                    {{ dashboard.period.end_date.strftime(
+                        '%d %b %Y'
+                    ) }}
+
+                </small>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-card-body">
+
+            <div class="table-responsive">
+
+                {% if dashboard.by_department %}
+
+                <table class="table department-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width: 60px;">
+                                No
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th
+                                class="text-right"
+                                style="width: 160px;"
+                            >
+                                Total Kaizen
+                            </th>
+
+                            <th
+                                class="text-center"
+                                style="width: 100px;"
+                            >
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in dashboard.by_department %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ loop.index }}
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen_dashboard.kaizens',
+                                        department_id=item.department_id,
+                                        period='6_months'
+                                    ) }}"
+                                    class="department-link"
+                                >
+
+                                    <i
+                                        class="
+                                            fas
+                                            fa-building
+                                            mr-2
+                                            text-muted
+                                        "
+                                    ></i>
+
+                                    {{ item.department }}
+
+                                </a>
+
+                            </td>
+
+
+                            <td class="text-right">
+
+                                <span
+                                    class="department-total"
+                                >
+
+                                    {{ item.total }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen_dashboard.kaizens',
+                                        department_id=item.department_id,
+                                        period='6_months'
+                                    ) }}"
+                                    class="btn btn-outline-primary btn-sm"
+                                    title="View Kaizen"
+                                >
+
+                                    <i class="fas fa-list"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                <div class="empty-data">
+
+                    <i
+                        class="
+                            fas
+                            fa-building
+                            d-block
+                        "
+                    ></i>
+
+                    No department data available.
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="dashboard-footer">
+
+        <i class="fas fa-lightbulb mr-1"></i>
+
+        CIMS - Continuous Improvement Management System
+
+        &copy;
+
+        {{ dashboard.period.end_date.year }}
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     CHART.JS
+     ========================================================== -->
+
+<script src="{{ url_for(
+    'static',
+    filename='js/chart.js'
+) }}"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           CHECK CHART.JS
+           ====================================================== */
+
+        if (typeof Chart === "undefined") {
+
+            console.error(
+                "Chart.js is not loaded."
+            );
+
+            return;
+
+        }
+
+
+        /* =====================================================
+           TREND DATA
+           ====================================================== */
+
+        const trendLabels =
+            {{ dashboard.trend
+                | map(attribute='month')
+                | list
+                | tojson
+            }};
+
+
+        const trendValues =
+            {{ dashboard.trend
+                | map(attribute='total')
+                | list
+                | tojson
+            }};
+
+
+        /* =====================================================
+           SAVING DATA
+           ====================================================== */
+
+        const savingLabels =
+            {{ dashboard.saving_trend
+                | map(attribute='month')
+                | list
+                | tojson
+            }};
+
+
+        const savingValues =
+            {{ dashboard.saving_trend
+                | map(attribute='saving')
+                | list
+                | tojson
+            }};
+
+
+        /* =====================================================
+           KAIZEN TREND
+           ====================================================== */
+
+        const trendCanvas =
+            document.getElementById(
+                "kaizenTrendChart"
+            );
+
+
+        if (trendCanvas) {
+
+            new Chart(
+                trendCanvas,
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: trendLabels,
+
+                        datasets: [
+
+                            {
+
+                                label: "Kaizen",
+
+                                data: trendValues,
+
+                                tension: 0.35,
+
+                                fill: false,
+
+                                borderWidth: 3,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display: false
+
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label:
+                                        function(context) {
+
+                                            return " " +
+
+                                                Number(
+                                                    context.raw
+                                                ).toLocaleString(
+                                                    "id-ID"
+                                                );
+
+                                        }
+
+                                }
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           KAIZEN TARGET VS RESULT
+           ====================================================== */
+
+        const targetResultCanvas =
+            document.getElementById(
+                "kaizenTargetResultChart"
+            );
+
+
+        if (targetResultCanvas) {
+
+            const targetResultLabels =
+                {{ dashboard.target_vs_result
+                    | map(attribute='department')
+                    | list
+                    | tojson
+                }};
+
+
+            const targetResultTarget =
+                {{ dashboard.target_vs_result
+                    | map(attribute='target')
+                    | list
+                    | tojson
+                }};
+
+
+            const targetResultActual =
+                {{ dashboard.target_vs_result
+                    | map(attribute='actual')
+                    | list
+                    | tojson
+                }};
+
+
+            new Chart(
+
+                targetResultCanvas,
+
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels:
+                            targetResultLabels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Target",
+
+                                data:
+                                    targetResultTarget,
+
+                                borderWidth: 1
+
+                            },
+
+                            {
+
+                                label:
+                                    "Result",
+
+                                data:
+                                    targetResultActual,
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+
+                        plugins: {
+
+                            legend: {
+
+                                display: true,
+
+                                position: "top"
+
+                            },
+
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label:
+                                        function(context) {
+
+                                            return (
+
+                                                " " +
+
+                                                context.dataset.label +
+
+                                                ": " +
+
+                                                Number(
+                                                    context.raw
+                                                ).toLocaleString(
+                                                    "id-ID"
+                                                )
+
+                                            );
+
+                                        }
+
+                                }
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        /* =====================================================
+           COST SAVING TREND
+           ====================================================== */
+
+        const savingCanvas =
+            document.getElementById(
+                "savingTrendChart"
+            );
+
+
+        if (savingCanvas) {
+
+            new Chart(
+                savingCanvas,
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: savingLabels,
+
+                        datasets: [
+
+                            {
+
+                                label: "Cost Saving",
+
+                                data: savingValues,
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display: false
+
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label:
+                                        function(context) {
+
+                                            const value =
+                                                context.raw || 0;
+
+                                            return "Rp " +
+
+                                                new Intl.NumberFormat(
+                                                    "id-ID"
+                                                ).format(
+                                                    value
+                                                );
+
+                                        }
+
+                                }
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    callback:
+                                        function(value) {
+
+                                            return "Rp " +
+
+                                                new Intl.NumberFormat(
+                                                    "id-ID"
+                                                ).format(
+                                                    value
+                                                );
+
+                                        }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+
+);
+
+</script>
+
+{% endblock %}

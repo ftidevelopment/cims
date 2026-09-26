@@ -1,0 +1,18 @@
+🔔 CIMS - Improvement Updated
+
+Improvement No: {{ improvement.improvement_no }}
+Title: {{ improvement.title }}
+Problem No: {% if problem %}{{ problem.problem_no }}{% else %}-{% endif %}
+Problem Title: {% if problem %}{{ problem.title }}{% else %}-{% endif %}
+Owner: {% if improvement.owner_employee %}{{ improvement.owner_employee.full_name }}{% else %}-{% endif %}
+
+PIC:
+{% if improvement.improvement_pics %}{% for pic in improvement.improvement_pics %}{% if pic.is_active and pic.employee %}- {{ pic.employee.full_name }}{% if pic.is_leader %} (Leader){% else %} (PIC){% endif %}
+{% endif %}{% endfor %}{% else %}- No PIC assigned
+{% endif %}
+Improvement Cost: {{ improvement.improvement_cost or 0 }}
+Estimated Saving: {{ improvement.estimated_cost_saving or 0 }}
+Estimated Benefit: {{ improvement.estimated_benefit or 0 }}
+
+The improvement information has been updated in CIMS.
+Please check CIMS for the latest information.

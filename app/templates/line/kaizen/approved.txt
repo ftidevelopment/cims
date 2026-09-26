@@ -1,0 +1,13 @@
+🔔 CIMS - Kaizen Approved
+
+Kaizen No: {{ kaizen.kaizen_no }}
+Title: {{ kaizen.title }}
+Employee: {% if kaizen.employee %}{{ kaizen.employee.full_name }}{% else %}-{% endif %}
+Improvement: {% if kaizen.improvement %}{{ kaizen.improvement.improvement_no }} - {{ kaizen.improvement.title }}{% else %}-{% endif %}
+Problem: {% if kaizen.problem %}{{ kaizen.problem.problem_no }} - {{ kaizen.problem.title }}{% else %}-{% endif %}
+Approved By: {% if kaizen.approved_by %}{{ kaizen.approved_by.full_name }}{% else %}-{% endif %}
+Approved Date: {% if kaizen.approved_at %}{{ kaizen.approved_at.strftime('%d-%m-%Y %H:%M') }}{% else %}-{% endif %}
+Status: Approved
+
+The Kaizen proposal has been approved in CIMS.
+Please check CIMS for the latest information.

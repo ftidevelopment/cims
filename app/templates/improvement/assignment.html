@@ -1,0 +1,627 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Improvement Assignment
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ==================================================
+         Header
+    ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h4 class="mb-1">
+                Improvement Assignment
+            </h4>
+
+            <small class="text-muted">
+                Improvement PIC is automatically synchronized
+                from Problem PIC.
+            </small>
+
+        </div>
+
+        <div>
+
+            <a
+                href="{{ url_for(
+                    'improvement.detail',
+                    improvement_id=improvement.id
+                ) }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Improvement Information
+    ================================================== -->
+
+    <div class="card mb-3">
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-lightbulb mr-2"></i>
+
+                Improvement Information
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Improvement No -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Improvement No
+                    </strong>
+
+                    <div class="mt-1">
+
+                        {{ improvement.improvement_no }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Title -->
+
+                <div class="col-md-5">
+
+                    <strong>
+                        Improvement
+                    </strong>
+
+                    <div class="mt-1">
+
+                        {{ improvement.title }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Department
+                    </strong>
+
+                    <div class="mt-1">
+
+                        {% if problem and problem.department %}
+
+                            {{ problem.department.department_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <div class="row">
+
+                <!-- Problem No -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Problem No
+                    </strong>
+
+                    <div class="mt-1">
+
+                        {% if problem %}
+
+                            {{ problem.problem_no }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Problem -->
+
+                <div class="col-md-9">
+
+                    <strong>
+                        Problem
+                    </strong>
+
+                    <div class="mt-1">
+
+                        {% if problem %}
+
+                            {{ problem.title }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         PIC & Owner
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-users mr-2"></i>
+
+                Improvement PIC & Owner
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <!-- ==================================================
+                 Automatic Assignment Information
+            ================================================== -->
+
+            <div class="alert alert-info">
+
+                <i class="fas fa-info-circle mr-2"></i>
+
+                <strong>
+                    Automatic Assignment
+                </strong>
+
+                <div class="mt-1">
+
+                    Improvement PIC is automatically copied
+                    from the related Problem PIC.
+
+                    The Problem PIC Leader is automatically
+                    assigned as the Improvement Owner.
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 Improvement Owner
+            ================================================== -->
+
+            <div class="form-group">
+
+                <label>
+
+                    <i class="fas fa-user-tie mr-1"></i>
+
+                    Improvement Owner
+
+                </label>
+
+
+                {% if owner %}
+
+                    <div class="border rounded p-3 bg-light">
+
+                        <div class="d-flex align-items-center">
+
+                            <div class="mr-3">
+
+                                <i
+                                    class="fas fa-user-tie fa-2x text-primary"
+                                ></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong class="d-block">
+
+                                    {{ owner.full_name }}
+
+                                </strong>
+
+
+                                {% if owner.nik %}
+
+                                    <small class="text-muted">
+
+                                        NIK:
+                                        {{ owner.nik }}
+
+                                    </small>
+
+                                {% endif %}
+
+
+                                {% if owner.department %}
+
+                                    <small class="text-muted ml-3">
+
+                                        Department:
+                                        {{ owner.department.department_name }}
+
+                                    </small>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="ml-auto">
+
+                                <span class="badge badge-primary">
+
+                                    <i class="fas fa-star mr-1"></i>
+
+                                    Leader
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-warning">
+
+                        <i
+                            class="fas fa-exclamation-triangle mr-2"
+                        ></i>
+
+                        No Improvement Owner assigned.
+
+                    </div>
+
+                {% endif %}
+
+
+                <small class="form-text text-muted">
+
+                    The Owner is automatically taken from
+                    the Problem PIC Leader.
+
+                </small>
+
+            </div>
+
+
+            <!-- ==================================================
+                 Improvement PIC
+            ================================================== -->
+
+            <div class="form-group mb-0">
+
+                <label>
+
+                    <i class="fas fa-users mr-1"></i>
+
+                    Improvement PIC
+
+                </label>
+
+
+                {% if improvement_pics %}
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table table-bordered table-hover"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th
+                                        style="width: 60px;"
+                                        class="text-center"
+                                    >
+                                        No
+                                    </th>
+
+                                    <th>
+                                        Employee
+                                    </th>
+
+                                    <th>
+                                        NIK
+                                    </th>
+
+                                    <th>
+                                        Department
+                                    </th>
+
+                                    <th
+                                        style="width: 120px;"
+                                        class="text-center"
+                                    >
+                                        Role
+                                    </th>
+
+                                    <th
+                                        style="width: 120px;"
+                                        class="text-center"
+                                    >
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for pic in improvement_pics %}
+
+                                    <tr>
+
+                                        <!-- No -->
+
+                                        <td class="text-center">
+
+                                            {{ loop.index }}
+
+                                        </td>
+
+
+                                        <!-- Employee -->
+
+                                        <td>
+
+                                            <i
+                                                class="fas fa-user mr-2"
+                                            ></i>
+
+                                            <strong>
+
+                                                {{ pic.employee.full_name }}
+
+                                            </strong>
+
+                                        </td>
+
+
+                                        <!-- NIK -->
+
+                                        <td>
+
+                                            {% if pic.employee.nik %}
+
+                                                {{ pic.employee.nik }}
+
+                                            {% else %}
+
+                                                -
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <!-- Department -->
+
+                                        <td>
+
+                                            {% if pic.employee.department %}
+
+                                                {{
+                                                    pic.employee
+                                                    .department
+                                                    .department_name
+                                                }}
+
+                                            {% else %}
+
+                                                -
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <!-- Role -->
+
+                                        <td class="text-center">
+
+                                            {% if pic.is_leader %}
+
+                                                <span
+                                                    class="badge badge-primary"
+                                                >
+
+                                                    <i
+                                                        class="fas fa-star mr-1"
+                                                    ></i>
+
+                                                    Leader
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span
+                                                    class="badge badge-secondary"
+                                                >
+
+                                                    PIC
+
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <!-- Status -->
+
+                                        <td class="text-center">
+
+                                            {% if pic.status == "ASSIGNED" %}
+
+                                                <span
+                                                    class="badge badge-success"
+                                                >
+
+                                                    Assigned
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span
+                                                    class="badge badge-secondary"
+                                                >
+
+                                                    {{ pic.status }}
+
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-warning mb-0">
+
+                        <i
+                            class="fas fa-exclamation-triangle mr-2"
+                        ></i>
+
+                        No Improvement PIC found.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ==================================================
+                 Synchronization Notice
+            ================================================== -->
+
+            <div class="alert alert-secondary mt-3 mb-0">
+
+                <i class="fas fa-sync-alt mr-2"></i>
+
+                <strong>
+                    PIC Synchronization
+                </strong>
+
+                <div class="mt-1">
+
+                    Improvement PIC follows the PIC assignment
+                    of the related Problem.
+
+                    If the Problem PIC is changed, the
+                    Improvement PIC and Owner will be updated
+                    automatically.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             Footer
+        ================================================== -->
+
+        <div class="card-footer">
+
+            <a
+                href="{{ url_for(
+                    'improvement.detail',
+                    improvement_id=improvement.id
+                ) }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back to Improvement
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

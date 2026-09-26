@@ -1,0 +1,1229 @@
+{% from "components/sortable_header.html" import sortable_header %}
+{% extends "layouts/base.html" %}
+
+{% block title %}Kaizen{% endblock %}
+
+{% block content %}
+
+{% set is_mine = request.args.get("mine", "") %}
+
+<!-- ==========================================
+Content Header
+========================================== -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    {% if is_mine == "1" %}
+                        My Kaizen
+                    {% else %}
+                        Kaizen Management
+                    {% endif %}
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Continuous Improvement
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if is_mine == "1" %}
+                            My Kaizen
+                        {% else %}
+                            Kaizen
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+Main Content
+========================================== -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- ==========================================
+            Card Header
+            ========================================== -->
+            <div class="card-header">
+
+
+                <!-- ==========================================
+                     ROW 1
+                     Title + Filters
+                =========================================== -->
+                <div class="d-flex align-items-center flex-wrap">
+
+
+                    <!-- Title -->
+                    <div
+                        class="d-flex align-items-center flex-shrink-0 mr-3"
+                        style="min-width:160px;"
+                    >
+
+                        <h3
+                            class="card-title mb-0"
+                            style="white-space: nowrap;"
+                        >
+
+                            <i class="fas fa-lightbulb mr-2"></i>
+
+                            {% if is_mine == "1" %}
+                                My Kaizens
+                            {% else %}
+                                Kaizen List
+                            {% endif %}
+
+                        </h3>
+
+                    </div>
+
+
+                    <!-- ==========================================
+                         Status Filter
+                    =========================================== -->
+                    <form
+                        method="GET"
+                        class="mb-0 mr-2 flex-shrink-0"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="mine"
+                            value="{{ is_mine }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="keyword"
+                            value="{{ keyword }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="department_id"
+                            value="{{ department_id or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="date_from"
+                            value="{{ date_from or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="date_to"
+                            value="{{ date_to or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="sort"
+                            value="{{ sort_by }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="order"
+                            value="{{ sort_order }}"
+                        >
+
+
+                        <select
+                            name="status"
+                            class="custom-select custom-select-sm"
+                            style="width:150px;"
+                            onchange="this.form.submit()"
+                        >
+
+                            <option value="">
+                                All Status
+                            </option>
+
+                            <option
+                                value="Draft"
+                                {% if status == "Draft" %}selected{% endif %}
+                            >
+                                Draft
+                            </option>
+
+                            <option
+                                value="Proposal"
+                                {% if status == "Proposal" %}selected{% endif %}
+                            >
+                                Proposal
+                            </option>
+
+                            <option
+                                value="Approved"
+                                {% if status == "Approved" %}selected{% endif %}
+                            >
+                                Approved
+                            </option>
+
+                            <option
+                                value="Rejected"
+                                {% if status == "Rejected" %}selected{% endif %}
+                            >
+                                Rejected
+                            </option>
+
+                            <option
+                                value="Implemented"
+                                {% if status == "Implemented" %}selected{% endif %}
+                            >
+                                Implemented
+                            </option>
+
+                        </select>
+
+                    </form>
+
+
+                    <!-- ==========================================
+                         Department Filter
+                    =========================================== -->
+                    <form
+                        method="GET"
+                        class="mb-0 mr-2 flex-shrink-0"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="mine"
+                            value="{{ is_mine }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="keyword"
+                            value="{{ keyword }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="status"
+                            value="{{ status }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="date_from"
+                            value="{{ date_from or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="date_to"
+                            value="{{ date_to or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="sort"
+                            value="{{ sort_by }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="order"
+                            value="{{ sort_order }}"
+                        >
+
+
+                        <select
+                            name="department_id"
+                            class="custom-select custom-select-sm"
+                            style="width:180px;"
+                            onchange="this.form.submit()"
+                        >
+
+                            <option value="">
+                                All Department
+                            </option>
+
+                            {% for department in departments %}
+
+                            <option
+                                value="{{ department.id }}"
+                                {% if department_id == department.id %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ department.department_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </form>
+
+
+                    <!-- ==========================================
+                         Date Filter
+                    =========================================== -->
+                    <form
+                        method="GET"
+                        class="mb-0 mr-2 flex-shrink-0"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="mine"
+                            value="{{ is_mine }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="keyword"
+                            value="{{ keyword }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="status"
+                            value="{{ status }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="department_id"
+                            value="{{ department_id or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="sort"
+                            value="{{ sort_by }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="order"
+                            value="{{ sort_order }}"
+                        >
+
+
+                        <div class="d-flex align-items-center">
+
+                            <!-- From Date -->
+                            <input
+                                type="date"
+                                name="date_from"
+                                class="form-control form-control-sm"
+                                style="width:145px;"
+                                value="{{ date_from or '' }}"
+                                title="From Date"
+                            >
+
+                            <span class="mx-1">
+                                -
+                            </span>
+
+                            <!-- To Date -->
+                            <input
+                                type="date"
+                                name="date_to"
+                                class="form-control form-control-sm"
+                                style="width:145px;"
+                                value="{{ date_to or '' }}"
+                                title="To Date"
+                            >
+
+                            <!-- Filter -->
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-sm ml-1"
+                                title="Filter"
+                            >
+
+                                <i class="fas fa-filter"></i>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+
+                <!-- ==========================================
+                     ROW 2
+                     Create + Search
+                =========================================== -->
+                <div class="d-flex align-items-center flex-wrap mt-2">
+
+
+                    <!-- ==========================================
+                         Create from Improvement
+                    =========================================== -->
+                    <a
+                        href="{{ url_for('kaizen.select_improvement') }}"
+                        class="btn btn-success mr-2 mb-1"
+                    >
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Create Kaizen from Improvement
+
+                    </a>
+
+
+                    <!-- ==========================================
+                         Create from Problem
+                    =========================================== -->
+                    <a
+                        href="{{ url_for('kaizen.select_problem') }}"
+                        class="btn btn-primary mr-2 mb-1"
+                    >
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Create Kaizen from Problem
+
+                    </a>
+
+
+                    <!-- ==========================================
+                         Create Direct
+                    =========================================== -->
+                    <a
+                        href="{{ url_for('kaizen.create_direct') }}"
+                        class="btn btn-secondary mr-2 mb-1"
+                    >
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Create Kaizen Directly
+
+                    </a>
+
+
+                    <!-- ==========================================
+                         Search
+                    =========================================== -->
+                    <form
+                        method="GET"
+                        class="mb-1"
+                        style="flex:1; min-width:300px;"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="mine"
+                            value="{{ is_mine }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="status"
+                            value="{{ status }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="department_id"
+                            value="{{ department_id or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="date_from"
+                            value="{{ date_from or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="date_to"
+                            value="{{ date_to or '' }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="sort"
+                            value="{{ sort_by }}"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="order"
+                            value="{{ sort_order }}"
+                        >
+
+
+                        <div class="input-group">
+
+
+                            <input
+                                type="text"
+                                name="keyword"
+                                class="form-control"
+                                placeholder="Search kaizen no, title..."
+                                value="{{ keyword }}"
+                            >
+
+
+                            <div class="input-group-append">
+
+
+                                <!-- Search -->
+                                <button
+                                    class="btn btn-primary"
+                                    type="submit"
+                                    title="Search"
+                                >
+
+                                    <i class="fas fa-search"></i>
+
+                                </button>
+
+
+                                <!-- Reset -->
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen.index',
+                                        mine=is_mine
+                                    ) }}"
+                                    class="btn btn-secondary ml-1"
+                                    title="Reset"
+                                >
+
+                                    <i class="fas fa-sync-alt"></i>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 MY KAIZEN INFORMATION
+            =========================================== -->
+            {% if is_mine == "1" %}
+
+            <div class="card-body pb-2">
+
+                <div
+                    class="alert alert-info mb-0 d-flex align-items-center justify-content-between"
+                    style="background-color:#17a2b8; border-color:#17a2b8; color:white;"
+                >
+
+                    <div class="d-flex align-items-center">
+
+                        <i class="fas fa-user-circle fa-lg mr-3"></i>
+
+                        <strong class="mr-3">
+                            My Kaizens
+                        </strong>
+
+                        <span>
+                            Showing kaizens created by you.
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="{{ url_for('kaizen.index') }}"
+                        class="btn btn-outline-light btn-sm"
+                    >
+
+                        <i class="fas fa-list mr-1"></i>
+
+                        View All Kaizens
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ==========================================
+            Card Body
+            ========================================== -->
+            <div class="card-body">
+
+
+                <!-- ==========================================
+                     Filter Information
+                =========================================== -->
+                {% if is_mine == "1" or keyword or status or department_id or date_from or date_to %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-filter mr-1"></i>
+
+                    Filter:
+
+
+                    {% if is_mine == "1" %}
+
+                    <strong class="ml-1">
+                        My Kaizens
+                    </strong>
+
+                    {% endif %}
+
+
+                    {% if keyword %}
+
+                    <strong class="ml-3">
+                        Search: {{ keyword }}
+                    </strong>
+
+                    {% endif %}
+
+
+                    {% if status %}
+
+                    <strong class="ml-3">
+                        Status: {{ status }}
+                    </strong>
+
+                    {% endif %}
+
+
+                    {% if department_id %}
+
+                    <strong class="ml-3">
+
+                        Department:
+
+                        {% for department in departments %}
+
+                            {% if department.id == department_id %}
+
+                                {{ department.department_name }}
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </strong>
+
+                    {% endif %}
+
+
+                    {% if date_from %}
+
+                    <strong class="ml-3">
+                        From: {{ date_from }}
+                    </strong>
+
+                    {% endif %}
+
+
+                    {% if date_to %}
+
+                    <strong class="ml-3">
+                        To: {{ date_to }}
+                    </strong>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ==========================================
+                     Kaizen Table
+                =========================================== -->
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr class="text-center">
+
+
+                            <th width="60">
+                                No
+                            </th>
+
+
+                            <!-- Kaizen No -->
+                            {{ sortable_header(
+                                title="Kaizen No",
+                                field="kaizen_no",
+                                endpoint="kaizen.index",
+                                keyword=keyword,
+                                status=status,
+                                department_id=department_id,
+                                date_from=date_from,
+                                date_to=date_to,
+                                sort_by=sort_by,
+                                sort_order=sort_order,
+                                mine=is_mine
+                            ) }}
+
+
+                            <!-- Create Date -->
+                            {{ sortable_header(
+                                title="Create Date",
+                                field="created_at",
+                                endpoint="kaizen.index",
+                                keyword=keyword,
+                                status=status,
+                                department_id=department_id,
+                                date_from=date_from,
+                                date_to=date_to,
+                                sort_by=sort_by,
+                                sort_order=sort_order,
+                                mine=is_mine
+                            ) }}
+
+
+                            <th width="150">
+                                Department
+                            </th>
+
+
+                            <!-- Title -->
+                            {{ sortable_header(
+                                title="Title",
+                                field="title",
+                                endpoint="kaizen.index",
+                                keyword=keyword,
+                                status=status,
+                                department_id=department_id,
+                                date_from=date_from,
+                                date_to=date_to,
+                                sort_by=sort_by,
+                                sort_order=sort_order,
+                                mine=is_mine
+                            ) }}
+
+
+                            <!-- Category -->
+                            {{ sortable_header(
+                                title="Category",
+                                field="category",
+                                endpoint="kaizen.index",
+                                keyword=keyword,
+                                status=status,
+                                department_id=department_id,
+                                date_from=date_from,
+                                date_to=date_to,
+                                sort_by=sort_by,
+                                sort_order=sort_order,
+                                mine=is_mine
+                            ) }}
+
+
+                            <th>
+                                Improvement
+                            </th>
+
+
+                            <th>
+                                Problem
+                            </th>
+
+
+                            <!-- Status -->
+                            {{ sortable_header(
+                                title="Status",
+                                field="status",
+                                endpoint="kaizen.index",
+                                keyword=keyword,
+                                status=status,
+                                department_id=department_id,
+                                date_from=date_from,
+                                date_to=date_to,
+                                sort_by=sort_by,
+                                sort_order=sort_order,
+                                mine=is_mine
+                            ) }}
+
+
+                            <th width="130">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% if kaizens.items %}
+
+
+                        {% for kaizen in kaizens.items %}
+
+                        <tr>
+
+
+                            <!-- No -->
+                            <td class="text-center">
+
+                                {{ kaizens.first + loop.index0 }}
+
+                            </td>
+
+
+                            <!-- Kaizen No -->
+                            <td>
+
+                                {{ kaizen.kaizen_no }}
+
+                            </td>
+
+
+                            <!-- Create Date -->
+                            <td class="text-center">
+
+                                {% if kaizen.created_at %}
+
+                                    {{ kaizen.created_at.strftime('%d-%m-%Y') }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Department -->
+                            <td>
+
+                                {% if kaizen.department %}
+
+                                    {{ kaizen.department.department_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Title -->
+                            <td>
+
+                                {{ kaizen.title }}
+
+                            </td>
+
+
+                            <!-- Category -->
+                            <td>
+
+                                {% if kaizen.kaizen_category %}
+
+                                    {{ kaizen.kaizen_category.kaizen_category_code }}
+                                    -
+                                    {{ kaizen.kaizen_category.kaizen_category_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Improvement -->
+                            <td>
+
+                                {% if kaizen.improvement %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'improvement.detail',
+                                        improvement_id=kaizen.improvement.id
+                                    ) }}"
+                                >
+
+                                    {{ kaizen.improvement.improvement_no }}
+
+                                </a>
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Problem -->
+                            <td>
+
+                                {% if kaizen.problem %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'problem.show',
+                                        problem_id=kaizen.problem.id
+                                    ) }}"
+                                >
+
+                                    {{ kaizen.problem.problem_no }}
+
+                                </a>
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td class="text-center">
+
+
+                                {% if kaizen.status == "Draft" %}
+
+                                <span class="badge badge-pill badge-secondary">
+                                    Draft
+                                </span>
+
+
+                                {% elif kaizen.status == "Proposal" %}
+
+                                <span class="badge badge-pill badge-warning">
+                                    Proposal
+                                </span>
+
+
+                                {% elif kaizen.status == "Approved" %}
+
+                                <span class="badge badge-pill badge-success">
+                                    Approved
+                                </span>
+
+
+                                {% elif kaizen.status == "Rejected" %}
+
+                                <span class="badge badge-pill badge-danger">
+                                    Rejected
+                                </span>
+
+
+                                {% elif kaizen.status == "Implemented" %}
+
+                                <span class="badge badge-pill badge-primary">
+                                    Implemented
+                                </span>
+
+
+                                {% else %}
+
+                                <span class="badge badge-pill badge-light">
+                                    {{ kaizen.status }}
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Action -->
+                            <td class="text-center">
+
+
+                                <!-- View -->
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen.detail',
+                                        kaizen_id=kaizen.id
+                                    ) }}"
+                                    class="btn btn-info btn-sm"
+                                    title="View"
+                                >
+
+                                    <i class="fas fa-eye"></i>
+
+                                </a>
+
+                                <!-- PDF -->
+
+<a
+    href="{{ url_for(
+        'kaizen.export_pdf',
+        kaizen_id=kaizen.id
+    ) }}"
+    class="btn btn-danger btn-sm"
+    target="_blank"
+    title="Export PDF"
+>
+
+    <i class="fas fa-file-pdf"></i>
+
+</a>
+
+
+                                <!-- Edit -->
+                                {% if kaizen.status in ["Draft", "Rejected"] %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen.edit',
+                                        kaizen_id=kaizen.id
+                                    ) }}"
+                                    class="btn btn-warning btn-sm"
+                                    title="Edit"
+                                >
+
+                                    <i class="fas fa-edit"></i>
+
+                                </a>
+
+                                {% endif %}
+
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="10"
+                                class="text-center text-muted py-4"
+                            >
+
+                                <i class="fas fa-folder-open fa-2x mb-2"></i>
+
+                                <br>
+
+                                No Kaizen data found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ==========================================
+            Card Footer
+            ========================================== -->
+            <div class="card-footer clearfix">
+
+
+                <!-- Showing Information -->
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+                        {{ kaizens.first if kaizens.total > 0 else 0 }}
+                    </strong>
+
+                    to
+
+                    <strong>
+                        {{ kaizens.last if kaizens.total > 0 else 0 }}
+                    </strong>
+
+                    of
+
+                    <strong>
+                        {{ kaizens.total }}
+                    </strong>
+
+                    kaizen(s)
+
+                </div>
+
+
+                <!-- Pagination -->
+                <div class="float-right">
+
+                    <nav>
+
+                        <ul class="pagination pagination-sm mb-0">
+
+
+                            <!-- Previous -->
+                            {% if kaizens.has_prev %}
+
+                            <li class="page-item">
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'kaizen.index',
+                                        page=kaizens.prev_num,
+                                        mine=is_mine,
+                                        keyword=keyword,
+                                        status=status,
+                                        department_id=department_id,
+                                        date_from=date_from,
+                                        date_to=date_to,
+                                        sort=sort_by,
+                                        order=sort_order
+                                    ) }}"
+                                >
+
+                                    Previous
+
+                                </a>
+
+                            </li>
+
+                            {% endif %}
+
+
+                            <!-- Page Numbers -->
+                            {% for page_num in kaizens.iter_pages() %}
+
+                            {% if page_num %}
+
+                            <li
+                                class="page-item
+                                {% if page_num == kaizens.page %}
+                                    active
+                                {% endif %}"
+                            >
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'kaizen.index',
+                                        page=page_num,
+                                        mine=is_mine,
+                                        keyword=keyword,
+                                        status=status,
+                                        department_id=department_id,
+                                        date_from=date_from,
+                                        date_to=date_to,
+                                        sort=sort_by,
+                                        order=sort_order
+                                    ) }}"
+                                >
+
+                                    {{ page_num }}
+
+                                </a>
+
+                            </li>
+
+                            {% else %}
+
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+                                    ...
+                                </span>
+
+                            </li>
+
+                            {% endif %}
+
+                            {% endfor %}
+
+
+                            <!-- Next -->
+                            {% if kaizens.has_next %}
+
+                            <li class="page-item">
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'kaizen.index',
+                                        page=kaizens.next_num,
+                                        mine=is_mine,
+                                        keyword=keyword,
+                                        status=status,
+                                        department_id=department_id,
+                                        date_from=date_from,
+                                        date_to=date_to,
+                                        sort=sort_by,
+                                        order=sort_order
+                                    ) }}"
+                                >
+
+                                    Next
+
+                                </a>
+
+                            </li>
+
+                            {% endif %}
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

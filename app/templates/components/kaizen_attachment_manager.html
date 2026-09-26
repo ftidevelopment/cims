@@ -1,0 +1,313 @@
+<!-- ==================================================
+     Kaizen Attachment Manager
+     Existing Attachments
+================================================== -->
+
+<div class="mt-4">
+
+    <!-- ==========================================
+         Header
+    ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+        <label class="mb-0 font-weight-bold">
+
+            Existing Attachment
+
+        </label>
+
+
+        <span class="badge badge-secondary">
+
+            {% set filtered_attachments = [] %}
+
+            {% for attachment in kaizen.attachments %}
+
+                {% if attachment_type is defined and attachment_type %}
+
+                    {% if attachment.attachment_type == attachment_type %}
+
+                        {% set _ = filtered_attachments.append(attachment) %}
+
+                    {% endif %}
+
+                {% else %}
+
+                    {% set _ = filtered_attachments.append(attachment) %}
+
+                {% endif %}
+
+            {% endfor %}
+
+            {{ filtered_attachments|length }}
+
+            File(s)
+
+        </span>
+
+    </div>
+
+
+    <!-- ==========================================
+         Attachment Table
+    ========================================== -->
+
+    {% if filtered_attachments %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover table-sm mb-0">
+
+            <thead class="thead-light">
+
+                <tr>
+
+                    <th style="width: 40%;">
+                        File
+                    </th>
+
+                    <th style="width: 12%;" class="text-center">
+                        Size
+                    </th>
+
+                    <th style="width: 28%;">
+                        Description
+                    </th>
+
+                    <th style="width: 20%;" class="text-center">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for attachment in filtered_attachments %}
+
+                <tr>
+
+                    <!-- ==================================
+                         File
+                    =================================== -->
+
+                    <td>
+
+                        <div class="d-flex align-items-center">
+
+                            {% if attachment.file_type|lower in [
+                                "jpg",
+                                "jpeg",
+                                "png",
+                                "webp"
+                            ] %}
+
+                            <i class="fas fa-image text-success mr-2"></i>
+
+
+                            {% elif attachment.file_type|lower == "pdf" %}
+
+                            <i class="fas fa-file-pdf text-danger mr-2"></i>
+
+
+                            {% elif attachment.file_type|lower in [
+                                "xls",
+                                "xlsx"
+                            ] %}
+
+                            <i class="fas fa-file-excel text-success mr-2"></i>
+
+
+                            {% elif attachment.file_type|lower in [
+                                "doc",
+                                "docx"
+                            ] %}
+
+                            <i class="fas fa-file-word text-primary mr-2"></i>
+
+
+                            {% elif attachment.file_type|lower in [
+                                "ppt",
+                                "pptx"
+                            ] %}
+
+                            <i class="fas fa-file-powerpoint text-danger mr-2"></i>
+
+
+                            {% else %}
+
+                            <i class="fas fa-paperclip text-secondary mr-2"></i>
+
+                            {% endif %}
+
+
+                            <span
+                                class="font-weight-bold"
+                                style="word-break: break-word;"
+                            >
+
+                                {{ attachment.file_name }}
+
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ==================================
+                         File Size
+                    =================================== -->
+
+                    <td class="text-center">
+
+                        {% if attachment.file_size is none %}
+
+                            -
+
+                        {% elif attachment.file_size < 1024 %}
+
+                            {{ attachment.file_size }} B
+
+                        {% elif attachment.file_size < 1048576 %}
+
+                            {{ "%.1f"|format(
+                                attachment.file_size / 1024
+                            ) }} KB
+
+                        {% else %}
+
+                            {{ "%.2f"|format(
+                                attachment.file_size / 1048576
+                            ) }} MB
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ==================================
+                         Description
+                    =================================== -->
+
+                    <td>
+
+                        {% if attachment.description %}
+
+                            {{ attachment.description }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ==================================
+                         Action
+                    =================================== -->
+
+                    <td class="text-center">
+
+                        <!-- Preview -->
+
+                        {% if attachment.file_type|lower in [
+                            "jpg",
+                            "jpeg",
+                            "png",
+                            "webp",
+                            "pdf"
+                        ] %}
+
+                        <a
+                            href="{{ url_for(
+                                'kaizen.preview_attachment',
+                                kaizen_id=kaizen.id,
+                                attachment_id=attachment.id
+                            ) }}"
+                            class="btn btn-outline-info btn-sm"
+                            target="_blank"
+                            title="Preview"
+                        >
+
+                            <i class="fas fa-eye"></i>
+
+                        </a>
+
+                        {% endif %}
+
+
+                        <!-- Download -->
+
+                        <a
+                            href="{{ url_for(
+                                'kaizen.download_attachment',
+                                kaizen_id=kaizen.id,
+                                attachment_id=attachment.id
+                            ) }}"
+                            class="btn btn-outline-success btn-sm"
+                            title="Download"
+                        >
+
+                            <i class="fas fa-download"></i>
+
+                        </a>
+
+
+                        <!-- Delete -->
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm btn-delete"
+                            data-name="{{ attachment.file_name }}"
+                            data-url="{{ url_for(
+                                'kaizen.delete_attachment',
+                                kaizen_id=kaizen.id,
+                                attachment_id=attachment.id
+                            ) }}"
+                            title="Delete"
+                        >
+
+                            <i class="fas fa-trash"></i>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ==========================================
+         No Attachment
+    ========================================== -->
+
+    <div class="alert alert-secondary mb-0">
+
+        <i class="fas fa-paperclip mr-1"></i>
+
+        No attachment uploaded.
+
+    </div>
+
+
+    {% endif %}
+
+</div>

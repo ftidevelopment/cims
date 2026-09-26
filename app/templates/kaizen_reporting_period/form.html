@@ -1,0 +1,257 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    {% if reporting_period %}
+        Edit Kaizen Reporting Period
+    {% else %}
+        Add Kaizen Reporting Period
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h4 class="mb-1">
+                {% if reporting_period %}
+                    Edit Kaizen Reporting Period
+                {% else %}
+                    Add Kaizen Reporting Period
+                {% endif %}
+            </h4>
+
+            <small class="text-muted">
+                {% if reporting_period %}
+                    Update Kaizen reporting period
+                {% else %}
+                    Create a new Kaizen reporting period
+                {% endif %}
+            </small>
+        </div>
+
+        <div>
+            <a
+                href="{{ url_for('kaizen_reporting_period.index') }}"
+                class="btn btn-secondary"
+            >
+                <i class="fas fa-arrow-left"></i>
+                Back
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- Form Card -->
+    <div class="card">
+
+        <div class="card-header">
+            <strong>
+                Reporting Period Information
+            </strong>
+        </div>
+
+        <div class="card-body">
+
+            <form
+                method="POST"
+                action=""
+            >
+
+                <div class="row">
+
+                    <!-- Period Code -->
+                    <div class="col-md-4 mb-3">
+
+                        <label for="period_code" class="form-label">
+                            Period Code
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="period_code"
+                            name="period_code"
+                            class="form-control"
+                            value="{{ reporting_period.period_code if reporting_period else '' }}"
+                            placeholder="Example: 2026-S1"
+                            maxlength="20"
+                            {% if reporting_period %}readonly{% endif %}
+                            required
+                        >
+
+                        {% if reporting_period %}
+                            <small class="text-muted">
+                                Period code cannot be changed after creation.
+                            </small>
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Period Name -->
+                    <div class="col-md-8 mb-3">
+
+                        <label for="period_name" class="form-label">
+                            Period Name
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="period_name"
+                            name="period_name"
+                            class="form-control"
+                            value="{{ reporting_period.period_name if reporting_period else '' }}"
+                            placeholder="Example: Kaizen Semester 1 - 2026"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Start Date -->
+                    <div class="col-md-6 mb-3">
+
+                        <label for="start_date" class="form-label">
+                            Start Date
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="start_date"
+                            name="start_date"
+                            class="form-control"
+                            value="{{
+                                reporting_period.start_date.strftime('%Y-%m-%d')
+                                if reporting_period and reporting_period.start_date
+                                else ''
+                            }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- End Date -->
+                    <div class="col-md-6 mb-3">
+
+                        <label for="end_date" class="form-label">
+                            End Date
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="end_date"
+                            name="end_date"
+                            class="form-control"
+                            value="{{
+                                reporting_period.end_date.strftime('%Y-%m-%d')
+                                if reporting_period and reporting_period.end_date
+                                else ''
+                            }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+
+                        <label for="description" class="form-label">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            class="form-control"
+                            rows="4"
+                            maxlength="500"
+                            placeholder="Enter reporting period description..."
+                        >{{ reporting_period.description if reporting_period else '' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Date Validation -->
+                <div class="alert alert-info">
+
+                    <i class="fas fa-info-circle"></i>
+
+                    <strong>Period Information:</strong>
+
+                    <ul class="mb-0 mt-2">
+
+                        <li>
+                            Start Date must be earlier than or equal to End Date.
+                        </li>
+
+                        <li>
+                            An active reporting period cannot overlap
+                            with another active reporting period.
+                        </li>
+
+                        <li>
+                            Period Code cannot be changed after creation.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- Form Action -->
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a
+                        href="{{ url_for('kaizen_reporting_period.index') }}"
+                        class="btn btn-secondary"
+                    >
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        <i class="fas fa-save"></i>
+
+                        {% if reporting_period %}
+                            Update
+                        {% else %}
+                            Save
+                        {% endif %}
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

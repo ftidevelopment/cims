@@ -1,0 +1,721 @@
+{% from "components/sortable_header.html" import sortable_header %}
+
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+Role
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     Content Header
+========================================================= -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Role
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Security
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Role
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     Main Content
+========================================================= -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- =================================================
+                 Card Header
+            ================================================== -->
+
+            <div class="card-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+
+                    <!-- =========================================
+                         Left
+                    ========================================== -->
+
+                    <div class="d-flex align-items-center">
+
+                        <h3 class="card-title mb-0 mr-4">
+
+                            <i class="fas fa-user-shield mr-2"></i>
+
+                            Role List
+
+                        </h3>
+
+
+                        <!-- =====================================
+                             Status
+                        ====================================== -->
+
+                        <form
+                            method="GET"
+                            class="mb-0"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="keyword"
+                                value="{{ keyword }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="sort"
+                                value="{{ sort_by }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="order"
+                                value="{{ sort_order }}"
+                            >
+
+
+                            <select
+                                name="is_active"
+                                class="custom-select"
+                                style="width:160px;"
+                                onchange="this.form.submit()"
+                            >
+
+                                <option
+                                    value="true"
+                                    {% if is_active == "true" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Active
+                                </option>
+
+
+                                <option
+                                    value="false"
+                                    {% if is_active == "false" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Inactive
+                                </option>
+
+
+                                <option
+                                    value="all"
+                                    {% if is_active == "all" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    All
+                                </option>
+
+                            </select>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         Right
+                    ========================================== -->
+
+                    <div class="d-flex align-items-center">
+
+
+                        <!-- =====================================
+                             Add Role
+                        ====================================== -->
+
+                        <a
+                            href="{{ url_for('role.create') }}"
+                            class="btn btn-success mr-3"
+                        >
+
+                            <i class="fas fa-plus"></i>
+
+                            Add Role
+
+                        </a>
+
+
+                        <!-- =====================================
+                             Search
+                        ====================================== -->
+
+                        <form
+                            method="GET"
+                            class="mb-0"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="is_active"
+                                value="{{ is_active }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="sort"
+                                value="{{ sort_by }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="order"
+                                value="{{ sort_order }}"
+                            >
+
+
+                            <div class="input-group">
+
+                                <input
+                                    type="text"
+                                    name="keyword"
+                                    class="form-control"
+                                    style="width:280px;"
+                                    placeholder="Search code, name or description..."
+                                    value="{{ keyword }}"
+                                >
+
+
+                                <div class="input-group-append">
+
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+
+                                        <i class="fas fa-search"></i>
+
+                                    </button>
+
+
+                                    <a
+                                        href="{{ url_for('role.index') }}"
+                                        class="btn btn-secondary ml-1"
+                                    >
+
+                                        <i class="fas fa-sync-alt"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 Card Body
+            ================================================== -->
+
+            <div class="card-body">
+
+
+                <!-- =============================================
+                     Search Information
+                ============================================== -->
+
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search"></i>
+
+                    Search keyword :
+
+                    <strong>
+                        {{ keyword }}
+                    </strong>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =============================================
+                     Table
+                ============================================== -->
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr class="text-center">
+
+
+                            <!-- No -->
+
+                            <th
+                                width="60"
+                                class="text-center"
+                            >
+                                No
+                            </th>
+
+
+                            <!-- Role Code -->
+
+                            {{ sortable_header(
+                                "Role Code",
+                                "role_code",
+                                "role.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            <!-- Role Name -->
+
+                            {{ sortable_header(
+                                "Role Name",
+                                "role_name",
+                                "role.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            <!-- Description -->
+
+                            {{ sortable_header(
+                                "Description",
+                                "description",
+                                "role.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            <!-- Status -->
+
+                            <th width="120">
+                                Status
+                            </th>
+
+
+                            <!-- Action -->
+
+                            <th width="150">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% if roles %}
+
+
+                        {% for role in roles.items %}
+
+
+                        <tr>
+
+
+                            <!-- =================================
+                                 No
+                            ================================== -->
+
+                            <td class="text-center">
+
+                                {{ roles.first + loop.index0 }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Role Code
+                            ================================== -->
+
+                            <td>
+
+                                {{ role.role_code }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Role Name
+                            ================================== -->
+
+                            <td>
+
+                                {{ role.role_name }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Description
+                            ================================== -->
+
+                            <td>
+
+                                {{ role.description or "-" }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Status
+                            ================================== -->
+
+                            <td class="text-center">
+
+                                {% if role.is_active %}
+
+                                <span class="badge badge-success">
+
+                                    Active
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-danger">
+
+                                    Inactive
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Action
+                            ================================== -->
+
+                            <td class="text-center">
+
+
+                                {% if role.is_active %}
+
+
+                                <!-- Edit -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'role.edit',
+                                        role_id=role.id
+                                    ) }}"
+                                    class="btn btn-warning btn-sm"
+                                    title="Edit"
+                                >
+
+                                    <i class="fas fa-edit"></i>
+
+                                </a>
+
+
+                                <!-- Delete -->
+
+                                <button
+                                    type="button"
+                                    class="btn btn-danger btn-sm btn-delete"
+
+                                    data-name="{{ role.role_name }}"
+
+                                    data-url="{{ url_for(
+                                        'role.delete',
+                                        role_id=role.id
+                                    ) }}"
+
+                                    title="Delete"
+                                >
+
+                                    <i class="fas fa-trash"></i>
+
+                                </button>
+
+
+                                {% else %}
+
+
+                                <span class="text-muted">
+                                    Inactive
+                                </span>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                        {% else %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="text-center text-muted"
+                            >
+
+                                No role found.
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endif %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =================================================
+                 Delete Modal
+            ================================================== -->
+
+            {% include "components/delete_modal.html" %}
+
+
+            <!-- =================================================
+                 Card Footer
+            ================================================== -->
+
+            <div class="card-footer clearfix">
+
+
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+
+                        {{
+                            roles.first
+                            if roles.total > 0
+                            else 0
+                        }}
+
+                    </strong>
+
+                    to
+
+                    <strong>
+
+                        {{
+                            roles.last
+                            if roles.total > 0
+                            else 0
+                        }}
+
+                    </strong>
+
+                    of
+
+                    <strong>
+
+                        {{ roles.total }}
+
+                    </strong>
+
+                    role(s)
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 Pagination
+            ================================================== -->
+
+            <nav>
+
+                <ul class="pagination pagination-sm float-right">
+
+
+                    <!-- Previous -->
+
+                    {% if roles.has_prev %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'role.index',
+                                page=roles.prev_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+
+                    <!-- Page Numbers -->
+
+                    {% for page_num in roles.iter_pages() %}
+
+
+                    {% if page_num %}
+
+
+                    <li
+                        class="page-item
+                        {% if page_num == roles.page %}
+                        active
+                        {% endif %}"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'role.index',
+                                page=page_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            {{ page_num }}
+
+                        </a>
+
+                    </li>
+
+
+                    {% endif %}
+
+
+                    {% endfor %}
+
+
+                    <!-- Next -->
+
+                    {% if roles.has_next %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'role.index',
+                                page=roles.next_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+
+                </ul>
+
+            </nav>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

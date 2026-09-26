@@ -1,0 +1,19 @@
+🔔 CIMS - New Kaizen Created
+
+Kaizen No: {{ kaizen.kaizen_no }}
+Title: {{ kaizen.title }}
+Employee: {% if kaizen.employee %}{{ kaizen.employee.full_name }}{% else %}-{% endif %}
+Department: {% if kaizen.department %}{{ kaizen.department.name }}{% else %}-{% endif %}
+
+Improvement:
+{% if kaizen.improvement %}- Improvement No: {{ kaizen.improvement.improvement_no }}
+- Improvement Title: {{ kaizen.improvement.title }}
+{% else %}- None
+{% endif %}
+Problem:
+{% if kaizen.problem %}- Problem No: {{ kaizen.problem.problem_no }}
+- Problem Title: {{ kaizen.problem.title }}
+{% else %}- None
+{% endif %}
+Kaizen has been created in CIMS.
+Please check CIMS for the latest information.

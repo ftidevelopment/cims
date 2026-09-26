@@ -1,0 +1,844 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Issue Management{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h4 class="fw-bold mb-1">
+                Issue Management
+            </h4>
+
+            <div class="text-muted small">
+                Manage system issues, errors, and improvement requests.
+            </div>
+        </div>
+
+        <a href="{{ url_for('issue.create') }}"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Create Issue
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form method="GET"
+                  action="{{ url_for('issue.index') }}">
+
+                <div class="row g-2 align-items-center">
+
+                    <!-- Search Input -->
+                    <div class="col-md-6">
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search"></i>
+                            </span>
+
+                            <input
+                                type="text"
+                                name="keyword"
+                                class="form-control"
+                                placeholder="Search Issue No, Module, Category, Priority, Status..."
+                                value="{{ keyword or '' }}"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Search Button -->
+                    <div class="col-auto">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Reset Button -->
+                    <div class="col-auto">
+
+                        <a
+                            href="{{ url_for('issue.index') }}"
+                            class="btn btn-outline-secondary">
+
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Reset
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ISSUE TABLE
+    ====================================================== -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <!-- =================================================
+                     TABLE HEADER
+                ================================================== -->
+                <thead class="table-light">
+
+                    <tr>
+
+                        <!-- Issue No -->
+                        <th class="px-3">
+
+                            <a
+                                href="{{ url_for(
+                                    'issue.index',
+                                    keyword=keyword,
+                                    page=1,
+                                    per_page=per_page,
+                                    sort_by='issue_no',
+                                    sort_order=(
+                                        'desc'
+                                        if sort_by == 'issue_no'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    )
+                                ) }}"
+                                class="text-decoration-none text-dark">
+
+                                Issue No
+
+                                {% if sort_by == 'issue_no' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                        <i class="bi bi-caret-up-fill ms-1"></i>
+
+                                    {% else %}
+
+                                        <i class="bi bi-caret-down-fill ms-1"></i>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </a>
+
+                        </th>
+
+
+                        <!-- Priority -->
+                        <th>
+
+                            <a
+                                href="{{ url_for(
+                                    'issue.index',
+                                    keyword=keyword,
+                                    page=1,
+                                    per_page=per_page,
+                                    sort_by='priority',
+                                    sort_order=(
+                                        'desc'
+                                        if sort_by == 'priority'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    )
+                                ) }}"
+                                class="text-decoration-none text-dark">
+
+                                Priority
+
+                                {% if sort_by == 'priority' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                        <i class="bi bi-caret-up-fill ms-1"></i>
+
+                                    {% else %}
+
+                                        <i class="bi bi-caret-down-fill ms-1"></i>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </a>
+
+                        </th>
+
+
+                        <!-- Module -->
+                        <th>
+
+                            <a
+                                href="{{ url_for(
+                                    'issue.index',
+                                    keyword=keyword,
+                                    page=1,
+                                    per_page=per_page,
+                                    sort_by='module',
+                                    sort_order=(
+                                        'desc'
+                                        if sort_by == 'module'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    )
+                                ) }}"
+                                class="text-decoration-none text-dark">
+
+                                Module
+
+                                {% if sort_by == 'module' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                        <i class="bi bi-caret-up-fill ms-1"></i>
+
+                                    {% else %}
+
+                                        <i class="bi bi-caret-down-fill ms-1"></i>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </a>
+
+                        </th>
+
+
+                        <!-- Description -->
+                        <th>
+                            Description
+                        </th>
+
+
+                        <!-- Requestor -->
+                        <th>
+                            Requestor
+                        </th>
+
+
+                        <!-- Status -->
+                        <th>
+
+                            <a
+                                href="{{ url_for(
+                                    'issue.index',
+                                    keyword=keyword,
+                                    page=1,
+                                    per_page=per_page,
+                                    sort_by='status',
+                                    sort_order=(
+                                        'desc'
+                                        if sort_by == 'status'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    )
+                                ) }}"
+                                class="text-decoration-none text-dark">
+
+                                Status
+
+                                {% if sort_by == 'status' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                        <i class="bi bi-caret-up-fill ms-1"></i>
+
+                                    {% else %}
+
+                                        <i class="bi bi-caret-down-fill ms-1"></i>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            </a>
+
+                        </th>
+
+
+                        <!-- Age -->
+                        <th>
+                            Age
+                        </th>
+
+
+                        <!-- Action -->
+                        <th class="text-center px-3">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- =================================================
+                     TABLE BODY
+                ================================================== -->
+                <tbody>
+
+                    {% if issues.items %}
+
+                        {% for issue in issues.items %}
+
+                            <tr>
+
+                                <!-- =================================
+                                     ISSUE NO
+                                ================================== -->
+                                <td class="px-3">
+
+                                    <a
+                                        href="{{ url_for(
+                                            'issue.detail',
+                                            issue_id=issue.id
+                                        ) }}"
+                                        class="fw-semibold text-decoration-none">
+
+                                        {{ issue.issue_no }}
+
+                                    </a>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     PRIORITY
+                                ================================== -->
+                                <td>
+
+                                    {% if issue.priority == 'HIGH' %}
+
+                                        <span class="badge bg-danger">
+                                            High
+                                        </span>
+
+                                    {% elif issue.priority == 'MEDIUM' %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            Medium
+                                        </span>
+
+                                    {% elif issue.priority == 'LOW' %}
+
+                                        <span class="badge bg-success">
+                                            Low
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ issue.priority }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     MODULE
+                                ================================== -->
+                                <td>
+
+                                    {% if issue.module == 'KAIZEN' %}
+
+                                        <span>
+                                            Kaizen
+                                        </span>
+
+                                    {% elif issue.module == 'PROBLEM' %}
+
+                                        <span>
+                                            Problem
+                                        </span>
+
+                                    {% elif issue.module == 'IMPROVEMENT' %}
+
+                                        <span>
+                                            Improvement
+                                        </span>
+
+                                    {% else %}
+
+                                        {{ issue.module }}
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     DESCRIPTION
+                                ================================== -->
+                                <td style="min-width: 250px; max-width: 380px;">
+
+                                    <div
+                                        class="text-truncate"
+                                        style="max-width: 380px;"
+                                        title="{{ issue.description }}">
+
+                                        {{ issue.description }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     REQUESTOR
+                                ================================== -->
+                                <td style="min-width: 160px;">
+
+                                    {% if issue.requestor %}
+
+                                        <div class="fw-semibold">
+                                            {{ issue.requestor.full_name }}
+                                        </div>
+
+                                        <div class="text-muted small">
+                                            {{ issue.requestor.nik }}
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     STATUS
+                                ================================== -->
+                                <td>
+
+    {% if issue.status == 'OPEN' %}
+
+        <span class="badge badge-secondary">
+            Open
+        </span>
+
+    {% elif issue.status == 'IN_PROGRESS' %}
+
+        <span class="badge badge-primary">
+            In Progress
+        </span>
+
+        {% if issue.clarifications
+              | selectattr('status', 'equalto', 'OPEN')
+              | list
+              | length > 0 %}
+
+            <div class="mt-1">
+
+                <span
+                    class="badge badge-warning"
+                    title="Waiting for requestor response"
+                >
+                    <i class="fas fa-question-circle mr-1"></i>
+                    Waiting for Requestor
+                </span>
+
+            </div>
+
+        {% endif %}
+
+    {% elif issue.status == 'FINISH' %}
+
+        <span class="badge badge-success">
+            Finish
+        </span>
+
+    {% elif issue.status == 'CLOSE' %}
+
+        <span class="badge badge-dark">
+            Close
+        </span>
+
+    {% endif %}
+
+</td>
+
+
+                                <!-- =================================
+                                     AGE
+                                ================================== -->
+                                <td>
+
+                                    {% if issue.created_at %}
+
+                                        {% set age_days =
+                                            (now - issue.created_at).days
+                                        %}
+
+                                        {% if age_days <= 0 %}
+
+                                            <span class="text-success">
+                                                Today
+                                            </span>
+
+                                        {% elif age_days == 1 %}
+
+                                            <span class="text-success">
+                                                1 day
+                                            </span>
+
+                                        {% elif age_days <= 7 %}
+
+                                            <span class="text-warning">
+                                                {{ age_days }} days
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="text-danger">
+                                                {{ age_days }} days
+                                            </span>
+
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ACTION
+                                ================================== -->
+                                <td class="text-center px-3">
+
+                                    <div class="btn-group"
+                                         role="group">
+
+                                        <!-- View -->
+                                        <a
+                                            href="{{ url_for(
+                                                'issue.detail',
+                                                issue_id=issue.id
+                                            ) }}"
+                                            class="btn btn-sm btn-outline-primary"
+                                            title="View">
+
+                                            <i class="fas fa-eye"></i>
+
+                                        </a>
+
+
+                                        <!-- Edit -->
+                                        {% if issue.status in [
+                                            'OPEN',
+                                            'IN_PROGRESS'
+                                        ] %}
+                                        {% if current_user.role_code == 'ADMIN'
+          or issue.requestor_employee_id == current_user.employee_id %}
+
+
+                                            <a
+                                                href="{{ url_for(
+                                                    'issue.edit',
+                                                    issue_id=issue.id
+                                                ) }}"
+                                                class="btn btn-sm btn-outline-secondary"
+                                                title="Edit">
+
+                                                <i class="fas fa-pencil-alt"></i>
+
+                                            </a>
+                                            {% endif %}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <!-- =========================================
+                             NO DATA
+                        ========================================== -->
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="text-center py-5">
+
+                                <div class="text-muted">
+
+                                    <i
+                                        class="bi bi-inbox fs-1 d-block mb-2">
+                                    </i>
+
+                                    <div class="fw-semibold">
+                                        No issues found
+                                    </div>
+
+                                    <div class="small">
+                                        There are no issues to display.
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+        <div class="card-footer bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <!-- Result Information -->
+                <div class="text-muted small">
+
+                    {% if issues.total > 0 %}
+
+                        Showing
+
+                        <strong>
+                            {{ issues.first }}
+                        </strong>
+
+                        to
+
+                        <strong>
+                            {{ issues.last }}
+                        </strong>
+
+                        of
+
+                        <strong>
+                            {{ issues.total }}
+                        </strong>
+
+                        issues
+
+                    {% else %}
+
+                        Showing
+                        <strong>0</strong>
+                        issues
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- =================================================
+                     PAGINATION
+                ================================================== -->
+                {% if issues.pages > 1 %}
+
+                    <nav aria-label="Issue pagination">
+
+                        <ul class="pagination pagination-sm mb-0">
+
+                            <!-- Previous -->
+                            {% if issues.has_prev %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="{{ url_for(
+                                            'issue.index',
+                                            keyword=keyword,
+                                            page=issues.prev_num,
+                                            per_page=per_page,
+                                            sort_by=sort_by,
+                                            sort_order=sort_order
+                                        ) }}"
+                                        title="Previous">
+
+                                        <i class="bi bi-chevron-left"></i>
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+
+                                        <i class="bi bi-chevron-left"></i>
+
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+
+                            <!-- Page Numbers -->
+                            {% for page_num in issues.iter_pages(
+                                left_edge=1,
+                                right_edge=1,
+                                left_current=2,
+                                right_current=2
+                            ) %}
+
+                                {% if page_num %}
+
+                                    {% if page_num == issues.page %}
+
+                                        <li class="page-item active">
+
+                                            <span class="page-link">
+                                                {{ page_num }}
+                                            </span>
+
+                                        </li>
+
+                                    {% else %}
+
+                                        <li class="page-item">
+
+                                            <a
+                                                class="page-link"
+                                                href="{{ url_for(
+                                                    'issue.index',
+                                                    keyword=keyword,
+                                                    page=page_num,
+                                                    per_page=per_page,
+                                                    sort_by=sort_by,
+                                                    sort_order=sort_order
+                                                ) }}">
+
+                                                {{ page_num }}
+
+                                            </a>
+
+                                        </li>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <li class="page-item disabled">
+
+                                        <span class="page-link">
+                                            …
+                                        </span>
+
+                                    </li>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                            <!-- Next -->
+                            {% if issues.has_next %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="{{ url_for(
+                                            'issue.index',
+                                            keyword=keyword,
+                                            page=issues.next_num,
+                                            per_page=per_page,
+                                            sort_by=sort_by,
+                                            sort_order=sort_order
+                                        ) }}"
+                                        title="Next">
+
+                                        <i class="bi bi-chevron-right"></i>
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+
+                                        <i class="bi bi-chevron-right"></i>
+
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+                        </ul>
+
+                    </nav>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

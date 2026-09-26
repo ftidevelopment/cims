@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Kaizen Submitted
+    </title>
+
+</head>
+
+<body
+    style="
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333333;
+    "
+>
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        background-color: #f4f6f8;
+        padding: 30px 10px;
+    "
+>
+
+<tr>
+
+<td align="center">
+
+<table
+    width="700"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+    style="
+        max-width: 700px;
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #dddddd;
+    "
+>
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        background-color: #1f4e78;
+        padding: 25px 30px;
+        color: #ffffff;
+    "
+>
+
+<div
+    style="
+        font-size: 24px;
+        font-weight: bold;
+    "
+>
+    CIMS
+</div>
+
+<div
+    style="
+        font-size: 15px;
+        margin-top: 5px;
+    "
+>
+    Kaizen Proposal Submitted
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     INTRODUCTION
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 30px;
+    "
+>
+
+<p
+    style="
+        margin: 0 0 15px 0;
+        font-size: 16px;
+    "
+>
+    Dear CIMS User,
+</p>
+
+<p
+    style="
+        margin: 0 0 15px 0;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+>
+    A Kaizen proposal has been submitted
+    for review in the Continuous Improvement
+    Management System (CIMS).
+</p>
+
+<p
+    style="
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+>
+    Please review the proposal information
+    below.
+</p>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     STATUS
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 25px 30px;
+    "
+>
+
+<div
+    style="
+        background-color: #fff3cd;
+        border: 1px solid #ffe69c;
+        padding: 15px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    "
+>
+    PROPOSAL
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     BASIC INFORMATION
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 25px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e78;
+        margin-bottom: 12px;
+    "
+>
+    Kaizen Information
+</div>
+
+<table
+    width="100%"
+    cellpadding="8"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+<tr>
+
+<td
+    width="180"
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Kaizen No
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+    {{ kaizen.kaizen_no }}
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Title
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+    {{ kaizen.title }}
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Creator
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{% if kaizen.employee %}
+
+{{ kaizen.employee.full_name }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Department
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{% if kaizen.department %}
+
+{{ kaizen.department.department_name }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Category
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{% if kaizen.kaizen_category %}
+
+{{ kaizen.kaizen_category.kaizen_category_name  }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Status
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+        font-weight: bold;
+    "
+>
+    {{ kaizen.status }}
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     DESCRIPTION
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 25px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e78;
+        margin-bottom: 12px;
+    "
+>
+    Description
+</div>
+
+<div
+    style="
+        background-color: #f8f9fa;
+        border: 1px solid #dddddd;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 1.6;
+    "
+>
+
+{% if kaizen.description %}
+
+{{ kaizen.description }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</div>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     RELATED INFORMATION
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 25px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e78;
+        margin-bottom: 12px;
+    "
+>
+    Related Information
+</div>
+
+<table
+    width="100%"
+    cellpadding="8"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+<tr>
+
+<td
+    width="180"
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Problem
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{% if kaizen.problem %}
+
+{{ kaizen.problem.problem_no }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Improvement
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{% if kaizen.improvement %}
+
+{{ kaizen.improvement.improvement_no }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     BEFORE / AFTER
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 25px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e78;
+        margin-bottom: 12px;
+    "
+>
+    Improvement Result
+</div>
+
+<table
+    width="100%"
+    cellpadding="8"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+<tr>
+
+<td
+    width="180"
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Before
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{{ kaizen.before_condition or "-" }}
+
+{% if kaizen.before_value is not none %}
+
+<br>
+Value:
+{{ kaizen.before_value }}
+{{ kaizen.before_unit or "" }}
+
+{% endif %}
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Loss Before
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+    {{ kaizen.loss_before or "-" }}
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    After
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{{ kaizen.after_condition or "-" }}
+
+{% if kaizen.after_value is not none %}
+
+<br>
+Value:
+{{ kaizen.after_value }}
+{{ kaizen.after_unit or "" }}
+
+{% endif %}
+
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     BENEFIT
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        padding: 0 30px 25px 30px;
+    "
+>
+
+<div
+    style="
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e78;
+        margin-bottom: 12px;
+    "
+>
+    Benefit & Cost Saving
+</div>
+
+<table
+    width="100%"
+    cellpadding="8"
+    cellspacing="0"
+    border="0"
+    style="
+        border-collapse: collapse;
+        font-size: 14px;
+    "
+>
+
+<tr>
+
+<td
+    width="180"
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Benefit
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+    {{ kaizen.benefit or "-" }}
+</td>
+
+</tr>
+
+
+<tr>
+
+<td
+    style="
+        font-weight: bold;
+        background-color: #f1f3f5;
+        border: 1px solid #dddddd;
+    "
+>
+    Cost Saving
+</td>
+
+<td
+    style="
+        border: 1px solid #dddddd;
+    "
+>
+
+{% if kaizen.cost_saving is not none %}
+
+{{ kaizen.cost_saving }}
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     ACTION
+========================================== -->
+
+<tr>
+
+<td
+    align="center"
+    style="
+        padding: 5px 30px 30px 30px;
+    "
+>
+
+<a
+    href="{{ cims_url }}"
+    style="
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #1f4e78;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+    "
+>
+    Open CIMS
+</a>
+
+</td>
+
+</tr>
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<tr>
+
+<td
+    style="
+        background-color: #f1f3f5;
+        padding: 20px 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #777777;
+        line-height: 1.5;
+    "
+>
+
+This is an automated notification
+from CIMS.
+
+<br>
+
+Please do not reply to this email.
+
+</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>

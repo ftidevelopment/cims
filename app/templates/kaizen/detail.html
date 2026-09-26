@@ -1,0 +1,1607 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+Kaizen Detail
+{% endblock %}
+
+
+
+{% block content_header %}
+
+<div class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1 class="m-0">
+
+                    <i class="fas fa-lightbulb mr-2"></i>
+                    Kaizen Detail
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('kaizen.index') }}">
+                            Kaizen
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Detail
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- ==================================================
+         TOP ACTION BAR
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+
+                <!-- ==========================================
+                     LEFT ACTION
+                =========================================== -->
+
+                <div>
+                    <a
+                        href="{{ url_for(
+                            'kaizen.export_pdf',
+                            kaizen_id=kaizen.id
+                        ) }}"
+                        class="btn btn-danger mr-2 mb-2"
+                        target="_blank"
+                    >
+                        <i class="fas fa-file-pdf mr-1"></i>
+                        Export PDF
+                    </a>
+
+                    <!-- Back -->
+
+                    <a href="{{ url_for('kaizen.index') }}" class="btn btn-secondary btn-sm">
+
+                        <i class="fas fa-arrow-left mr-1"></i>
+
+                        Back
+
+                    </a>
+
+
+                    <!-- ==========================================
+                         EDIT
+                         Only Owner / Admin
+                    =========================================== -->
+
+                    {% if kaizen.status in ["Draft", "Rejected"]
+                    and can_edit_kaizen %}
+
+                    <a href="{{ url_for(
+                            'kaizen.edit',
+                            kaizen_id=kaizen.id
+                        ) }}" class="btn btn-primary btn-sm">
+
+                        <i class="fas fa-edit mr-1"></i>
+
+                        Edit
+
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     RIGHT ACTIONS
+                =========================================== -->
+
+                <div class="mt-2 mt-md-0">
+
+
+                    <!-- ==========================================
+                         SUBMIT PROPOSAL
+                         Only Owner / Admin
+                    =========================================== -->
+
+                    {% if kaizen.status in ["Draft", "Rejected"]
+                    and can_edit_kaizen %}
+
+                    <form method="POST" action="{{ url_for(
+                            'kaizen.submit',
+                            kaizen_id=kaizen.id
+                        ) }}" class="d-inline">
+
+                        <button type="submit" class="btn btn-success btn-sm">
+
+                            <i class="fas fa-paper-plane mr-1"></i>
+
+                            Submit Proposal
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+
+
+                    <!-- ==========================================
+                         PROPOSAL
+                    =========================================== -->
+
+
+                    {% if kaizen.status == "Proposal" %}
+
+                    {% if can_approve_kaizen or can_reject_kaizen %}
+
+                    <!-- ======================================
+             APPROVE
+        ======================================= -->
+
+                    {% if can_approve_kaizen %}
+
+                    <form method="POST" action="{{ url_for(
+                    'kaizen.approve',
+                    kaizen_id=kaizen.id
+                ) }}" class="d-inline">
+
+                        <button type="submit" class="btn btn-success btn-sm">
+
+                            <i class="fas fa-check mr-1"></i>
+
+                            Approve
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+
+                    <!-- ======================================
+             REJECT
+        ======================================= -->
+
+                    {% if can_reject_kaizen %}
+
+                    <button type="button" class="btn btn-danger btn-sm btn-reject" data-url="{{ url_for(
+                    'kaizen.reject',
+                    kaizen_id=kaizen.id
+                ) }}">
+
+                        <i class="fas fa-times mr-1"></i>
+
+                        Reject
+
+                    </button>
+
+                    {% endif %}
+
+
+                    {% endif %}
+
+                    {% endif %}
+
+
+
+                    <!-- ==========================================
+                         APPROVED
+                    =========================================== -->
+
+                    {% if kaizen.status == "Approved" %}
+
+                    <span class="text-success">
+
+                        <i class="fas fa-check-double mr-1"></i>
+
+                        Approved
+
+                    </span>
+
+                    {% endif %}
+
+
+
+                    <!-- ==========================================
+                         DELETE
+                         Only Owner / Admin
+                    =========================================== -->
+
+                    {% if kaizen.status in ["Draft", "Rejected"]
+                    and can_edit_kaizen %}
+
+                    <button type="button" class="btn btn-outline-danger btn-delete" data-name="{{ kaizen.kaizen_no }}"
+                        data-url="{{ url_for(
+                            'kaizen.delete',
+                            kaizen_id=kaizen.id
+                        ) }}" title="Delete Kaizen">
+
+                        <i class="fas fa-trash mr-1"></i>
+
+                        Delete
+
+                    </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         KAIZEN HEADER
+    ================================================== -->
+
+    <div class="card card-primary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-lightbulb mr-1"></i>
+
+                Kaizen Information
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- Kaizen No -->
+
+                <div class="col-md-3">
+
+                    <div class="form-group">
+
+                        <label>
+                            Kaizen No
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.kaizen_no }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Status -->
+
+                <div class="col-md-3">
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <div>
+
+                            {% if kaizen.status == "Draft" %}
+
+                            <span class="badge badge-secondary p-2">
+
+                                <i class="fas fa-pencil-alt mr-1"></i>
+
+                                Draft
+
+                            </span>
+
+                            {% elif kaizen.status == "Proposal" %}
+
+                            <span class="badge badge-warning p-2">
+
+                                <i class="fas fa-paper-plane mr-1"></i>
+
+                                Proposal
+
+                            </span>
+
+                            {% elif kaizen.status == "Approved" %}
+
+                            <span class="badge badge-success p-2">
+
+                                <i class="fas fa-check mr-1"></i>
+
+                                Approved
+
+                            </span>
+
+                            {% elif kaizen.status == "Rejected" %}
+
+                            <span class="badge badge-danger p-2">
+
+                                <i class="fas fa-times mr-1"></i>
+
+                                Rejected
+
+                            </span>
+
+                            {% elif kaizen.status == "Implemented" %}
+
+                            <span class="badge badge-primary p-2">
+
+                                <i class="fas fa-check-double mr-1"></i>
+
+                                Implemented
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge badge-secondary p-2">
+
+                                {{ kaizen.status }}
+
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Category -->
+
+                <div class="col-md-3">
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.kaizen_category %}
+
+                            {{ kaizen.kaizen_category.kaizen_category_code }}
+
+                            -
+
+                            {{ kaizen.kaizen_category.kaizen_category_name }}
+
+                            {% else %}
+
+                            -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Implementation Date -->
+
+                <div class="col-md-3">
+
+                    <div class="form-group">
+
+                        <label>
+                            Implementation Date
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                             {% if kaizen.implementation_date %}
+
+        {% if kaizen.implementation_date.strftime is defined %}
+
+            {{ kaizen.implementation_date.strftime(
+                '%d-%m-%Y'
+            ) }}
+
+        {% else %}
+
+            {{ kaizen.implementation_date }}
+
+        {% endif %}
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Title -->
+
+            <div class="form-group">
+
+                <label>
+                    Title
+                </label>
+
+                <div class="form-control bg-light">
+
+                    {{ kaizen.title }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Description -->
+
+            <div class="form-group">
+
+                <label>
+                    Description
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {% if kaizen.description %}
+
+                    {{ kaizen.description | safe }}
+
+                    {% else %}
+
+                    <span class="text-muted">
+                        No description.
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         RELATED INFORMATION
+    ================================================== -->
+
+    <div class="card card-info">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-link mr-1"></i>
+
+                Related Information
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- Improvement -->
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Improvement
+                        </label>
+
+                        {% if kaizen.improvement %}
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.improvement.improvement_no }}
+
+                            -
+
+                            {{ kaizen.improvement.title }}
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="form-control bg-light">
+
+                            -
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Problem -->
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Problem
+                        </label>
+
+                        {% if kaizen.problem %}
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.problem.problem_no %}
+
+                            {{ kaizen.problem.problem_no }} -
+
+                            {% endif %}
+
+                            {{ kaizen.problem.title }}
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="form-control bg-light">
+
+                            -
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         RESPONSIBLE
+    ================================================== -->
+
+    <div class="card card-primary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-user mr-1"></i>
+
+                Responsible
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- Employee -->
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Employee
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.employee %}
+
+                            {{ kaizen.employee.full_name }}
+
+                            {% else %}
+
+                            -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Department -->
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Department
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.department %}
+
+                            {{ kaizen.department.department_code }}
+
+                            -
+
+                            {{ kaizen.department.department_name }}
+
+                            {% else %}
+
+                            -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         BEFORE CONDITION
+    ================================================== -->
+
+    <div class="card card-warning">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-arrow-down mr-1"></i>
+
+                Before Condition
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <div class="form-group">
+
+                <label>
+                    Before Condition
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {% if kaizen.before_condition %}
+
+                    {{ kaizen.before_condition | safe }}
+
+                    {% else %}
+
+                    <span class="text-muted">
+                        No information.
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+
+
+                <!-- Before Value -->
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+
+                        <label>
+                            Before Value
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.before_value is not none %}
+
+                            {{ kaizen.before_value }}
+
+                            {% else %}
+
+                            -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Before Unit -->
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+
+                        <label>
+                            Before Unit
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.before_unit or "-" }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Loss -->
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+
+                        <label>
+                            Loss Before
+                        </label>
+
+                        <div class="border rounded p-2 bg-light">
+
+                            {% if kaizen.loss_before %}
+
+                            {{ kaizen.loss_before | safe }}
+
+                            {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 BEFORE ATTACHMENT UPLOAD
+            =========================================== -->
+
+            <div class="border-top pt-3 mt-3">
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <label class="font-weight-bold mb-0">
+
+                        <i class="fas fa-paperclip mr-1"></i>
+
+                        Before Attachment
+
+                    </label>
+
+                    <small class="text-muted">
+
+                        Maximum file size: 10 MB
+
+                    </small>
+
+                </div>
+
+
+                {% if can_edit_kaizen %}
+
+                <form method="POST" action="{{ url_for(
+                        'kaizen.upload_attachment',
+                        kaizen_id=kaizen.id
+                    ) }}" enctype="multipart/form-data">
+
+                    <input type="hidden" name="attachment_type" value="BEFORE">
+
+
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+                                    File
+                                </label>
+
+                                <input type="file" name="file" class="form-control-file"
+                                    accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Description
+                                </label>
+
+                                <input type="text" name="description" class="form-control" maxlength="500"
+                                    placeholder="Attachment description">
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-outline-primary btn-sm">
+
+                        <i class="fas fa-upload mr-1"></i>
+
+                        Upload Before Attachment
+
+                    </button>
+
+                </form>
+                {% endif %}
+
+
+                <div class="mt-3">
+
+                    {% set attachment_type = "BEFORE" %}
+
+                    {% include "components/kaizen_attachment_manager.html" %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         AFTER CONDITION
+    ================================================== -->
+
+    <div class="card card-success">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-arrow-up mr-1"></i>
+
+                After Condition
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <div class="form-group">
+
+                <label>
+                    After Condition
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {% if kaizen.after_condition %}
+
+                    {{ kaizen.after_condition | safe }}
+
+                    {% else %}
+
+                    <span class="text-muted">
+                        No information.
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+
+                        <label>
+                            After Value
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.after_value is not none %}
+
+                            {{ kaizen.after_value }}
+
+                            {% else %}
+
+                            -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+
+                        <label>
+                            After Unit
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.after_unit or "-" }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 AFTER ATTACHMENT UPLOAD
+            =========================================== -->
+
+            <div class="border-top pt-3 mt-3">
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <label class="font-weight-bold mb-0">
+
+                        <i class="fas fa-paperclip mr-1"></i>
+
+                        After Attachment
+
+                    </label>
+
+                    <small class="text-muted">
+
+                        Maximum file size: 10 MB
+
+                    </small>
+
+                </div>
+
+                {% if can_edit_kaizen %}
+                <form method="POST" action="{{ url_for(
+                        'kaizen.upload_attachment',
+                        kaizen_id=kaizen.id
+                    ) }}" enctype="multipart/form-data">
+
+                    <input type="hidden" name="attachment_type" value="AFTER">
+
+
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+                                    File
+                                </label>
+
+                                <input type="file" name="file" class="form-control-file"
+                                    accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Description
+                                </label>
+
+                                <input type="text" name="description" class="form-control" maxlength="500"
+                                    placeholder="Attachment description">
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-outline-success btn-sm">
+
+                        <i class="fas fa-upload mr-1"></i>
+
+                        Upload After Attachment
+
+                    </button>
+
+                </form>
+
+                {% endif %}
+                <div class="mt-3">
+
+                    {% set attachment_type = "AFTER" %}
+
+                    {% include "components/kaizen_attachment_manager.html" %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         BENEFIT
+    ================================================== -->
+
+    <div class="card card-primary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-chart-line mr-1"></i>
+
+                Benefit
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <div class="form-group">
+
+                <label>
+                    Benefit
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {% if kaizen.benefit %}
+
+                    {{ kaizen.benefit | safe }}
+
+                    {% else %}
+
+                    <span class="text-muted">
+                        No information.
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Cost Saving
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if kaizen.cost_saving is not none %}
+
+                            {{ "{:,.2f}".format(
+                            kaizen.cost_saving
+                            ) }}
+
+                            {% else %}
+
+                            -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Implementation Date
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                             {% if kaizen.implementation_date %}
+
+        {% if kaizen.implementation_date.strftime is defined %}
+
+            {{ kaizen.implementation_date.strftime(
+                '%d-%m-%Y'
+            ) }}
+
+        {% else %}
+
+            {{ kaizen.implementation_date }}
+
+        {% endif %}
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         APPROVAL / REJECTION INFORMATION
+    ================================================== -->
+
+    {% if
+    kaizen.approved_by
+    or
+    kaizen.rejected_by
+    or
+    kaizen.rejection_reason
+    %}
+
+    <div class="card card-secondary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-history mr-1"></i>
+
+                Approval History
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                {% if kaizen.approved_by %}
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Approved By
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.approved_by.full_name }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+
+                {% if kaizen.approved_at %}
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Approved At
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.approved_at.strftime(
+                            '%d-%m-%Y %H:%M'
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+
+                {% if kaizen.rejected_by %}
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Rejected By
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.rejected_by.full_name }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+
+                {% if kaizen.rejected_at %}
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+
+                        <label>
+                            Rejected At
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {{ kaizen.rejected_at.strftime(
+                            '%d-%m-%Y %H:%M'
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+
+                {% if kaizen.rejection_reason %}
+
+                <div class="col-md-12">
+
+                    <div class="form-group">
+
+                        <label>
+                            Rejection Reason
+                        </label>
+
+                        <div class="border rounded p-3 bg-light">
+
+                            {{ kaizen.rejection_reason }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- ==================================================
+         SYSTEM INFORMATION
+    ================================================== -->
+
+    <div class="card card-light">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-info-circle mr-1"></i>
+
+                System Information
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <div class="col-md-3">
+
+                    <strong>Created At</strong>
+
+                    <div class="text-muted">
+
+                        {% if kaizen.created_at %}
+
+                        {{ kaizen.created_at.strftime(
+                        '%d-%m-%Y %H:%M'
+                        ) }}
+
+                        {% else %}
+
+                        -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-3">
+
+                    <strong>Created By</strong>
+
+                    <div class="text-muted">
+
+                        {% if kaizen.employee %}
+
+                        {{ kaizen.employee.full_name }}
+
+                        {% else %}
+
+                        -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-3">
+
+                    <strong>Updated At</strong>
+
+                    <div class="text-muted">
+
+                        {% if kaizen.updated_at %}
+
+                        {{ kaizen.updated_at.strftime(
+                        '%d-%m-%Y %H:%M'
+                        ) }}
+
+                        {% else %}
+
+                        -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-3">
+
+                    <strong>Version</strong>
+
+                    <div class="text-muted">
+
+                        {{ kaizen.version }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+{% endblock %}
+
+
+
+<!-- ==================================================
+     DELETE MODAL
+================================================== -->
+
+{% include "components/delete_modal.html" %}
+
+
+
+<!-- ==================================================
+     REJECT MODAL
+================================================== -->
+
+{% include "components/reject_modal.html" %}
+
+
+
+{% block scripts %}
+
+{{ super() }}
+
+<script src="{{ url_for(
+    'static',
+    filename='js/reject-modal.js'
+) }}"></script>
+
+{% endblock %}

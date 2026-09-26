@@ -1,0 +1,786 @@
+{% from "components/sortable_header.html" import sortable_header %}
+
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+Kaizen Department Target
+{% endblock %}
+
+
+{% block page_title %}
+Kaizen Department Target
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('dashboard.index') }}">
+        Home
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+    Kaizen Department Target
+</li>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card card-primary card-outline">
+
+    <!-- ===================================================== -->
+    <!-- CARD HEADER -->
+    <!-- ===================================================== -->
+
+    <div class="card-header">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-bullseye mr-2"></i>
+
+                Kaizen Department Target
+
+            </h3>
+
+
+            <div>
+
+                <a
+                    href="{{ url_for('kaizen_department_target.create') }}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="fas fa-plus mr-1"></i>
+
+                    Add Target
+
+                </a>
+
+                <a
+                    href="{{ url_for(
+                        'kaizen_department_target.export',
+                        keyword=keyword,
+                        status=status,
+                        department_id=department_id,
+                        sort=sort_by,
+                        order=sort_order
+                    ) }}"
+                    class="btn btn-success btn-sm"
+                    title="Export Excel"
+                >
+
+                    <i class="fas fa-file-excel mr-1"></i>
+
+                    Export
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- CARD BODY -->
+    <!-- ===================================================== -->
+
+    <div class="card-body">
+
+
+        <!-- ================================================= -->
+        <!-- SEARCH / FILTER -->
+        <!-- ================================================= -->
+
+        <form
+            method="GET"
+            action="{{ url_for('kaizen_department_target.index') }}"
+        >
+
+            <div class="row">
+
+
+                <!-- SEARCH -->
+
+                <div class="col-md-5">
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            name="keyword"
+                            class="form-control"
+                            placeholder="Search period, department code or name..."
+                            value="{{ keyword }}"
+                        >
+
+                        <div class="input-group-append">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="fas fa-search"></i>
+
+                            </button>
+                        
+                            <!-- RESET BUTTON -->
+
+                            <a
+                                href="{{ url_for('kaizen_department_target.index') }}"
+                                class="btn btn-secondary ml-1"
+                                title="Reset"
+                            >
+
+                                <i class="fas fa-sync-alt"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-md-2">
+
+                    <select
+                        name="status"
+                        class="form-control"
+                        onchange="this.form.submit()"
+                    >
+
+                        <option
+                            value="active"
+                            {% if status == "active" %}
+                                selected
+                            {% endif %}
+                        >
+                            Active
+                        </option>
+
+                        <option
+                            value="inactive"
+                            {% if status == "inactive" %}
+                                selected
+                            {% endif %}
+                        >
+                            Inactive
+                        </option>
+
+                        <option
+                            value="all"
+                            {% if status == "all" %}
+                                selected
+                            {% endif %}
+                        >
+                            All
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- DEPARTMENT -->
+
+            <div class="col-md-3">
+
+                <select
+                    name="department_id"
+                    class="form-control"
+                    onchange="this.form.submit()"
+                >
+
+                    <option value="">
+                        All Department
+                    </option>
+
+                    {% for department in departments %}
+
+                    <option
+                        value="{{ department.id }}"
+                        {% if department_id == department.id %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ department.department_code }}
+                        - 
+                        {{ department.department_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+                <!-- PER PAGE -->
+
+                <div class="col-md-2">
+
+                    <select
+                        name="per_page"
+                        class="form-control"
+                        onchange="this.form.submit()"
+                    >
+
+                        {% for value in [10, 25, 50, 100] %}
+
+                        <option
+                            value="{{ value }}"
+                            {% if per_page == value %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ value }} / page
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+        </form>
+
+
+        <div class="mt-3"></div>
+
+
+        <!-- ================================================= -->
+        <!-- TABLE -->
+        <!-- ================================================= -->
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width: 5%;">
+                            No
+                        </th>
+
+
+                        {{ sortable_header(
+                            "Reporting Period",
+                            "reporting_period",
+                            "kaizen_department_target.index",
+                            keyword,
+                            status,
+                            sort_by,
+                            sort_order
+                        ) }}
+
+
+                        {{ sortable_header(
+                            "Department",
+                            "department",
+                            "kaizen_department_target.index",
+                            keyword,
+                            status,
+                            sort_by,
+                            sort_order
+                        ) }}
+
+
+                        {{ sortable_header(
+                            "Target",
+                            "target_quantity",
+                            "kaizen_department_target.index",
+                            keyword,
+                            status,
+                            sort_by,
+                            sort_order
+                        ) }}
+
+
+                        {{ sortable_header(
+                            "Description",
+                            "description",
+                            "kaizen_department_target.index",
+                            keyword,
+                            status,
+                            sort_by,
+                            sort_order
+                        ) }}
+
+
+                        <th style="width: 10%;">
+                            Status
+                        </th>
+
+
+                        <th style="width: 15%;">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for target in targets.items %}
+
+                    <tr>
+
+
+                        <!-- NO -->
+
+                        <td>
+
+                            {{ targets.first + loop.index0 }}
+
+                        </td>
+
+
+                        <!-- REPORTING PERIOD -->
+
+                        <td>
+
+                            {% if target.reporting_period %}
+
+                                <strong>
+                                    {{ target.reporting_period.period_code }}
+                                </strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    {{ target.reporting_period.period_name }}
+
+                                </small>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    -
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td>
+
+                            {% if target.department %}
+
+                                <strong>
+                                    {{ target.department.department_code }}
+                                </strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    {{ target.department.department_name }}
+
+                                </small>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    -
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- TARGET -->
+
+                        <td class="text-center">
+
+                            <span class="badge badge-primary">
+
+                                {{ target.target_quantity }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <td>
+
+                            {% if target.description %}
+
+                                {{ target.description }}
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    -
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td class="text-center">
+
+                            {% if target.is_active %}
+
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge badge-secondary">
+                                    Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <!-- ACTION -->
+
+<td class="text-center">
+
+
+    {% if target.is_active %}
+
+
+        <!-- EDIT -->
+
+        <a
+            href="{{ url_for(
+                'kaizen_department_target.edit',
+                target_id=target.id
+            ) }}"
+            class="btn btn-warning btn-sm"
+            title="Edit"
+        >
+
+            <i class="fas fa-edit"></i>
+
+        </a>
+
+
+        <!-- DELETE -->
+
+        <button
+            type="button"
+            class="btn btn-danger btn-sm btn-delete"
+            data-name="{{ target.reporting_period.period_name }} - {{ target.department.department_name }}"
+            data-url="{{ url_for(
+                'kaizen_department_target.delete',
+                target_id=target.id
+            ) }}"
+            title="Delete"
+        >
+
+            <i class="fas fa-trash"></i>
+
+        </button>
+
+
+    {% else %}
+
+
+        <!-- RESTORE -->
+
+        <form
+            method="POST"
+            action="{{ url_for(
+                'kaizen_department_target.restore',
+                target_id=target.id
+            ) }}"
+            class="d-inline"
+        >
+
+            <button
+                type="submit"
+                class="btn btn-success btn-sm"
+                title="Restore"
+            >
+
+                <i class="fas fa-undo"></i>
+
+            </button>
+
+        </form>
+
+
+    {% endif %}
+
+
+</td>
+
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="text-center text-muted py-4"
+                        >
+
+                            <i class="fas fa-info-circle mr-1"></i>
+
+                            No Kaizen Department Target found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+        {% if targets.pages > 1 %}
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+
+
+            <!-- RECORD INFO -->
+
+            <div>
+
+                Showing
+
+                <strong>
+                    {{ targets.first }}
+                </strong>
+
+                -
+
+                <strong>
+                    {{ targets.last }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ targets.total }}
+                </strong>
+
+                records
+
+            </div>
+
+
+            <!-- PAGINATION -->
+
+            <ul class="pagination pagination-sm mb-0">
+
+
+                <!-- PREVIOUS -->
+
+                {% if targets.has_prev %}
+
+                <li class="page-item">
+
+                    <a
+                        class="page-link"
+                        href="{{ url_for(
+                            'kaizen_department_target.index',
+                            page=targets.prev_num,
+                            per_page=per_page,
+                            keyword=keyword,
+                            status=status,
+                            sort=sort_by,
+                            order=sort_order
+                        ) }}"
+                    >
+
+                        <i class="fas fa-angle-left"></i>
+
+                    </a>
+
+                </li>
+
+                {% else %}
+
+                <li class="page-item disabled">
+
+                    <span class="page-link">
+
+                        <i class="fas fa-angle-left"></i>
+
+                    </span>
+
+                </li>
+
+                {% endif %}
+
+
+                <!-- PAGE NUMBERS -->
+
+                {% for page_num in targets.iter_pages(
+                    left_edge=1,
+                    left_current=2,
+                    right_current=2,
+                    right_edge=1
+                ) %}
+
+
+                    {% if page_num %}
+
+
+                        {% if page_num == targets.page %}
+
+                        <li class="page-item active">
+
+                            <span class="page-link">
+
+                                {{ page_num }}
+
+                            </span>
+
+                        </li>
+
+                        {% else %}
+
+                        <li class="page-item">
+
+                            <a
+                                class="page-link"
+                                href="{{ url_for(
+                                    'kaizen_department_target.index',
+                                    page=page_num,
+                                    per_page=per_page,
+                                    keyword=keyword,
+                                    status=status,
+                                    sort=sort_by,
+                                    order=sort_order
+                                ) }}"
+                            >
+
+                                {{ page_num }}
+
+                            </a>
+
+                        </li>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+
+                    <li class="page-item disabled">
+
+                        <span class="page-link">
+                            ...
+                        </span>
+
+                    </li>
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+                <!-- NEXT -->
+
+                {% if targets.has_next %}
+
+                <li class="page-item">
+
+                    <a
+                        class="page-link"
+                        href="{{ url_for(
+                            'kaizen_department_target.index',
+                            page=targets.next_num,
+                            per_page=per_page,
+                            keyword=keyword,
+                            status=status,
+                            sort=sort_by,
+                            order=sort_order
+                        ) }}"
+                    >
+
+                        <i class="fas fa-angle-right"></i>
+
+                    </a>
+
+                </li>
+
+                {% else %}
+
+                <li class="page-item disabled">
+
+                    <span class="page-link">
+
+                        <i class="fas fa-angle-right"></i>
+
+                    </span>
+
+                </li>
+
+                {% endif %}
+
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- DELETE MODAL -->
+<!-- ========================================================= -->
+
+{% include "components/delete_modal.html" %}
+
+
+{% endblock %}

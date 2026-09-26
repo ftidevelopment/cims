@@ -1,0 +1,1311 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Kaizen List
+{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.kaizen-list-page {
+    width: 100%;
+    padding: 24px 25px 40px 25px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.kaizen-list-page .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.kaizen-list-page .dashboard-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #343a40;
+}
+
+.kaizen-list-page .dashboard-period {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.kaizen-list-page .dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.kaizen-list-page .dashboard-actions-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.kaizen-list-page .dashboard-actions-top .btn {
+    margin-left: 8px;
+    margin-bottom: 6px;
+}
+
+.kaizen-list-page .dashboard-actions-list {
+    margin-top: 2px;
+}
+
+.kaizen-list-page .dashboard-actions-list .btn {
+    margin-left: 8px;
+}
+
+
+/* =========================================================
+   LIST CARD
+   ========================================================= */
+
+.kaizen-list-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+
+.kaizen-list-card .section-title {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #343a40;
+}
+
+
+/* =========================================================
+   FILTER
+   ========================================================= */
+
+.kaizen-filter-panel {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.kaizen-filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.kaizen-filter-item label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #343a40;
+    margin: 0;
+}
+
+.kaizen-filter-item input,
+.kaizen-filter-item select {
+    height: 38px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    background: #ffffff;
+    color: #343a40;
+}
+
+.kaizen-filter-item input {
+    width: 270px;
+}
+
+.kaizen-filter-item select {
+    width: 170px;
+}
+
+.kaizen-filter-item input:focus,
+.kaizen-filter-item select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.15rem rgba(0,123,255,.15);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.kaizen-search-button {
+    height: 38px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 6px;
+    background: #0d6efd;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.kaizen-search-button:hover {
+    background: #0b5ed7;
+}
+
+.kaizen-reset-button {
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid #6c757d;
+    background: #ffffff;
+    color: #6c757d;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.kaizen-reset-button:hover {
+    background: #f8f9fa;
+    color: #343a40;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   PERIOD INFORMATION
+   ========================================================= */
+
+.kaizen-period-info {
+    margin-bottom: 20px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #e7f3ff;
+    border: 1px solid #b8dcff;
+    color: #245b8a;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.kaizen-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.kaizen-table {
+    width: 100%;
+    min-width: 1100px;
+    border-collapse: collapse;
+    margin: 0;
+    background: #ffffff;
+}
+
+.kaizen-table thead th {
+    background: #f8f9fa;
+    color: #343a40;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 10px;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.kaizen-table tbody td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 13px;
+    color: #343a40;
+    vertical-align: middle;
+}
+
+.kaizen-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.kaizen-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+
+/* =========================================================
+   COLUMN WIDTH
+   ========================================================= */
+
+/* No */
+.kaizen-table th:nth-child(1),
+.kaizen-table td:nth-child(1) {
+    width: 55px;
+    text-align: center;
+}
+
+/* Kaizen No */
+.kaizen-table th:nth-child(2),
+.kaizen-table td:nth-child(2) {
+    width: 155px;
+    white-space: nowrap;
+}
+
+/* Title */
+.kaizen-table th:nth-child(3),
+.kaizen-table td:nth-child(3) {
+    min-width: 280px;
+}
+
+/* Department */
+.kaizen-table th:nth-child(4),
+.kaizen-table td:nth-child(4) {
+    min-width: 180px;
+}
+
+/* Status */
+.kaizen-table th:nth-child(5),
+.kaizen-table td:nth-child(5) {
+    width: 120px;
+    text-align: center;
+}
+
+/* Created */
+.kaizen-table th:nth-child(6),
+.kaizen-table td:nth-child(6) {
+    width: 120px;
+    white-space: nowrap;
+}
+
+/* Implementation */
+.kaizen-table th:nth-child(7),
+.kaizen-table td:nth-child(7) {
+    width: 135px;
+    white-space: nowrap;
+}
+
+/* Cost Saving */
+.kaizen-table th:nth-child(8),
+.kaizen-table td:nth-child(8) {
+    width: 145px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Action */
+.kaizen-table th:nth-child(9),
+.kaizen-table td:nth-child(9) {
+    width: 75px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.kaizen-number {
+    font-weight: 600;
+    color: #343a40;
+    white-space: nowrap;
+}
+
+.kaizen-number a {
+    color: #1976b8;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.kaizen-number a:hover {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.kaizen-title {
+    font-weight: 600;
+    color: #343a40;
+    line-height: 1.4;
+}
+
+.kaizen-department {
+    color: #495057;
+    white-space: nowrap;
+}
+
+.kaizen-cost-saving {
+    font-weight: 600;
+    color: #238b45;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.kaizen-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kaizen-status-draft {
+    background: #f0f2f5;
+    color: #687582;
+}
+
+.kaizen-status-proposal {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.kaizen-status-approved {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.kaizen-status-rejected {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.kaizen-status-implemented {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.kaizen-status-default {
+    background: #e9ecef;
+    color: #495057;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+   ========================================================= */
+
+.kaizen-view-button {
+    width: 40px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #17a2b8;
+    border: none;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.kaizen-view-button:hover {
+    background: #138496;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   NO DATA
+   ========================================================= */
+
+.kaizen-no-data {
+    text-align: center;
+    padding: 30px !important;
+    color: #6c757d !important;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.kaizen-pagination-wrapper {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.kaizen-pagination-info {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.kaizen-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.kaizen-pagination a,
+.kaizen-pagination-dots {
+    min-width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.kaizen-pagination a {
+    border: 1px solid #dee2e6;
+    color: #495057;
+    background: #ffffff;
+}
+
+.kaizen-pagination a:hover {
+    background: #f8f9fa;
+    text-decoration: none;
+}
+
+.kaizen-pagination a.active {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    color: #ffffff;
+}
+
+.kaizen-pagination-dots {
+    color: #6c757d;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .kaizen-list-page {
+        padding: 20px 15px 30px 15px;
+    }
+
+    .kaizen-list-page .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .kaizen-list-page .dashboard-actions {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .kaizen-list-page .dashboard-actions-top {
+        width: 100%;
+    }
+
+    .kaizen-list-page .dashboard-actions-top .btn {
+        margin-left: 0;
+        margin-right: 6px;
+    }
+
+    .kaizen-list-page .dashboard-actions-list {
+        margin-top: 4px;
+    }
+
+    .kaizen-list-page .dashboard-actions-list .btn {
+        margin-left: 0;
+    }
+
+    .kaizen-list-page .dashboard-title {
+        font-size: 23px;
+    }
+
+    .kaizen-filter-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .kaizen-filter-item {
+        width: 100%;
+    }
+
+    .kaizen-filter-item input,
+    .kaizen-filter-item select {
+        width: 100%;
+    }
+
+    .kaizen-search-button,
+    .kaizen-reset-button {
+        width: 100%;
+    }
+
+    .kaizen-pagination-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+
+<div class="kaizen-list-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="dashboard-header">
+
+
+        <!-- TITLE -->
+
+        <div>
+
+            <h1 class="dashboard-title">
+
+                <i class="fas fa-lightbulb text-warning mr-1"></i>
+
+                Kaizen List
+
+            </h1>
+
+            <div class="dashboard-period">
+
+                Public Kaizen Monitoring
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <div class="dashboard-actions">
+
+
+            <!-- TOP NAVIGATION -->
+
+            <div class="dashboard-actions-top">
+
+
+                <!-- PROBLEM -->
+
+                <a
+                    href="{{ url_for('problem_dashboard.index') }}"
+                    class="btn btn-outline-danger btn-sm"
+                >
+
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+
+                    Problem
+
+                </a>
+
+
+                <!-- IMPROVEMENT -->
+
+                <a
+                    href="{{ url_for('improvement_dashboard.index') }}"
+                    class="btn btn-outline-success btn-sm"
+                >
+
+                    <i class="fas fa-tools mr-1"></i>
+
+                    Improvement
+
+                </a>
+
+
+                <!-- KAIZEN -->
+
+                <a
+                    href="{{ url_for('kaizen_dashboard.index') }}"
+                    class="btn btn-outline-warning btn-sm"
+                >
+
+                    <i class="fas fa-lightbulb mr-1"></i>
+
+                    Kaizen
+
+                </a>
+
+
+                <!-- LOGIN -->
+
+                <a
+                    href="{{ url_for('auth.login') }}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="fas fa-sign-in-alt mr-1"></i>
+
+                    Login
+
+                </a>
+
+            </div>
+
+
+            <!-- KAIZEN LIST -->
+
+            <div class="dashboard-actions-list">
+
+                <a
+                    href="{{ url_for('kaizen_dashboard.kaizens') }}"
+                    class="btn btn-outline-primary btn-sm"
+                >
+
+                    <i class="fas fa-list mr-1"></i>
+
+                    Kaizen List
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LIST CARD
+         ====================================================== -->
+
+    <div class="kaizen-list-card">
+
+
+        <h3 class="section-title">
+
+            <i class="fas fa-list mr-1"></i>
+
+            Kaizen List
+
+        </h3>
+
+
+        <!-- =================================================
+             FILTER
+             ================================================= -->
+
+        <form
+            method="GET"
+            action="{{ url_for('kaizen_dashboard.kaizens') }}"
+        >
+
+            <div class="kaizen-filter-panel">
+
+
+                <!-- SEARCH -->
+
+                <div class="kaizen-filter-item">
+
+                    <label>
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Kaizen No, title, description..."
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="kaizen-filter-item">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select name="status">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option
+                            value="Draft"
+                            {% if status == "Draft" %}
+                                selected
+                            {% endif %}
+                        >
+                            Draft
+                        </option>
+
+                        <option
+                            value="Proposal"
+                            {% if status == "Proposal" %}
+                                selected
+                            {% endif %}
+                        >
+                            Proposal
+                        </option>
+
+                        <option
+                            value="Approved"
+                            {% if status == "Approved" %}
+                                selected
+                            {% endif %}
+                        >
+                            Approved
+                        </option>
+
+                        <option
+                            value="Rejected"
+                            {% if status == "Rejected" %}
+                                selected
+                            {% endif %}
+                        >
+                            Rejected
+                        </option>
+
+                        <option
+                            value="Implemented"
+                            {% if status == "Implemented" %}
+                                selected
+                            {% endif %}
+                        >
+                            Implemented
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="kaizen-filter-item">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <select name="department_id">
+
+                        <option value="">
+                            All Department
+                        </option>
+
+                        {% for department in departments %}
+
+                        <option
+                            value="{{ department.id }}"
+                            {% if department_id|string == department.id|string %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ department.department_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- PERIOD -->
+
+                <div class="kaizen-filter-item">
+
+                    <label>
+                        Period
+                    </label>
+
+                    <select name="period">
+
+                        <option value="">
+                            All Period
+                        </option>
+
+                        <option
+                            value="6_months"
+                            {% if period == "6_months" %}
+                                selected
+                            {% endif %}
+                        >
+                            Last 6 Months
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <button
+                    type="submit"
+                    class="kaizen-search-button"
+                >
+
+                    <i class="fas fa-search mr-1"></i>
+
+                    Search
+
+                </button>
+
+
+                <!-- RESET -->
+
+                <a
+                    href="{{ url_for('kaizen_dashboard.kaizens') }}"
+                    class="kaizen-reset-button"
+                >
+
+                    <i class="fas fa-sync-alt mr-1"></i>
+
+                    Reset
+
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <!-- =================================================
+             PERIOD INFORMATION
+             ================================================= -->
+
+        {% if period == "6_months" %}
+
+        <div class="kaizen-period-info">
+
+            <i class="fas fa-calendar-alt mr-1"></i>
+
+            Showing Kaizen from
+
+            <strong>
+                {{ period_start_display }}
+            </strong>
+
+            to
+
+            <strong>
+                {{ period_end_display }}
+            </strong>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             TABLE
+             ================================================= -->
+
+        <div class="kaizen-table-wrapper">
+
+            <table class="kaizen-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            No
+                        </th>
+
+                        <th>
+                            Kaizen No
+                        </th>
+
+                        <th>
+                            Title
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                            Implementation
+                        </th>
+
+                        <th>
+                            Cost Saving
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for kaizen in kaizens %}
+
+                    <tr>
+
+
+                        <!-- NO -->
+
+                        <td>
+
+                            {{
+                                pagination.first
+                                + loop.index0
+                            }}
+
+                        </td>
+
+
+                        <!-- KAIZEN NO -->
+
+                        <td>
+
+                            <span class="kaizen-number">
+
+                                {{ kaizen.kaizen_no }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- TITLE -->
+
+                        <td>
+
+                            <div class="kaizen-title">
+
+                                {{ kaizen.title }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td>
+
+                            <span class="kaizen-department">
+
+                                {{ kaizen.department }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if kaizen.status == "Draft" %}
+
+                                <span class="kaizen-status kaizen-status-draft">
+                                    Draft
+                                </span>
+
+                            {% elif kaizen.status == "Proposal" %}
+
+                                <span class="kaizen-status kaizen-status-proposal">
+                                    Proposal
+                                </span>
+
+                            {% elif kaizen.status == "Approved" %}
+
+                                <span class="kaizen-status kaizen-status-approved">
+                                    Approved
+                                </span>
+
+                            {% elif kaizen.status == "Rejected" %}
+
+                                <span class="kaizen-status kaizen-status-rejected">
+                                    Rejected
+                                </span>
+
+                            {% elif kaizen.status == "Implemented" %}
+
+                                <span class="kaizen-status kaizen-status-implemented">
+                                    Implemented
+                                </span>
+
+                            {% else %}
+
+                                <span class="kaizen-status kaizen-status-default">
+
+                                    {{ kaizen.status }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- CREATED -->
+
+                        <td>
+
+                            {{ kaizen.created_at_display }}
+
+                        </td>
+
+
+                        <!-- IMPLEMENTATION -->
+
+                        <td>
+
+                            {{ kaizen.implementation_date_display }}
+
+                        </td>
+
+
+                        <!-- COST SAVING -->
+
+                        <td>
+
+                            <span class="kaizen-cost-saving">
+
+                                {{ "{:,.0f}".format(
+                                    kaizen.cost_saving or 0
+                                ) }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_dashboard.detail',
+                                    kaizen_id=kaizen.id
+                                ) }}"
+                                class="kaizen-view-button"
+                                title="View Kaizen"
+                            >
+
+                                <i class="fas fa-eye"></i>
+
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="9"
+                            class="kaizen-no-data"
+                        >
+
+                            <i class="fas fa-info-circle mr-1"></i>
+
+                            No Kaizen data found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGINATION
+             ================================================= -->
+
+        {% if pagination.total > 0 %}
+
+        <div class="kaizen-pagination-wrapper">
+
+
+            <!-- INFORMATION -->
+
+            <div class="kaizen-pagination-info">
+
+                Showing
+
+                <strong>
+                    {{ pagination.first }}
+                </strong>
+
+                -
+
+                <strong>
+                    {{ pagination.last }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ pagination.total }}
+                </strong>
+
+                Kaizens
+
+            </div>
+
+
+            <!-- PAGINATION -->
+
+            <div class="kaizen-pagination">
+
+
+                <!-- PREVIOUS -->
+
+                {% if pagination.has_prev %}
+
+                <a
+                    href="{{ url_for(
+                        'kaizen_dashboard.kaizens',
+                        page=pagination.prev_num,
+                        per_page=pagination.per_page,
+                        search=search,
+                        status=status,
+                        department_id=department_id,
+                        period=period
+                    ) }}"
+                    title="Previous"
+                >
+
+                    <i class="fas fa-chevron-left"></i>
+
+                </a>
+
+                {% endif %}
+
+
+                <!-- PAGE NUMBERS -->
+
+                {% for page_num in pagination.iter_pages(
+                    left_edge=1,
+                    right_edge=1,
+                    left_current=2,
+                    right_current=2
+                ) %}
+
+
+                    {% if page_num %}
+
+                    <a
+                        href="{{ url_for(
+                            'kaizen_dashboard.kaizens',
+                            page=page_num,
+                            per_page=pagination.per_page,
+                            search=search,
+                            status=status,
+                            department_id=department_id,
+                            period=period
+                        ) }}"
+                        class="{% if page_num == pagination.page %}active{% endif %}"
+                    >
+
+                        {{ page_num }}
+
+                    </a>
+
+
+                    {% else %}
+
+                    <span class="kaizen-pagination-dots">
+                        ...
+                    </span>
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+                <!-- NEXT -->
+
+                {% if pagination.has_next %}
+
+                <a
+                    href="{{ url_for(
+                        'kaizen_dashboard.kaizens',
+                        page=pagination.next_num,
+                        per_page=pagination.per_page,
+                        search=search,
+                        status=status,
+                        department_id=department_id,
+                        period=period
+                    ) }}"
+                    title="Next"
+                >
+
+                    <i class="fas fa-chevron-right"></i>
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="text-center text-muted small mt-4">
+
+        CIMS - Continuous Improvement Management System
+
+    </div>
+
+</div>
+
+{% endblock %}

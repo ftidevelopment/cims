@@ -1,0 +1,370 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Inactive Reporting Period{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ==========================================================
+         Page Header
+         ========================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h4 class="mb-1">
+
+                <i class="fas fa-archive mr-2"></i>
+
+                Inactive Reporting Period
+
+            </h4>
+
+            <small class="text-muted">
+
+                List of inactive Kaizen reporting periods
+
+            </small>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{{ url_for(
+                    'kaizen_reporting_period.index'
+                ) }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back to Reporting Period
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================================
+         Card
+         ========================================================== -->
+
+    <div class="card card-primary card-outline">
+
+        <!-- ======================================================
+             Card Header
+             ====================================================== -->
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-list mr-1"></i>
+
+                Inactive Reporting Period List
+
+            </h3>
+
+        </div>
+
+
+        <!-- ======================================================
+             Card Body
+             ====================================================== -->
+
+        <div class="card-body">
+
+            {% if periods %}
+
+            <div class="table-responsive">
+
+                <table
+                    class="table table-bordered table-hover align-middle"
+                >
+
+                    <!-- ==========================================
+                         Table Header
+                         ========================================== -->
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th
+                                style="width: 60px;"
+                                class="text-center"
+                            >
+                                No
+                            </th>
+
+                            <th>
+                                Period Code
+                            </th>
+
+                            <th>
+                                Period Name
+                            </th>
+
+                            <th style="width: 140px;">
+                                Start Date
+                            </th>
+
+                            <th style="width: 140px;">
+                                End Date
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th
+                                style="width: 120px;"
+                                class="text-center"
+                            >
+                                Status
+                            </th>
+
+                            <th
+                                style="width: 120px;"
+                                class="text-center"
+                            >
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- ==========================================
+                         Table Body
+                         ========================================== -->
+
+                    <tbody>
+
+                        {% for period in periods %}
+
+                        <tr>
+
+                            <!-- ==================================
+                                 No
+                                 ================================== -->
+
+                            <td class="text-center">
+
+                                {{ loop.index }}
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 Period Code
+                                 ================================== -->
+
+                            <td>
+
+                                <strong>
+
+                                    {{ period.period_code }}
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 Period Name
+                                 ================================== -->
+
+                            <td>
+
+                                {{ period.period_name }}
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 Start Date
+                                 ================================== -->
+
+                            <td>
+
+                                {{ 
+                                    period.start_date.strftime(
+                                        '%d-%m-%Y'
+                                    )
+                                    if period.start_date
+                                    else '-'
+                                }}
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 End Date
+                                 ================================== -->
+
+                            <td>
+
+                                {{
+                                    period.end_date.strftime(
+                                        '%d-%m-%Y'
+                                    )
+                                    if period.end_date
+                                    else '-'
+                                }}
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 Description
+                                 ================================== -->
+
+                            <td>
+
+                                {% if period.description %}
+
+                                    {{ period.description }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+
+                                        -
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 Status
+                                 ================================== -->
+
+                            <td class="text-center">
+
+                                <span class="badge bg-secondary">
+
+                                    Inactive
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- ==================================
+                                 Action
+                                 ================================== -->
+
+                            <td class="text-center">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-success"
+                                    data-toggle="modal"
+                                    data-target="#restoreModal{{ period.id }}"
+                                    title="Restore"
+                                >
+
+                                    <i class="fas fa-undo mr-1"></i>
+
+                                    Restore
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- ==================================================
+                             Restore Modal
+
+                             IMPORTANT:
+                             Modal dipanggil DI DALAM LOOP.
+
+                             Karena restore_modal.html menggunakan:
+                                 period.id
+                                 period.period_name
+
+                             ================================================== -->
+
+                        {% include "components/restore_modal.html" %}
+
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- ==========================================================
+                 Empty State
+                 ========================================================== -->
+
+            <div class="text-center py-5">
+
+                <div class="mb-3">
+
+                    <i
+                        class="fas fa-archive fa-3x text-muted"
+                    ></i>
+
+                </div>
+
+
+                <h5 class="text-muted">
+
+                    No inactive reporting period found
+
+                </h5>
+
+
+                <p class="text-muted mb-3">
+
+                    There are currently no inactive
+                    reporting periods.
+
+                </p>
+
+
+                <a
+                    href="{{ url_for(
+                        'kaizen_reporting_period.index'
+                    ) }}"
+                    class="btn btn-primary"
+                >
+
+                    <i class="fas fa-arrow-left mr-1"></i>
+
+                    Back to Reporting Period
+
+                </a>
+
+            </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

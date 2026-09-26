@@ -1,0 +1,408 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+Assign Kaizen Approval Authority
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Assign Kaizen Approval Authority
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a
+                            href="{{ url_for(
+                                'dashboard.index'
+                            ) }}"
+                        >
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a
+                            href="{{ url_for(
+                                'kaizen_approval_authority.index'
+                            ) }}"
+                        >
+
+                            Kaizen Approval Authority
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+
+                        Assign
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <div class="row">
+
+            <div class="col-md-8">
+
+
+                <div class="card card-primary card-outline">
+
+
+                    <!-- ======================================
+                         HEADER
+                    ======================================= -->
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i
+                                class="fas fa-user-check mr-2"
+                            ></i>
+
+                            Assign Approval Authority
+
+                        </h3>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         BODY
+                    ======================================= -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'kaizen_approval_authority.create'
+                        ) }}"
+                    >
+
+                        <div class="card-body">
+
+
+                            <!-- ==================================
+                                 DEPARTMENT
+                            =================================== -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="department_id"
+                                >
+
+                                    Department
+
+                                    <span class="text-danger">
+
+                                        *
+
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    id="department_id"
+                                    name="department_id"
+                                    class="form-control"
+                                    required
+                                >
+
+                                    <option value="">
+
+                                        -- Select Department --
+
+                                    </option>
+
+
+                                    {% for department
+                                        in departments %}
+
+                                        <option
+                                            value="{{
+                                                department.id
+                                            }}"
+                                            {% if request.form.get(
+                                                "department_id"
+                                            ) == department.id|string %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{
+                                                department.department_name
+                                            }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- ==================================
+                                 EMPLOYEE
+                            =================================== -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="employee_id"
+                                >
+
+                                    Employee
+
+                                    <span class="text-danger">
+
+                                        *
+
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    id="employee_id"
+                                    name="employee_id"
+                                    class="form-control"
+                                    required
+                                >
+
+                                    <option value="">
+
+                                        -- Select Employee --
+
+                                    </option>
+
+
+                                    {% for employee
+                                        in employees %}
+
+                                        <option
+                                            value="{{
+                                                employee.id
+                                            }}"
+                                            {% if request.form.get(
+                                                "employee_id"
+                                            ) == employee.id|string %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{
+                                                employee.full_name
+                                            }}
+
+                                            -
+
+                                            {{
+                                                employee.nik
+                                            }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- ==================================
+                                 INFORMATION
+                            =================================== -->
+
+                            <div class="alert alert-info">
+
+                                <i
+                                    class="fas fa-info-circle mr-2"
+                                ></i>
+
+                                The selected employee will be
+                                authorized to approve and reject
+                                Kaizen for the selected department.
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- ======================================
+                             FOOTER
+                        ======================================= -->
+
+                        <div class="card-footer">
+
+
+                            <a
+                                href="{{ url_for(
+                                    'kaizen_approval_authority.index'
+                                ) }}"
+                                class="btn btn-secondary"
+                            >
+
+                                <i
+                                    class="fas fa-arrow-left mr-1"
+                                ></i>
+
+                                Cancel
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i
+                                    class="fas fa-user-check mr-1"
+                                ></i>
+
+                                Assign Authority
+
+                            </button>
+
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 INFORMATION CARD
+            =========================================== -->
+
+            <div class="col-md-4">
+
+
+                <div class="card card-info card-outline">
+
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i
+                                class="fas fa-info-circle mr-2"
+                            ></i>
+
+                            How It Works
+
+                        </h3>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <p>
+
+                            An employee can be assigned as
+                            Kaizen Approval Authority for
+                            multiple departments.
+
+                        </p>
+
+
+                        <p class="mb-2">
+
+                            Example:
+
+                        </p>
+
+
+                        <ul class="pl-3">
+
+                            <li>
+
+                                Engineering → Budi
+
+                            </li>
+
+                            <li>
+
+                                Maintenance → Budi
+
+                            </li>
+
+                            <li>
+
+                                Production → Andi
+
+                            </li>
+
+                        </ul>
+
+
+                        <p class="mb-0">
+
+                            In this example, Budi can approve
+                            or reject Kaizen from Engineering
+                            and Maintenance, but not Production.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

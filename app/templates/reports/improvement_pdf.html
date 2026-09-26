@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Improvement Report - {{ improvement.improvement_no }}
+    </title>
+
+    <style>
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        @page {
+
+            size: A4;
+
+            margin:
+                18mm
+                15mm
+                18mm
+                15mm;
+
+            @bottom-left {
+
+                content:
+                    "Confidential - For Internal Use Only";
+
+                font-size: 7.5pt;
+
+                color: #777;
+            }
+
+            @bottom-right {
+
+                content:
+                    "Page "
+                    counter(page)
+                    " of "
+                    counter(pages);
+
+                font-size: 7.5pt;
+
+                color: #777;
+            }
+        }
+
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            font-size: 9pt;
+
+            color: #222;
+
+            line-height: 1.45;
+        }
+
+
+        body {
+
+            background: #ffffff;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .document-header {
+
+            width: 100%;
+
+            border-bottom:
+                2px solid #1f4e78;
+
+            padding-bottom: 8px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .header-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            border: none;
+        }
+
+
+        .header-table td {
+
+            border: none;
+
+            vertical-align: middle;
+
+            padding: 0;
+        }
+
+
+        .header-logo {
+
+            width: 75px;
+        }
+
+
+        .header-logo img {
+
+            width: 65px;
+
+            height: auto;
+
+            display: block;
+        }
+
+
+        .company-name {
+
+            font-size: 16pt;
+
+            font-weight: 700;
+
+            color: #1f4e78;
+
+            line-height: 1.15;
+        }
+
+
+        .company-subtitle {
+
+            font-size: 8.5pt;
+
+            color: #555;
+
+            margin-top: 2px;
+        }
+
+
+        .system-name {
+
+            font-size: 8.5pt;
+
+            color: #666;
+
+            margin-top: 4px;
+        }
+
+
+        .header-right {
+
+            width: 145px;
+
+            text-align: right;
+
+            vertical-align: top !important;
+        }
+
+
+        .document-label {
+
+            font-size: 8pt;
+
+            color: #777;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .document-number {
+
+            font-size: 10pt;
+
+            font-weight: 700;
+
+            color: #1f4e78;
+
+            margin-top: 2px;
+        }
+
+
+        /* =========================================================
+           REPORT TITLE
+        ========================================================= */
+
+        .report-title {
+
+            background: #1f4e78;
+
+            color: #ffffff;
+
+            padding:
+                9px
+                12px;
+
+            font-size: 15pt;
+
+            font-weight: 700;
+
+            text-align: center;
+
+            letter-spacing: 0.4px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .report-subtitle {
+
+            text-align: center;
+
+            color: #666;
+
+            font-size: 8pt;
+
+            margin-top: -6px;
+
+            margin-bottom: 14px;
+        }
+
+
+        /* =========================================================
+           SUMMARY
+        ========================================================= */
+
+        .summary-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-bottom: 15px;
+
+            table-layout: fixed;
+        }
+
+
+        .summary-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                6px
+                7px;
+
+            vertical-align: top;
+        }
+
+
+        .summary-label {
+
+            width: 20%;
+
+            background: #f1f4f7;
+
+            font-weight: 700;
+
+            color: #444;
+        }
+
+
+        .summary-value {
+
+            width: 30%;
+        }
+
+
+        .summary-title {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        /* =========================================================
+           SECTION
+        ========================================================= */
+
+        .section {
+
+            margin-top: 13px;
+
+            margin-bottom: 12px;
+
+            page-break-inside: avoid;
+        }
+
+
+        .section-title {
+
+            background: #1f4e78;
+
+            color: #ffffff;
+
+            padding:
+                5px
+                8px;
+
+            font-size: 9.5pt;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+
+        .section-title-light {
+
+            background: #eaf1f7;
+
+            color: #1f4e78;
+
+            border-left:
+                3px solid #1f4e78;
+
+            padding:
+                5px
+                7px;
+
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+
+        /* =========================================================
+           DATA TABLE
+        ========================================================= */
+
+        .data-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .data-table th {
+
+            background: #f1f4f7;
+
+            color: #333;
+
+            border:
+                1px solid #cfd6dd;
+
+            padding:
+                5px
+                6px;
+
+            font-size: 8.5pt;
+
+            font-weight: 700;
+
+            text-align: left;
+
+            vertical-align: middle;
+        }
+
+
+        .data-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                5px
+                6px;
+
+            font-size: 8.5pt;
+
+            vertical-align: top;
+
+            word-wrap: break-word;
+
+            overflow-wrap: break-word;
+        }
+
+
+        .data-table tr {
+
+            page-break-inside: avoid;
+        }
+
+
+        /* =========================================================
+           FIELD TABLE
+        ========================================================= */
+
+        .field-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .field-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                6px
+                7px;
+
+            vertical-align: top;
+
+            word-wrap: break-word;
+        }
+
+
+        .field-label {
+
+            width: 24%;
+
+            background: #f7f8fa;
+
+            font-weight: 700;
+
+            color: #444;
+        }
+
+
+        .field-value {
+
+            width: 76%;
+
+            min-height: 24px;
+        }
+
+
+        /* =========================================================
+           LONG TEXT
+        ========================================================= */
+
+        .text-content {
+
+            white-space: pre-line;
+
+            line-height: 1.5;
+
+            min-height: 25px;
+        }
+
+
+        .empty-content {
+
+            color: #888;
+
+            font-style: italic;
+        }
+
+
+        /* =========================================================
+           PIC
+        ========================================================= */
+
+        .pic-leader {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        .pic-status {
+
+            font-size: 8pt;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================================
+           COST & BENEFIT
+        ========================================================= */
+
+        .currency {
+
+            text-align: right;
+
+            white-space: nowrap;
+        }
+
+
+        .number {
+
+            text-align: right;
+
+            white-space: nowrap;
+        }
+
+
+        .highlight-row td {
+
+            background: #eef5fb;
+
+            font-weight: 700;
+        }
+
+
+        .benefit-positive {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        /* =========================================================
+           ATTACHMENT
+        ========================================================= */
+
+        .attachment-name {
+
+            font-weight: 600;
+
+            word-break: break-word;
+        }
+
+
+        .attachment-description {
+
+            color: #555;
+
+            word-break: break-word;
+        }
+
+
+        .attachment-size {
+
+            text-align: right;
+
+            white-space: nowrap;
+        }
+
+
+        .empty-data {
+
+            padding: 9px;
+
+            border:
+                1px solid #d9dee5;
+
+            background: #f8f9fa;
+
+            color: #777;
+
+            text-align: center;
+
+            font-size: 8.5pt;
+        }
+
+
+        /* =========================================================
+           ATTACHMENT EVIDENCE
+        ========================================================= */
+
+        .evidence-container {
+
+            margin-top: 8px;
+        }
+
+
+        .evidence-item {
+
+            margin-bottom: 12px;
+
+            page-break-inside: avoid;
+        }
+
+
+        .evidence-title {
+
+            background: #f1f4f7;
+
+            border:
+                1px solid #d9dee5;
+
+            border-bottom: none;
+
+            padding:
+                5px
+                7px;
+
+            font-weight: 700;
+
+            color: #444;
+        }
+
+
+        .evidence-image {
+
+            border:
+                1px solid #d9dee5;
+
+            padding: 7px;
+
+            text-align: center;
+
+            page-break-inside: avoid;
+        }
+
+
+        .evidence-image img {
+
+            max-width: 100%;
+
+            max-height: 180mm;
+
+            width: auto;
+
+            height: auto;
+
+            display: block;
+
+            margin: 0 auto;
+        }
+
+
+        .evidence-description {
+
+            border:
+                1px solid #d9dee5;
+
+            border-top: none;
+
+            padding:
+                5px
+                7px;
+
+            font-size: 8pt;
+
+            color: #555;
+        }
+
+
+        /* =========================================================
+           VERIFICATION
+        ========================================================= */
+
+        .verification-box {
+
+            border:
+                1px solid #d9dee5;
+
+            padding: 9px;
+
+            min-height: 45px;
+
+            white-space: pre-line;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================================
+           APPROVAL
+        ========================================================= */
+
+        .approval-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .approval-table th {
+
+            background: #f1f4f7;
+
+            border:
+                1px solid #cfd6dd;
+
+            padding: 6px;
+
+            font-size: 8.5pt;
+
+            text-align: center;
+        }
+
+
+        .approval-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding: 7px;
+
+            vertical-align: top;
+        }
+
+
+        .approval-label {
+
+            width: 25%;
+
+            background: #f7f8fa;
+
+            font-weight: 700;
+        }
+
+
+        .signature-space {
+
+            height: 32px;
+        }
+
+
+        .approval-status {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        /* =========================================================
+           DOCUMENT CONTROL
+        ========================================================= */
+
+        .document-control {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .document-control td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                5px
+                6px;
+
+            font-size: 8pt;
+
+            vertical-align: top;
+        }
+
+
+        .document-control-label {
+
+            width: 25%;
+
+            background: #f7f8fa;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           FOOTER MESSAGE
+        ========================================================= */
+
+        .footer-message {
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            font-size: 7.5pt;
+
+            color: #888;
+
+            font-style: italic;
+        }
+
+
+        /* =========================================================
+           UTILITY
+        ========================================================= */
+
+        .text-center {
+
+            text-align: center !important;
+        }
+
+
+        .text-right {
+
+            text-align: right !important;
+        }
+
+
+        .text-muted {
+
+            color: #777;
+        }
+
+
+        .nowrap {
+
+            white-space: nowrap;
+        }
+
+
+        .page-break {
+
+            page-break-before: always;
+        }
+
+
+        /* =========================================================
+           PRINT
+        ========================================================= */
+
+        @media print {
+
+            .section-title,
+            .report-title {
+
+                -webkit-print-color-adjust: exact;
+
+                print-color-adjust: exact;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="document-header">
+
+    <table class="header-table">
+
+        <tr>
+
+            <td class="header-logo">
+
+                {% if logo_uri %}
+
+                <img
+                    src="{{ logo_uri }}"
+                    alt="CIMS Logo"
+                >
+
+                {% endif %}
+
+            </td>
+
+
+            <td>
+
+                <div class="company-name">
+                    FOXCONN TECHNOLOGIES INDONESIA
+                </div>
+
+                <div class="company-subtitle">
+                    component electronic
+                </div>
+
+                <div class="system-name">
+                    CIMS – Continuous Improvement Management System
+                </div>
+
+            </td>
+
+
+            <td class="header-right">
+
+                <div class="document-label">
+                    Document
+                </div>
+
+                <div class="document-number">
+                    {{ improvement.improvement_no }}
+                </div>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     REPORT TITLE
+========================================================= -->
+
+<div class="report-title">
+    IMPROVEMENT REPORT
+</div>
+
+
+<div class="report-subtitle">
+    Continuous Improvement Documentation
+</div>
+
+
+<!-- =========================================================
+     SUMMARY
+========================================================= -->
+
+<table class="summary-table">
+
+    <tr>
+
+        <td class="summary-label">
+            Improvement No.
+        </td>
+
+        <td class="summary-value">
+            {{ improvement.improvement_no or '-' }}
+        </td>
+
+
+        <td class="summary-label">
+            Problem No.
+        </td>
+
+        <td class="summary-value">
+
+            {% if improvement.problem %}
+
+                {{ improvement.problem.problem_no or '-' }}
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+
+    <tr>
+
+        <td class="summary-label">
+            Status
+        </td>
+
+        <td class="summary-value">
+
+            {% if improvement.approved_date %}
+
+                Approved
+
+            {% elif improvement.verification_result %}
+
+                Verified
+
+            {% elif improvement.implementation_result %}
+
+                Implemented
+
+            {% else %}
+
+                In Progress
+
+            {% endif %}
+
+        </td>
+
+
+        <td class="summary-label">
+            Owner
+        </td>
+
+        <td class="summary-value">
+
+            {% if improvement.owner_employee %}
+
+                {{ improvement.owner_employee.full_name or '-' }}
+
+                {% if improvement.owner_employee.nik %}
+
+                    <br>
+
+                    <span class="text-muted">
+                        {{ improvement.owner_employee.nik }}
+                    </span>
+
+                {% endif %}
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+
+    <tr>
+
+        <td class="summary-label">
+            Improvement Title
+        </td>
+
+        <td
+            class="summary-value summary-title"
+            colspan="3"
+        >
+            {{ improvement.title or '-' }}
+        </td>
+
+    </tr>
+
+</table>
+
+
+<!-- =========================================================
+     1. BASIC INFORMATION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        1. BASIC INFORMATION
+    </div>
+
+
+    <table class="field-table">
+
+        <tr>
+
+            <td class="field-label">
+                Improvement No.
+            </td>
+
+            <td class="field-value">
+                {{ improvement.improvement_no or '-' }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="field-label">
+                Problem No.
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.problem %}
+
+                    {{ improvement.problem.problem_no or '-' }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- =================================================
+             DEPARTMENT
+        ================================================== -->
+
+        <tr>
+
+            <td class="field-label">
+                Department
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.problem
+                      and improvement.problem.department %}
+
+                    {{ improvement.problem.department.department_name }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- =================================================
+             CATEGORY
+        ================================================== -->
+
+        <tr>
+
+            <td class="field-label">
+                Category
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.problem
+                      and improvement.problem.problem_category %}
+
+                    {{ improvement.problem.problem_category.problem_category_name }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="field-label">
+                Title
+            </td>
+
+            <td class="field-value">
+                {{ improvement.title or '-' }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="field-label">
+                Owner
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.owner_employee %}
+
+                    {{ improvement.owner_employee.full_name or '-' }}
+
+                    {% if improvement.owner_employee.nik %}
+
+                        &nbsp;(
+                        {{ improvement.owner_employee.nik }}
+                        )
+
+                    {% endif %}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="field-label">
+                Problem Status
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.problem %}
+
+                    {{ improvement.problem.status or '-' }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     2. IMPROVEMENT DESCRIPTION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        2. IMPROVEMENT DESCRIPTION
+    </div>
+
+
+    <table class="field-table">
+
+        <tr>
+
+            <td class="field-label">
+                Description
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.description %}
+
+                    <div class="text-content">
+                        {{ improvement.description }}
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+                        No description provided.
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="field-label">
+                Root Cause
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.root_cause %}
+
+                    <div class="text-content">
+                        {{ improvement.root_cause }}
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+                        No root cause provided.
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="field-label">
+                Improvement Plan
+            </td>
+
+            <td class="field-value">
+
+                {% if improvement.improvement_plan %}
+
+                    <div class="text-content">
+                        {{ improvement.improvement_plan }}
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+                        No improvement plan provided.
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     3. IMPROVEMENT PIC
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        3. IMPROVEMENT PIC
+    </div>
+
+
+    {% if improvement.improvement_pics %}
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+
+                <th
+                    style="width: 8%;"
+                    class="text-center"
+                >
+                    No.
+                </th>
+
+                <th
+                    style="width: 20%;"
+                >
+                    NIK
+                </th>
+
+                <th
+                    style="width: 37%;"
+                >
+                    Name
+                </th>
+
+                <th
+                    style="width: 18%;"
+                    class="text-center"
+                >
+                    Role
+                </th>
+
+                <th
+                    style="width: 17%;"
+                    class="text-center"
+                >
+                    Status
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for pic in improvement.improvement_pics %}
+
+            <tr>
+
+                <td class="text-center">
+                    {{ loop.index }}
+                </td>
+
+
+                <td>
+
+                    {% if pic.employee %}
+
+                        {{ pic.employee.nik or '-' }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {% if pic.employee %}
+
+                        {{ pic.employee.full_name or '-' }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td class="text-center">
+
+                    {% if pic.is_leader %}
+
+                        <span class="pic-leader">
+                            Leader
+                        </span>
+
+                    {% else %}
+
+                        PIC
+
+                    {% endif %}
+
+                </td>
+
+
+                <td class="text-center">
+
+                    <span class="pic-status">
+                        {{ pic.status or '-' }}
+                    </span>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    {% else %}
+
+    <div class="empty-data">
+        No Improvement PIC assigned.
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =========================================================
+     4. IMPLEMENTATION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        4. IMPLEMENTATION
+    </div>
+
+
+    <div class="section-title-light">
+        Implementation Result
+    </div>
+
+
+    <div class="verification-box">
+
+        {% if improvement.implementation_result %}
+
+            {{ improvement.implementation_result }}
+
+        {% else %}
+
+            <span class="empty-content">
+                No implementation result provided.
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     5. COST & BENEFIT
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        5. COST &amp; BENEFIT
+    </div>
+
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+
+                <th style="width: 55%;">
+                    Item
+                </th>
+
+                <th
+                    style="width: 45%;"
+                    class="text-right"
+                >
+                    Value
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+            <!-- Improvement Cost -->
+
+            <tr>
+
+                <td>
+                    Improvement Cost
+                </td>
+
+                <td class="currency">
+
+                    {% if improvement.improvement_cost is not none %}
+
+                        {{ "{:,.2f}".format(
+                            improvement.improvement_cost
+                        ) }}
+
+                    {% else %}
+
+                        0.00
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            <!-- Estimated Cost Saving -->
+
+            <tr>
+
+                <td>
+                    Estimated Cost Saving
+                </td>
+
+                <td class="currency">
+
+                    {% if improvement.estimated_cost_saving is not none %}
+
+                        {{ "{:,.2f}".format(
+                            improvement.estimated_cost_saving
+                        ) }}
+
+                    {% else %}
+
+                        0.00
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            <!-- Estimated Time Saving -->
+
+            <tr>
+
+                <td>
+                    Estimated Time Saving
+                </td>
+
+                <td class="number">
+
+                    {% if improvement.estimated_time_saving is not none %}
+
+                        {{ "{:,}".format(
+                            improvement.estimated_time_saving
+                        ) }}
+
+                        minutes
+
+                    {% else %}
+
+                        0 minutes
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            <!-- Estimated Benefit -->
+
+            <tr class="highlight-row">
+
+                <td>
+                    Estimated Benefit
+                </td>
+
+                <td class="currency benefit-positive">
+
+                    {% if improvement.estimated_benefit is not none %}
+
+                        {{ "{:,.2f}".format(
+                            improvement.estimated_benefit
+                        ) }}
+
+                    {% else %}
+
+                        0.00
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            {% if benefit %}
+
+
+                <!-- Net Benefit -->
+
+                {% if benefit.net_benefit is defined %}
+
+                <tr>
+
+                    <td>
+                        Net Benefit
+                    </td>
+
+                    <td class="currency">
+
+                        {% if benefit.net_benefit is not none %}
+
+                            {{ "{:,.2f}".format(
+                                benefit.net_benefit
+                            ) }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+
+                <!-- ROI -->
+
+                {% if benefit.roi is defined %}
+
+                <tr>
+
+                    <td>
+                        ROI
+                    </td>
+
+                    <td class="number">
+
+                        {% if benefit.roi is not none %}
+
+                            {{ "{:,.2f}".format(
+                                benefit.roi
+                            ) }} %
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+
+            {% endif %}
+
+        </tbody>
+
+    </table>
+
+
+    <div
+        class="text-muted"
+        style="
+            margin-top: 5px;
+            font-size: 7.5pt;
+        "
+    >
+        Monetary values are presented based on the Improvement
+        data recorded in CIMS.
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     6. VERIFICATION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        6. VERIFICATION
+    </div>
+
+
+    <div class="section-title-light">
+        Verification Result
+    </div>
+
+
+    <div class="verification-box">
+
+        {% if improvement.verification_result %}
+
+            {{ improvement.verification_result }}
+
+        {% else %}
+
+            <span class="empty-content">
+                No verification result provided.
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     7. ATTACHMENT LIST
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        7. ATTACHMENT LIST
+    </div>
+
+
+    {% if improvement.attachments %}
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+
+                <th
+                    style="width: 7%;"
+                    class="text-center"
+                >
+                    No.
+                </th>
+
+                <th style="width: 34%;">
+                    File
+                </th>
+
+                <th style="width: 19%;">
+                    Type
+                </th>
+
+                <th
+                    style="width: 15%;"
+                    class="text-right"
+                >
+                    Size
+                </th>
+
+                <th style="width: 25%;">
+                    Description
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for attachment in improvement.attachments|sort(attribute="sort_order") %}
+
+            <tr>
+
+                <td class="text-center">
+                    {{ loop.index }}
+                </td>
+
+
+                <td>
+
+                    <div class="attachment-name">
+                        {{ attachment.file_name or '-' }}
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    {{ attachment.file_type or '-' }}
+
+                </td>
+
+
+                <td class="attachment-size">
+
+                    {% if attachment.file_size is not none %}
+
+
+                        {% if attachment.file_size >= 1048576 %}
+
+                            {{ "%.2f"|format(
+                                attachment.file_size / 1048576
+                            ) }}
+
+                            MB
+
+
+                        {% elif attachment.file_size >= 1024 %}
+
+                            {{ "%.2f"|format(
+                                attachment.file_size / 1024
+                            ) }}
+
+                            KB
+
+
+                        {% else %}
+
+                            {{ attachment.file_size }}
+                            B
+
+                        {% endif %}
+
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {% if attachment.description %}
+
+                        <div class="attachment-description">
+                            {{ attachment.description }}
+                        </div>
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    {% else %}
+
+    <div class="empty-data">
+        No attachments available.
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =========================================================
+     8. ATTACHMENT EVIDENCE
+========================================================= -->
+
+{% set image_attachments = [] %}
+
+
+{% for attachment in improvement.attachments|sort(attribute="sort_order") %}
+
+    {% if attachment.id in attachment_images %}
+
+        {% set dummy = image_attachments.append(attachment) %}
+
+    {% endif %}
+
+{% endfor %}
+
+
+{% if image_attachments %}
+
+<div class="section">
+
+    <div class="section-title">
+        8. ATTACHMENT EVIDENCE
+    </div>
+
+
+    <div class="evidence-container">
+
+
+        {% for attachment in image_attachments %}
+
+        <div class="evidence-item">
+
+
+            <div class="evidence-title">
+
+                Evidence {{ loop.index }}
+
+                &nbsp;–&nbsp;
+
+                {{ attachment.file_name or 'Attachment' }}
+
+            </div>
+
+
+            <div class="evidence-image">
+
+                <img
+                    src="{{ attachment_images[attachment.id] }}"
+                    alt="{{ attachment.file_name or 'Attachment Evidence' }}"
+                >
+
+            </div>
+
+
+            {% if attachment.description %}
+
+            <div class="evidence-description">
+
+                <strong>
+                    Description:
+                </strong>
+
+                {{ attachment.description }}
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- =========================================================
+     9. APPROVAL
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        9. APPROVAL
+    </div>
+
+
+    <table class="approval-table">
+
+        <thead>
+
+            <tr>
+
+                <th style="width: 25%;">
+                    Item
+                </th>
+
+                <th style="width: 35%;">
+                    Information
+                </th>
+
+                <th style="width: 40%;">
+                    Signature
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+            <!-- Approval Status -->
+
+            <tr>
+
+                <td class="approval-label">
+                    Approval Status
+                </td>
+
+
+                <td>
+
+                    {% if improvement.approved_date %}
+
+                        <div class="approval-status">
+                            Approved
+                        </div>
+
+
+                        <div style="margin-top: 4px;">
+
+                            Date:
+
+                            {{ improvement.approved_date.strftime(
+                                '%d-%m-%Y'
+                            ) }}
+
+                        </div>
+
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            Pending Approval
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    <div class="signature-space"></div>
+
+                </td>
+
+            </tr>
+
+
+            <!-- Approval By -->
+
+            <tr>
+
+                <td class="approval-label">
+                    Approval By
+                </td>
+
+
+                <td>
+
+                    {% if improvement.approved_by %}
+
+                        <strong>
+                            {{ improvement.approved_by.full_name or '-' }}
+                        </strong>
+
+
+                        {% if improvement.approved_by.nik %}
+
+                            <br>
+
+                            <span class="text-muted">
+                                {{ improvement.approved_by.nik }}
+                            </span>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+                        <span class="text-muted">
+                            -
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    <div class="signature-space"></div>
+
+                </td>
+
+            </tr>
+
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     10. DOCUMENT CONTROL
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        10. DOCUMENT CONTROL
+    </div>
+
+
+    <table class="document-control">
+
+        <tr>
+
+            <td class="document-control-label">
+                Improvement No.
+            </td>
+
+            <td>
+                {{ improvement.improvement_no or '-' }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="document-control-label">
+                Printed By
+            </td>
+
+            <td>
+
+                {% if printed_by %}
+
+                    {{ printed_by }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="document-control-label">
+                Print Date &amp; Time
+            </td>
+
+            <td>
+
+                {% if print_datetime %}
+
+                    {{ print_datetime.strftime(
+                        '%d-%m-%Y %H:%M'
+                    ) }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="document-control-label">
+                System
+            </td>
+
+            <td>
+                CIMS – Continuous Improvement Management System
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER MESSAGE
+========================================================= -->
+
+<div class="footer-message">
+
+    Small Improvement, Big Impact
+
+</div>
+
+
+</body>
+
+</html>

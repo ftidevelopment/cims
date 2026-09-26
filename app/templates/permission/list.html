@@ -1,0 +1,734 @@
+{% from "components/sortable_header.html" import sortable_header %}
+
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+Permission
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     Content Header
+========================================================= -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Permission
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Security
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Permission
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     Main Content
+========================================================= -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- =================================================
+                 Card Header
+            ================================================== -->
+
+            <div class="card-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+
+                    <!-- =========================================
+                         Left
+                    ========================================== -->
+
+                    <div class="d-flex align-items-center">
+
+                        <h3 class="card-title mb-0 mr-4">
+
+                            <i class="fas fa-key mr-2"></i>
+
+                            Permission List
+
+                        </h3>
+
+
+                        <!-- =====================================
+                             Status
+                        ====================================== -->
+
+                        <form
+                            method="GET"
+                            class="mb-0"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="keyword"
+                                value="{{ keyword }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="sort"
+                                value="{{ sort_by }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="order"
+                                value="{{ sort_order }}"
+                            >
+
+
+                            <select
+                                name="is_active"
+                                class="custom-select"
+                                style="width:160px;"
+                                onchange="this.form.submit()"
+                            >
+
+                                <option
+                                    value="true"
+                                    {% if is_active == "true" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Active
+                                </option>
+
+
+                                <option
+                                    value="false"
+                                    {% if is_active == "false" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Inactive
+                                </option>
+
+
+                                <option
+                                    value="all"
+                                    {% if is_active == "all" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    All
+                                </option>
+
+                            </select>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         Right
+                    ========================================== -->
+
+                    <div class="d-flex align-items-center">
+
+
+                        <!-- =====================================
+                             Add Permission
+                        ====================================== -->
+
+                        <a
+                            href="{{ url_for('permission.create') }}"
+                            class="btn btn-success mr-3"
+                        >
+
+                            <i class="fas fa-plus"></i>
+
+                            Add Permission
+
+                        </a>
+
+
+                        <!-- =====================================
+                             Search
+                        ====================================== -->
+
+                        <form
+                            method="GET"
+                            class="mb-0"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="is_active"
+                                value="{{ is_active }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="sort"
+                                value="{{ sort_by }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="order"
+                                value="{{ sort_order }}"
+                            >
+
+
+                            <div class="input-group">
+
+                                <input
+                                    type="text"
+                                    name="keyword"
+                                    class="form-control"
+                                    style="width:280px;"
+                                    placeholder="Search code, name or description..."
+                                    value="{{ keyword }}"
+                                >
+
+
+                                <div class="input-group-append">
+
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+
+                                        <i class="fas fa-search"></i>
+
+                                    </button>
+
+
+                                    <a
+                                        href="{{ url_for('permission.index') }}"
+                                        class="btn btn-secondary ml-1"
+                                    >
+
+                                        <i class="fas fa-sync-alt"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 Card Body
+            ================================================== -->
+
+            <div class="card-body">
+
+
+                <!-- =============================================
+                     Search Information
+                ============================================== -->
+
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search"></i>
+
+                    Search keyword :
+
+                    <strong>
+                        {{ keyword }}
+                    </strong>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =============================================
+                     Table
+                ============================================== -->
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr class="text-center">
+
+
+                            <!-- No -->
+
+                            <th
+                                width="60"
+                                class="text-center"
+                            >
+                                No
+                            </th>
+
+
+                            <!-- Permission Code -->
+
+                            {{ sortable_header(
+                                "Permission Code",
+                                "permission_code",
+                                "permission.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            <!-- Permission Name -->
+
+                            {{ sortable_header(
+                                "Permission Name",
+                                "permission_name",
+                                "permission.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            <!-- Description -->
+
+                            <th>
+                                Description
+                            </th>
+
+
+                            <!-- Status -->
+
+                            <th width="120">
+                                Status
+                            </th>
+
+
+                            <!-- Action -->
+
+                            <th width="150">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% if permissions %}
+
+
+                        {% for permission in permissions.items %}
+
+
+                        <tr>
+
+
+                            <!-- =================================
+                                 No
+                            ================================== -->
+
+                            <td class="text-center">
+
+                                {{ permissions.first + loop.index0 }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Permission Code
+                            ================================== -->
+
+                            <td>
+
+                                {{ permission.permission_code }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Permission Name
+                            ================================== -->
+
+                            <td>
+
+                                {{ permission.permission_name }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Description
+                            ================================== -->
+
+                            <td>
+
+                                {{ permission.description or "-" }}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Status
+                            ================================== -->
+
+                            <td class="text-center">
+
+                                {% if permission.is_active %}
+
+                                <span class="badge badge-success">
+
+                                    Active
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-danger">
+
+                                    Inactive
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 Action
+                            ================================== -->
+
+                            <td class="text-center">
+
+
+                                {% if permission.is_active %}
+
+
+                                <!-- Edit -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'permission.edit',
+                                        permission_id=permission.id
+                                    ) }}"
+                                    class="btn btn-warning btn-sm"
+                                    title="Edit"
+                                >
+
+                                    <i class="fas fa-edit"></i>
+
+                                </a>
+
+
+                                <!-- Delete -->
+
+                                <button
+                                    type="button"
+                                    class="btn btn-danger btn-sm btn-delete"
+
+                                    data-name="{{ permission.permission_name }}"
+
+                                    data-url="{{ url_for(
+                                        'permission.delete',
+                                        permission_id=permission.id
+                                    ) }}"
+
+                                    title="Delete"
+                                >
+
+                                    <i class="fas fa-trash"></i>
+
+                                </button>
+
+
+                                {% else %}
+
+
+                                <!-- Restore -->
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'permission.restore',
+                                        permission_id=permission.id
+                                    ) }}"
+                                    style="display:inline;"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success btn-sm"
+                                        title="Restore"
+                                    >
+
+                                        <i class="fas fa-undo"></i>
+
+                                    </button>
+
+                                </form>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                        {% else %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="text-center text-muted"
+                            >
+
+                                No permission found.
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endif %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =================================================
+                 Delete Modal
+            ================================================== -->
+
+            {% include "components/delete_modal.html" %}
+
+
+            <!-- =================================================
+                 Card Footer
+            ================================================== -->
+
+            <div class="card-footer clearfix">
+
+
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+
+                        {{
+                            permissions.first
+                            if permissions.total > 0
+                            else 0
+                        }}
+
+                    </strong>
+
+                    to
+
+                    <strong>
+
+                        {{
+                            permissions.last
+                            if permissions.total > 0
+                            else 0
+                        }}
+
+                    </strong>
+
+                    of
+
+                    <strong>
+
+                        {{ permissions.total }}
+
+                    </strong>
+
+                    permission(s)
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 Pagination
+            ================================================== -->
+
+            <nav>
+
+                <ul class="pagination pagination-sm float-right">
+
+
+                    <!-- Previous -->
+
+                    {% if permissions.has_prev %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'permission.index',
+                                page=permissions.prev_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+
+                    <!-- Page Numbers -->
+
+                    {% for page_num in permissions.iter_pages() %}
+
+
+                    {% if page_num %}
+
+
+                    <li
+                        class="page-item
+                        {% if page_num == permissions.page %}
+                        active
+                        {% endif %}"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'permission.index',
+                                page=page_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            {{ page_num }}
+
+                        </a>
+
+                    </li>
+
+
+                    {% endif %}
+
+
+                    {% endfor %}
+
+
+                    <!-- Next -->
+
+                    {% if permissions.has_next %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'permission.index',
+                                page=permissions.next_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+
+                </ul>
+
+            </nav>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

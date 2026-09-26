@@ -1,0 +1,567 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Problem Detail
+{% endblock %}
+
+{% block content %}
+
+
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>Problem Detail</h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('problem.index') }}">
+                            Problem
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        Detail
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <!-- ========================= -->
+        <!-- Basic Information -->
+        <!-- ========================= -->
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    Basic Information
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <table class="table table-borderless table-sm">
+
+                            <tr>
+                                <th width="180">Problem No</th>
+                                <td>{{ problem.problem_no }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Problem Date</th>
+                                <td>{{ problem.problem_date.strftime('%d-%b-%Y') }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Department</th>
+                                <td>{{ problem.department.department_name }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Reporter</th>
+                                <td>{{ problem.reporter.full_name }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Monitor</th>
+                                <td>
+                                    {{ problem.monitor.full_name if problem.monitor else "-" }}
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <table class="table table-borderless table-sm">
+
+                            <tr>
+                                <th width="180">Category</th>
+                                <td>
+                                    {{ problem.problem_category.problem_category_name
+                                    if problem.problem_category else "-" }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Priority</th>
+                                <td>{{ problem.priority }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Status</th>
+                                <td>
+
+                                    <span class="badge badge-info">
+
+                                        {{ problem.status }}
+
+                                    </span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Target Date</th>
+
+                                <td>
+                                    {% if problem.target_date %}
+                                    {{ problem.target_date.strftime('%d-%b-%Y') }}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Source</th>
+                                <td>{{ problem.problem_source or "-" }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Location</th>
+                                <td>{{ problem.problem_location or "-" }}</td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================= -->
+        <!-- Problem Detail -->
+        <!-- ========================= -->
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    Problem Detail
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-group">
+
+                    <label>Title</label>
+
+                    <div class="border rounded p-2 bg-light">
+
+                        {{ problem.title }}
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Description</label>
+
+                    <div class="border rounded p-2 bg-light">
+
+                        {{ problem.description|replace('\n','<br>')|safe }}
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Cause</label>
+
+                    <div class="border rounded p-2 bg-light">
+
+                        {{ problem.problem_cause|default('-', true)|replace('\n','<br>')|safe }}
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Impact</label>
+
+                    <div class="border rounded p-2 bg-light">
+
+                        {{ problem.problem_impact|default('-', true)|replace('\n','<br>')|safe }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================= -->
+        <!-- Loss Information -->
+        <!-- ========================= -->
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    Loss Information
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <strong>Loss Quantity</strong>
+
+                        <p>{{ problem.loss_quantity }}</p>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <strong>Loss Cost</strong>
+
+                        <p>Rp {{ "{:,.2f}".format(problem.loss_cost) }}</p>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <strong>Loss Time</strong>
+
+                        <p>{{ problem.loss_time }} Minutes</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ========================= -->
+        <!-- Problem PIC -->
+        <!-- ========================= -->
+
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    Problem PIC
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                {% if problem.problem_pics %}
+
+                <table class="table table-bordered table-sm">
+
+                    <thead>
+
+                        <tr>
+
+                            <th width="60">
+                                No
+                            </th>
+                            <th>
+                                NIK
+                            </th>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th width="120">
+                                Member
+                            </th>
+
+                            <th width="120">
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for pic in problem.problem_pics %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                {{ pic.employee.nik }}
+                            </td>
+                            <td>
+                                {{ pic.employee.full_name }}
+                            </td>
+
+                            <td>
+
+                                {% if pic.is_leader %}
+
+                                <span class="badge badge-primary">
+                                    Leader
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-secondary">
+                                    PIC
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge badge-info">
+                                    {{ pic.status }}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                <span class="text-muted">
+                    No PIC assigned.
+                </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- ========================= -->
+        <!-- Attachment -->
+        <!-- ========================= -->
+
+        <!-- Attachment -->
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-paperclip"></i>
+                    Attachment
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                {% if problem.attachments %}
+
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">No</th>
+                            <th>File Name</th>
+                            <th style="width: 120px;">Size</th>
+                            <th style="width: 180px;">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for attachment in problem.attachments %}
+
+                        <tr>
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                <i class="fas fa-paperclip"></i>
+                                {{ attachment.original_name }}
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(attachment.file_size / 1024) }} KB
+                            </td>
+
+                            <td>
+
+                                {% if attachment.is_image %}
+
+                                <a href="{{ url_for(
+                                    'problem_attachment.preview',
+                                    attachment_id=attachment.id
+                                ) }}" target="_blank" class="btn btn-sm btn-info">
+
+                                    <i class="fas fa-eye"></i>
+                                    Preview
+
+                                </a>
+
+                                {% endif %}
+
+                                <a href="{{ url_for(
+                                'problem_attachment.download',
+                                attachment_id=attachment.id
+                            ) }}" class="btn btn-sm btn-primary">
+
+                                    <i class="fas fa-download"></i>
+                                    Download
+
+                                </a>
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+                {% else %}
+
+                <span class="text-muted">
+                    No attachment.
+                </span>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- ========================= -->
+        <!-- Button -->
+        <!-- ========================= -->
+
+        <div class="text-right mb-3">
+
+            <a href="{{ url_for('problem.index') }}" class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back
+
+            </a>
+            <a
+                href="{{ url_for(
+                    'problem.export_pdf',
+                    problem_id=problem.id
+                ) }}"
+                target="_blank"
+                class="btn btn-danger"
+            >
+                <i class="fas fa-file-pdf"></i>
+                Export PDF
+            </a>
+            {% if has_permission("PROBLEM_EDIT") %}
+
+            {% if current_user.role_code == "ADMIN"
+            or problem.reporter_employee_id == current_user.employee_id %}
+
+            <a href="{{ url_for(
+                'problem.edit',
+                problem_id=problem.id
+            ) }}" class="btn btn-warning">
+
+                <i class="fas fa-edit"></i>
+
+                Edit
+
+            </a>
+
+            {% endif %}
+
+            {% endif %}
+
+            {% if can_assign_problem %}
+
+            <a
+                href="{{ url_for(
+                    'problem.assign',
+                    problem_id=problem.id
+                ) }}"
+                class="btn btn-primary"
+            >
+                <i class="fas fa-user-check"></i>
+                Assign
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

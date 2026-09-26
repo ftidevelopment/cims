@@ -1,0 +1,761 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Kaizen Award Scoring
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ================================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h1 class="h3 mb-0">
+                Kaizen Award Scoring
+            </h1>
+
+            <small class="text-muted">
+                Evaluate Kaizen Improvement
+            </small>
+
+        </div>
+
+        <div>
+
+            <a href="{{ url_for(
+                'kaizen_award_score.index',
+                award_period_id=award_period.id
+            ) }}"
+               class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Scoring
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- AWARD PERIOD -->
+    <!-- ================================================== -->
+
+    <div class="card card-primary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-trophy"></i>
+
+                Award Period
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Award Code
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.award_code }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Award Name
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.award_name }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Start Date
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.start_date }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <strong>
+                        End Date
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ award_period.end_date }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- KAIZEN INFORMATION -->
+    <!-- ================================================== -->
+
+    <div class="card card-info">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-lightbulb"></i>
+
+                Kaizen Information
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Kaizen No -->
+
+                <div class="col-md-3 mb-3">
+
+                    <strong>
+                        Kaizen No.
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ kaizen.kaizen_no }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Title -->
+
+                <div class="col-md-6 mb-3">
+
+                    <strong>
+                        Title
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {{ kaizen.title }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-3 mb-3">
+
+                    <strong>
+                        Status
+                    </strong>
+
+                    <div>
+
+                        {% if kaizen.status == "Approved" %}
+
+                            <span class="badge badge-success">
+                                Approved
+                            </span>
+
+                        {% elif kaizen.status == "Implemented" %}
+
+                            <span class="badge badge-primary">
+                                Implemented
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-secondary">
+                                {{ kaizen.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="col-md-12 mb-3">
+
+                    <strong>
+                        Description
+                    </strong>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        {% if kaizen.description %}
+
+                            {{ kaizen.description | safe }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                No description.
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="col-md-4 mb-3">
+
+                    <strong>
+                        Category
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {% if kaizen.kaizen_category %}
+
+                            {{ kaizen.kaizen_category.kaizen_category_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Employee -->
+
+                <div class="col-md-4 mb-3">
+
+                    <strong>
+                        Employee
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {% if kaizen.employee %}
+
+                            {{ kaizen.employee.nik }}
+                            -
+                            {{ kaizen.employee.full_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="col-md-4 mb-3">
+
+                    <strong>
+                        Department
+                    </strong>
+
+                    <div class="text-muted">
+
+                        {% if kaizen.department %}
+
+                            {{ kaizen.department.department_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- BEFORE CONDITION -->
+    <!-- ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-arrow-circle-left"></i>
+
+                Before Condition
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Condition -->
+
+                <div class="col-md-8 mb-3">
+
+                    <strong>
+                        Condition
+                    </strong>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        {% if kaizen.before_condition %}
+
+                            {{ kaizen.before_condition | safe }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                No information.
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Value -->
+
+                <div class="col-md-4 mb-3">
+
+                    <strong>
+                        Measurement
+                    </strong>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        {% if kaizen.before_value is not none %}
+
+                            {{ kaizen.before_value }}
+
+                            {% if kaizen.before_unit %}
+
+                                {{ kaizen.before_unit }}
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Loss -->
+
+                <div class="col-md-12">
+
+                    <strong>
+                        Loss / Problem
+                    </strong>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        {% if kaizen.loss_before %}
+
+                            {{ kaizen.loss_before | safe }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                No information.
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- AFTER CONDITION -->
+    <!-- ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-arrow-circle-right"></i>
+
+                After Condition
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Condition -->
+
+                <div class="col-md-8 mb-3">
+
+                    <strong>
+                        Condition
+                    </strong>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        {% if kaizen.after_condition %}
+
+                            {{ kaizen.after_condition | safe }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                No information.
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Value -->
+
+                <div class="col-md-4 mb-3">
+
+                    <strong>
+                        Measurement
+                    </strong>
+
+                    <div class="border rounded p-3 bg-light">
+
+                        {% if kaizen.after_value is not none %}
+
+                            {{ kaizen.after_value }}
+
+                            {% if kaizen.after_unit %}
+
+                                {{ kaizen.after_unit }}
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                -
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- BENEFIT -->
+    <!-- ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-chart-line"></i>
+
+                Benefit
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="border rounded p-3 bg-light">
+
+                {% if kaizen.benefit %}
+
+                    {{ kaizen.benefit | safe }}
+
+                {% else %}
+
+                    <span class="text-muted">
+                        No benefit information.
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- COST SAVING -->
+    <!-- ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-coins"></i>
+
+                Cost Saving
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <h4>
+
+                {% if kaizen.cost_saving is not none %}
+
+                    {{ "{:,.2f}".format(
+                        kaizen.cost_saving
+                    ) }}
+
+                {% else %}
+
+                    0.00
+
+                {% endif %}
+
+            </h4>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- SCORING FORM -->
+    <!-- ================================================== -->
+
+    <form method="POST">
+
+        <div class="card card-success">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-star"></i>
+
+                    Judge Score
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Judge -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label>
+                            Judge
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               value="{{ current_user.nik }} - {{ current_user.full_name }}"
+                               readonly>
+
+                    </div>
+
+
+                    <!-- Score -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label for="score">
+
+                            Score
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input type="number"
+                               id="score"
+                               name="score"
+                               class="form-control"
+                               min="0"
+                               max="100"
+                               step="0.01"
+                               value="{% if existing_score %}{{ existing_score.score }}{% endif %}"
+                               required>
+
+                        <small class="form-text text-muted">
+
+                            Score range: 0 - 100
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Comment -->
+
+                    <div class="col-md-12 mb-3">
+
+                        <label for="comment">
+
+                            Comment
+
+                        </label>
+
+                        <textarea id="comment"
+                                  name="comment"
+                                  rows="4"
+                                  class="form-control"
+                                  placeholder="Enter judge comment...">{% if existing_score %}{{ existing_score.comment or '' }}{% endif %}</textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================== -->
+            <!-- FOOTER -->
+            <!-- ================================================== -->
+
+            <div class="card-footer">
+
+                <a href="{{ url_for(
+                    'kaizen_award_score.index',
+                    award_period_id=award_period.id
+                ) }}"
+                   class="btn btn-secondary">
+
+                    <i class="fas fa-times"></i>
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    <i class="fas fa-save"></i>
+
+                    {% if existing_score %}
+
+                        Update Score
+
+                    {% else %}
+
+                        Save Score
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

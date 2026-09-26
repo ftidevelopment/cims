@@ -1,0 +1,270 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+{% if kaizen_category %}
+Edit Kaizen Category
+{% else %}
+Add Kaizen Category
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     Content Header
+========================================================= -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+
+                    {% if kaizen_category %}
+                        Edit Kaizen Category
+                    {% else %}
+                        Add Kaizen Category
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Master
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('kaizen_category.index') }}">
+                            Kaizen Category
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+
+                        {% if kaizen_category %}
+                            Edit
+                        {% else %}
+                            Add
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     Main Content
+========================================================= -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- =================================================
+                 Card Header
+            ================================================== -->
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-lightbulb mr-2"></i>
+
+
+                    {% if kaizen_category %}
+
+                        Edit Kaizen Category
+
+                    {% else %}
+
+                        Add Kaizen Category
+
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+
+            <!-- =================================================
+                 Form
+            ================================================== -->
+
+            <form
+                id="kaizen-category-form"
+                method="POST"
+                class="needs-validation"
+                novalidate
+            >
+
+                <div class="card-body">
+
+
+                    <!-- =========================================
+                         Kaizen Category Code
+                    ========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Kaizen Category Code
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="kaizen_category_code"
+                            class="form-control"
+                            maxlength="10"
+                            required
+                            data-label="Kaizen Category Code"
+                            value="{{ kaizen_category.kaizen_category_code if kaizen_category else '' }}"
+                            {% if kaizen_category %}
+                            readonly
+                            {% endif %}
+                        >
+
+
+                        <div class="invalid-feedback">
+                            Kaizen Category Code is required.
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         Kaizen Category Name
+                    ========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Kaizen Category Name
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="kaizen_category_name"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                            data-label="Kaizen Category Name"
+                            value="{{ kaizen_category.kaizen_category_name if kaizen_category else '' }}"
+                        >
+
+
+                        <div class="invalid-feedback">
+                            Kaizen Category Name is required.
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         Description
+                    ========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Description
+                        </label>
+
+
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="4"
+                            maxlength="500"
+                            data-label="Description"
+                        >{{ kaizen_category.description if kaizen_category else '' }}</textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     Footer
+                ================================================== -->
+
+                <div class="card-footer">
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('kaizen_category.index') }}"
+                        class="btn btn-secondary"
+                    >
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

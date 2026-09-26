@@ -1,0 +1,1785 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    CIMS - Continuous Improvement Management System
+{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   CIMS HOME
+   ========================================================= */
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.public-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cims-home {
+    width: 100%;
+    min-height: 100vh;
+    background: #f4f6f9;
+    color: #212529;
+}
+
+
+/* =========================================================
+   TOP HEADER
+   ========================================================= */
+
+.cims-top-header {
+    width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e9ed;
+    padding: 14px 5%;
+    box-sizing: border-box;
+}
+
+.cims-top-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+}
+
+
+/* =========================================================
+   COMPANY BRAND
+   ========================================================= */
+
+.cims-company {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cims-company-logo {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+.cims-company-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+.cims-company-name {
+    line-height: 1.15;
+}
+
+.cims-company-name strong {
+    display: block;
+
+    color: #0F2A43;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+.cims-company-name span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #7a8792;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+   ========================================================= */
+
+.cims-top-nav {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.cims-top-nav a {
+    text-decoration: none !important;
+}
+
+.cims-top-nav .btn {
+    font-size: 12px;
+    font-weight: 600;
+
+    border-radius: 5px;
+
+    padding: 7px 12px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.cims-hero {
+    width: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbfd 0%,
+            #ffffff 55%,
+            #edf6fb 100%
+        );
+
+    padding: 55px 5% 60px 5%;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.cims-hero-inner {
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        0.9fr 1.1fr;
+
+    gap: 45px;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   HERO LEFT
+   ========================================================= */
+
+.cims-hero-left {
+    padding-left: 15px;
+}
+
+.cims-hero-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #1976B8;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 12px;
+}
+
+.cims-hero-label i {
+    font-size: 14px;
+}
+
+.cims-hero-title {
+    margin: 0;
+
+    color: #0F2A43;
+
+    font-size: 48px;
+
+    line-height: 1.05;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+.cims-hero-title span {
+    display: block;
+
+    color: #1976B8;
+
+    margin-top: 5px;
+}
+
+.cims-hero-subtitle {
+    margin: 18px 0 0 0;
+
+    color: #536270;
+
+    font-size: 17px;
+
+    line-height: 1.5;
+
+    max-width: 430px;
+}
+
+.cims-hero-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+}
+
+.cims-hero-actions .btn {
+    border-radius: 6px;
+
+    padding: 9px 17px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   HERO VISUAL / PERFORMANCE ILLUSTRATION
+   ========================================================= */
+
+.cims-hero-visual {
+    position: relative;
+
+    min-height: 390px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =========================================================
+   DASHBOARD ILLUSTRATION
+   ========================================================= */
+
+.cims-chart-board {
+    width: 100%;
+
+    max-width: 680px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe8ee;
+
+    border-radius: 15px;
+
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 15px 40px rgba(15, 42, 67, 0.12);
+
+    position: relative;
+
+    z-index: 2;
+}
+
+.cims-chart-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.cims-chart-title strong {
+    display: block;
+
+    color: #0F2A43;
+
+    font-size: 14px;
+}
+
+.cims-chart-title span {
+    display: block;
+
+    color: #8a96a0;
+
+    font-size: 10px;
+
+    margin-top: 3px;
+}
+
+.cims-chart-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: #28a745;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.cims-chart-status i {
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   TREND CHART
+   ========================================================= */
+
+.cims-trend-chart {
+    height: 125px;
+
+    position: relative;
+
+    border-left: 1px solid #dfe5ea;
+
+    border-bottom: 1px solid #dfe5ea;
+
+    margin: 0 8px 22px 8px;
+
+    overflow: hidden;
+}
+
+.cims-trend-line {
+    position: absolute;
+
+    left: 4%;
+
+    right: 3%;
+
+    bottom: 16px;
+
+    height: 80px;
+}
+
+.cims-trend-line svg {
+    width: 100%;
+    height: 100%;
+}
+
+.cims-chart-arrow {
+    position: absolute;
+
+    right: 7%;
+
+    top: 7px;
+
+    color: #28a745;
+
+    font-size: 25px;
+
+    transform: rotate(-8deg);
+}
+
+
+/* =========================================================
+   KPI MINI CARDS
+   ========================================================= */
+
+.cims-kpi-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+}
+
+.cims-kpi-card {
+    border-radius: 9px;
+
+    padding: 13px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.cims-kpi-card.problem {
+    background: #fff3f3;
+}
+
+.cims-kpi-card.improvement {
+    background: #eef9f1;
+}
+
+.cims-kpi-card.kaizen {
+    background: #fff9e8;
+}
+
+.cims-kpi-card .kpi-icon {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 8px;
+}
+
+.cims-kpi-card.problem .kpi-icon {
+    background: #f9d7da;
+    color: #dc3545;
+}
+
+.cims-kpi-card.improvement .kpi-icon {
+    background: #d5f0dc;
+    color: #28a745;
+}
+
+.cims-kpi-card.kaizen .kpi-icon {
+    background: #ffedb8;
+    color: #d39e00;
+}
+
+.cims-kpi-card strong {
+    display: block;
+
+    font-size: 11px;
+
+    color: #586570;
+}
+
+.cims-kpi-card .kpi-value {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
+
+.cims-kpi-card.problem .kpi-value {
+    color: #dc3545;
+}
+
+.cims-kpi-card.improvement .kpi-value {
+    color: #28a745;
+}
+
+.cims-kpi-card.kaizen .kpi-value {
+    color: #d39e00;
+}
+
+.cims-kpi-card small {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 9px;
+
+    color: #87929b;
+}
+
+
+/* =========================================================
+   HERO DECORATION
+   ========================================================= */
+
+.cims-hero-circle {
+    position: absolute;
+
+    border-radius: 50%;
+
+    z-index: 1;
+}
+
+.cims-hero-circle.one {
+    width: 150px;
+    height: 150px;
+
+    background: rgba(25, 118, 184, 0.06);
+
+    right: -30px;
+    top: 0;
+}
+
+.cims-hero-circle.two {
+    width: 100px;
+    height: 100px;
+
+    background: rgba(40, 167, 69, 0.07);
+
+    left: 5%;
+    bottom: 5px;
+}
+
+
+/* =========================================================
+   MODULES
+   ========================================================= */
+
+.cims-modules-section {
+    background: #ffffff;
+
+    padding: 35px 5% 45px 5%;
+
+    box-sizing: border-box;
+}
+
+.cims-section-inner {
+    max-width: 1400px;
+
+    margin: 0 auto;
+}
+
+.cims-section-title {
+    margin: 0 0 20px 0;
+
+    color: #0F2A43;
+
+    font-size: 23px;
+
+    font-weight: 700;
+}
+
+.cims-modules {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.cims-module {
+    min-height: 210px;
+
+    border-radius: 13px;
+
+    padding: 24px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid #e5eaee;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.cims-module:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(15, 42, 67, 0.10);
+}
+
+.cims-module.problem {
+    background:
+        linear-gradient(
+            135deg,
+            #fffafa,
+            #fff3f3
+        );
+}
+
+.cims-module.improvement {
+    background:
+        linear-gradient(
+            135deg,
+            #fbfffc,
+            #eef9f1
+        );
+}
+
+.cims-module.kaizen {
+    background:
+        linear-gradient(
+            135deg,
+            #fffefa,
+            #fff9e8
+        );
+}
+
+.cims-module-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    margin-bottom: 15px;
+}
+
+.cims-module.problem .cims-module-icon {
+    background: #f9d7da;
+    color: #dc3545;
+}
+
+.cims-module.improvement .cims-module-icon {
+    background: #d5f0dc;
+    color: #28a745;
+}
+
+.cims-module.kaizen .cims-module-icon {
+    background: #ffedb8;
+    color: #d39e00;
+}
+
+.cims-module h3 {
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    color: #0F2A43;
+}
+
+.cims-module p {
+    margin: 6px 0 15px 0;
+
+    color: #6d7881;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    max-width: 300px;
+}
+
+
+/* =========================================================
+   MINI MODULE CHART
+   ========================================================= */
+
+.cims-mini-chart {
+    height: 65px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 6px;
+
+    margin-top: 5px;
+}
+
+.cims-mini-bar {
+    width: 16px;
+
+    border-radius: 3px 3px 0 0;
+}
+
+.cims-module.problem .cims-mini-bar {
+    background: #dc3545;
+}
+
+.cims-module.improvement .cims-mini-bar {
+    background: #28a745;
+}
+
+.cims-module.kaizen .cims-mini-bar {
+    background: #f0ad00;
+}
+
+
+/* =========================================================
+   WORKFLOW
+   ========================================================= */
+
+.cims-workflow-section {
+    background: #f4f6f9;
+
+    padding: 40px 5%;
+
+    box-sizing: border-box;
+}
+
+.cims-workflow {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.cims-workflow-item {
+    min-width: 125px;
+
+    text-align: center;
+}
+
+.cims-workflow-icon {
+    width: 48px;
+    height: 48px;
+
+    margin: 0 auto 8px auto;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    border: 2px solid #1976B8;
+
+    color: #1976B8;
+
+    font-size: 18px;
+}
+
+.cims-workflow-item strong {
+    display: block;
+
+    color: #0F2A43;
+
+    font-size: 12px;
+}
+
+.cims-workflow-arrow {
+    color: #9aa7b1;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   PERFORMANCE CTA
+   ========================================================= */
+
+.cims-performance {
+    background: #ffffff;
+
+    padding: 35px 5%;
+
+    box-sizing: border-box;
+}
+
+.cims-performance-box {
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    border-radius: 13px;
+
+    padding: 25px 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0F2A43,
+            #164E73
+        );
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+}
+
+.cims-performance-box h2 {
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+.cims-performance-box p {
+    margin: 5px 0 0 0;
+
+    color: #cbdde9;
+
+    font-size: 12px;
+}
+
+.cims-performance-box .btn {
+    background: #ffffff;
+
+    color: #0F2A43;
+
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 9px 17px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.cims-footer {
+    background: #0F2A43;
+
+    color: #b9c9d6;
+
+    padding: 18px 5%;
+
+    box-sizing: border-box;
+}
+
+.cims-footer-inner {
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.cims-footer strong {
+    color: #ffffff;
+
+    font-size: 12px;
+}
+
+.cims-footer span {
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .cims-hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .cims-hero-left {
+        text-align: center;
+        padding-left: 0;
+    }
+
+    .cims-hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cims-hero-actions {
+        justify-content: center;
+    }
+
+    .cims-hero-visual {
+        min-height: auto;
+    }
+
+    .cims-chart-board {
+        max-width: 650px;
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    .cims-top-header-inner {
+        flex-direction: column;
+    }
+
+    .cims-top-nav {
+        justify-content: center;
+    }
+
+    .cims-modules {
+        grid-template-columns: 1fr;
+    }
+
+    .cims-performance-box {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .cims-footer-inner {
+        flex-direction: column;
+
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .cims-top-header {
+        padding: 12px 15px;
+    }
+
+    .cims-company-name strong {
+        font-size: 13px;
+    }
+
+    .cims-top-nav {
+        width: 100%;
+    }
+
+    .cims-top-nav .btn {
+        flex: 1;
+    }
+
+    .cims-hero {
+        padding: 40px 15px;
+    }
+
+    .cims-hero-title {
+        font-size: 36px;
+    }
+
+    .cims-hero-subtitle {
+        font-size: 14px;
+    }
+
+    .cims-chart-board {
+        padding: 15px;
+    }
+
+    .cims-kpi-row {
+        grid-template-columns: 1fr;
+    }
+
+    .cims-modules-section,
+    .cims-workflow-section,
+    .cims-performance {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .cims-workflow-arrow {
+        display: none;
+    }
+
+    .cims-workflow {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 20px;
+    }
+
+}
+
+</style>
+
+
+<div class="cims-home">
+
+
+    <!-- =====================================================
+         COMPANY HEADER
+         ====================================================== -->
+
+    <header class="cims-top-header">
+
+        <div class="cims-top-header-inner">
+
+
+            <!-- COMPANY -->
+
+            <div class="cims-company">
+
+                <div class="cims-company-logo">
+
+                    <img
+                        src="{{ url_for('static', filename='img/cims_logo.png') }}"
+                        alt="CIMS Logo"
+                    >
+
+                </div>
+
+                <div class="cims-company-name">
+
+                    <strong>
+                        FOXCONN TECHNOLOGIES INDONESIA
+                    </strong>
+
+                    <span>
+                        CONTINUOUS IMPROVEMENT MANAGEMENT SYSTEM
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <nav class="cims-top-nav">
+
+
+                <a
+                    href="{{ url_for('dashboard.index') }}"
+                    class="btn btn-outline-primary btn-sm"
+                >
+
+                    <i class="fas fa-chart-line mr-1"></i>
+
+                    Performance
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('problem_dashboard.index') }}"
+                    class="btn btn-outline-danger btn-sm"
+                >
+
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+
+                    Problem
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('improvement_dashboard.index') }}"
+                    class="btn btn-outline-success btn-sm"
+                >
+
+                    <i class="fas fa-tools mr-1"></i>
+
+                    Improvement
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('kaizen_dashboard.index') }}"
+                    class="btn btn-outline-warning btn-sm"
+                >
+
+                    <i class="fas fa-lightbulb mr-1"></i>
+
+                    Kaizen
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('auth.login') }}"
+                    class="btn btn-primary btn-sm"
+                >
+
+                    <i class="fas fa-sign-in-alt mr-1"></i>
+
+                    Login
+
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         HERO
+         ====================================================== -->
+
+    <section class="cims-hero">
+
+        <div class="cims-hero-inner">
+
+
+            <!-- LEFT -->
+
+            <div class="cims-hero-left">
+
+                <div class="cims-hero-label">
+
+                    <i class="fas fa-chart-line"></i>
+
+                    Continuous Improvement
+
+                </div>
+
+
+                <h1 class="cims-hero-title">
+
+                    Turn Problems
+
+                    <span>
+                        into Better Results
+                    </span>
+
+                </h1>
+
+
+                <p class="cims-hero-subtitle">
+
+                    Small Ideas.
+                    Better Processes.
+                    Better Results.
+
+                </p>
+
+
+                <div class="cims-hero-actions">
+
+                    <a
+                        href="{{ url_for('dashboard.index') }}"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-chart-line mr-1"></i>
+
+                        View Performance
+
+                    </a>
+
+
+                    <a
+                        href="#cims-modules"
+                        class="btn btn-outline-secondary"
+                    >
+
+                        Explore CIMS
+
+                        <i class="fas fa-arrow-down ml-1"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT : GRAPHIC -->
+
+            <div class="cims-hero-visual">
+
+                <div class="cims-hero-circle one"></div>
+
+                <div class="cims-hero-circle two"></div>
+
+
+                <div class="cims-chart-board">
+
+
+                    <!-- HEADER -->
+
+                    <div class="cims-chart-header">
+
+                        <div class="cims-chart-title">
+
+                            <strong>
+                                Continuous Improvement
+                            </strong>
+
+                            <span>
+                                Problem → Improvement → Kaizen
+                            </span>
+
+                        </div>
+
+                        <div class="cims-chart-status">
+
+                            <i class="fas fa-circle"></i>
+
+                            Improving
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TREND -->
+
+                    <div class="cims-trend-chart">
+
+                        <div class="cims-trend-line">
+
+                            <svg
+                                viewBox="0 0 600 100"
+                                preserveAspectRatio="none"
+                            >
+
+                                <polyline
+                                    points="
+                                    0,82
+                                    80,76
+                                    150,70
+                                    220,58
+                                    290,55
+                                    360,42
+                                    430,35
+                                    500,20
+                                    590,5
+                                    "
+                                    fill="none"
+                                    stroke="#28a745"
+                                    stroke-width="5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="cims-chart-arrow">
+
+                            <i class="fas fa-arrow-up"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- KPI -->
+
+                    <div class="cims-kpi-row">
+
+
+                        <!-- PROBLEM -->
+
+                        <div class="cims-kpi-card problem">
+
+                            <div class="kpi-icon">
+
+                                <i class="fas fa-exclamation-triangle"></i>
+
+                            </div>
+
+                            <strong>
+                                Problems
+                            </strong>
+
+                            <span class="kpi-value">
+                                ↓
+                            </span>
+
+                            <small>
+                                Reduced
+                            </small>
+
+                        </div>
+
+
+                        <!-- IMPROVEMENT -->
+
+                        <div class="cims-kpi-card improvement">
+
+                            <div class="kpi-icon">
+
+                                <i class="fas fa-tools"></i>
+
+                            </div>
+
+                            <strong>
+                                Improvements
+                            </strong>
+
+                            <span class="kpi-value">
+                                ↑
+                            </span>
+
+                            <small>
+                                Increased
+                            </small>
+
+                        </div>
+
+
+                        <!-- KAIZEN -->
+
+                        <div class="cims-kpi-card kaizen">
+
+                            <div class="kpi-icon">
+
+                                <i class="fas fa-lightbulb"></i>
+
+                            </div>
+
+                            <strong>
+                                Kaizen
+                            </strong>
+
+                            <span class="kpi-value">
+                                ↑
+                            </span>
+
+                            <small>
+                                More Ideas
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MODULES
+         ====================================================== -->
+
+    <section
+        id="cims-modules"
+        class="cims-modules-section"
+    >
+
+        <div class="cims-section-inner">
+
+
+            <h2 class="cims-section-title">
+
+                CIMS Improvement Journey
+
+            </h2>
+
+
+            <div class="cims-modules">
+
+
+                <!-- PROBLEM -->
+
+                <div class="cims-module problem">
+
+                    <div class="cims-module-icon">
+
+                        <i class="fas fa-exclamation-triangle"></i>
+
+                    </div>
+
+                    <h3>
+                        Problem
+                    </h3>
+
+                    <p>
+                        Identify and solve problems.
+                    </p>
+
+
+                    <div class="cims-mini-chart">
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 85%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 70%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 55%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 40%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 25%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 15%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- IMPROVEMENT -->
+
+                <div class="cims-module improvement">
+
+                    <div class="cims-module-icon">
+
+                        <i class="fas fa-tools"></i>
+
+                    </div>
+
+                    <h3>
+                        Improvement
+                    </h3>
+
+                    <p>
+                        Implement solutions for better results.
+                    </p>
+
+
+                    <div class="cims-mini-chart">
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 15%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 30%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 42%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 55%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 70%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 88%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- KAIZEN -->
+
+                <div class="cims-module kaizen">
+
+                    <div class="cims-module-icon">
+
+                        <i class="fas fa-lightbulb"></i>
+
+                    </div>
+
+                    <h3>
+                        Kaizen
+                    </h3>
+
+                    <p>
+                        Everyone can contribute improvement ideas.
+                    </p>
+
+
+                    <div class="cims-mini-chart">
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 18%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 32%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 48%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 60%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 76%;"
+                        ></div>
+
+                        <div
+                            class="cims-mini-bar"
+                            style="height: 92%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORKFLOW
+         ====================================================== -->
+
+    <section class="cims-workflow-section">
+
+        <div class="cims-section-inner">
+
+
+            <h2 class="cims-section-title">
+
+                From Problem to Better Result
+
+            </h2>
+
+
+            <div class="cims-workflow">
+
+
+                <div class="cims-workflow-item">
+
+                    <div class="cims-workflow-icon">
+
+                        <i class="fas fa-exclamation-triangle"></i>
+
+                    </div>
+
+                    <strong>
+                        Identify
+                    </strong>
+
+                </div>
+
+
+                <div class="cims-workflow-arrow">
+
+                    <i class="fas fa-arrow-right"></i>
+
+                </div>
+
+
+                <div class="cims-workflow-item">
+
+                    <div class="cims-workflow-icon">
+
+                        <i class="fas fa-tools"></i>
+
+                    </div>
+
+                    <strong>
+                        Improve
+                    </strong>
+
+                </div>
+
+
+                <div class="cims-workflow-arrow">
+
+                    <i class="fas fa-arrow-right"></i>
+
+                </div>
+
+
+                <div class="cims-workflow-item">
+
+                    <div class="cims-workflow-icon">
+
+                        <i class="fas fa-cogs"></i>
+
+                    </div>
+
+                    <strong>
+                        Implement
+                    </strong>
+
+                </div>
+
+
+                <div class="cims-workflow-arrow">
+
+                    <i class="fas fa-arrow-right"></i>
+
+                </div>
+
+
+                <div class="cims-workflow-item">
+
+                    <div class="cims-workflow-icon">
+
+                        <i class="fas fa-check"></i>
+
+                    </div>
+
+                    <strong>
+                        Verify
+                    </strong>
+
+                </div>
+
+
+                <div class="cims-workflow-arrow">
+
+                    <i class="fas fa-arrow-right"></i>
+
+                </div>
+
+
+                <div class="cims-workflow-item">
+
+                    <div class="cims-workflow-icon">
+
+                        <i class="fas fa-lightbulb"></i>
+
+                    </div>
+
+                    <strong>
+                        Share
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PERFORMANCE
+         ====================================================== -->
+
+    <section class="cims-performance">
+
+        <div class="cims-performance-box">
+
+
+            <div>
+
+                <h2>
+                    CIMS Performance
+                </h2>
+
+                <p>
+                    Monitor improvement results across the organization.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('dashboard.index') }}"
+                class="btn"
+            >
+
+                <i class="fas fa-chart-bar mr-1"></i>
+
+                View Performance
+
+                <i class="fas fa-arrow-right ml-1"></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <footer class="cims-footer">
+
+        <div class="cims-footer-inner">
+
+            <strong>
+                FOXCONN TECHNOLOGIES INDONESIA
+            </strong>
+
+            <span>
+                People &nbsp; | &nbsp;
+                Process &nbsp; | &nbsp;
+                Improvement &nbsp; | &nbsp;
+                A Better Tomorrow
+            </span>
+
+        </div>
+
+    </footer>
+
+
+</div>
+
+{% endblock %}

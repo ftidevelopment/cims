@@ -1,0 +1,28 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        {% set category, message = messages[-1] %}
+
+        {% if category == "success" %}
+            {% set title = "Success" %}
+        {% elif category == "error" %}
+            {% set title = "Error" %}
+        {% elif category == "warning" %}
+            {% set title = "Warning" %}
+        {% elif category == "info" %}
+            {% set title = "Information" %}
+        {% else %}
+            {% set title = "Notification" %}
+        {% endif %}
+
+        <div
+            id="flash-message"
+            data-icon="{{ category }}"
+            data-title="{{ title }}"
+            data-message="{{ message }}">
+        </div>
+
+    {% endif %}
+
+{% endwith %}

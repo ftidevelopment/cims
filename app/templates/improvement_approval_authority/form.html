@@ -1,0 +1,401 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+Assign Improvement Approval Authority
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- ==========================================================
+     CONTENT HEADER
+=========================================================== -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+
+            <!-- Page Title -->
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Assign Improvement Approval Authority
+                </h1>
+
+            </div>
+
+
+            <!-- Breadcrumb -->
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+
+                    <li class="breadcrumb-item">
+
+                        <a
+                            href="{{ url_for('dashboard.index') }}"
+                        >
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a
+                            href="{{ url_for(
+                                'improvement_approval_authority.index'
+                            ) }}"
+                        >
+                            Improvement Approval Authority
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+
+                        Assign
+
+                    </li>
+
+
+                </ol>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================================
+     CONTENT
+=========================================================== -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <div class="row">
+
+
+            <div class="col-md-8">
+
+
+                <!-- ==================================================
+                     CARD
+                =================================================== -->
+
+                <div class="card card-primary card-outline">
+
+
+                    <!-- Card Header -->
+
+                    <div class="card-header">
+
+
+                        <h3 class="card-title">
+
+                            <i
+                                class="fas fa-user-check mr-2"
+                            ></i>
+
+                            Approval Authority
+
+                        </h3>
+
+
+                    </div>
+
+
+
+                    <!-- ==================================================
+                         FORM
+                    =================================================== -->
+
+                    <form method="POST">
+
+
+                        <div class="card-body">
+
+
+                            <!-- ==================================================
+                                 INFORMATION
+                            =================================================== -->
+
+                            <div class="alert alert-info">
+
+                                <i
+                                    class="fas fa-info-circle mr-2"
+                                ></i>
+
+                                Select an employee and the department
+                                for which the employee is authorized
+                                to approve Improvements.
+
+                            </div>
+
+
+
+                            <!-- ==================================================
+                                 DEPARTMENT
+                            =================================================== -->
+
+                            <div class="form-group">
+
+
+                                <label
+                                    for="department_id"
+                                >
+
+                                    Department
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    name="department_id"
+                                    id="department_id"
+                                    class="form-control"
+                                    required
+                                >
+
+
+                                    <option value="">
+
+                                        -- Select Department --
+
+                                    </option>
+
+
+                                    {% for department in departments %}
+
+
+                                    <option
+                                        value="{{ department.id }}"
+                                        {% if request.form.get(
+                                            'department_id'
+                                        ) == department.id|string %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ department.department_name }}
+
+                                    </option>
+
+
+                                    {% endfor %}
+
+
+                                </select>
+
+
+                            </div>
+
+
+
+                            <!-- ==================================================
+                                 EMPLOYEE
+                            =================================================== -->
+
+                            <div class="form-group">
+
+
+                                <label
+                                    for="employee_id"
+                                >
+
+                                    Employee
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    name="employee_id"
+                                    id="employee_id"
+                                    class="form-control"
+                                    required
+                                >
+
+
+                                    <option value="">
+
+                                        -- Select Employee --
+
+                                    </option>
+
+
+                                    {% for employee in employees %}
+
+
+                                    {% if employee.user %}
+
+
+                                    <option
+                                        value="{{ employee.id }}"
+                                        {% if request.form.get(
+                                            'employee_id'
+                                        ) == employee.id|string %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ employee.full_name }}
+
+                                        -
+                                        
+                                        {{ employee.nik }}
+
+                                    </option>
+
+
+                                    {% endif %}
+
+
+                                    {% endfor %}
+
+
+                                </select>
+
+
+                                <small class="form-text text-muted">
+
+                                    Only employees with a User Account
+                                    can be assigned as an Improvement
+                                    Approval Authority.
+
+                                </small>
+
+
+                            </div>
+
+
+
+                            <!-- ==================================================
+                                 AUTHORITY INFORMATION
+                            =================================================== -->
+
+                            <div class="card bg-light mt-4">
+
+
+                                <div class="card-body">
+
+
+                                    <h5>
+
+                                        <i
+                                            class="fas fa-check-circle mr-2"
+                                        ></i>
+
+                                        Authority
+
+                                    </h5>
+
+
+                                    <p class="mb-0">
+
+                                        The selected employee will be
+                                        authorized to approve Improvements
+                                        related to the selected department.
+
+                                    </p>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- ==================================================
+                             CARD FOOTER
+                        =================================================== -->
+
+                        <div class="card-footer">
+
+
+                            <!-- Save -->
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i
+                                    class="fas fa-save mr-1"
+                                ></i>
+
+                                Save Authority
+
+                            </button>
+
+
+
+                            <!-- Cancel -->
+
+                            <a
+                                href="{{ url_for(
+                                    'improvement_approval_authority.index'
+                                ) }}"
+                                class="btn btn-secondary"
+                            >
+
+                                <i
+                                    class="fas fa-arrow-left mr-1"
+                                ></i>
+
+                                Cancel
+
+                            </a>
+
+
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

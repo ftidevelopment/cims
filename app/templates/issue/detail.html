@@ -1,0 +1,1266 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Issue Detail{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <div class="d-flex align-items-center">
+
+                <h4 class="font-weight-bold mb-0 mr-2">
+                    Issue Detail
+                </h4>
+
+                {% if issue.status == 'OPEN' %}
+
+                    <span class="badge badge-primary">
+                        Open
+                    </span>
+
+                {% elif issue.status == 'IN_PROGRESS' %}
+
+                    <span class="badge badge-warning">
+                        In Progress
+                    </span>
+
+                {% elif issue.status == 'FINISH' %}
+
+                    <span class="badge badge-info">
+                        Finish
+                    </span>
+
+                {% elif issue.status == 'CLOSE' %}
+
+                    <span class="badge badge-success">
+                        Close
+                    </span>
+
+                {% else %}
+
+                    <span class="badge badge-secondary">
+                        {{ issue.status }}
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            <div class="text-muted small mt-1">
+                {{ issue.issue_no }}
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             HEADER ACTIONS
+        ================================================== -->
+
+        <div class="d-flex">
+
+            <a
+                href="{{ url_for('issue.index') }}"
+                class="btn btn-outline-secondary mr-2"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back
+
+            </a>
+
+
+            {% if issue.status in ['OPEN', 'IN_PROGRESS'] %}
+
+                {% if can_edit %}
+
+                    <a
+                        href="{{ url_for(
+                            'issue.edit',
+                            issue_id=issue.id
+                        ) }}"
+                        class="btn btn-warning btn-sm"
+                    >
+
+                        <i class="fas fa-edit mr-1"></i>
+
+                        Edit
+
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ISSUE INFORMATION
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h6 class="font-weight-bold border-bottom pb-2 mb-4">
+
+                <i class="fas fa-exclamation-circle mr-2"></i>
+
+                Issue Information
+
+            </h6>
+
+
+            <div class="row">
+
+
+                <!-- Issue No -->
+
+                <div class="col-md-3 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Issue No
+                    </label>
+
+                    <div class="font-weight-semibold">
+                        {{ issue.issue_no }}
+                    </div>
+
+                </div>
+
+
+                <!-- Module -->
+
+                <div class="col-md-3 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Module
+                    </label>
+
+                    <div class="font-weight-semibold">
+
+                        {% if issue.module == 'KAIZEN' %}
+
+                            Kaizen
+
+                        {% elif issue.module == 'PROBLEM' %}
+
+                            Problem
+
+                        {% elif issue.module == 'IMPROVEMENT' %}
+
+                            Improvement
+
+                        {% else %}
+
+                            {{ issue.module }}
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="col-md-3 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Category
+                    </label>
+
+                    <div class="font-weight-semibold">
+
+                        {% if issue.category == 'BUG_ERROR' %}
+
+                            Bug / Error
+
+                        {% elif issue.category == 'DATA_ISSUE' %}
+
+                            Data Issue
+
+                        {% elif issue.category == 'SYSTEM_IMPROVEMENT' %}
+
+                            System Improvement
+
+                        {% elif issue.category == 'NEW_FEATURE' %}
+
+                            New Feature
+
+                        {% elif issue.category == 'REPORT_ISSUE' %}
+
+                            Report Issue
+
+                        {% elif issue.category == 'OTHER' %}
+
+                            Other
+
+                        {% else %}
+
+                            {{ issue.category }}
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Priority -->
+
+                <div class="col-md-3 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Priority
+                    </label>
+
+                    <div>
+
+                        {% if issue.priority == 'HIGH' %}
+
+                            <span class="badge badge-danger">
+                                High
+                            </span>
+
+                        {% elif issue.priority == 'MEDIUM' %}
+
+                            <span class="badge badge-warning">
+                                Medium
+                            </span>
+
+                        {% elif issue.priority == 'LOW' %}
+
+                            <span class="badge badge-success">
+                                Low
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-secondary">
+                                {{ issue.priority }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Requestor -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Requestor
+                    </label>
+
+                    {% if issue.requestor %}
+
+                        <div class="font-weight-semibold">
+                            {{ issue.requestor.full_name }}
+                        </div>
+
+                        <div class="text-muted small">
+                            NIK: {{ issue.requestor.nik }}
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-muted">
+                            -
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Developer -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Developer
+                    </label>
+
+                    {% if issue.developer %}
+
+                        <div class="font-weight-semibold">
+                            {{ issue.developer.full_name }}
+                        </div>
+
+                        <div class="text-muted small">
+                            NIK: {{ issue.developer.nik }}
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-muted">
+                            Not assigned
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Created -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Created
+                    </label>
+
+                    <div class="font-weight-semibold">
+
+                        {% if issue.created_at %}
+
+                            {{ issue.created_at.strftime(
+                                '%d-%m-%Y %H:%M'
+                            ) }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Finished -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Finished At
+                    </label>
+
+                    <div class="font-weight-semibold">
+
+                        {% if issue.finished_at %}
+
+                            {{ issue.finished_at.strftime(
+                                '%d-%m-%Y %H:%M'
+                            ) }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Closed -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Closed At
+                    </label>
+
+                    <div class="font-weight-semibold">
+
+                        {% if issue.closed_at %}
+
+                            {{ issue.closed_at.strftime(
+                                '%d-%m-%Y %H:%M'
+                            ) }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Age -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="text-muted small mb-1">
+                        Age
+                    </label>
+
+                    {% if issue.created_at %}
+
+                        {% set age_days =
+                            (now - issue.created_at).days
+                        %}
+
+                        <div class="font-weight-semibold">
+
+                            {% if age_days <= 0 %}
+
+                                Today
+
+                            {% elif age_days == 1 %}
+
+                                1 day
+
+                            {% else %}
+
+                                {{ age_days }} days
+
+                            {% endif %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-muted">
+                            -
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DESCRIPTION
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h6 class="font-weight-bold border-bottom pb-2 mb-3">
+
+                <i class="fas fa-align-left mr-2"></i>
+
+                Description
+
+            </h6>
+
+
+            <div
+                class="bg-light rounded p-3"
+                style="white-space: pre-wrap;"
+            >
+
+                {{ issue.description }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DEVELOPER CLARIFICATION
+    ====================================================== -->
+
+    {% if clarifications %}
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-body">
+
+                <div
+                    class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3"
+                >
+
+                    <h6 class="font-weight-bold mb-0">
+
+                        <i class="fas fa-question-circle mr-2"></i>
+
+                        Developer Clarification
+
+                    </h6>
+
+                </div>
+
+
+                {% for clarification in clarifications %}
+
+                    <div
+                        class="border rounded p-3 mb-3"
+                    >
+
+                        <!-- =================================================
+                             CLARIFICATION HEADER
+                        ================================================== -->
+
+                        <div
+                            class="d-flex justify-content-between align-items-start mb-3"
+                        >
+
+                            <div>
+
+                                <span class="font-weight-bold">
+
+                                    Clarification #{{ loop.index }}
+
+                                </span>
+
+                            </div>
+
+
+                            {% if clarification.status == 'OPEN' %}
+
+                                <span class="badge badge-warning">
+
+                                    <i class="fas fa-clock mr-1"></i>
+
+                                    Waiting for Response
+
+                                </span>
+
+                            {% elif clarification.status == 'CLOSE' %}
+
+                                <span class="badge badge-success">
+
+                                    <i class="fas fa-check mr-1"></i>
+
+                                    Closed
+
+                                </span>
+
+                            {% elif clarification.status == 'RESPONDED' %}
+
+                                <!-- Compatibility with old data -->
+
+                                <span class="badge badge-success">
+
+                                    <i class="fas fa-check mr-1"></i>
+
+                                    Responded
+
+                                </span>
+
+                            {% elif clarification.status == 'CANCELLED' %}
+
+                                <span class="badge badge-secondary">
+
+                                    Cancelled
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =================================================
+                             DEVELOPER REQUEST
+                        ================================================== -->
+
+                        <div class="mb-3">
+
+                            <div class="text-muted small mb-1">
+
+                                <i class="fas fa-question-circle mr-1"></i>
+
+                                Developer Request
+
+                            </div>
+
+                            <div
+                                class="bg-light rounded p-3"
+                                style="white-space: pre-wrap;"
+                            >
+
+                                {{ clarification.question }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             REQUEST INFORMATION
+                        ================================================== -->
+
+                        <div class="text-muted small mb-3">
+
+                            Requested by:
+
+                            <strong>
+
+                                {% if clarification.requested_by %}
+
+                                    {{ clarification.requested_by.full_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </strong>
+
+                            |
+
+                            {% if clarification.requested_at %}
+
+                                {{ clarification.requested_at.strftime(
+                                    '%d-%m-%Y %H:%M'
+                                ) }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- =================================================
+                             REQUESTOR RESPONSE
+                        ================================================== -->
+
+                        {% if clarification.response %}
+
+                            <div class="border-top pt-3">
+
+                                <div class="text-muted small mb-1">
+
+                                    <i class="fas fa-reply mr-1"></i>
+
+                                    Requestor Response
+
+                                </div>
+
+
+                                <div
+                                    class="bg-light rounded p-3"
+                                    style="white-space: pre-wrap;"
+                                >
+
+                                    {{ clarification.response }}
+
+                                </div>
+
+
+                                <div class="text-muted small mt-2">
+
+                                    Responded by:
+
+                                    <strong>
+
+                                        {% if clarification.responded_by %}
+
+                                            {{ clarification.responded_by.full_name }}
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                    |
+
+                                    {% if clarification.responded_at %}
+
+                                        {{ clarification.responded_at.strftime(
+                                            '%d-%m-%Y %H:%M'
+                                        ) }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- =================================================
+                             RESPOND BUTTON
+                             ONLY REQUESTOR CAN RESPOND
+                        ================================================== -->
+
+                        {% if clarification.status == 'OPEN'
+                              and issue.requestor_employee_id
+                                  == current_user.employee_id %}
+
+                            <div class="mt-3">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-primary"
+                                    data-toggle="modal"
+                                    data-target="#respondClarificationModal{{ clarification.id }}"
+                                >
+
+                                    <i class="fas fa-reply mr-1"></i>
+
+                                    Respond
+
+                                </button>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         RESPONSE MODAL
+                    ================================================== -->
+
+                    {% if clarification.status == 'OPEN'
+                          and issue.requestor_employee_id
+                              == current_user.employee_id %}
+
+                        {% include
+                            "components/issue/respond_clarification_modal.html"
+                        %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         WORKFLOW
+    ====================================================== -->
+
+    {% if can_manage_workflow %}
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-body">
+
+                <h6 class="font-weight-bold border-bottom pb-2 mb-3">
+
+                    <i class="fas fa-project-diagram mr-2"></i>
+
+                    Workflow
+
+                </h6>
+
+
+                <div class="d-flex flex-wrap">
+
+
+                    <!-- =================================================
+                         OPEN → IN PROGRESS
+                    ================================================== -->
+
+                    {% if issue.status == 'OPEN' %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'issue.start',
+                                issue_id=issue.id
+                            ) }}"
+                            class="d-inline mr-2 mb-2"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="fas fa-play mr-1"></i>
+
+                                Start Issue
+
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         IN PROGRESS
+                    ================================================== -->
+
+                    {% if issue.status == 'IN_PROGRESS' %}
+
+                        <button
+                            type="button"
+                            class="btn btn-warning mr-2 mb-2"
+                            data-toggle="modal"
+                            data-target="#requestClarificationModal"
+                        >
+
+                            <i class="fas fa-question-circle mr-1"></i>
+
+                            Request Clarification
+
+                        </button>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'issue.finish',
+                                issue_id=issue.id
+                            ) }}"
+                            class="d-inline mr-2 mb-2"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-info text-dark"
+                            >
+
+                                <i class="fas fa-check-circle mr-1"></i>
+
+                                Finish Issue
+
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         FINISH → CLOSE
+                    ================================================== -->
+
+                    {% if issue.status == 'FINISH' %}
+
+                        <!-- Close -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'issue.close',
+                                issue_id=issue.id
+                            ) }}"
+                            class="d-inline mr-2 mb-2"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                            >
+
+                                <i class="fas fa-check-double mr-1"></i>
+
+                                Close Issue
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- Still Exists -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'issue.still_exists',
+                                issue_id=issue.id
+                            ) }}"
+                            class="d-inline mr-2 mb-2"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-warning"
+                            >
+
+                                <i class="fas fa-sync-alt mr-1"></i>
+
+                                Still Exists
+
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         DELETE
+                    ================================================== -->
+
+                    {% if issue.status == 'OPEN' %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'issue.delete',
+                                issue_id=issue.id
+                            ) }}"
+                            class="d-inline mr-2 mb-2"
+                            onsubmit="return confirm(
+                                'Are you sure you want to delete this Issue?'
+                            );"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-outline-danger"
+                            >
+
+                                <i class="fas fa-trash mr-1"></i>
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         ATTACHMENTS
+    ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <!-- Header -->
+
+            <div
+                class="d-flex justify-content-between align-items-center mb-3"
+            >
+
+                <h6 class="font-weight-bold mb-0">
+
+                    <i class="fas fa-paperclip mr-2"></i>
+
+                    Attachments
+
+                </h6>
+
+
+                <!-- =================================================
+                     ADD ATTACHMENT BUTTON
+                ================================================== -->
+
+                {% if can_add_attachment %}
+
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-primary"
+                        data-toggle="modal"
+                        data-target="#addAttachmentModal"
+                    >
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Add Attachment
+
+                    </button>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 ATTACHMENT TABLE
+            ================================================== -->
+
+            {% if attachments %}
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-hover align-middle mb-0"
+                    >
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th
+                                    style="width: 50px;"
+                                    class="text-center"
+                                >
+                                    #
+                                </th>
+
+                                <th>
+                                    File Name
+                                </th>
+
+                                <th style="width: 100px;">
+                                    Type
+                                </th>
+
+                                <th style="width: 120px;">
+                                    Size
+                                </th>
+
+                                <th>
+                                    Description
+                                </th>
+
+                                <th
+                                    style="width: 190px;"
+                                    class="text-center"
+                                >
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for attachment in attachments %}
+
+                                <tr>
+
+                                    <!-- Number -->
+
+                                    <td class="text-center">
+
+                                        {{ loop.index }}
+
+                                    </td>
+
+
+                                    <!-- File Name -->
+
+                                    <td>
+
+                                        <div class="font-weight-semibold">
+
+                                            <i class="fas fa-file mr-1"></i>
+
+                                            {{ attachment.file_name }}
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Type -->
+
+                                    <td>
+
+                                        {{ attachment.file_type|upper }}
+
+                                    </td>
+
+
+                                    <!-- Size -->
+
+                                    <td>
+
+                                        {% if attachment.file_size %}
+
+                                            {% if attachment.file_size < 1024 %}
+
+                                                {{ attachment.file_size }} B
+
+                                            {% elif attachment.file_size < 1048576 %}
+
+                                                {{ (
+                                                    attachment.file_size / 1024
+                                                )|round(1) }} KB
+
+                                            {% else %}
+
+                                                {{ (
+                                                    attachment.file_size / 1048576
+                                                )|round(1) }} MB
+
+                                            {% endif %}
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Description -->
+
+                                    <td>
+
+                                        {% if attachment.description %}
+
+                                            {{ attachment.description }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Action -->
+
+                                    <td class="text-center">
+
+                                        <div
+                                            class="btn-group"
+                                            role="group"
+                                            aria-label="Attachment actions"
+                                        >
+
+                                            <!-- Preview -->
+
+                                            <a
+                                                href="{{ url_for(
+                                                    'issue.preview_attachment',
+                                                    attachment_id=attachment.id
+                                                ) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-outline-primary"
+                                                title="Preview"
+                                            >
+
+                                                <i class="fas fa-eye"></i>
+
+                                            </a>
+
+
+                                            <!-- Download -->
+
+                                            <a
+                                                href="{{ url_for(
+                                                    'issue.download_attachment',
+                                                    attachment_id=attachment.id
+                                                ) }}"
+                                                class="btn btn-sm btn-outline-secondary"
+                                                title="Download"
+                                            >
+
+                                                <i class="fas fa-download"></i>
+
+                                            </a>
+
+
+                                            <!-- Delete -->
+
+                                            {% if can_delete_attachment %}
+
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-outline-danger btn-delete"
+                                                    title="Delete"
+                                                    data-name="{{ attachment.file_name }}"
+                                                    data-url="{{ url_for(
+                                                        'issue.delete_attachment',
+                                                        attachment_id=attachment.id
+                                                    ) }}"
+                                                >
+
+                                                    <i class="fas fa-trash"></i>
+
+                                                </button>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="text-center py-4 text-muted">
+
+                    <i
+                        class="fas fa-paperclip fa-2x d-block mb-2"
+                    ></i>
+
+                    No attachments found.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ISSUE COMPONENTS
+========================================================== -->
+
+{% include "components/issue/add_attachment_modal.html" %}
+
+
+{% if can_manage_workflow %}
+
+    {% include
+        "components/issue/request_clarification_modal.html"
+    %}
+
+{% endif %}
+
+
+{% include "components/delete_modal.html" %}
+
+{% endblock %}

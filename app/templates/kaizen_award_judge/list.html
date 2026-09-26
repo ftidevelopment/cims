@@ -1,0 +1,372 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Kaizen Award Judges{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h4 class="mb-1">
+                <i class="fas fa-user-tie me-2"></i>
+                Kaizen Award Judges
+            </h4>
+
+            <small class="text-muted">
+                Manage judges for this Kaizen Award Period
+            </small>
+        </div>
+
+        <div>
+
+            <a href="{{ url_for('kaizen_award_period.index') }}"
+               class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left me-1"></i>
+                Back to Award Period
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Award Period Information -->
+    <div class="card card-primary card-outline mb-3">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+                <i class="fas fa-trophy me-1"></i>
+                Award Period Information
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Award Code -->
+                <div class="col-md-3">
+
+                    <label class="form-label text-muted">
+                        Award Code
+                    </label>
+
+                    <div class="fw-bold">
+                        {{ award_period.award_code }}
+                    </div>
+
+                </div>
+
+
+                <!-- Award Name -->
+                <div class="col-md-4">
+
+                    <label class="form-label text-muted">
+                        Award Name
+                    </label>
+
+                    <div class="fw-bold">
+                        {{ award_period.award_name }}
+                    </div>
+
+                </div>
+
+
+                <!-- Start Date -->
+                <div class="col-md-2">
+
+                    <label class="form-label text-muted">
+                        Start Date
+                    </label>
+
+                    <div>
+                        {{ award_period.start_date.strftime('%d-%m-%Y')
+                           if award_period.start_date else '-' }}
+                    </div>
+
+                </div>
+
+
+                <!-- End Date -->
+                <div class="col-md-2">
+
+                    <label class="form-label text-muted">
+                        End Date
+                    </label>
+
+                    <div>
+                        {{ award_period.end_date.strftime('%d-%m-%Y')
+                           if award_period.end_date else '-' }}
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+                <div class="col-md-1">
+
+                    <label class="form-label text-muted">
+                        Status
+                    </label>
+
+                    {% if award_period.is_active %}
+
+                        <span class="badge bg-success">
+                            Active
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary">
+                            Inactive
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Judge List -->
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+                <i class="fas fa-users me-1"></i>
+                Judge List
+            </h3>
+
+            <div class="card-tools">
+
+                <a href="{{ url_for(
+                    'kaizen_award_judge.add',
+                    award_period_id=award_period.id
+                ) }}"
+                   class="btn btn-primary btn-sm">
+
+                    <i class="fas fa-plus me-1"></i>
+                    Add Judge
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            {% if judges %}
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th style="width: 60px;" class="text-center">
+                                No
+                            </th>
+
+                            <th style="width: 150px;">
+                                Employee ID
+                            </th>
+
+                            <th>
+                                Employee Name
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th style="width: 120px;" class="text-center">
+                                Status
+                            </th>
+
+                            <th style="width: 120px;" class="text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for judge in judges %}
+
+                        <tr>
+
+                            <!-- No -->
+                            <td class="text-center">
+                                {{ loop.index }}
+                            </td>
+
+
+                            <!-- Employee ID -->
+                            <td>
+
+                                {% if judge.employee %}
+
+    <strong>
+        {{ judge.employee.nik }}
+    </strong>
+
+{% else %}
+
+    <span class="text-muted">
+        -
+    </span>
+
+{% endif %}
+
+                            </td>
+
+
+                            <!-- Employee Name -->
+                            <td>
+
+                                {% if judge.employee %}
+
+                                    {{ judge.employee.full_name }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Department -->
+                            <td>
+
+                                {% if judge.employee and judge.employee.department %}
+
+                                    {{ judge.employee.department.department_name }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td class="text-center">
+
+                                {% if judge.is_active %}
+
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        Inactive
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Action -->
+                            <td class="text-center">
+
+                                <form method="POST"
+                                      action="{{ url_for(
+                                          'kaizen_award_judge.delete',
+                                          judge_id=judge.id
+                                      ) }}"
+                                      class="d-inline">
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            title="Remove Judge"
+                                            onclick="return confirm('Are you sure you want to remove this Judge?');">
+
+                                        <i class="fas fa-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <!-- Empty State -->
+            <div class="text-center py-5">
+
+                <div class="mb-3">
+
+                    <i class="fas fa-user-tie fa-3x text-muted"></i>
+
+                </div>
+
+                <h5 class="text-muted">
+                    No Judge assigned
+                </h5>
+
+                <p class="text-muted mb-3">
+                    There are currently no judges assigned to this Award Period.
+                </p>
+
+                <a href="{{ url_for(
+                    'kaizen_award_judge.add',
+                    award_period_id=award_period.id
+                ) }}"
+                   class="btn btn-primary">
+
+                    <i class="fas fa-plus me-1"></i>
+                    Add First Judge
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

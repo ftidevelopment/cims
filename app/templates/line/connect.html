@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Connect LINE - CIMS</title>
+
+
+    <!--
+        QR Code library
+        No Python package required.
+    -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+    <style>
+
+        body {
+
+            margin: 0;
+
+            padding: 30px;
+
+            background: #f5f6f8;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+        }
+
+
+        .container {
+
+            max-width: 600px;
+
+            margin: 40px auto;
+
+            background: #ffffff;
+
+            padding: 35px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 20px rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+
+            text-align: center;
+
+        }
+
+
+        h2 {
+
+            margin-top: 0;
+
+            color: #333333;
+
+        }
+
+
+        .employee-info {
+
+            margin: 20px 0;
+
+            padding: 15px;
+
+            background: #f8f9fa;
+
+            border-radius: 8px;
+
+        }
+
+
+        .employee-name {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        .employee-nik {
+
+            margin-top: 5px;
+
+            color: #666666;
+
+        }
+
+
+        .qr-container {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin: 25px auto;
+
+            padding: 20px;
+
+            width: fit-content;
+
+            background: #ffffff;
+
+            border: 1px solid #dddddd;
+
+            border-radius: 10px;
+
+        }
+
+
+        .instruction {
+
+            margin-top: 20px;
+
+            color: #555555;
+
+            line-height: 1.6;
+
+        }
+
+
+        .instruction strong {
+
+            color: #222222;
+
+        }
+
+
+        .status-connected {
+
+            padding: 20px;
+
+            background: #eaf8ef;
+
+            border-radius: 10px;
+
+            color: #198754;
+
+        }
+
+
+        .connected-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 10px 20px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            background: #6c757d;
+
+            color: #ffffff;
+
+        }
+
+
+        .warning {
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            background: #fff3cd;
+
+            color: #856404;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+        }
+
+
+        .hidden {
+
+            display: none;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h2>
+        Connect LINE
+    </h2>
+
+
+    <!-- ==================================================
+         Employee Information
+         ================================================== -->
+
+    <div class="employee-info">
+
+        <div class="employee-name">
+
+            {{ employee.full_name }}
+
+        </div>
+
+        <div class="employee-nik">
+
+            NIK: {{ employee.nik }}
+
+        </div>
+
+    </div>
+
+
+    {% if connected %}
+
+        <!-- ==============================================
+             Already Connected
+             ============================================== -->
+
+        <div class="status-connected">
+
+            <div class="connected-icon">
+                ✓
+            </div>
+
+            <strong>
+                LINE Connected
+            </strong>
+
+            <div style="margin-top: 8px;">
+
+                Your LINE account is already
+                connected to CIMS.
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- ==============================================
+             QR Code
+             ============================================== -->
+
+        <p>
+
+            Scan the QR Code below using
+            your LINE app.
+
+        </p>
+
+
+        <div
+            id="qrcode"
+            class="qr-container"
+        ></div>
+
+
+        <div class="instruction">
+
+            <strong>
+                How to connect:
+            </strong>
+
+            <br>
+
+            1. Open the LINE app on your phone.
+
+            <br>
+
+            2. Use the QR Code scanner.
+
+            <br>
+
+            3. Scan the QR Code displayed above.
+
+            <br>
+
+            4. Follow the instructions in LINE.
+
+            <br>
+
+            5. Wait until the connection is completed.
+
+        </div>
+
+
+        <div class="warning">
+
+            This QR Code is valid for
+            <strong>5 minutes</strong>.
+
+            <br>
+
+            Do not share this QR Code
+            with another employee.
+
+        </div>
+
+
+        <!-- ==============================================
+             Hidden LIFF URL
+             ============================================== -->
+
+        <input
+            type="hidden"
+            id="liff-url"
+            value="{{ liff_url }}"
+        >
+
+
+    {% endif %}
+
+
+    <!-- ==================================================
+         Back
+         ================================================== -->
+
+    <a
+        href="{{ url_for('dashboard.my_dashboard') }}"
+        class="btn"
+    >
+
+        Back to Dashboard
+
+    </a>
+
+
+</div>
+
+
+{% if not connected %}
+
+<script>
+
+    // ==================================================
+    // Get LIFF URL
+    // ==================================================
+
+    const liffUrl =
+        document.getElementById(
+            "liff-url"
+        ).value;
+
+
+    // ==================================================
+    // Generate QR Code
+    // ==================================================
+
+    if (liffUrl) {
+
+        new QRCode(
+            document.getElementById(
+                "qrcode"
+            ),
+            {
+                text: liffUrl,
+
+                width: 280,
+
+                height: 280,
+
+                correctLevel:
+                    QRCode.CorrectLevel.H
+            }
+        );
+
+    }
+
+</script>
+
+{% endif %}
+
+
+</body>
+
+</html>

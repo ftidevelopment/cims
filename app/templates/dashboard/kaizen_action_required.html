@@ -1,0 +1,306 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ==================================================
+         PAGE HEADER
+         ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="mb-1">
+                Kaizen Approval Required
+            </h3>
+
+            <p class="text-muted mb-0">
+                Kaizen waiting for your approval
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('dashboard.my_dashboard') }}"
+           class="btn btn-secondary">
+
+            <i class="fas fa-arrow-left"></i>
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- ==================================================
+         SUMMARY
+         ================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-center">
+
+                <div class="mr-3">
+
+                    <i class="fas fa-lightbulb
+                              fa-2x
+                              text-warning"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted">
+
+                        Kaizen Waiting for Approval
+
+                    </div>
+
+                    <h3 class="mb-0">
+
+                        {{ action_required | length }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         KAIZEN LIST
+         ================================================== -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            <strong>
+                Kaizen to Approve
+            </strong>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            {% if action_required %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="thead-light">
+
+                        <tr>
+
+                            <th style="width: 150px;">
+                                Kaizen No.
+                            </th>
+
+                            <th>
+                                Kaizen
+                            </th>
+
+                            <th style="width: 180px;">
+                                Employee
+                            </th>
+
+                            <th style="width: 180px;">
+                                Department
+                            </th>
+
+                            <th style="width: 120px;">
+                                Status
+                            </th>
+
+                            <th style="width: 140px;">
+                                Created Date
+                            </th>
+
+                            <th style="width: 120px;">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for action in action_required %}
+
+                        {% set kaizen = action["item"] %}
+
+                        <tr>
+
+                            <!-- --------------------------------
+                                 Kaizen No.
+                                 -------------------------------- -->
+
+                            <td>
+
+                                <strong>
+
+                                    {{ kaizen.kaizen_no }}
+
+                                </strong>
+
+                            </td>
+
+
+                            <!-- --------------------------------
+                                 Title
+                                 -------------------------------- -->
+
+                            <td>
+
+                                {{ kaizen.title }}
+
+                            </td>
+
+
+                            <!-- --------------------------------
+                                 Employee
+                                 -------------------------------- -->
+
+                            <td>
+
+                                {% if kaizen.employee %}
+
+                                    {{ kaizen.employee.name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- --------------------------------
+                                 Department
+                                 -------------------------------- -->
+
+                            <td>
+
+                                {% if kaizen.department %}
+
+                                    {{ kaizen.department.department_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- --------------------------------
+                                 Status
+                                 -------------------------------- -->
+
+                            <td>
+
+                                <span class="badge badge-warning">
+
+                                    {{ kaizen.status }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- --------------------------------
+                                 Created Date
+                                 -------------------------------- -->
+
+                            <td>
+
+                                {% if kaizen.created_at %}
+
+                                    {{ kaizen.created_at.strftime(
+                                        '%d-%m-%Y'
+                                    ) }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- --------------------------------
+                                 Action
+                                 -------------------------------- -->
+
+                            <td>
+
+                                <a href="{{ url_for(
+                                    'kaizen.detail',
+                                    kaizen_id=kaizen.id
+                                ) }}"
+                                   class="btn btn-sm btn-warning">
+
+                                    <i class="fas fa-check"></i>
+
+                                    Approve
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="text-center p-5">
+
+                <i class="fas fa-check-circle
+                          fa-3x
+                          text-success
+                          mb-3"></i>
+
+                <h5>
+                    No Kaizen Approval Required
+                </h5>
+
+                <p class="text-muted mb-0">
+
+                    There are currently no Kaizen
+                    waiting for your approval.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

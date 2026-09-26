@@ -1,0 +1,390 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+
+{% if employee %}
+
+Edit Employee
+
+{% else %}
+
+Add Employee
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+
+                    {% if employee %}
+
+                    Edit Employee
+
+                    {% else %}
+
+                    Add Employee
+
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        Master Data
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('employee.index') }}">
+
+                            Employee
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+
+                        {% if employee %}
+
+                        Edit
+
+                        {% else %}
+
+                        Add
+
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- ========================================== -->
+            <!-- Card Header -->
+            <!-- ========================================== -->
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-users mr-2"></i>
+
+                    {% if employee %}
+
+                    Edit Employee
+
+                    {% else %}
+
+                    Add Employee
+
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+
+            <!-- ========================================== -->
+            <!-- Form -->
+            <!-- ========================================== -->
+
+            <form
+                id="employee-form"
+                method="POST"
+                class="needs-validation"
+                novalidate
+            >
+
+                <div class="card-body">
+
+
+                    <!-- ====================================== -->
+                    <!-- NIK -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            NIK
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nik"
+                            class="form-control"
+                            maxlength="20"
+                            required
+                            data-label="NIK"
+                            value="{{ (employee.nik or '') if employee else '' }}"
+                            {% if employee %}readonly{% endif %}
+                        >
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- Full Name -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="full_name"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                            data-label="Full Name"
+                            value="{{ (employee.full_name or '') if employee else '' }}"
+                        >
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- Department -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Department
+                        </label>
+
+                        <select
+                            name="department_id"
+                            class="form-control"
+                            required
+                            data-label="Department"
+                        >
+
+                            <option value="">
+                                -- Select Department --
+                            </option>
+
+                            {% for department in departments %}
+
+                            <option
+                                value="{{ department.id }}"
+                                {% if employee and employee.department_id == department.id %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ department.department_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- Email -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                            data-label="Email"
+                            value="{{ (employee.email or '') if employee else '' }}"
+                        >
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- Phone Number -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone_number"
+                            class="form-control"
+                            maxlength="20"
+                            required
+                            data-label="Phone Number"
+                            value="{{ (employee.phone_number or '') if employee else '' }}"
+                        >
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- Telegram Chat ID -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Telegram Chat ID
+                        </label>
+
+                        <input
+                            type="text"
+                            name="telegram_chat_id"
+                            class="form-control"
+                            maxlength="50"
+                            value="{{ (employee.telegram_chat_id or '') if employee else '' }}"
+                        >
+
+                        <small class="form-text text-muted">
+
+                            Optional
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- LINE User ID -->
+                    <!-- ====================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            LINE User ID
+                        </label>
+
+                        <input
+                            type="text"
+                            name="line_user_id"
+                            class="form-control"
+                            maxlength="100"
+                            value="{{ (employee.line_user_id or '') if employee else '' }}"
+                        >
+
+                        <small class="form-text text-muted">
+
+                            Optional. Enter the LINE User ID
+                            for LINE notification.
+
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ========================================== -->
+                <!-- Card Footer -->
+                <!-- ========================================== -->
+
+                <div class="card-footer">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('employee.index') }}"
+                        class="btn btn-secondary"
+                    >
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

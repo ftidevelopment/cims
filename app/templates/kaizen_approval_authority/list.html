@@ -1,0 +1,360 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+Kaizen Approval Authority
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Kaizen Approval Authority
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a
+                            href="{{ url_for(
+                                'dashboard.index'
+                            ) }}"
+                        >
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+
+                        Kaizen Approval Authority
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- ==========================================
+                 HEADER
+            =========================================== -->
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-user-check mr-2"></i>
+
+                    Approval Authority
+
+                </h3>
+
+
+                <div class="card-tools">
+
+                    <a
+                        href="{{ url_for(
+                            'kaizen_approval_authority.create'
+                        ) }}"
+                        class="btn btn-primary btn-sm"
+                    >
+
+                        <i class="fas fa-plus"></i>
+
+                        Assign Authority
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 BODY
+            =========================================== -->
+
+            <div class="card-body">
+
+
+                {% if authorities %}
+
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-bordered table-hover"
+                    >
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width: 60px;">
+
+                                    No
+
+                                </th>
+
+
+                                <th>
+
+                                    Department
+
+                                </th>
+
+
+                                <th>
+
+                                    Employee
+
+                                </th>
+
+
+                                <th>
+
+                                    NIK
+
+                                </th>
+
+
+                                <th>
+
+                                    Role
+
+                                </th>
+
+
+                                <th style="width: 120px;">
+
+                                    Action
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for authority in authorities %}
+
+
+                            <tr>
+
+
+                                <!-- No -->
+
+                                <td>
+
+                                    {{ loop.index }}
+
+                                </td>
+
+
+                                <!-- Department -->
+
+                                <td>
+
+                                    {% if authority.department %}
+
+                                        {{
+                                            authority.department.department_name
+                                        }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Employee -->
+
+                                <td>
+
+                                    {% if authority.employee %}
+
+                                        <strong>
+
+                                            {{
+                                                authority.employee.full_name
+                                            }}
+
+                                        </strong>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- NIK -->
+
+                                <td>
+
+                                    {% if authority.employee %}
+
+                                        {{
+                                            authority.employee.nik
+                                        }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Role -->
+
+                                <td>
+
+                                    {% if authority.employee
+                                          and authority.employee.user %}
+
+                                        {{
+                                            authority.employee.user.role_name
+                                        }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Action -->
+
+                                <td>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for(
+                                            'kaizen_approval_authority.remove',
+                                            department_id=authority.department_id,
+                                            employee_id=authority.employee_id
+                                        ) }}"
+                                        class="d-inline"
+                                        onsubmit="return confirm(
+                                            'Remove this Kaizen Approval Authority?'
+                                        );"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-danger btn-sm"
+                                        >
+
+                                            <i
+                                                class="fas fa-user-minus"
+                                            ></i>
+
+                                            Remove
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+
+                            </tr>
+
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                {% else %}
+
+
+                <div class="alert alert-info">
+
+                    <i
+                        class="fas fa-info-circle mr-2"
+                    ></i>
+
+                    No Kaizen Approval Authority
+                    has been configured.
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

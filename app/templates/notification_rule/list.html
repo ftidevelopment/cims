@@ -1,0 +1,593 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- =====================================================
+         Header
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h4 class="mb-1">
+                Notification Recipient
+            </h4>
+
+            <div class="text-muted">
+                Notification recipient configuration
+            </div>
+
+        </div>
+
+        <a
+            href="{{ url_for('notification_rule.create') }}"
+            class="btn btn-primary"
+        >
+            <i class="bi bi-plus-lg mr-1"></i>
+            Configure Recipient
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         Filter
+    ====================================================== -->
+
+    <div class="card shadow-sm mb-3">
+
+        <div class="card-body py-3">
+
+            <form
+                method="GET"
+                action="{{ url_for('notification_rule.index') }}"
+            >
+
+                <div class="d-flex align-items-end flex-wrap">
+
+                    <!-- Module -->
+
+                    <div class="mr-2 mb-2">
+
+                        <label class="mb-1 small text-muted">
+                            Module
+                        </label>
+
+                        <select
+                            name="module"
+                            class="custom-select custom-select-sm"
+                            style="width: 150px;"
+                            onchange="this.form.submit()"
+                        >
+
+                            <option value="">
+                                All Module
+                            </option>
+
+                            {% for item in modules %}
+
+                            <option
+                                value="{{ item }}"
+                                {% if module == item %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ item }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Event -->
+
+                    <div class="mr-2 mb-2">
+
+                        <label class="mb-1 small text-muted">
+                            Event
+                        </label>
+
+                        <select
+                            name="event"
+                            class="custom-select custom-select-sm"
+                            style="width: 210px;"
+                        >
+
+                            <option value="">
+                                All Event
+                            </option>
+
+                            {% for item in events %}
+
+                            <option
+                                value="{{ item }}"
+                                {% if event == item %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ item }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Department -->
+
+                    <div class="mr-2 mb-2">
+
+                        <label class="mb-1 small text-muted">
+                            Department
+                        </label>
+
+                        <select
+                            name="department_id"
+                            class="custom-select custom-select-sm"
+                            style="width: 180px;"
+                        >
+
+                            <option value="">
+                                All Department
+                            </option>
+
+                            {% for department in departments %}
+
+                            <option
+                                value="{{ department.id }}"
+                                {% if department_id == department.id %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ department.department_name }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Employee Search -->
+
+                    <div
+                        class="mr-2 mb-2"
+                        style="flex: 1; min-width: 220px;"
+                    >
+
+                        <label class="mb-1 small text-muted">
+                            Employee
+                        </label>
+
+                        <input
+                            type="text"
+                            name="keyword"
+                            class="form-control form-control-sm"
+                            placeholder="Search employee name / NIK..."
+                            value="{{ keyword }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Search -->
+
+                    <div class="mr-2 mb-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm"
+                            title="Search"
+                        >
+                            <i class="fas fa-search"></i>
+                        </button>
+
+                    </div>
+
+
+                    <!-- Reset -->
+
+                    <div class="mb-2">
+
+                        <a
+                            href="{{ url_for('notification_rule.index') }}"
+                            class="btn btn-secondary btn-sm"
+                            title="Reset Filter"
+                        >
+                            <i class="fas fa-sync-alt"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         Active Filter Information
+    ====================================================== -->
+
+    {% if module or event or department_id or keyword %}
+
+    <div class="alert alert-info py-2 px-3">
+
+        <div class="d-flex align-items-center flex-wrap">
+
+            <i class="bi bi-funnel mr-2"></i>
+
+            <strong class="mr-2">
+                Filter:
+            </strong>
+
+
+            {% if module %}
+
+            <span class="mr-3">
+                Module:
+                <strong>{{ module }}</strong>
+            </span>
+
+            {% endif %}
+
+
+            {% if event %}
+
+            <span class="mr-3">
+                Event:
+                <strong>{{ event }}</strong>
+            </span>
+
+            {% endif %}
+
+
+            {% if department_id %}
+
+            <span class="mr-3">
+
+                Department:
+
+                <strong>
+
+                    {% for department in departments %}
+
+                        {% if department.id == department_id %}
+
+                            {{ department.department_name }}
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </strong>
+
+            </span>
+
+            {% endif %}
+
+
+            {% if keyword %}
+
+            <span>
+                Employee:
+                <strong>{{ keyword }}</strong>
+            </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         Notification Rule Table
+    ====================================================== -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0 align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>
+                                Module
+                            </th>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Employee
+                            </th>
+
+                            <th
+                                class="text-center"
+                                style="width: 90px;"
+                            >
+                                Email
+                            </th>
+
+                            <th
+                                class="text-center"
+                                style="width: 90px;"
+                            >
+                                LINE
+                            </th>
+
+                            <th
+                                class="text-center"
+                                style="width: 100px;"
+                            >
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for rule in pagination.items %}
+
+                        <tr>
+
+                            <!-- Module -->
+
+                            <td>
+
+                                <span class="badge bg-primary">
+                                    {{ rule.module }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- Event -->
+
+                            <td>
+                                {{ rule.event }}
+                            </td>
+
+
+                            <!-- Department -->
+
+                            <td>
+
+                                {% if rule.department %}
+
+                                    {{ rule.department.department_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Employee -->
+
+                            <td>
+
+                                {% if rule.employee %}
+
+                                    <strong>
+                                        {{ rule.employee.full_name }}
+                                    </strong>
+
+                                    <div class="text-muted small">
+                                        {{ rule.employee.nik }}
+                                    </div>
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Email -->
+
+                            <td class="text-center">
+
+                                {% if rule.email_enabled %}
+
+                                    <span class="badge bg-success">
+                                        ON
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        OFF
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- LINE -->
+
+                            <td class="text-center">
+
+                                {% if rule.line_enabled %}
+
+                                    <span class="badge bg-success">
+                                        ON
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        OFF
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Action -->
+
+                            <td class="text-center">
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'notification_rule.delete',
+                                        rule_id=rule.id
+                                    ) }}"
+                                    onsubmit="return confirm(
+                                        'Delete this notification rule?'
+                                    );"
+                                    class="d-inline"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        title="Delete"
+                                    >
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="text-center py-4 text-muted"
+                            >
+
+                                <i class="bi bi-inbox mr-1"></i>
+
+                                No notification rules found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             Pagination
+        ================================================== -->
+
+        {% if pagination.pages > 1 %}
+
+        <div class="card-footer">
+
+            <nav>
+
+                <ul class="pagination justify-content-end mb-0">
+
+                    {% for page_num in pagination.iter_pages(
+                        left_edge=1,
+                        right_edge=1,
+                        left_current=2,
+                        right_current=2
+                    ) %}
+
+                        {% if page_num %}
+
+                        <li
+                            class="page-item
+                            {% if page_num == pagination.page %}
+                                active
+                            {% endif %}"
+                        >
+
+                            <a
+                                class="page-link"
+                                href="{{ url_for(
+                                    'notification_rule.index',
+                                    page=page_num,
+                                    keyword=keyword,
+                                    module=module,
+                                    event=event,
+                                    department_id=department_id
+                                ) }}"
+                            >
+                                {{ page_num }}
+                            </a>
+
+                        </li>
+
+                        {% else %}
+
+                        <li class="page-item disabled">
+
+                            <span class="page-link">
+                                …
+                            </span>
+
+                        </li>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

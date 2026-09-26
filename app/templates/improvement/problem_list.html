@@ -1,0 +1,648 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Select Problem{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================
+Content Header
+========================================== -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>Problem Selection</h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Continuous Improvement
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Improvement
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Select Problem
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+Main Content
+========================================== -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- ==========================================
+            Card Header
+            ========================================== -->
+            <!-- ==========================================
+Card Header
+========================================== -->
+<div class="card-header">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <!-- Left -->
+        <div class="d-flex align-items-center">
+
+            <h3 class="card-title mb-0 mr-4">
+
+                <i class="fas fa-clipboard-list mr-2"></i>
+
+                Select Problem for Improvement
+
+            </h3>
+
+        </div>
+
+
+        <!-- Right -->
+        <div class="d-flex align-items-center">
+
+            <!-- Status Filter -->
+            <form method="GET" class="mb-0 mr-2">
+
+                <input type="hidden"
+                       name="keyword"
+                       value="{{ keyword or '' }}">
+
+                <input type="hidden"
+                       name="department_id"
+                       value="{{ department_id or '' }}">
+
+                <select name="status"
+                        class="custom-select custom-select-sm"
+                        style="width:150px;"
+                        onchange="this.form.submit()">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="{{ PROBLEM_STATUS.OPEN }}"
+                        {% if status == PROBLEM_STATUS.OPEN %}
+                            selected
+                        {% endif %}>
+                        Open
+                    </option>
+
+                    <option value="{{ PROBLEM_STATUS.IN_PROGRESS }}"
+                        {% if status == PROBLEM_STATUS.IN_PROGRESS %}
+                            selected
+                        {% endif %}>
+                        In Progress
+                    </option>
+
+                    <option value="{{ PROBLEM_STATUS.VERIFICATION }}"
+                        {% if status == PROBLEM_STATUS.VERIFICATION %}
+                            selected
+                        {% endif %}>
+                        Verification
+                    </option>
+
+                    <option value="{{ PROBLEM_STATUS.CLOSED }}"
+                        {% if status == PROBLEM_STATUS.CLOSED %}
+                            selected
+                        {% endif %}>
+                        Closed
+                    </option>
+
+                </select>
+
+            </form>
+
+
+            <!-- Department Filter -->
+            <form method="GET" class="mb-0 mr-2">
+
+                <input type="hidden"
+                       name="keyword"
+                       value="{{ keyword or '' }}">
+
+                <input type="hidden"
+                       name="status"
+                       value="{{ status or '' }}">
+
+                <select name="department_id"
+                        class="custom-select custom-select-sm"
+                        style="width:170px;"
+                        onchange="this.form.submit()">
+
+                    <option value="">
+                        All Department
+                    </option>
+
+                    {% for department in departments %}
+
+                    <option value="{{ department.id }}"
+                        {% if department_id == department.id %}
+                            selected
+                        {% endif %}>
+
+                        {{ department.department_name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </form>
+
+
+            <!-- Search -->
+            <form method="GET" class="mb-0 mr-2">
+
+                <input type="hidden"
+                       name="status"
+                       value="{{ status or '' }}">
+
+                <input type="hidden"
+                       name="department_id"
+                       value="{{ department_id or '' }}">
+
+                <div class="input-group">
+
+                    <input type="text"
+                           name="keyword"
+                           class="form-control"
+                           style="width:300px;"
+                           placeholder="Search problem no, title, location..."
+                           value="{{ keyword or '' }}">
+
+                    <div class="input-group-append">
+
+                        <button class="btn btn-primary"
+                                type="submit">
+
+                            <i class="fas fa-search"></i>
+
+                        </button>
+
+                        <a href="{{ url_for(
+                            'improvement.select_problem'
+                        ) }}"
+                           class="btn btn-secondary ml-1">
+
+                            <i class="fas fa-sync-alt"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+
+            <!-- Back -->
+            <a href="{{ url_for(
+                'improvement.index'
+            ) }}"
+               class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+            <!-- ==========================================
+            Card Body
+            ========================================== -->
+            <div class="card-body">
+
+
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search mr-1"></i>
+
+                    Search keyword :
+
+                    <strong>{{ keyword }}</strong>
+
+                </div>
+
+                {% endif %}
+
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr class="text-center">
+
+                            <th width="60">
+                                No
+                            </th>
+
+                            <th>
+                                Problem No
+                            </th>
+
+                            <th width="120">
+                                Problem Date
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Title
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th width="110">
+                                Status
+                            </th>
+
+                            <th width="130">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% if problems.items %}
+
+
+                        {% for problem in problems.items %}
+
+                        <tr>
+
+
+                            <!-- No -->
+                            <td class="text-center">
+
+                                {{ problems.first + loop.index0 }}
+
+                            </td>
+
+
+                            <!-- Problem No -->
+                            <td>
+
+                                {{ problem.problem_no }}
+
+                            </td>
+
+
+                            <!-- Problem Date -->
+                            <td class="text-center">
+
+                                {{ problem.problem_date.strftime("%d/%m/%Y")
+                                if problem.problem_date
+                                else "-" }}
+
+                            </td>
+
+
+                            <!-- Department -->
+                            <td>
+
+                                {{ problem.department.department_name
+                                if problem.department
+                                else "-" }}
+
+                            </td>
+
+
+                            <!-- Category -->
+                            <td>
+
+                                {{ problem.problem_category.problem_category_name
+                                if problem.problem_category
+                                else "-" }}
+
+                            </td>
+
+
+                            <!-- Title -->
+                            <td>
+
+                                {{ problem.title }}
+
+                            </td>
+
+
+                            <!-- Location -->
+                            <td>
+
+                                {{ problem.problem_location or "-" }}
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td class="text-center">
+
+                                {% if problem.status == PROBLEM_STATUS.OPEN %}
+
+                                <span class="badge badge-pill badge-danger">
+
+                                    Open
+
+                                </span>
+
+                                {% elif problem.status == PROBLEM_STATUS.IN_PROGRESS %}
+
+                                <span class="badge badge-pill badge-warning">
+
+                                    In Progress
+
+                                </span>
+
+                                {% elif problem.status == PROBLEM_STATUS.VERIFICATION %}
+
+                                <span class="badge badge-pill badge-primary">
+
+                                    Verification
+
+                                </span>
+
+                                {% elif problem.status == PROBLEM_STATUS.CLOSED %}
+
+                                <span class="badge badge-pill badge-success">
+
+                                    Closed
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-pill badge-secondary">
+
+                                    {{ problem.status }}
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Action -->
+
+                            <!-- Action -->
+
+                            <td class="text-center">
+
+                                {% if problem.status != PROBLEM_STATUS.CLOSED %}
+
+                                {% if problem.improvements %}
+
+                                <a href="{{ url_for(
+                    'improvement.edit',
+                    improvement_id=problem.improvements[0].id
+                ) }}" class="btn btn-warning btn-sm" title="Edit Improvement">
+                                    <i class="fas fa-edit mr-1"></i>
+                                    Edit Improvement
+                                </a>
+
+                                {% else %}
+
+                                <a href="{{ url_for(
+                    'improvement.create',
+                    problem_id=problem.id
+                ) }}" class="btn btn-success btn-sm" title="Create Improvement">
+                                    <i class="fas fa-lightbulb mr-1"></i>
+                                    Improvement
+                                </a>
+
+                                {% endif %}
+
+                                {% endif %}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        {% else %}
+
+
+                        <tr>
+
+                            <td colspan="9" class="text-center text-muted py-4">
+
+                                <i class="fas fa-folder-open fa-2x mb-2"></i>
+
+                                <br>
+
+                                No problem data found.
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endif %}
+
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+
+            <!-- ==========================================
+            Card Footer
+            ========================================== -->
+            <div class="card-footer clearfix">
+
+
+                <!-- Showing -->
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+
+                        {{ problems.first
+                        if problems.total > 0
+                        else 0 }}
+
+                    </strong>
+
+                    to
+
+                    <strong>
+
+                        {{ problems.last
+                        if problems.total > 0
+                        else 0 }}
+
+                    </strong>
+
+                    of
+
+                    <strong>
+
+                        {{ problems.total }}
+
+                    </strong>
+
+                    problem(s)
+
+                </div>
+
+
+                <!-- Pagination -->
+                <div class="float-right">
+
+                    <nav>
+
+                        <ul class="pagination pagination-sm mb-0">
+
+
+                            {% if problems.has_prev %}
+
+                            <li class="page-item">
+
+                                <a class="page-link" href="{{ url_for(
+    'improvement.select_problem',
+    page=problems.prev_num,
+    keyword=keyword,
+    status=status,
+    department_id=department_id
+) }}">
+    Previous
+</a>
+
+                            </li>
+
+                            {% endif %}
+
+
+                            {% for page_num in problems.iter_pages() %}
+
+
+                            {% if page_num %}
+
+                            <li class="page-item
+                                {% if page_num == problems.page %}
+                                    active
+                                {% endif %}">
+
+                                <a class="page-link" href="{{ url_for(
+    'improvement.select_problem',
+    page=page_num,
+    keyword=keyword,
+    status=status,
+    department_id=department_id
+) }}">
+    {{ page_num }}
+</a>
+
+                            </li>
+
+
+                            {% else %}
+
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+
+                                    ...
+
+                                </span>
+
+                            </li>
+
+                            {% endif %}
+
+
+                            {% endfor %}
+
+
+                            {% if problems.has_next %}
+
+                            <li class="page-item">
+
+                                <a class="page-link" href="{{ url_for(
+    'improvement.select_problem',
+    page=problems.next_num,
+    keyword=keyword,
+    status=status,
+    department_id=department_id
+) }}">
+    Next
+</a>
+
+                            </li>
+
+                            {% endif %}
+
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

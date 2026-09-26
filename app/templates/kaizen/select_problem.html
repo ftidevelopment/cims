@@ -1,0 +1,768 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+    Select Problem
+{% endblock %}
+
+
+
+{% block content_header %}
+
+<div class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1 class="m-0">
+
+                    <i class="fas fa-lightbulb mr-2"></i>
+
+                    Create Kaizen from Problem
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('kaizen.index') }}">
+                            Kaizen
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        Select Problem
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- ==================================================
+         SELECT PROBLEM CARD
+    ================================================== -->
+
+    <div class="card card-primary card-outline">
+
+
+        <!-- ==================================================
+             CARD HEADER
+        ================================================== -->
+
+        <div class="card-header">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+
+                <h3 class="card-title mb-0">
+
+                    <i class="fas fa-clipboard-list mr-2"></i>
+
+                    Select Problem
+
+                </h3>
+
+
+                <a
+                    href="{{ url_for('kaizen.index') }}"
+                    class="btn btn-secondary btn-sm"
+                >
+
+                    <i class="fas fa-arrow-left mr-1"></i>
+
+                    Back
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             SEARCH
+        ================================================== -->
+
+        <div class="card-body border-bottom">
+
+            <form
+                method="GET"
+                action="{{ url_for('kaizen.select_problem') }}"
+            >
+
+                <div class="row">
+
+
+                    <!-- Search -->
+
+                    <div class="col-md-8">
+
+                        <div class="form-group mb-md-0">
+
+                            <label>
+                                Search Problem
+                            </label>
+
+                            <input
+                                type="text"
+                                name="keyword"
+                                class="form-control"
+                                value="{{ keyword or '' }}"
+                                placeholder="Search problem no, title, location..."
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Search Button -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group mb-0">
+
+                            <label>
+                                &nbsp;
+                            </label>
+
+                            <div>
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+
+                                    <i class="fas fa-search mr-1"></i>
+
+                                    Search
+
+                                </button>
+
+
+                                <a
+                                    href="{{ url_for('kaizen.select_problem') }}"
+                                    class="btn btn-secondary"
+                                >
+
+                                    <i class="fas fa-sync-alt mr-1"></i>
+
+                                    Reset
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             PROBLEM TABLE
+        ================================================== -->
+
+        <div class="card-body p-0">
+
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover mb-0">
+
+
+                    <!-- ==================================================
+                         TABLE HEADER
+                    ================================================== -->
+
+                    <thead class="thead-light">
+
+                        <tr>
+
+
+                            <th
+                                width="60"
+                                class="text-center"
+                            >
+                                No
+                            </th>
+
+
+                            <th>
+                                Problem No
+                            </th>
+
+
+                            <th>
+                                Date
+                            </th>
+
+
+                            <th>
+                                Department
+                            </th>
+
+
+                            <th>
+                                Category
+                            </th>
+
+
+                            <th>
+                                Title
+                            </th>
+
+
+                            <th>
+                                Location
+                            </th>
+
+
+                            <th
+                                class="text-center"
+                                width="100"
+                            >
+                                Priority
+                            </th>
+
+
+                            <th
+                                class="text-center"
+                                width="100"
+                            >
+                                Status
+                            </th>
+
+
+                            <th
+                                class="text-center"
+                                width="100"
+                            >
+                                Action
+                            </th>
+
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <!-- ==================================================
+                         TABLE BODY
+                    ================================================== -->
+
+                    <tbody>
+
+
+                    {% if problems and problems.items %}
+
+
+                        {% for problem in problems.items %}
+
+
+                        <tr>
+
+
+                            <!-- No -->
+
+                            <td class="text-center">
+
+                                {{ problems.first + loop.index0 }}
+
+                            </td>
+
+
+
+                            <!-- Problem No -->
+
+                            <td>
+
+                                <strong>
+
+                                    {{ problem.problem_no }}
+
+                                </strong>
+
+                            </td>
+
+
+
+                            <!-- Problem Date -->
+
+                            <td>
+
+                                {% if problem.problem_date %}
+
+                                    {{ problem.problem_date.strftime(
+                                        "%d/%m/%Y"
+                                    ) }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- Department -->
+
+                            <td>
+
+                                {% if problem.department %}
+
+                                    {{ problem.department.department_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- Category -->
+
+                            <td>
+
+                                {% if problem.problem_category %}
+
+                                    {{ problem.problem_category.problem_category_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+
+                            <!-- Title -->
+
+                            <td>
+
+                                {{ problem.title }}
+
+                            </td>
+
+
+
+                            <!-- Location -->
+
+                            <td>
+
+                                {{ problem.problem_location or "-" }}
+
+                            </td>
+
+
+
+                            <!-- Priority -->
+
+                            <td class="text-center">
+
+
+                                {% if problem.priority == "High" %}
+
+                                    <span class="badge badge-danger">
+
+                                        High
+
+                                    </span>
+
+
+                                {% elif problem.priority == "Medium" %}
+
+                                    <span class="badge badge-warning">
+
+                                        Medium
+
+                                    </span>
+
+
+                                {% elif problem.priority == "Low" %}
+
+                                    <span class="badge badge-success">
+
+                                        Low
+
+                                    </span>
+
+
+                                {% else %}
+
+                                    <span class="badge badge-secondary">
+
+                                        {{ problem.priority or "-" }}
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- Status -->
+
+                            <td class="text-center">
+
+
+                                {% if problem.status == "Open" %}
+
+                                    <span class="badge badge-success">
+
+                                        Open
+
+                                    </span>
+
+
+                                {% elif problem.status == "In Progress" %}
+
+                                    <span class="badge badge-warning">
+
+                                        In Progress
+
+                                    </span>
+
+
+                                {% elif problem.status == "Closed" %}
+
+                                    <span class="badge badge-secondary">
+
+                                        Closed
+
+                                    </span>
+
+
+                                {% else %}
+
+                                    <span class="badge badge-info">
+
+                                        {{ problem.status or "-" }}
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- Action -->
+
+                            <td class="text-center">
+
+
+                                <a
+                                    href="{{ url_for(
+                                        'kaizen.create_from_problem',
+                                        problem_id=problem.id
+                                    ) }}"
+                                    class="btn btn-primary btn-sm"
+                                    title="Select Problem"
+                                >
+
+                                    <i class="fas fa-check mr-1"></i>
+
+                                    Select
+
+                                </a>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="10"
+                                class="text-center py-4"
+                            >
+
+                                <div class="text-muted">
+
+                                    <i class="fas fa-info-circle mr-1"></i>
+
+                                    No problem found.
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                    {% endif %}
+
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ==================================================
+             PAGINATION INFORMATION
+        ================================================== -->
+
+        {% if problems %}
+
+        <div class="card-footer">
+
+
+            <div class="d-flex justify-content-between align-items-center">
+
+
+                <div>
+
+                    Showing
+
+                    <strong>
+                        {{ problems.first or 0 }}
+                    </strong>
+
+                    to
+
+                    <strong>
+                        {{ problems.last or 0 }}
+                    </strong>
+
+                    of
+
+                    <strong>
+                        {{ problems.total }}
+                    </strong>
+
+                    problem(s)
+
+                </div>
+
+
+
+                <!-- Pagination -->
+
+                {% if problems.pages > 1 %}
+
+                <ul class="pagination pagination-sm mb-0">
+
+
+                    <!-- Previous -->
+
+                    {% if problems.has_prev %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'kaizen.select_problem',
+                                page=problems.prev_num,
+                                keyword=keyword,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            &laquo;
+
+                        </a>
+
+                    </li>
+
+                    {% else %}
+
+                    <li class="page-item disabled">
+
+                        <span class="page-link">
+                            &laquo;
+                        </span>
+
+                    </li>
+
+                    {% endif %}
+
+
+
+                    <!-- Page Numbers -->
+
+                    {% for page_num in problems.iter_pages(
+                        left_edge=1,
+                        left_current=2,
+                        right_current=2,
+                        right_edge=1
+                    ) %}
+
+
+                        {% if page_num %}
+
+
+                            {% if page_num == problems.page %}
+
+                            <li class="page-item active">
+
+                                <span class="page-link">
+
+                                    {{ page_num }}
+
+                                </span>
+
+                            </li>
+
+
+                            {% else %}
+
+                            <li class="page-item">
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'kaizen.select_problem',
+                                        page=page_num,
+                                        keyword=keyword,
+                                        sort=sort_by,
+                                        order=sort_order
+                                    ) }}"
+                                >
+
+                                    {{ page_num }}
+
+                                </a>
+
+                            </li>
+
+                            {% endif %}
+
+
+                        {% else %}
+
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+                                    ...
+                                </span>
+
+                            </li>
+
+                        {% endif %}
+
+
+                    {% endfor %}
+
+
+
+                    <!-- Next -->
+
+                    {% if problems.has_next %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'kaizen.select_problem',
+                                page=problems.next_num,
+                                keyword=keyword,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}"
+                        >
+
+                            &raquo;
+
+                        </a>
+
+                    </li>
+
+                    {% else %}
+
+                    <li class="page-item disabled">
+
+                        <span class="page-link">
+                            &raquo;
+                        </span>
+
+                    </li>
+
+                    {% endif %}
+
+
+                </ul>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,576 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    <!-- ========================================== -->
+    <!-- BRAND -->
+    <!-- ========================================== -->
+
+    <a href="{{ url_for('dashboard.index') }}" class="brand-link">
+        <span class="brand-text font-weight-light">
+            CIMS
+        </span>
+    </a>
+
+
+    <div class="sidebar">
+
+        <!-- ====================================== -->
+        <!-- USER PANEL -->
+        <!-- ====================================== -->
+
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+            <div class="image">
+                <i class="fas fa-user-circle text-white" style="font-size: 30px;">
+                </i>
+            </div>
+
+            <div class="info">
+                <a href="#" class="d-block">
+                    {{ current_user.username }}
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- NAVIGATION -->
+        <!-- ====================================== -->
+
+        <nav class="mt-2">
+
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+
+                <!-- ================================== -->
+                <!-- GENERAL -->
+                <!-- ================================== -->
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('dashboard.my_dashboard') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-home"></i>
+
+                        <p>
+                            Dashboard
+                        </p>
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('line.connect') }}" class="nav-link">
+
+                        <i class="nav-icon fab fa-line"></i>
+
+                        <p>
+                            Connect LINE
+                        </p>
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('auth.change_password') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-key"></i>
+
+                        <p>
+                            Change Password
+                        </p>
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('issue.index') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-bug"></i>
+
+                        <p>
+                            Issue System
+                        </p>
+
+                    </a>
+
+                </li>
+
+
+                <!-- ================================== -->
+                <!-- TRANSACTION -->
+                <!-- ================================== -->
+
+                <li class="nav-header">
+                    TRANSACTION
+                </li>
+
+
+                <!-- Problem -->
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('problem.index') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-exclamation-circle"></i>
+
+                        <p>
+                            Problem
+                        </p>
+
+                    </a>
+
+                </li>
+
+
+                <!-- Improvement -->
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('improvement.index') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-lightbulb"></i>
+
+                        <p>
+                            Improvement
+                        </p>
+
+                    </a>
+
+                </li>
+
+
+                <!-- Kaizen -->
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('kaizen.index') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-chart-line"></i>
+
+                        <p>
+                            Kaizen
+                        </p>
+
+                    </a>
+
+                </li>
+
+                <!-- Kaizen Target vs Result -->
+<li class="nav-item">
+    <a
+        href="{{ url_for('kaizen_target_result.index') }}"
+        class="nav-link"
+    >
+        <i class="fas fa-chart-bar nav-icon"></i>
+        <p>Kaizen Target vs Result</p>
+    </a>
+</li>
+
+                <!-- Award Result -->
+
+                <li class="nav-item">
+
+                    <a href="{{ url_for('kaizen_award_result.index') }}" class="nav-link">
+
+                        <i class="nav-icon fas fa-award"></i>
+
+                        <p>
+                            Award Result
+                        </p>
+
+                    </a>
+
+                </li>
+                
+
+                {% if current_user.role_code in ["ADMIN", "KZN"] %}
+
+                <!-- Kaizen Reporting Period -->
+                <li class="nav-item">
+                    <a href="{{ url_for('kaizen_reporting_period.index') }}" class="nav-link">
+                        <i class="far fa-calendar-alt nav-icon"></i>
+                        <p>
+                            Kaizen Period
+                        </p>
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+                <!-- Kaizen Award Period -->
+                {% if current_user.role_code in ["ADMIN", "KZN", "SUPERVISOR"] %}
+
+                <li class="nav-item">
+                    <a href="{{ url_for('kaizen_award_period.index') }}" class="nav-link">
+                        <i class="fas fa-trophy nav-icon"></i>
+                        <p>
+                            Kaizen Award Period
+                        </p>
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+                {% if current_user.role_code in ["ADMIN", "KZN"] %}
+
+                <!-- Kaizen Department Target -->
+                <li class="nav-item">
+                    <a href="{{ url_for('kaizen_department_target.index') }}" class="nav-link">
+                        <i class="fas fa-bullseye nav-icon"></i>
+                        <p>
+                            Kaizen Target
+                        </p>
+                    </a>
+                </li>
+
+                {% endif %}
+
+
+                {% if current_user.role_code == "ADMIN" %}
+                <!-- ================================== -->
+                <!-- MASTER DATA -->
+                <!-- ================================== -->
+
+                <li class="nav-header">
+                    MASTER DATA
+                </li>
+
+
+                <!-- Master Data Tree -->
+
+                <li class="nav-item">
+
+                    <a href="#" class="nav-link">
+
+                        <i class="nav-icon fas fa-database"></i>
+
+                        <p>
+                            Master Data
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+
+                    </a>
+
+
+                    <ul class="nav nav-treeview">
+
+
+                        <!-- Department -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('department.index') }}" class="nav-link">
+
+                                <i class="far fa-building nav-icon"></i>
+
+                                <p>
+                                    Department
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Problem Category -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('problem_category.index') }}" class="nav-link">
+
+                                <i class="fas fa-tags nav-icon"></i>
+
+                                <p>
+                                    Problem Category
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Kaizen Category -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('kaizen_category.index') }}" class="nav-link">
+
+                                <i class="fas fa-tags nav-icon"></i>
+
+                                <p>
+                                    Kaizen Category
+                                </p>
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </li>
+
+                {% endif %}
+                <!-- ================================== -->
+                <!-- ADMINISTRATION -->
+                <!-- ================================== -->
+
+                {% if current_user.role_code == "ADMIN" %}
+
+                <li class="nav-header">
+                    ADMINISTRATION
+                </li>
+
+
+                <!-- ================================== -->
+                <!-- USER MANAGEMENT -->
+                <!-- ================================== -->
+
+                <li class="nav-item">
+
+                    <a href="#" class="nav-link">
+
+                        <i class="nav-icon fas fa-users-cog"></i>
+
+                        <p>
+                            User Management
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+
+                    </a>
+
+
+                    <ul class="nav nav-treeview">
+
+
+                        <!-- Employee -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('employee.index') }}" class="nav-link">
+
+                                <i class="fas fa-user-tie nav-icon"></i>
+
+                                <p>
+                                    Employee
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- User -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('user.index') }}" class="nav-link">
+
+                                <i class="fas fa-users nav-icon"></i>
+
+                                <p>
+                                    User
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Role -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('role.index') }}" class="nav-link">
+
+                                <i class="fas fa-user-tag nav-icon"></i>
+
+                                <p>
+                                    Role
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Permission -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('permission.index') }}" class="nav-link">
+
+                                <i class="fas fa-key nav-icon"></i>
+
+                                <p>
+                                    Permission
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+
+                </li>
+
+
+                <!-- ================================== -->
+                <!-- AUTHORITY -->
+                <!-- ================================== -->
+
+                <li class="nav-item">
+
+                    <a href="#" class="nav-link">
+
+                        <i class="nav-icon fas fa-user-shield"></i>
+
+                        <p>
+                            Authority
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+
+                    </a>
+
+
+                    <ul class="nav nav-treeview">
+
+
+                        <!-- Problem Assignment -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('problem_assignment_authority.index') }}" class="nav-link">
+
+                                <i class="fas fa-user-check nav-icon"></i>
+
+                                <p>
+                                    Problem Assignment
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Improvement Approval -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('improvement_approval_authority.index') }}" class="nav-link">
+
+                                <i class="fas fa-user-check nav-icon"></i>
+
+                                <p>
+                                    Improvement Approval
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Kaizen Approval -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('kaizen_approval_authority.index') }}" class="nav-link">
+
+                                <i class="fas fa-user-check nav-icon"></i>
+
+                                <p>
+                                    Kaizen Approval
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+
+                </li>
+
+
+                <!-- ================================== -->
+                <!-- NOTIFICATION -->
+                <!-- ================================== -->
+
+                <li class="nav-item">
+
+                    <a href="#" class="nav-link">
+
+                        <i class="nav-icon fas fa-bell"></i>
+
+                        <p>
+                            Notification
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+
+                    </a>
+
+
+                    <ul class="nav nav-treeview">
+
+
+                        <!-- Notification Recipient -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('notification_rule.index') }}" class="nav-link">
+
+                                <i class="fas fa-user-plus nav-icon"></i>
+
+                                <p>
+                                    Notification Recipient
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- LINE User ID -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('line.user_id_confirmation') }}" class="nav-link">
+
+                                <i class="fab fa-line nav-icon"></i>
+
+                                <p>
+                                    LINE User ID Confirmation
+                                </p>
+
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+
+                </li>
+
+
+                {% endif %}
+
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+</aside>

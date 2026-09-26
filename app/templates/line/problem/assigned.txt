@@ -1,0 +1,18 @@
+🔔 CIMS - Problem Assigned
+
+Problem No: {{ problem.problem_no }}
+Title: {{ problem.title }}
+Priority: {{ problem.priority }}
+Status: {{ problem.status }}
+Source: {{ problem.problem_source }}
+Location: {{ problem.problem_location }}
+Department: {% if problem.department %}{{ problem.department.department_name }}{% else %}-{% endif %}
+Reporter: {% if problem.reporter %}{{ problem.reporter.full_name }}{% else %}-{% endif %}
+Problem Date: {% if problem.problem_date %}{{ problem.problem_date.strftime('%d-%m-%Y') }}{% else %}-{% endif %}
+
+PIC:
+{% if problem.problem_pics %}{% for pic in problem.problem_pics %}{% if pic.is_active and pic.employee %}- {{ pic.employee.full_name }}{% if pic.is_leader %} (Leader){% else %} (PIC){% endif %}
+{% endif %}{% endfor %}{% else %}- No PIC assigned
+{% endif %}
+You have been assigned to this Problem.
+Please check CIMS for details.

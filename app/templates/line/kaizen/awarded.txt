@@ -1,0 +1,18 @@
+🏆 CIMS - Kaizen Award Result
+
+Award Code: {{ award_period.award_code }}
+Award Name: {{ award_period.award_name }}
+Period: {{ award_period.start_date.strftime('%d-%m-%Y') }} - {{ award_period.end_date.strftime('%d-%m-%Y') }}
+Status: Closed
+
+🏆 TOP 5 KAIZEN
+
+{% if top_5 %}{% for item in top_5 %}{% if loop.index == 1 %}🥇 1. {{ item[0].kaizen_no }}{% elif loop.index == 2 %}🥈 2. {{ item[0].kaizen_no }}{% elif loop.index == 3 %}🥉 3. {{ item[0].kaizen_no }}{% else %}{{ loop.index }}. {{ item[0].kaizen_no }}{% endif %}
+Title: {{ item[0].title }}
+Score: {{ "%.2f"|format(item[2]|float) }}
+
+{% endfor %}{% else %}No Kaizen score data available for this award period.
+
+{% endif %}Congratulations to the Top 5 Kaizen contributors.
+
+Please check CIMS for more details.

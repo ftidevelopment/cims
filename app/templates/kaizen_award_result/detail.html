@@ -1,0 +1,781 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Kaizen Award Result Detail
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* =====================================================
+       PAGE
+       ====================================================== */
+
+    .award-result-detail-page {
+        width: 100%;
+        padding: 20px;
+    }
+
+
+    /* =====================================================
+       HEADER
+       ====================================================== */
+
+    .detail-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .detail-subtitle {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       CARD
+       ====================================================== */
+
+    .detail-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    .detail-card-header {
+        padding: 13px 16px;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+    }
+
+    .detail-card-body {
+        padding: 18px;
+    }
+
+
+    /* =====================================================
+       INFORMATION
+       ====================================================== */
+
+    .info-label {
+        display: block;
+        font-size: 12px;
+        color: #6c757d;
+        margin-bottom: 3px;
+    }
+
+    .info-value {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       SCORE SUMMARY
+       ====================================================== */
+
+    .score-summary-box {
+        border: 1px solid #dee2e6;
+        border-radius: 7px;
+        padding: 15px;
+        text-align: center;
+        background: #f8f9fa;
+    }
+
+    .score-summary-label {
+        font-size: 12px;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+
+    .score-summary-value {
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+
+    /* =====================================================
+       TABLE
+       ====================================================== */
+
+    .score-table {
+        margin-bottom: 0;
+    }
+
+    .score-table th {
+        background: #f8f9fa;
+        font-size: 13px;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .score-table td {
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .score-value {
+        text-align: right;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       COMMENT
+       ====================================================== */
+
+    .judge-comment {
+        white-space: pre-line;
+    }
+
+
+    /* =====================================================
+       EMPTY
+       ====================================================== */
+
+    .empty-score {
+        padding: 40px;
+        text-align: center;
+        color: #6c757d;
+    }
+
+
+    /* =====================================================
+       READ ONLY
+       ====================================================== */
+
+    .readonly-label {
+        font-size: 11px;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: .3px;
+    }
+
+</style>
+
+
+<div class="award-result-detail-page">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <div class="detail-title">
+
+                <i class="fas fa-trophy mr-2"></i>
+
+                Kaizen Award Result Detail
+
+            </div>
+
+            <div class="detail-subtitle">
+
+                Read-only result from closed Kaizen Award period.
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{{ url_for(
+                    'kaizen_award_result.index',
+                    award_period_id=award_period.id
+                ) }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back to Result
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         AWARD PERIOD INFORMATION
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-calendar-alt mr-2"></i>
+
+            Award Period
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+            <div class="row">
+
+
+                <!-- Award Code -->
+
+                <div class="col-md-3 mb-3">
+
+                    <span class="info-label">
+                        Award Code
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ award_period.award_code }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Award Name -->
+
+                <div class="col-md-3 mb-3">
+
+                    <span class="info-label">
+                        Award Name
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ award_period.award_name }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Period -->
+
+                <div class="col-md-4 mb-3">
+
+                    <span class="info-label">
+                        Period
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ award_period.start_date.strftime('%d %b %Y') }}
+
+                        -
+
+                        {{ award_period.end_date.strftime('%d %b %Y') }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-2 mb-3">
+
+                    <span class="info-label">
+                        Status
+                    </span>
+
+                    <span class="badge badge-secondary">
+
+                        <i class="fas fa-lock mr-1"></i>
+
+                        CLOSED
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         KAIZEN INFORMATION
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-lightbulb mr-2"></i>
+
+            Kaizen Information
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+            <div class="row">
+
+
+                <!-- Kaizen No -->
+
+                <div class="col-md-3 mb-3">
+
+                    <span class="info-label">
+                        Kaizen No
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ kaizen.kaizen_no }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="col-md-3 mb-3">
+
+                    <span class="info-label">
+                        Category
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if kaizen.kaizen_category %}
+
+                            {{ kaizen.kaizen_category.kaizen_category_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="col-md-3 mb-3">
+
+                    <span class="info-label">
+                        Department
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if kaizen.department %}
+
+                            {{ kaizen.department.department_name }}
+
+                        {% elif kaizen.problem
+                              and kaizen.problem.department %}
+
+                            {{ kaizen.problem.department.department_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Approved Date -->
+
+                <div class="col-md-3 mb-3">
+
+                    <span class="info-label">
+                        Approved Date
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if kaizen.approved_at %}
+
+                            {{ kaizen.approved_at.strftime(
+                                '%d %b %Y'
+                            ) }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <!-- Title -->
+
+                <div class="col-md-12">
+
+                    <span class="info-label">
+                        Title
+                    </span>
+
+                    <div class="font-weight-bold">
+
+                        {{ kaizen.title or "-" }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SCORE SUMMARY
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-chart-bar mr-2"></i>
+
+            Score Summary
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+            <div class="row">
+
+
+                <!-- Judges -->
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="score-summary-box">
+
+                        <div class="score-summary-label">
+
+                            Judges Scored
+
+                        </div>
+
+                        <div class="score-summary-value">
+
+                            {{ judges_scored }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Total Score -->
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="score-summary-box">
+
+                        <div class="score-summary-label">
+
+                            Total Score
+
+                        </div>
+
+                        <div class="score-summary-value">
+
+                            {{ "{:,.2f}".format(
+                                total_score|float
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Average -->
+
+                <div class="col-md-4 mb-3">
+
+                    <div class="score-summary-box">
+
+                        <div class="score-summary-label">
+
+                            Average Score
+
+                        </div>
+
+                        <div class="score-summary-value">
+
+                            {{ "{:,.2f}".format(
+                                average_score|float
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JUDGES SCORE
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-user-tie mr-2"></i>
+
+            Judges Score
+
+            <span class="float-right readonly-label">
+
+                Read Only
+
+            </span>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            {% if scores %}
+
+                <table class="table table-bordered table-hover score-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width: 60px;">
+                                No
+                            </th>
+
+                            <th>
+                                Judge
+                            </th>
+
+                            <th class="text-center">
+                                Score
+                            </th>
+
+                            <th>
+                                Comment
+                            </th>
+
+                            <th>
+                                Scored At
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for score in scores %}
+
+                            <tr>
+
+
+                                <!-- No -->
+
+                                <td class="text-center">
+
+                                    {{ loop.index }}
+
+                                </td>
+
+
+                                <!-- Judge -->
+
+                                <td>
+
+                                    {% if score.judge_employee %}
+
+                                        <strong>
+
+                                            {{ score.judge_employee.employee_code
+                                            if score.judge_employee.employee_code
+                                            else score.judge_employee.id }}
+
+                                        </strong>
+
+                                        {% if score.judge_employee.name %}
+
+                                            <div class="text-muted small">
+
+                                                {{ score.judge_employee.name }}
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Score -->
+
+                                <td class="score-value">
+
+                                    {{ "{:,.2f}".format(
+                                        score.score|float
+                                    ) }}
+
+                                </td>
+
+
+                                <!-- Comment -->
+
+                                <td>
+
+                                    {% if score.comment %}
+
+                                        <div class="judge-comment">
+
+                                            {{ score.comment }}
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+
+                                            No comment
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Scored At -->
+
+                                <td>
+
+                                    {% if score.scored_at %}
+
+                                        {{ score.scored_at.strftime(
+                                            '%d %b %Y %H:%M'
+                                        ) }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <div class="empty-score">
+
+                    <i class="fas fa-star-half-alt fa-2x mb-2"></i>
+
+                    <div>
+
+                        No score has been recorded
+                        for this Kaizen.
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div class="text-muted small">
+
+            <i class="fas fa-lock mr-1"></i>
+
+            This Award Period is closed.
+            All scoring data is read-only.
+
+        </div>
+
+
+        <a
+            href="{{ url_for(
+                'kaizen_award_result.index',
+                award_period_id=award_period.id
+            ) }}"
+            class="btn btn-secondary"
+        >
+
+            <i class="fas fa-arrow-left mr-1"></i>
+
+            Back to Award Result
+
+        </a>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h3 class="mb-1">
+                Problem Assignment Required
+            </h3>
+
+            <p class="text-muted mb-0">
+                Problems that require your assignment
+            </p>
+        </div>
+
+        <a href="{{ url_for('dashboard.my_dashboard') }}"
+           class="btn btn-secondary">
+
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+    <!-- Summary -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-center">
+
+                <div class="mr-3">
+
+                    <i class="fas fa-tasks fa-2x text-danger"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted">
+                        Problems Waiting for Assignment
+                    </div>
+
+                    <h3 class="mb-0">
+
+                        {{ action_required | length }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Problem List -->
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            <strong>
+                Problems to Assign
+            </strong>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            {% if action_required %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="thead-light">
+
+                        <tr>
+
+                            <th style="width: 140px;">
+                                Problem No.
+                            </th>
+
+                            <th>
+                                Problem
+                            </th>
+
+                            <th style="width: 120px;">
+                                Status
+                            </th>
+
+                            <th style="width: 130px;">
+                                Priority
+                            </th>
+
+                            <th style="width: 140px;">
+                                Problem Date
+                            </th>
+
+                            <th style="width: 120px;">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for action in action_required %}
+
+                        {% set problem = action["item"] %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ problem.problem_no }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                {{ problem.title }}
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="badge badge-warning">
+
+                                    {{ problem.status }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                {% if problem.priority %}
+
+                                    {{ problem.priority }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if problem.problem_date %}
+
+                                    {{ problem.problem_date.strftime(
+                                        '%d-%m-%Y'
+                                    ) }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                <a href="{{ url_for(
+                                    'problem.show',
+                                    problem_id=problem.id
+                                ) }}"
+                                   class="btn btn-sm btn-danger">
+
+                                    <i class="fas fa-user-plus"></i>
+                                    Assign
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="text-center p-5">
+
+                <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+
+                <h5>
+                    No Problem Assignment Required
+                </h5>
+
+                <p class="text-muted mb-0">
+
+                    There are currently no problems waiting for assignment.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

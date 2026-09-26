@@ -1,0 +1,1574 @@
+{% extends "layouts/base.html" %}
+
+{% block public_content %}
+
+<style>
+
+    /* =========================================================
+       PUBLIC PROBLEM DASHBOARD
+       ========================================================= */
+
+    .problem-dashboard {
+        padding-top: 24px;
+        padding-bottom: 30px;
+    }
+
+
+    /* =========================================================
+   DASHBOARD HEADER
+   ========================================================= */
+
+.problem-dashboard .dashboard-header {
+    margin-bottom: 24px;
+    padding: 22px 28px;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    border: 1px solid #e7edf4;
+
+    box-shadow:
+        0 4px 16px rgba(15, 42, 67, 0.06);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   HEADER TITLE AREA
+   ========================================================= */
+
+.problem-dashboard .dashboard-title-wrapper {
+    display: flex;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   HEADER ICON
+   ========================================================= */
+
+.problem-dashboard .dashboard-title-icon {
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f4c81,
+            #1976b8
+        );
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 14px;
+
+    font-size: 21px;
+
+    box-shadow:
+        0 5px 12px rgba(
+            25,
+            118,
+            184,
+            0.25
+        );
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.problem-dashboard .dashboard-title {
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #183247;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   SUBTITLE
+   ========================================================= */
+
+.problem-dashboard .dashboard-subtitle {
+    margin-top: 5px;
+
+    font-size: 14px;
+
+    color: #71849a;
+}
+
+
+/* =========================================================
+   PERIOD
+   ========================================================= */
+
+.problem-dashboard .dashboard-period {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 8px;
+
+    padding: 5px 10px;
+
+    background: #eef6fc;
+
+    color: #1976b8;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.problem-dashboard .dashboard-period i {
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   DASHBOARD NAVIGATION
+   ========================================================= */
+
+.problem-dashboard .dashboard-actions {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+   ========================================================= */
+
+.problem-dashboard .dashboard-actions-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    flex-wrap: wrap;
+}
+
+.problem-dashboard .dashboard-actions-top .btn {
+    margin-left: 7px;
+
+    margin-bottom: 6px;
+
+    border-radius: 7px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   ACTIVE PROBLEM BUTTON
+   ========================================================= */
+
+.problem-dashboard .dashboard-actions-top
+.btn-problem-active {
+    color: #ffffff;
+
+    background-color: #dc3545;
+
+    border-color: #dc3545;
+}
+
+.problem-dashboard .dashboard-actions-top
+.btn-problem-active:hover {
+    color: #ffffff;
+
+    background-color: #c82333;
+
+    border-color: #bd2130;
+}
+
+
+/* =========================================================
+   PROBLEM LIST BUTTON
+   ========================================================= */
+
+.problem-dashboard .dashboard-actions-list {
+    margin-top: 2px;
+}
+
+.problem-dashboard .dashboard-actions-list .btn {
+    margin-left: 7px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   HEADER RESPONSIVE
+   ========================================================= */
+
+    @media (max-width: 768px) {
+
+        .problem-dashboard .dashboard-header {
+
+            padding: 18px;
+
+            align-items: flex-start;
+
+        }
+
+
+        .problem-dashboard .dashboard-title {
+
+            font-size: 22px;
+
+        }
+
+
+        .problem-dashboard .dashboard-title-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            font-size: 18px;
+
+        }
+
+
+        .problem-dashboard .dashboard-actions {
+
+            width: 100%;
+
+            align-items: flex-start;
+
+        }
+
+
+        .problem-dashboard .dashboard-actions-top {
+
+            width: 100%;
+
+            justify-content: flex-start;
+
+        }
+
+
+        .problem-dashboard .dashboard-actions-top .btn {
+
+            margin-left: 0;
+
+            margin-right: 6px;
+
+        }
+
+
+        .problem-dashboard .dashboard-actions-list {
+
+            margin-top: 5px;
+
+        }
+
+
+        .problem-dashboard .dashboard-actions-list .btn {
+
+            margin-left: 0;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       CLICKABLE DASHBOARD CARD
+       ========================================================= */
+
+    .dashboard-clickable {
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .dashboard-clickable:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        text-decoration: none !important;
+    }
+
+    .dashboard-clickable:hover h3,
+    .dashboard-clickable:hover p,
+    .dashboard-clickable:hover .info-box-text,
+    .dashboard-clickable:hover .info-box-number {
+        text-decoration: none;
+    }
+
+
+    /* =========================================================
+       SMALL BOX
+       ========================================================= */
+
+    .small-box {
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    .small-box .inner {
+        min-height: 105px;
+    }
+
+    .small-box h3 {
+        font-weight: 600;
+    }
+
+    .small-box p {
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       INFO BOX
+       ========================================================= */
+
+    .info-box {
+        min-height: 85px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    .info-box-icon {
+        border-radius: 6px 0 0 6px;
+    }
+
+    .info-box-text {
+        font-size: 13px;
+    }
+
+    .info-box-number {
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .dashboard-card {
+        border-radius: 6px;
+    }
+
+    .dashboard-card .card-header {
+        font-weight: 600;
+    }
+
+    .dashboard-card .card-title {
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       PERIOD LABEL
+       ========================================================= */
+
+    .period-label {
+        font-size: 12px;
+        color: #6c757d;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       CHART
+       ========================================================= */
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    .dashboard-navigation {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-navigation .btn {
+        margin-right: 5px;
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 767.98px) {
+
+        .dashboard-header h3 {
+            font-size: 20px;
+        }
+
+        .small-box .inner {
+            min-height: 95px;
+        }
+
+        .chart-container {
+            height: 250px;
+        }
+
+    }
+
+</style>
+
+
+<div class="container-fluid problem-dashboard">
+
+
+
+    <!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<div class="dashboard-header">
+
+
+    <!-- =====================================================
+         TITLE
+         ===================================================== -->
+
+    <div class="dashboard-title-wrapper">
+
+
+        <!-- HEADER ICON -->
+
+        <div class="dashboard-title-icon">
+
+            <i class="fas fa-exclamation-triangle"></i>
+
+        </div>
+
+
+        <!-- TITLE CONTENT -->
+
+        <div>
+
+            <h1 class="dashboard-title">
+
+                Problem Dashboard
+
+            </h1>
+
+
+            <div class="dashboard-subtitle">
+
+                Public Problem Monitoring
+
+            </div>
+
+
+            {% if dashboard.period %}
+
+            <div class="dashboard-period">
+
+                <i class="far fa-calendar-alt"></i>
+
+
+                {{ dashboard.period.start_date.strftime(
+                    '%d %b %Y'
+                ) }}
+
+
+                <span class="mx-1">
+                    -
+                </span>
+
+
+                {{ dashboard.period.end_date.strftime(
+                    '%d %b %Y'
+                ) }}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVIGATION
+         ===================================================== -->
+
+    <div class="dashboard-actions">
+
+
+        <!-- =================================================
+             TOP NAVIGATION
+             ================================================= -->
+
+        <!-- =================================================
+     TOP NAVIGATION
+     ================================================= -->
+
+<div class="dashboard-actions-top">
+
+
+    <!-- PERFORMANCE DASHBOARD -->
+
+    <a
+        href="{{ url_for(
+            'dashboard.index'
+        ) }}"
+        class="btn btn-outline-primary btn-sm"
+    >
+
+        <i class="fas fa-chart-line mr-1"></i>
+
+        Performance
+
+    </a>
+
+
+    <!-- PROBLEM - ACTIVE -->
+
+    <a
+        href="{{ url_for(
+            'problem_dashboard.index'
+        ) }}"
+        class="btn btn-problem-active btn-sm"
+    >
+
+        <i class="fas fa-exclamation-triangle mr-1"></i>
+
+        Problem
+
+    </a>
+
+
+    <!-- IMPROVEMENT -->
+
+    <a
+        href="{{ url_for(
+            'improvement_dashboard.index'
+        ) }}"
+        class="btn btn-outline-success btn-sm"
+    >
+
+        <i class="fas fa-tools mr-1"></i>
+
+        Improvement
+
+    </a>
+
+
+    <!-- KAIZEN -->
+
+    <a
+        href="{{ url_for(
+            'kaizen_dashboard.index'
+        ) }}"
+        class="btn btn-outline-warning btn-sm"
+    >
+
+        <i class="fas fa-lightbulb mr-1"></i>
+
+        Kaizen
+
+    </a>
+
+
+    <!-- LOGIN -->
+
+    <a
+        href="{{ url_for(
+            'auth.login'
+        ) }}"
+        class="btn btn-primary btn-sm"
+    >
+
+        <i class="fas fa-sign-in-alt mr-1"></i>
+
+        Login
+
+    </a>
+
+</div>
+
+        <!-- =================================================
+             PROBLEM LIST
+             ================================================= -->
+
+        <div class="dashboard-actions-list">
+
+            <a
+                href="{{ url_for(
+                    'problem_dashboard.problems'
+                ) }}"
+                class="btn btn-outline-primary btn-sm"
+            >
+
+                <i class="fas fa-list mr-1"></i>
+
+                Problem List
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+    <!-- =========================================================
+         KPI SUMMARY
+         ========================================================= -->
+
+    <div class="row">
+
+
+        <!-- =====================================================
+             OPEN PROBLEM
+             ===================================================== -->
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+
+            <a
+                href="{{ url_for(
+                    'problem_dashboard.problems',
+                    status='Open'
+                ) }}"
+                class="small-box bg-primary dashboard-clickable"
+                style="display: block; color: inherit;"
+            >
+
+                <div class="inner">
+
+                    <h3>
+                        {{ dashboard.summary.open }}
+                    </h3>
+
+                    <p>
+                        Open Problem
+                    </p>
+
+                </div>
+
+                <div class="icon">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             ON PROGRESS
+             ===================================================== -->
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+
+            <a
+                href="{{ url_for(
+                    'problem_dashboard.problems',
+                    status='On Progress'
+                ) }}"
+                class="small-box bg-warning dashboard-clickable"
+                style="display: block; color: inherit;"
+            >
+
+                <div class="inner">
+
+                    <h3>
+                        {{ dashboard.summary.on_progress }}
+                    </h3>
+
+                    <p>
+                        On Progress
+                    </p>
+
+                </div>
+
+                <div class="icon">
+                    <i class="fas fa-spinner"></i>
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             TOTAL OPEN
+             ===================================================== -->
+
+        <div class="col-lg-2 col-md-4 col-sm-6">
+
+            <a
+                href="{{ url_for(
+                    'problem_dashboard.problems',
+                    open_only='true'
+                ) }}"
+                class="small-box bg-info dashboard-clickable"
+                style="display: block; color: inherit;"
+            >
+
+                <div class="inner">
+
+                    <h3>
+                        {{ dashboard.summary.total_open }}
+                    </h3>
+
+                    <p>
+                        Total Open
+                    </p>
+
+                </div>
+
+                <div class="icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             TOTAL PROBLEM
+             ===================================================== -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <a
+                href="{{ url_for(
+                    'problem_dashboard.problems',
+                    period='6_months'
+                ) }}"
+                class="small-box bg-success dashboard-clickable"
+                style="display: block; color: inherit;"
+            >
+
+                <div class="inner">
+
+                    <h3>
+                        {{ dashboard.summary.total_problem }}
+                    </h3>
+
+                    <p>
+                        Total Problem - 6 Months
+                    </p>
+
+                </div>
+
+                <div class="icon">
+                    <i class="fas fa-list"></i>
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             PROBLEM LOSS
+             ===================================================== -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <a
+                href="{{ url_for(
+                    'problem_dashboard.problems',
+                    period='6_months'
+                ) }}"
+                class="small-box bg-danger dashboard-clickable"
+                style="display: block; color: inherit;"
+            >
+
+                <div class="inner">
+
+                    <h3>
+
+                        {{ "{:,.0f}".format(
+                            dashboard.summary.total_loss
+                        ) }}
+
+                    </h3>
+
+                    <p>
+                        Problem Loss - 6 Months
+                    </p>
+
+                </div>
+
+                <div class="icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         AGING
+         ========================================================= -->
+
+    <div class="card dashboard-card card-outline card-primary">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+
+                <i class="fas fa-hourglass-half mr-1"></i>
+
+                Problem Aging
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- =================================================
+                     0 - 7 DAYS
+                     ================================================= -->
+
+                <div class="col-lg col-md-4 col-sm-6">
+
+                    <a
+                        href="{{ url_for(
+                            'problem_dashboard.problems',
+                            aging='0_7'
+                        ) }}"
+                        class="info-box dashboard-clickable"
+                        style="display: flex; color: inherit;"
+                    >
+
+                        <span class="info-box-icon bg-success">
+
+                            <i class="fas fa-clock"></i>
+
+                        </span>
+
+                        <div class="info-box-content">
+
+                            <span class="info-box-text">
+                                0 - 7 Days
+                            </span>
+
+                            <span class="info-box-number">
+
+                                {{ dashboard.aging["0_7"] }}
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- =================================================
+                     8 - 14 DAYS
+                     ================================================= -->
+
+                <div class="col-lg col-md-4 col-sm-6">
+
+                    <a
+                        href="{{ url_for(
+                            'problem_dashboard.problems',
+                            aging='8_14'
+                        ) }}"
+                        class="info-box dashboard-clickable"
+                        style="display: flex; color: inherit;"
+                    >
+
+                        <span class="info-box-icon bg-info">
+
+                            <i class="fas fa-clock"></i>
+
+                        </span>
+
+                        <div class="info-box-content">
+
+                            <span class="info-box-text">
+                                8 - 14 Days
+                            </span>
+
+                            <span class="info-box-number">
+
+                                {{ dashboard.aging["8_14"] }}
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- =================================================
+                     15 - 30 DAYS
+                     ================================================= -->
+
+                <div class="col-lg col-md-4 col-sm-6">
+
+                    <a
+                        href="{{ url_for(
+                            'problem_dashboard.problems',
+                            aging='15_30'
+                        ) }}"
+                        class="info-box dashboard-clickable"
+                        style="display: flex; color: inherit;"
+                    >
+
+                        <span class="info-box-icon bg-warning">
+
+                            <i class="fas fa-clock"></i>
+
+                        </span>
+
+                        <div class="info-box-content">
+
+                            <span class="info-box-text">
+                                15 - 30 Days
+                            </span>
+
+                            <span class="info-box-number">
+
+                                {{ dashboard.aging["15_30"] }}
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- =================================================
+                     31 - 60 DAYS
+                     ================================================= -->
+
+                <div class="col-lg col-md-4 col-sm-6">
+
+                    <a
+                        href="{{ url_for(
+                            'problem_dashboard.problems',
+                            aging='31_60'
+                        ) }}"
+                        class="info-box dashboard-clickable"
+                        style="display: flex; color: inherit;"
+                    >
+
+                        <span
+                            class="info-box-icon"
+                            style="
+                                background-color: #fd7e14;
+                                color: #fff;
+                            "
+                        >
+
+                            <i class="fas fa-clock"></i>
+
+                        </span>
+
+                        <div class="info-box-content">
+
+                            <span class="info-box-text">
+                                31 - 60 Days
+                            </span>
+
+                            <span class="info-box-number">
+
+                                {{ dashboard.aging["31_60"] }}
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- =================================================
+                     > 60 DAYS
+                     ================================================= -->
+
+                <div class="col-lg col-md-4 col-sm-6">
+
+                    <a
+                        href="{{ url_for(
+                            'problem_dashboard.problems',
+                            aging='over_60'
+                        ) }}"
+                        class="info-box dashboard-clickable"
+                        style="display: flex; color: inherit;"
+                    >
+
+                        <span class="info-box-icon bg-danger">
+
+                            <i class="fas fa-exclamation-triangle"></i>
+
+                        </span>
+
+                        <div class="info-box-content">
+
+                            <span class="info-box-text">
+                                &gt; 60 Days
+                            </span>
+
+                            <span class="info-box-number">
+
+                                {{ dashboard.aging["over_60"] }}
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         CHARTS
+         ========================================================= -->
+
+    <div class="row">
+
+
+        <!-- =====================================================
+             PROBLEM TREND
+             ===================================================== -->
+
+        <div class="col-lg-6">
+
+            <div class="card dashboard-card card-outline card-primary">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-chart-line mr-1"></i>
+
+                        Problem Trend
+
+                    </h3>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="problemTrendChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PROBLEM LOSS TREND
+             ===================================================== -->
+
+        <div class="col-lg-6">
+
+            <div class="card dashboard-card card-outline card-danger">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-chart-bar mr-1"></i>
+
+                        Problem Loss Trend
+
+                    </h3>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="problemLossChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =============================================================
+     CHART.JS
+     ============================================================= -->
+
+<script src="{{ url_for(
+    'static',
+    filename='js/chart.js'
+) }}"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           CHECK CHART.JS
+           ===================================================== */
+
+        if (typeof Chart === "undefined") {
+
+            console.error(
+                "Chart.js is not loaded."
+            );
+
+            return;
+
+        }
+
+
+        /* =====================================================
+           PROBLEM TREND DATA
+           ===================================================== */
+
+        const problemTrendLabels = [
+
+            {% for item in dashboard.trend %}
+
+            "{{ item.label }}"
+
+            {% if not loop.last %}
+                ,
+            {% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const problemTrendData = [
+
+            {% for item in dashboard.trend %}
+
+            {{ item.total }}
+
+            {% if not loop.last %}
+                ,
+            {% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        /* =====================================================
+           PROBLEM LOSS DATA
+           ===================================================== */
+
+        const problemLossLabels = [
+
+            {% for item in dashboard.loss_trend %}
+
+            "{{ item.label }}"
+
+            {% if not loop.last %}
+                ,
+            {% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const problemLossData = [
+
+            {% for item in dashboard.loss_trend %}
+
+            {{ item.loss }}
+
+            {% if not loop.last %}
+                ,
+            {% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        /* =====================================================
+           DEBUG DATA
+           ===================================================== */
+
+        console.log(
+            "Problem Trend Labels:",
+            problemTrendLabels
+        );
+
+        console.log(
+            "Problem Trend Data:",
+            problemTrendData
+        );
+
+        console.log(
+            "Problem Loss Labels:",
+            problemLossLabels
+        );
+
+        console.log(
+            "Problem Loss Data:",
+            problemLossData
+        );
+
+
+        /* =====================================================
+           PROBLEM TREND CHART
+           ===================================================== */
+
+        const problemTrendCanvas =
+            document.getElementById(
+                "problemTrendChart"
+            );
+
+
+        if (problemTrendCanvas) {
+
+            new Chart(
+
+                problemTrendCanvas,
+
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels:
+                            problemTrendLabels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Problem",
+
+                                data:
+                                    problemTrendData,
+
+                                tension:
+                                    0.35,
+
+                                fill:
+                                    false,
+
+                                borderWidth:
+                                    3,
+
+                                pointRadius:
+                                    4,
+
+                                pointHoverRadius:
+                                    6
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive:
+                            true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display:
+                                    false
+
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label:
+                                        function (context) {
+
+                                            return " " +
+
+                                                Number(
+                                                    context.raw
+                                                ).toLocaleString(
+                                                    "id-ID"
+                                                );
+
+                                        }
+
+                                }
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display:
+                                        false
+
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                ticks: {
+
+                                    precision:
+                                        0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        /* =====================================================
+           PROBLEM LOSS CHART
+           ===================================================== */
+
+        const problemLossCanvas =
+            document.getElementById(
+                "problemLossChart"
+            );
+
+
+        if (problemLossCanvas) {
+
+            new Chart(
+
+                problemLossCanvas,
+
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels:
+                            problemLossLabels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Problem Loss",
+
+                                data:
+                                    problemLossData,
+
+                                borderWidth:
+                                    1
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        responsive:
+                            true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display:
+                                    false
+
+                            },
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label:
+                                        function (context) {
+
+                                            return " Rp " +
+
+                                                Number(
+                                                    context.raw
+                                                ).toLocaleString(
+                                                    "id-ID"
+                                                );
+
+                                        }
+
+                                }
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display:
+                                        false
+
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                ticks: {
+
+                                    callback:
+                                        function (value) {
+
+                                            return "Rp " +
+
+                                                Number(
+                                                    value
+                                                ).toLocaleString(
+                                                    "id-ID"
+                                                );
+
+                                        }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    }
+
+);
+
+</script>
+
+{% endblock %}

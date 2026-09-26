@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Improvement Implemented
+    </title>
+
+</head>
+
+<body
+    style="
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333333;
+    "
+>
+
+    <table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        style="
+            background-color: #f4f6f8;
+            padding: 30px 10px;
+        "
+    >
+
+        <tr>
+
+            <td align="center">
+
+                <!-- ==========================================
+                     Main Container
+                =========================================== -->
+
+                <table
+                    width="700"
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                    style="
+                        max-width: 700px;
+                        width: 100%;
+                        background-color: #ffffff;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        border: 1px solid #dddddd;
+                    "
+                >
+
+                    <!-- ======================================
+                         Header
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                background-color: #1f4e78;
+                                padding: 25px 30px;
+                                color: #ffffff;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                    margin-bottom: 6px;
+                                "
+                            >
+                                CIMS
+                            </div>
+
+                            <div
+                                style="
+                                    font-size: 15px;
+                                "
+                            >
+                                Improvement Implemented
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Introduction
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                padding: 30px;
+                            "
+                        >
+
+                            <p
+                                style="
+                                    margin: 0 0 15px 0;
+                                    font-size: 16px;
+                                "
+                            >
+                                Dear CIMS User,
+                            </p>
+
+                            <p
+                                style="
+                                    margin: 0 0 15px 0;
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                "
+                            >
+                                An improvement has been
+                                implemented in the Continuous
+                                Improvement Management System
+                                (CIMS).
+                            </p>
+
+                            <p
+                                style="
+                                    margin: 0;
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                "
+                            >
+                                The implementation result has
+                                been recorded in CIMS. Please
+                                review the information below.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Improvement Information
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                padding: 0 30px 25px 30px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-size: 17px;
+                                    font-weight: bold;
+                                    color: #1f4e78;
+                                    margin-bottom: 12px;
+                                "
+                            >
+                                Improvement Information
+                            </div>
+
+
+                            <table
+                                width="100%"
+                                cellpadding="8"
+                                cellspacing="0"
+                                border="0"
+                                style="
+                                    border-collapse: collapse;
+                                    font-size: 14px;
+                                "
+                            >
+
+                                <tr>
+
+                                    <td
+                                        width="180"
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Improvement No
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ improvement.improvement_no }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Title
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ improvement.title }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Related Problem
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ problem.problem_no }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Problem Title
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ problem.title }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Priority
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ problem.priority }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Problem Status
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ problem.status }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Improvement Owner
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+
+                                        {% if improvement.owner_employee %}
+
+                                            {{ improvement.owner_employee.full_name }}
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Implementation Result
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                padding: 0 30px 25px 30px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-size: 17px;
+                                    font-weight: bold;
+                                    color: #1f4e78;
+                                    margin-bottom: 12px;
+                                "
+                            >
+                                Implementation Result
+                            </div>
+
+
+                            <div
+                                style="
+                                    background-color: #f8f9fa;
+                                    border: 1px solid #dddddd;
+                                    padding: 15px;
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                    white-space: pre-line;
+                                "
+                            >
+
+                                {% if improvement.implementation_result %}
+
+                                    {{ improvement.implementation_result }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Improvement Plan
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                padding: 0 30px 25px 30px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-size: 17px;
+                                    font-weight: bold;
+                                    color: #1f4e78;
+                                    margin-bottom: 12px;
+                                "
+                            >
+                                Improvement Plan
+                            </div>
+
+
+                            <div
+                                style="
+                                    background-color: #f8f9fa;
+                                    border: 1px solid #dddddd;
+                                    padding: 15px;
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                    white-space: pre-line;
+                                "
+                            >
+
+                                {% if improvement.improvement_plan %}
+
+                                    {{ improvement.improvement_plan }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Cost & Benefit
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                padding: 0 30px 25px 30px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-size: 17px;
+                                    font-weight: bold;
+                                    color: #1f4e78;
+                                    margin-bottom: 12px;
+                                "
+                            >
+                                Cost &amp; Benefit
+                            </div>
+
+
+                            <table
+                                width="100%"
+                                cellpadding="8"
+                                cellspacing="0"
+                                border="0"
+                                style="
+                                    border-collapse: collapse;
+                                    font-size: 14px;
+                                "
+                            >
+
+                                <tr>
+
+                                    <td
+                                        width="180"
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Improvement Cost
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ improvement.improvement_cost }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Estimated Time Saving
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ improvement.estimated_time_saving }}
+                                        minutes
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Estimated Cost Saving
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ improvement.estimated_cost_saving }}
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td
+                                        style="
+                                            font-weight: bold;
+                                            background-color: #f1f3f5;
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        Estimated Benefit
+                                    </td>
+
+                                    <td
+                                        style="
+                                            border: 1px solid #dddddd;
+                                        "
+                                    >
+                                        {{ improvement.estimated_benefit }}
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Improvement PIC
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                padding: 0 30px 25px 30px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-size: 17px;
+                                    font-weight: bold;
+                                    color: #1f4e78;
+                                    margin-bottom: 12px;
+                                "
+                            >
+                                Improvement PIC
+                            </div>
+
+
+                            {% if improvement.improvement_pics %}
+
+                                <table
+                                    width="100%"
+                                    cellpadding="8"
+                                    cellspacing="0"
+                                    border="0"
+                                    style="
+                                        border-collapse: collapse;
+                                        font-size: 14px;
+                                    "
+                                >
+
+                                    <tr>
+
+                                        <th
+                                            align="left"
+                                            style="
+                                                background-color: #f1f3f5;
+                                                border: 1px solid #dddddd;
+                                            "
+                                        >
+                                            No
+                                        </th>
+
+                                        <th
+                                            align="left"
+                                            style="
+                                                background-color: #f1f3f5;
+                                                border: 1px solid #dddddd;
+                                            "
+                                        >
+                                            Employee
+                                        </th>
+
+                                        <th
+                                            align="left"
+                                            style="
+                                                background-color: #f1f3f5;
+                                                border: 1px solid #dddddd;
+                                            "
+                                        >
+                                            Role
+                                        </th>
+
+                                    </tr>
+
+
+                                    {% for pic in improvement.improvement_pics %}
+
+                                        {% if pic.is_active and pic.employee %}
+
+                                            <tr>
+
+                                                <td
+                                                    style="
+                                                        border: 1px solid #dddddd;
+                                                    "
+                                                >
+                                                    {{ loop.index }}
+                                                </td>
+
+                                                <td
+                                                    style="
+                                                        border: 1px solid #dddddd;
+                                                    "
+                                                >
+                                                    {{ pic.employee.full_name }}
+                                                </td>
+
+                                                <td
+                                                    style="
+                                                        border: 1px solid #dddddd;
+                                                    "
+                                                >
+
+                                                    {% if pic.is_leader %}
+
+                                                        Leader
+
+                                                    {% else %}
+
+                                                        PIC
+
+                                                    {% endif %}
+
+                                                </td>
+
+                                            </tr>
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                </table>
+
+                            {% else %}
+
+                                <div
+                                    style="
+                                        padding: 15px;
+                                        background-color: #f8f9fa;
+                                        border: 1px solid #dddddd;
+                                        font-size: 14px;
+                                    "
+                                >
+                                    No Improvement PIC assigned.
+                                </div>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Action
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            align="center"
+                            style="
+                                padding: 5px 30px 30px 30px;
+                            "
+                        >
+
+                            <a
+                                href="{{ cims_url }}"
+                                style="
+                                    display: inline-block;
+                                    padding: 12px 24px;
+                                    background-color: #1f4e78;
+                                    color: #ffffff;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    font-size: 14px;
+                                    font-weight: bold;
+                                "
+                            >
+                                Open CIMS
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ======================================
+                         Footer
+                    ======================================= -->
+
+                    <tr>
+
+                        <td
+                            style="
+                                background-color: #f1f3f5;
+                                padding: 20px 30px;
+                                text-align: center;
+                                font-size: 12px;
+                                color: #777777;
+                                line-height: 1.5;
+                            "
+                        >
+
+                            This is an automated notification
+                            from CIMS.
+
+                            <br>
+
+                            Please do not reply to this email.
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</body>
+
+</html>

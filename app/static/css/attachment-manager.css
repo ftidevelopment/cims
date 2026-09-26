@@ -1,0 +1,194 @@
+/* ==========================================================
+   Attachment Manager
+   Reusable Component for CIMS
+========================================================== */
+
+/* ==========================================
+   Upload Area
+========================================== */
+
+.attachment-manager .custom-file-label {
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+.attachment-manager .custom-file-label::after {
+
+    content: "Browse";
+
+}
+
+/* ==========================================
+   Selected Files
+========================================== */
+
+.attachment-list {
+
+    margin-top: 15px;
+
+}
+
+.attachment-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 10px 15px;
+
+    border: 1px solid #dee2e6;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    margin-bottom: 8px;
+
+    transition: all .2s;
+
+}
+
+.attachment-item:hover {
+
+    background: #f8f9fa;
+
+}
+
+/* ==========================================
+   File Information
+========================================== */
+
+.attachment-info {
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    flex: 1;
+
+}
+
+.attachment-info i {
+
+    font-size: 18px;
+
+    width: 24px;
+
+    text-align: center;
+
+    margin-right: 10px;
+
+}
+
+.attachment-name {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-weight: 500;
+
+}
+
+.attachment-size {
+
+    margin-left: 10px;
+
+    color: #6c757d;
+
+    font-size: .85rem;
+
+}
+
+/* ==========================================
+   Remove Button
+========================================== */
+
+.attachment-remove {
+
+    margin-left: 15px;
+
+}
+
+/* ==========================================
+   Existing Attachment
+========================================== */
+
+.existing-attachment {
+
+    margin-top: 20px;
+
+}
+
+.existing-attachment .attachment-item {
+
+    background: #fcfcfc;
+
+}
+
+/* ==========================================
+   Empty State
+========================================== */
+
+.attachment-empty {
+
+    border: 2px dashed #ced4da;
+
+    border-radius: 6px;
+
+    text-align: center;
+
+    padding: 20px;
+
+    color: #6c757d;
+
+    background: #fafafa;
+
+}
+
+.attachment-empty i {
+
+    font-size: 24px;
+
+    margin-bottom: 10px;
+
+    display: block;
+
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:768px){
+
+    .attachment-item{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .attachment-remove{
+
+        margin-top:10px;
+
+        margin-left:0;
+
+        width:100%;
+
+    }
+
+}

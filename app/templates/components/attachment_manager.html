@@ -1,0 +1,223 @@
+<!-- =====================================================
+Attachment Manager
+Reusable Component
+Version : 2.0
+====================================================== -->
+
+<div class="form-group attachment-manager">
+
+    <!-- ==========================================
+    Upload
+    ========================================== -->
+
+    <label>
+
+        Attachment
+
+    </label>
+
+    <div class="custom-file">
+
+        <input
+            type="file"
+            id="{{ input_id | default('attachments') }}"
+            name="{{ field_name | default('attachments') }}"
+            class="custom-file-input"
+            multiple
+            accept=".jpg,.jpeg,.png,.pdf,.xls,.xlsx">
+
+        <label
+            class="custom-file-label"
+            for="{{ input_id | default('attachments') }}">
+
+            Add Files
+
+        </label>
+
+    </div>
+
+    <small class="form-text text-muted">
+
+        Allowed :
+        JPG, PNG, PDF, XLS, XLSX
+
+        <br>
+
+        Maximum File Size :
+        10 MB
+
+    </small>
+
+    <!-- ==========================================
+    Selected Files
+    ========================================== -->
+
+    <div class="mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+
+            <label class="mb-0">
+
+                Selected Files
+
+            </label>
+
+            <span class="badge badge-primary">
+
+                <span id="attachment-count">
+
+                    0
+
+                </span>
+
+                File(s)
+
+            </span>
+
+        </div>
+
+        <div
+            id="{{ list_id | default('attachment-list') }}"
+            class="attachment-list">
+
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+    Existing Attachments
+    ========================================== -->
+
+    {% if attachments %}
+
+    <div class="existing-attachment mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+
+            <label class="mb-0">
+
+                Existing Attachment
+
+            </label>
+
+            <span class="badge badge-secondary">
+
+                {{ attachments|length }}
+
+                File(s)
+
+            </span>
+
+        </div>
+
+        {% for attachment in attachments %}
+
+        <div class="attachment-item">
+
+            <!-- ===========================
+            File Information
+            ============================ -->
+
+            <div class="attachment-info">
+
+                {% if attachment.is_image %}
+
+                <i class="fas fa-image text-success"></i>
+
+                {% elif attachment.extension|lower == "pdf" %}
+
+                <i class="fas fa-file-pdf text-danger"></i>
+
+                {% elif attachment.extension|lower in ["xls","xlsx"] %}
+
+                <i class="fas fa-file-excel text-success"></i>
+
+                {% else %}
+
+                <i class="fas fa-paperclip text-secondary"></i>
+
+                {% endif %}
+
+                <span class="attachment-name">
+
+                    {{ attachment.original_name }}
+
+                </span>
+
+                <span class="attachment-size">
+
+                    {{ attachment.extension|upper }}
+
+                </span>
+
+            </div>
+
+            <!-- ===========================
+            Action
+            ============================ -->
+
+            <div class="attachment-action">
+
+                <!-- Preview -->
+
+                {% if attachment.is_image %}
+
+                <a
+                    href="{{ url_for(
+                        'problem_attachment.preview',
+                        attachment_id=attachment.id
+                    ) }}"
+                    class="btn btn-outline-info btn-sm"
+                    target="_blank"
+                    title="Preview">
+
+                    <i class="fas fa-eye"></i>
+
+                </a>
+
+                {% endif %}
+
+                <!-- Download -->
+
+                <a
+                    href="{{ url_for(
+                        'problem_attachment.download',
+                        attachment_id=attachment.id
+                    ) }}"
+                    class="btn btn-outline-success btn-sm"
+                    title="Download">
+
+                    <i class="fas fa-download"></i>
+
+                </a>
+
+                <!-- Delete -->
+
+                <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm btn-delete"
+
+                    data-name="{{ attachment.original_name }}"
+
+                    data-url="{{ url_for(
+                        'problem_attachment.delete',
+                        attachment_id=attachment.id
+                    ) }}"
+
+                    title="Delete">
+
+                    <i class="fas fa-trash"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</div>

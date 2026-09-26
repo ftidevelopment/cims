@@ -1,0 +1,1541 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h4 class="mb-1">
+                Notification Recipient
+            </h4>
+
+            <div class="text-muted">
+                Configure notification recipients
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('notification_rule.index') }}"
+            class="btn btn-secondary"
+        >
+
+            Back
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         NOTIFICATION CONFIGURATION
+    ====================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+
+        <!-- =================================================
+             CARD HEADER
+        ================================================== -->
+
+        <div class="card-header">
+
+            <strong>
+                Notification Configuration
+            </strong>
+
+        </div>
+
+
+        <!-- =================================================
+             CARD BODY
+        ================================================== -->
+
+        <div class="card-body">
+
+
+            <form
+                method="GET"
+                action="{{ url_for('notification_rule.create') }}"
+            >
+
+
+                <!-- ==========================================
+                     MODULE / EVENT / DEPARTMENT
+                =========================================== -->
+
+                <div class="row g-3">
+
+
+                    <!-- ======================================
+                         MODULE
+                    ======================================= -->
+
+                    <div class="col-md-4">
+
+                        <label
+                            for="moduleSelect"
+                            class="form-label"
+                        >
+
+                            Module
+
+                        </label>
+
+
+                        <select
+                            name="module"
+                            id="moduleSelect"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+
+                                -- Select Module --
+
+                            </option>
+
+
+                            {% for module in modules %}
+
+                            <option
+                                value="{{ module }}"
+                                {% if module == selected_module %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ module }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         EVENT
+                    ======================================= -->
+
+                    <div class="col-md-4">
+
+                        <label
+                            for="eventSelect"
+                            class="form-label"
+                        >
+
+                            Event
+
+                        </label>
+
+
+                        <select
+                            name="event"
+                            id="eventSelect"
+                            class="form-select"
+                            required
+                            {% if not selected_module %}
+                            disabled
+                            {% endif %}
+                        >
+
+                            <option value="">
+
+                                -- Select Event --
+
+                            </option>
+
+
+                            {% for event in events %}
+
+                            <option
+                                value="{{ event }}"
+                                {% if event == selected_event %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ event }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         DEPARTMENT
+                    ======================================= -->
+
+                    <div class="col-md-4">
+
+                        <label
+                            for="departmentSelect"
+                            class="form-label"
+                        >
+
+                            Department
+
+                        </label>
+
+
+                        <!--
+                            IMPORTANT:
+
+                            Department MUST NOT be disabled
+                            when searching by NIK.
+
+                            Department is the SOURCE department
+                            of the notification.
+
+                            Example:
+
+                            Production
+                                ↓
+                            Create Problem
+                                ↓
+                            Budi - Purchasing
+                        -->
+
+                        <select
+                            name="department_id"
+                            id="departmentSelect"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+
+                                -- Select Department --
+
+                            </option>
+
+
+                            {% for department in departments %}
+
+                            <option
+                                value="{{ department.id }}"
+
+                                {% if department.id
+                                    == selected_department_id %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ department.department_code }}
+                                -
+                                {{ department.department_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <div class="form-text">
+
+                            Select the department where the
+                            notification event originates.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SEARCH EMPLOYEE BY NIK
+                ================================================== -->
+
+                <div class="row mt-3">
+
+                    <div class="col-md-6">
+
+
+                        <label
+                            for="nikInput"
+                            class="form-label"
+                        >
+
+                            Search Employee by NIK
+
+                        </label>
+
+
+                        <div class="input-group">
+
+
+                            <input
+                                type="text"
+                                name="nik"
+                                id="nikInput"
+                                class="form-control"
+                                placeholder="Enter Employee NIK"
+                                value="{{ selected_nik or '' }}"
+                                autocomplete="off"
+                            >
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                name="search_type"
+                                value="nik"
+                                title="Search employee by NIK"
+                                id="searchNikButton"
+                            >
+
+                                <i class="bi bi-search"></i>
+
+                                Search NIK
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="form-text">
+
+                            Search employee by NIK.
+
+                            <strong>
+                                The employee may belong to
+                                another department.
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACTION BUTTONS
+                ================================================== -->
+
+                <div class="mt-3 d-flex gap-2">
+
+
+                    <!-- ==========================================
+                         LOAD BY DEPARTMENT
+                    =========================================== -->
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        name="search_type"
+                        value="department"
+                        id="loadEmployeesButton"
+                    >
+
+                        <i class="bi bi-people"></i>
+
+                        Load Employees
+
+                    </button>
+
+
+                    <!-- ==========================================
+                         CLEAR SEARCH
+                    =========================================== -->
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        id="clearSearchButton"
+                    >
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Clear
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EMPLOYEE CONFIGURATION
+    ====================================================== -->
+
+    {% if selected_module
+        and selected_event
+        and selected_department_id
+    %}
+
+
+    <form
+        method="POST"
+        action="{{ url_for('notification_rule.create') }}"
+    >
+
+
+        <!-- =================================================
+             HIDDEN MODULE
+        ================================================== -->
+
+        <input
+            type="hidden"
+            name="module"
+            value="{{ selected_module }}"
+        >
+
+
+        <!-- =================================================
+             HIDDEN EVENT
+        ================================================== -->
+
+        <input
+            type="hidden"
+            name="event"
+            value="{{ selected_event }}"
+        >
+
+
+        <!-- =================================================
+             HIDDEN DEPARTMENT
+        ================================================== -->
+
+        <!--
+            IMPORTANT:
+
+            Always preserve selected department.
+
+            Department = SOURCE department.
+        -->
+
+        <input
+            type="hidden"
+            name="department_id"
+            value="{{ selected_department_id }}"
+        >
+
+
+        <!-- =================================================
+             HIDDEN NIK
+        ================================================== -->
+
+        <input
+            type="hidden"
+            name="nik"
+            value="{{ selected_nik or '' }}"
+        >
+
+
+        <!-- =================================================
+             HIDDEN SEARCH TYPE
+        ================================================== -->
+
+        <input
+            type="hidden"
+            name="search_type"
+            value="{{ search_type }}"
+        >
+
+
+        <!-- =================================================
+             EMPLOYEE CARD
+        ================================================== -->
+
+        <div class="card shadow-sm">
+
+
+            <!-- =================================================
+                 CARD HEADER
+            ================================================== -->
+
+            <div class="card-header">
+
+                <div
+                    class="d-flex justify-content-between align-items-center"
+                >
+
+
+                    <strong>
+
+                        Notification Recipients
+
+                    </strong>
+
+
+                    <span class="text-muted">
+
+                        {{ employees|length }}
+
+                        employee(s)
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EMPLOYEE TABLE
+            ================================================== -->
+
+            <div class="card-body p-0">
+
+
+                {% if employees %}
+
+
+                <div class="table-responsive">
+
+
+                    <table
+                        class="table table-hover mb-0 align-middle"
+                    >
+
+
+                        <thead class="table-light">
+
+
+                            <tr>
+
+
+                                <!-- ==================================
+                                     SELECT
+                                =================================== -->
+
+                                <th
+                                    style="width: 50px;"
+                                    class="text-center"
+                                >
+
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        id="selectAll"
+                                        title="Select all employees"
+                                    >
+
+                                </th>
+
+
+                                <!-- ==================================
+                                     EMPLOYEE
+                                =================================== -->
+
+                                <th>
+
+                                    Employee
+
+                                </th>
+
+
+                                <!-- ==================================
+                                     NIK
+                                =================================== -->
+
+                                <th>
+
+                                    NIK
+
+                                </th>
+
+
+                                <!-- ==================================
+                                     DEPARTMENT
+                                =================================== -->
+
+                                <th>
+
+                                    Department
+
+                                </th>
+
+
+                                <!-- ==================================
+                                     EMAIL
+                                =================================== -->
+
+                                <th>
+
+                                    Email
+
+                                </th>
+
+
+                                <!-- ==================================
+                                     EMAIL CHANNEL
+                                =================================== -->
+
+                                <th
+                                    class="text-center"
+                                    style="width: 100px;"
+                                >
+
+                                    Email
+
+                                </th>
+
+
+                                <!-- ==================================
+                                     LINE CHANNEL
+                                =================================== -->
+
+                                <th
+                                    class="text-center"
+                                    style="width: 100px;"
+                                >
+
+                                    LINE
+
+                                </th>
+
+
+                            </tr>
+
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            {% for employee in employees %}
+
+
+                            {% set rule =
+                                existing_rules.get(
+                                    employee.id
+                                )
+                            %}
+
+
+                            <tr>
+
+
+                                <!-- ==================================
+                                     EMPLOYEE SELECTION
+                                =================================== -->
+
+                                <td class="text-center">
+
+
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input employee-checkbox"
+                                        name="employee_ids"
+                                        value="{{ employee.id }}"
+
+                                        {% if rule %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+
+                                </td>
+
+
+                                <!-- ==================================
+                                     EMPLOYEE NAME
+                                =================================== -->
+
+                                <td>
+
+
+                                    <strong>
+
+                                        {{ employee.full_name }}
+
+                                    </strong>
+
+
+                                </td>
+
+
+                                <!-- ==================================
+                                     NIK
+                                =================================== -->
+
+                                <td>
+
+                                    {{ employee.nik }}
+
+                                </td>
+
+
+                                <!-- ==================================
+                                     DEPARTMENT
+                                =================================== -->
+
+                                <td>
+
+
+                                    {% if employee.department %}
+
+
+                                        {{ employee.department.department_code }}
+
+                                        -
+
+                                        {{ employee.department.department_name }}
+
+
+                                    {% else %}
+
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+                                <!-- ==================================
+                                     EMAIL
+                                =================================== -->
+
+                                <td>
+
+
+                                    {% if employee.email %}
+
+
+                                        {{ employee.email }}
+
+
+                                    {% else %}
+
+
+                                        <span class="text-muted">
+
+                                            -
+
+                                        </span>
+
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+                                <!-- ==================================
+                                     EMAIL CHANNEL
+                                =================================== -->
+
+                                <td class="text-center">
+
+
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input channel-checkbox email-checkbox"
+
+                                        name="email_enabled_{{ employee.id }}"
+
+                                        value="1"
+
+                                        {% if rule
+                                            and rule.email_enabled %}
+                                        checked
+                                        {% endif %}
+
+                                        {% if not employee.email %}
+                                        disabled
+                                        {% endif %}
+                                    >
+
+
+                                </td>
+
+
+                                <!-- ==================================
+                                     LINE CHANNEL
+                                =================================== -->
+
+                                <td class="text-center">
+
+
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input channel-checkbox line-checkbox"
+
+                                        name="line_enabled_{{ employee.id }}"
+
+                                        value="1"
+
+                                        {% if rule
+                                            and rule.line_enabled %}
+                                        checked
+                                        {% endif %}
+
+                                        {% if not employee.line_user_id %}
+                                        disabled
+                                        {% endif %}
+                                    >
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+                {% else %}
+
+
+                <!-- =================================================
+                     NO EMPLOYEE
+                ================================================== -->
+
+                <div class="p-4 text-center text-muted">
+
+
+                    {% if selected_nik %}
+
+
+                        <i class="bi bi-person-x fs-3 d-block mb-2"></i>
+
+
+                        No active employee found
+                        with NIK:
+
+
+                        <strong>
+
+                            {{ selected_nik }}
+
+                        </strong>
+
+
+                    {% elif selected_department_id %}
+
+
+                        <i class="bi bi-people fs-3 d-block mb-2"></i>
+
+
+                        No active employees found
+                        for the selected department.
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- =================================================
+                 CARD FOOTER
+            ================================================== -->
+
+            {% if employees %}
+
+
+            <div
+                class="card-footer d-flex justify-content-between align-items-center"
+            >
+
+
+                <div class="text-muted">
+
+
+                    <small>
+
+
+                        {% if selected_nik %}
+
+
+                            Employee searched by NIK:
+
+
+                            <strong>
+
+                                {{ selected_nik }}
+
+                            </strong>
+
+
+                            <br>
+
+
+                            <span class="text-info">
+
+                                <i class="bi bi-info-circle"></i>
+
+                                This employee can receive
+                                notifications from the selected
+                                source department even if the
+                                employee belongs to another department.
+
+                            </span>
+
+
+                        {% else %}
+
+
+                            Employees from selected department.
+
+
+                        {% endif %}
+
+
+                        &nbsp;
+
+
+                        Select employees and
+                        notification channels.
+
+
+                    </small>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+
+                    <i class="bi bi-save"></i>
+
+
+                    Save Configuration
+
+                </button>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </form>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =========================================================
+     EVENT CONFIGURATION
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const moduleSelect =
+            document.getElementById(
+                "moduleSelect"
+            );
+
+
+        const eventSelect =
+            document.getElementById(
+                "eventSelect"
+            );
+
+
+        if (
+            !moduleSelect ||
+            !eventSelect
+        ) {
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // Events From Flask
+        // =====================================================
+
+        const eventsByModule =
+            {{ events_by_module | tojson }};
+
+
+        // =====================================================
+        // Populate Events
+        // =====================================================
+
+        function populateEvents(
+            selectedEvent = ""
+        ) {
+
+
+            const module =
+                moduleSelect.value;
+
+
+            // -------------------------------------------------
+            // Clear
+            // -------------------------------------------------
+
+            eventSelect.innerHTML =
+                '<option value="">'
+                + '-- Select Event --'
+                + '</option>';
+
+
+            // -------------------------------------------------
+            // No Module
+            // -------------------------------------------------
+
+            if (!module) {
+
+                eventSelect.disabled =
+                    true;
+
+                return;
+
+            }
+
+
+            // -------------------------------------------------
+            // Get Events
+            // -------------------------------------------------
+
+            const events =
+                eventsByModule[module]
+                || [];
+
+
+            // -------------------------------------------------
+            // Add Events
+            // -------------------------------------------------
+
+            events.forEach(
+                function (event) {
+
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        event;
+
+
+                    option.textContent =
+                        event;
+
+
+                    if (
+                        event === selectedEvent
+                    ) {
+
+                        option.selected =
+                            true;
+
+                    }
+
+
+                    eventSelect.appendChild(
+                        option
+                    );
+
+
+                }
+            );
+
+
+            // -------------------------------------------------
+            // Enable
+            // -------------------------------------------------
+
+            eventSelect.disabled =
+                events.length === 0;
+
+
+        }
+
+
+        // =====================================================
+        // Module Changed
+        // =====================================================
+
+        moduleSelect.addEventListener(
+            "change",
+            function () {
+
+                populateEvents();
+
+            }
+        );
+
+
+        // =====================================================
+        // Initial Load
+        // =====================================================
+
+        const initialEvent =
+            "{{ selected_event }}";
+
+
+        populateEvents(
+            initialEvent
+        );
+
+
+    }
+);
+
+</script>
+
+
+<!-- =========================================================
+     SEARCH NIK
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const nikInput =
+            document.getElementById(
+                "nikInput"
+            );
+
+
+        const departmentSelect =
+            document.getElementById(
+                "departmentSelect"
+            );
+
+
+        const searchNikButton =
+            document.getElementById(
+                "searchNikButton"
+            );
+
+
+        const clearSearchButton =
+            document.getElementById(
+                "clearSearchButton"
+            );
+
+
+        if (
+            !nikInput
+            || !departmentSelect
+        ) {
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // IMPORTANT
+        //
+        // Department MUST remain enabled.
+        //
+        // NIK is only used to search the recipient.
+        //
+        // DO NOT disable departmentSelect.
+        // =====================================================
+
+
+        // =====================================================
+        // SEARCH NIK VALIDATION
+        // =====================================================
+
+        if (searchNikButton) {
+
+            searchNikButton.addEventListener(
+                "click",
+                function (event) {
+
+
+                    // -----------------------------------------
+                    // Department is required
+                    // -----------------------------------------
+
+                    if (
+                        !departmentSelect.value
+                    ) {
+
+
+                        event.preventDefault();
+
+
+                        alert(
+                            "Please select a department first."
+                        );
+
+
+                        departmentSelect.focus();
+
+
+                        return;
+
+                    }
+
+
+                    // -----------------------------------------
+                    // Module is required
+                    // -----------------------------------------
+
+                    const moduleSelect =
+                        document.getElementById(
+                            "moduleSelect"
+                        );
+
+
+                    if (
+                        moduleSelect
+                        && !moduleSelect.value
+                    ) {
+
+
+                        event.preventDefault();
+
+
+                        alert(
+                            "Please select a module first."
+                        );
+
+
+                        moduleSelect.focus();
+
+
+                        return;
+
+                    }
+
+
+                    // -----------------------------------------
+                    // Event is required
+                    // -----------------------------------------
+
+                    const eventSelect =
+                        document.getElementById(
+                            "eventSelect"
+                        );
+
+
+                    if (
+                        eventSelect
+                        && !eventSelect.value
+                    ) {
+
+
+                        event.preventDefault();
+
+
+                        alert(
+                            "Please select an event first."
+                        );
+
+
+                        eventSelect.focus();
+
+
+                        return;
+
+                    }
+
+
+                    // -----------------------------------------
+                    // NIK is required
+                    // -----------------------------------------
+
+                    if (
+                        !nikInput.value.trim()
+                    ) {
+
+
+                        event.preventDefault();
+
+
+                        alert(
+                            "Please enter Employee NIK."
+                        );
+
+
+                        nikInput.focus();
+
+
+                        return;
+
+                    }
+
+
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // ENTER KEY
+        // =====================================================
+
+        nikInput.addEventListener(
+            "keydown",
+            function (event) {
+
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+
+                    if (
+                        !departmentSelect.value
+                    ) {
+
+
+                        event.preventDefault();
+
+
+                        alert(
+                            "Please select a department first."
+                        );
+
+
+                        departmentSelect.focus();
+
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // CLEAR SEARCH
+        // =====================================================
+
+        if (clearSearchButton) {
+
+
+            clearSearchButton.addEventListener(
+                "click",
+                function () {
+
+
+                    const baseUrl =
+                        "{{ url_for(
+                            'notification_rule.create'
+                        ) }}";
+
+
+                    window.location.href =
+                        baseUrl;
+
+
+                }
+            );
+
+
+        }
+
+
+    }
+);
+
+</script>
+
+
+<!-- =========================================================
+     SELECT ALL
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const selectAll =
+            document.getElementById(
+                "selectAll"
+            );
+
+
+        const employeeCheckboxes =
+            document.querySelectorAll(
+                ".employee-checkbox"
+            );
+
+
+        if (!selectAll) {
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // Update Select All State
+        // =====================================================
+
+        function updateSelectAllState() {
+
+
+            if (
+                employeeCheckboxes.length === 0
+            ) {
+
+
+                selectAll.checked =
+                    false;
+
+
+                selectAll.indeterminate =
+                    false;
+
+
+                return;
+
+            }
+
+
+            const checkedCount =
+                document.querySelectorAll(
+                    ".employee-checkbox:checked"
+                ).length;
+
+
+            selectAll.checked =
+                checkedCount ===
+                employeeCheckboxes.length;
+
+
+            selectAll.indeterminate =
+                checkedCount > 0
+                &&
+                checkedCount <
+                employeeCheckboxes.length;
+
+
+        }
+
+
+        // =====================================================
+        // Select All
+        // =====================================================
+
+        selectAll.addEventListener(
+            "change",
+            function () {
+
+
+                employeeCheckboxes.forEach(
+                    function (checkbox) {
+
+
+                        checkbox.checked =
+                            selectAll.checked;
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        // =====================================================
+        // Employee Checkbox
+        // =====================================================
+
+        employeeCheckboxes.forEach(
+            function (checkbox) {
+
+
+                checkbox.addEventListener(
+                    "change",
+                    function () {
+
+
+                        updateSelectAllState();
+
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        // =====================================================
+        // Initial State
+        // =====================================================
+
+        updateSelectAllState();
+
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

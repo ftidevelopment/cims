@@ -1,0 +1,634 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Create Issue{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h4 class="fw-bold mb-1">
+                Create Issue
+            </h4>
+
+            <div class="text-muted small">
+                Report a system issue, error, or improvement request.
+            </div>
+        </div>
+
+        <a href="{{ url_for('issue.index') }}"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+    <form
+        method="POST"
+        action="{{ url_for('issue.create') }}"
+        enctype="multipart/form-data"
+    >
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <!-- =================================================
+                     ISSUE INFORMATION
+                ================================================== -->
+                <div class="mb-4">
+
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">
+
+                        <i class="bi bi-exclamation-circle me-2"></i>
+
+                        Issue Information
+
+                    </h6>
+
+
+                    <div class="row g-3">
+
+                        <!-- Issue No -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Issue No
+                            </label>
+
+                            <div class="form-control bg-light text-muted">
+                                Auto Generated
+                            </div>
+
+                            <div class="form-text">
+                                Issue number will be generated automatically.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Requestor -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Requestor
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {% if current_user.employee %}
+
+                                    {{ current_user.employee.full_name }}
+
+                                    <span class="text-muted">
+                                        ({{ current_user.employee.nik }})
+                                    </span>
+
+                                {% else %}
+
+                                    {{ current_user.username }}
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="form-text">
+                                Requestor is automatically taken from the logged-in user.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Module -->
+                        <div class="col-md-4">
+
+                            <label
+                                for="module"
+                                class="form-label fw-semibold"
+                            >
+
+                                Module
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <select
+                                id="module"
+                                name="module"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Select Module --
+                                </option>
+
+                                {% for value, label in modules %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if form_data and form_data.get('module') == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ label }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Category -->
+                        <div class="col-md-4">
+
+                            <label
+                                for="category"
+                                class="form-label fw-semibold"
+                            >
+
+                                Category
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <select
+                                id="category"
+                                name="category"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Select Category --
+                                </option>
+
+                                {% for value, label in categories %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if form_data and form_data.get('category') == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ label }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Priority -->
+                        <div class="col-md-4">
+
+                            <label
+                                for="priority"
+                                class="form-label fw-semibold"
+                            >
+
+                                Priority
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <select
+                                id="priority"
+                                name="priority"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Select Priority --
+                                </option>
+
+                                {% for value, label in priorities %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if form_data and form_data.get('priority') == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ label }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="col-12">
+
+                            <label
+                                for="description"
+                                class="form-label fw-semibold"
+                            >
+
+                                Description
+
+                                <span class="text-danger">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                class="form-control"
+                                rows="6"
+                                placeholder="Describe the issue clearly..."
+                                required
+                            >{{ form_data.get('description', '') if form_data else '' }}</textarea>
+
+                            <div class="form-text">
+                                Please provide enough information to help the developer understand the issue.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ATTACHMENTS
+                ================================================== -->
+                <div>
+
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">
+
+                        <i class="bi bi-paperclip me-2"></i>
+
+                        Attachments
+
+                    </h6>
+
+
+                    <!-- File Input -->
+                    <div class="mb-3">
+
+                        <label
+                            for="attachments"
+                            class="form-label fw-semibold"
+                        >
+
+                            Select Attachment
+
+                        </label>
+
+                        <input
+                            type="file"
+                            id="attachments"
+                            name="attachments"
+                            class="form-control"
+                            multiple
+                        >
+
+                        <div class="form-text">
+
+                            Multiple files can be selected.
+                            Maximum file size: 10 MB per file.
+                            Attachment description is optional.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         ATTACHMENT TABLE
+                    ================================================== -->
+                    <div
+                        id="attachmentPreview"
+                        class="table-responsive d-none"
+                    >
+
+                        <table
+                            class="table table-sm table-bordered align-middle mb-0"
+                        >
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th
+                                        style="width: 50px;"
+                                        class="text-center"
+                                    >
+                                        #
+                                    </th>
+
+                                    <th>
+                                        File Name
+                                    </th>
+
+                                    <th
+                                        style="width: 120px;"
+                                    >
+                                        Size
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th
+                                        style="width: 70px;"
+                                        class="text-center"
+                                    >
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="attachmentTableBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FORM FOOTER
+            ================================================== -->
+            <div
+                class="card-footer bg-white d-flex justify-content-end gap-2"
+            >
+
+                <a
+                    href="{{ url_for('issue.index') }}"
+                    class="btn btn-outline-secondary"
+                >
+
+                    <i class="bi bi-x-lg me-1"></i>
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    <i class="bi bi-check-lg me-1"></i>
+
+                    Create Issue
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     ATTACHMENT JAVASCRIPT
+========================================================== -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("attachments");
+    const preview = document.getElementById("attachmentPreview");
+    const tableBody = document.getElementById("attachmentTableBody");
+
+    if (!input) {
+        return;
+    }
+
+
+    input.addEventListener("change", function () {
+
+        tableBody.innerHTML = "";
+
+
+        if (!input.files || input.files.length === 0) {
+
+            preview.classList.add("d-none");
+
+            return;
+        }
+
+
+        preview.classList.remove("d-none");
+
+
+        Array.from(input.files).forEach(function (file, index) {
+
+            const row = document.createElement("tr");
+
+
+            // =====================================================
+            // NUMBER
+            // =====================================================
+
+            const numberCell = document.createElement("td");
+
+            numberCell.className = "text-center";
+
+            numberCell.textContent = index + 1;
+
+
+            // =====================================================
+            // FILE NAME
+            // =====================================================
+
+            const nameCell = document.createElement("td");
+
+            const fileName = document.createElement("div");
+
+            fileName.className = "fw-semibold";
+
+            fileName.textContent = file.name;
+
+            nameCell.appendChild(fileName);
+
+
+            // =====================================================
+            // FILE SIZE
+            // =====================================================
+
+            const sizeCell = document.createElement("td");
+
+            sizeCell.textContent = formatFileSize(file.size);
+
+
+            // =====================================================
+            // DESCRIPTION
+            // =====================================================
+
+            const descriptionCell = document.createElement("td");
+
+            const descriptionInput = document.createElement("input");
+
+            descriptionInput.type = "text";
+
+            descriptionInput.className = "form-control form-control-sm";
+
+            descriptionInput.name = "attachment_descriptions";
+
+            descriptionInput.placeholder = "Optional description";
+
+            descriptionInput.maxLength = 500;
+
+            descriptionCell.appendChild(
+                descriptionInput
+            );
+
+
+            // =====================================================
+            // ACTION
+            // =====================================================
+
+            const actionCell = document.createElement("td");
+
+            actionCell.className = "text-center";
+
+
+            const removeButton = document.createElement("button");
+
+            removeButton.type = "button";
+
+            removeButton.className =
+                "btn btn-sm btn-outline-danger";
+
+            removeButton.title = "Remove";
+
+
+            const removeIcon = document.createElement("i");
+
+            removeIcon.className = "bi bi-trash";
+
+
+            removeButton.appendChild(removeIcon);
+
+
+            removeButton.addEventListener(
+                "click",
+                function () {
+
+                    row.remove();
+
+                }
+            );
+
+
+            actionCell.appendChild(
+                removeButton
+            );
+
+
+            // =====================================================
+            // APPEND
+            // =====================================================
+
+            row.appendChild(numberCell);
+
+            row.appendChild(nameCell);
+
+            row.appendChild(sizeCell);
+
+            row.appendChild(descriptionCell);
+
+            row.appendChild(actionCell);
+
+            tableBody.appendChild(row);
+
+        });
+
+    });
+
+
+    // =========================================================
+    // FORMAT FILE SIZE
+    // =========================================================
+
+    function formatFileSize(bytes) {
+
+        if (bytes === 0) {
+            return "0 Bytes";
+        }
+
+
+        const units = [
+            "Bytes",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+
+        const index = Math.floor(
+            Math.log(bytes) / Math.log(1024)
+        );
+
+
+        return (
+            parseFloat(
+                (
+                    bytes /
+                    Math.pow(1024, index)
+                ).toFixed(2)
+            )
+            + " "
+            + units[index]
+        );
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

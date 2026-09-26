@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Kaizen Report - {{ kaizen.kaizen_no }}
+    </title>
+
+
+    <style>
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        @page {
+
+            size: A4;
+
+            margin:
+                18mm
+                15mm
+                18mm
+                15mm;
+
+            @bottom-left {
+
+                content:
+                    "Confidential - For Internal Use Only";
+
+                font-size: 7.5pt;
+
+                color: #777;
+            }
+
+            @bottom-right {
+
+                content:
+                    "Page "
+                    counter(page)
+                    " of "
+                    counter(pages);
+
+                font-size: 7.5pt;
+
+                color: #777;
+            }
+        }
+
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            font-size: 9pt;
+
+            color: #222;
+
+            line-height: 1.45;
+        }
+
+
+        body {
+
+            background: #ffffff;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .document-header {
+
+            width: 100%;
+
+            border-bottom:
+                2px solid #1f4e78;
+
+            padding-bottom: 8px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .header-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            border: none;
+        }
+
+
+        .header-table td {
+
+            border: none;
+
+            vertical-align: middle;
+
+            padding: 0;
+        }
+
+
+        .header-logo {
+
+            width: 75px;
+        }
+
+
+        .header-logo img {
+
+            width: 65px;
+
+            height: auto;
+
+            display: block;
+        }
+
+
+        .company-name {
+
+            font-size: 16pt;
+
+            font-weight: 700;
+
+            color: #1f4e78;
+
+            line-height: 1.15;
+        }
+
+
+        .company-subtitle {
+
+            font-size: 8.5pt;
+
+            color: #555;
+
+            margin-top: 2px;
+        }
+
+
+        .system-name {
+
+            font-size: 8.5pt;
+
+            color: #666;
+
+            margin-top: 4px;
+        }
+
+
+        .header-right {
+
+            width: 145px;
+
+            text-align: right;
+
+            vertical-align: top !important;
+        }
+
+
+        .document-label {
+
+            font-size: 8pt;
+
+            color: #777;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .document-number {
+
+            font-size: 10pt;
+
+            font-weight: 700;
+
+            color: #1f4e78;
+
+            margin-top: 2px;
+        }
+
+
+        /* =========================================================
+           REPORT TITLE
+        ========================================================= */
+
+        .report-title {
+
+            background: #1f4e78;
+
+            color: #ffffff;
+
+            padding:
+                9px
+                12px;
+
+            font-size: 15pt;
+
+            font-weight: 700;
+
+            text-align: center;
+
+            letter-spacing: 0.4px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .report-subtitle {
+
+            text-align: center;
+
+            color: #666;
+
+            font-size: 8pt;
+
+            margin-top: -6px;
+
+            margin-bottom: 14px;
+        }
+
+
+        /* =========================================================
+           SUMMARY
+        ========================================================= */
+
+        .summary-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-bottom: 15px;
+
+            table-layout: fixed;
+        }
+
+
+        .summary-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                6px
+                7px;
+
+            vertical-align: top;
+        }
+
+
+        .summary-label {
+
+            width: 20%;
+
+            background: #f1f4f7;
+
+            font-weight: 700;
+
+            color: #444;
+        }
+
+
+        .summary-value {
+
+            width: 30%;
+        }
+
+
+        .summary-title {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        /* =========================================================
+           SECTION
+        ========================================================= */
+
+        .section {
+
+            margin-top: 13px;
+
+            margin-bottom: 12px;
+
+            page-break-inside: avoid;
+        }
+
+
+        .section-title {
+
+            background: #1f4e78;
+
+            color: #ffffff;
+
+            padding:
+                5px
+                8px;
+
+            font-size: 9.5pt;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+
+        .section-title-light {
+
+            background: #eaf1f7;
+
+            color: #1f4e78;
+
+            border-left:
+                3px solid #1f4e78;
+
+            padding:
+                5px
+                7px;
+
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+
+        /* =========================================================
+           DATA TABLE
+        ========================================================= */
+
+        .data-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .data-table th {
+
+            background: #f1f4f7;
+
+            color: #333;
+
+            border:
+                1px solid #cfd6dd;
+
+            padding:
+                5px
+                6px;
+
+            font-size: 8.5pt;
+
+            font-weight: 700;
+
+            text-align: left;
+
+            vertical-align: middle;
+        }
+
+
+        .data-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                5px
+                6px;
+
+            font-size: 8.5pt;
+
+            vertical-align: top;
+
+            word-wrap: break-word;
+
+            overflow-wrap: break-word;
+        }
+
+
+        .data-table tr {
+
+            page-break-inside: avoid;
+        }
+
+
+        /* =========================================================
+           FIELD TABLE
+        ========================================================= */
+
+        .field-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .field-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                6px
+                7px;
+
+            vertical-align: top;
+
+            word-wrap: break-word;
+        }
+
+
+        .field-label {
+
+            width: 24%;
+
+            background: #f7f8fa;
+
+            font-weight: 700;
+
+            color: #444;
+        }
+
+
+        .field-value {
+
+            width: 76%;
+
+            min-height: 24px;
+        }
+
+
+        /* =========================================================
+           LONG TEXT
+        ========================================================= */
+
+        .text-content {
+
+            white-space: pre-line;
+
+            line-height: 1.5;
+
+            min-height: 25px;
+        }
+
+
+        .empty-content {
+
+            color: #888;
+
+            font-style: italic;
+        }
+
+
+        .empty-data {
+
+            padding: 9px;
+
+            border:
+                1px solid #d9dee5;
+
+            background: #f8f9fa;
+
+            color: #777;
+
+            text-align: center;
+
+            font-size: 8.5pt;
+        }
+
+
+        /* =========================================================
+           VALUE
+        ========================================================= */
+
+        .number {
+
+            text-align: right;
+
+            white-space: nowrap;
+        }
+
+
+        .currency {
+
+            text-align: right;
+
+            white-space: nowrap;
+        }
+
+
+        .highlight-row td {
+
+            background: #eef5fb;
+
+            font-weight: 700;
+        }
+
+
+        .benefit-positive {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        /* =========================================================
+           ATTACHMENT
+        ========================================================= */
+
+        .attachment-name {
+
+            font-weight: 600;
+
+            word-break: break-word;
+        }
+
+
+        .attachment-description {
+
+            color: #555;
+
+            word-break: break-word;
+        }
+
+
+        .attachment-size {
+
+            text-align: right;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           ATTACHMENT EVIDENCE
+        ========================================================= */
+
+        .evidence-container {
+
+            margin-top: 8px;
+        }
+
+
+        .evidence-item {
+
+            margin-bottom: 12px;
+
+            page-break-inside: avoid;
+        }
+
+
+        .evidence-title {
+
+            background: #f1f4f7;
+
+            border:
+                1px solid #d9dee5;
+
+            border-bottom: none;
+
+            padding:
+                5px
+                7px;
+
+            font-weight: 700;
+
+            color: #444;
+        }
+
+
+        .evidence-image {
+
+            border:
+                1px solid #d9dee5;
+
+            padding: 7px;
+
+            text-align: center;
+
+            page-break-inside: avoid;
+        }
+
+
+        .evidence-image img {
+
+            max-width: 100%;
+
+            max-height: 180mm;
+
+            width: auto;
+
+            height: auto;
+
+            display: block;
+
+            margin: 0 auto;
+        }
+
+
+        .evidence-description {
+
+            border:
+                1px solid #d9dee5;
+
+            border-top: none;
+
+            padding:
+                5px
+                7px;
+
+            font-size: 8pt;
+
+            color: #555;
+        }
+
+
+        /* =========================================================
+           APPROVAL
+        ========================================================= */
+
+        .approval-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .approval-table th {
+
+            background: #f1f4f7;
+
+            border:
+                1px solid #cfd6dd;
+
+            padding: 6px;
+
+            font-size: 8.5pt;
+
+            text-align: center;
+        }
+
+
+        .approval-table td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding: 7px;
+
+            vertical-align: top;
+        }
+
+
+        .approval-label {
+
+            width: 25%;
+
+            background: #f7f8fa;
+
+            font-weight: 700;
+        }
+
+
+        .signature-space {
+
+            height: 32px;
+        }
+
+
+        .approval-status {
+
+            font-weight: 700;
+
+            color: #1f4e78;
+        }
+
+
+        .rejected-status {
+
+            font-weight: 700;
+
+            color: #a33a3a;
+        }
+
+
+        /* =========================================================
+           DOCUMENT CONTROL
+        ========================================================= */
+
+        .document-control {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+        }
+
+
+        .document-control td {
+
+            border:
+                1px solid #d9dee5;
+
+            padding:
+                5px
+                6px;
+
+            font-size: 8pt;
+
+            vertical-align: top;
+        }
+
+
+        .document-control-label {
+
+            width: 25%;
+
+            background: #f7f8fa;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           FOOTER MESSAGE
+        ========================================================= */
+
+        .footer-message {
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            font-size: 7.5pt;
+
+            color: #888;
+
+            font-style: italic;
+        }
+
+
+        /* =========================================================
+           UTILITY
+        ========================================================= */
+
+        .text-center {
+
+            text-align: center !important;
+        }
+
+
+        .text-right {
+
+            text-align: right !important;
+        }
+
+
+        .text-muted {
+
+            color: #777;
+        }
+
+
+        .nowrap {
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           PRINT
+        ========================================================= */
+
+        @media print {
+
+            .section-title,
+            .report-title {
+
+                -webkit-print-color-adjust: exact;
+
+                print-color-adjust: exact;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="document-header">
+
+    <table class="header-table">
+
+        <tr>
+
+            <td class="header-logo">
+
+                {% if logo_uri %}
+
+                <img
+                    src="{{ logo_uri }}"
+                    alt="CIMS Logo"
+                >
+
+                {% endif %}
+
+            </td>
+
+
+            <td>
+
+                <div class="company-name">
+                    FOXCONN TECHNOLOGIES INDONESIA
+                </div>
+
+
+                <div class="company-subtitle">
+                    component electronic
+                </div>
+
+
+                <div class="system-name">
+                    CIMS – Continuous Improvement Management System
+                </div>
+
+            </td>
+
+
+            <td class="header-right">
+
+                <div class="document-label">
+                    Document
+                </div>
+
+
+                <div class="document-number">
+                    {{ kaizen.kaizen_no }}
+                </div>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     REPORT TITLE
+========================================================= -->
+
+<div class="report-title">
+
+    KAIZEN REPORT
+
+</div>
+
+
+<div class="report-subtitle">
+
+    Continuous Improvement Documentation
+
+</div>
+
+
+<!-- =========================================================
+     SUMMARY
+========================================================= -->
+
+<table class="summary-table">
+
+    <tr>
+
+        <td class="summary-label">
+            Kaizen No.
+        </td>
+
+        <td class="summary-value">
+            {{ kaizen.kaizen_no or '-' }}
+        </td>
+
+
+        <td class="summary-label">
+            Status
+        </td>
+
+        <td class="summary-value">
+
+            {{ kaizen.status or '-' }}
+
+        </td>
+
+    </tr>
+
+
+    <tr>
+
+        <td class="summary-label">
+            Category
+        </td>
+
+        <td class="summary-value">
+
+            {% if kaizen.kaizen_category %}
+
+                {{ kaizen.kaizen_category.kaizen_category_name }}
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </td>
+
+
+        <td class="summary-label">
+            Department
+        </td>
+
+        <td class="summary-value">
+
+            {% if kaizen.department %}
+
+                {{ kaizen.department.department_name }}
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+
+    <tr>
+
+        <td class="summary-label">
+            Title
+        </td>
+
+        <td
+            class="summary-value summary-title"
+            colspan="3"
+        >
+
+            {{ kaizen.title or '-' }}
+
+        </td>
+
+    </tr>
+
+</table>
+
+
+<!-- =========================================================
+     1. BASIC INFORMATION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        1. BASIC INFORMATION
+
+    </div>
+
+
+    <table class="field-table">
+
+
+        <!-- Kaizen No. -->
+
+        <tr>
+
+            <td class="field-label">
+                Kaizen No.
+            </td>
+
+            <td class="field-value">
+
+                {{ kaizen.kaizen_no or '-' }}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Title -->
+
+        <tr>
+
+            <td class="field-label">
+                Title
+            </td>
+
+            <td class="field-value">
+
+                {{ kaizen.title or '-' }}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Category -->
+
+        <tr>
+
+            <td class="field-label">
+                Category
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.kaizen_category %}
+
+                    {{ kaizen.kaizen_category.kaizen_category_name }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Department -->
+
+        <tr>
+
+            <td class="field-label">
+                Department
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.department %}
+
+                    {{ kaizen.department.department_name }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Creator / PIC -->
+
+        <tr>
+
+            <td class="field-label">
+                Creator / PIC
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.employee %}
+
+                    {{ kaizen.employee.full_name or '-' }}
+
+                    {% if kaizen.employee.nik %}
+
+                        &nbsp;(
+                        {{ kaizen.employee.nik }}
+                        )
+
+                    {% endif %}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Problem -->
+
+        <tr>
+
+            <td class="field-label">
+                Related Problem
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.problem %}
+
+                    {{ kaizen.problem.problem_no or '-' }}
+
+                {% else %}
+
+                    Direct Kaizen
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Improvement -->
+
+        <tr>
+
+            <td class="field-label">
+                Related Improvement
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.improvement %}
+
+                    {{ kaizen.improvement.improvement_no or '-' }}
+
+                {% else %}
+
+                    Direct Kaizen
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Status -->
+
+        <tr>
+
+            <td class="field-label">
+                Status
+            </td>
+
+            <td class="field-value">
+
+                {{ kaizen.status or '-' }}
+
+            </td>
+
+        </tr>
+
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     2. KAIZEN DESCRIPTION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        2. KAIZEN DESCRIPTION
+
+    </div>
+
+
+    <table class="field-table">
+
+        <tr>
+
+            <td class="field-label">
+                Description
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.description %}
+
+                    <div class="text-content">
+
+                        {{ kaizen.description }}
+
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+
+                        No description provided.
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     3. BEFORE CONDITION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        3. BEFORE CONDITION
+
+    </div>
+
+
+    <table class="field-table">
+
+
+        <!-- Condition -->
+
+        <tr>
+
+            <td class="field-label">
+                Before Condition
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.before_condition %}
+
+                    <div class="text-content">
+
+                        {{ kaizen.before_condition }}
+
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+
+                        No before condition provided.
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Value -->
+
+        <tr>
+
+            <td class="field-label">
+                Before Value
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.before_value is not none %}
+
+                    {{ "{:,.2f}".format(
+                        kaizen.before_value
+                    ) }}
+
+                    {% if kaizen.before_unit %}
+
+                        {{ kaizen.before_unit }}
+
+                    {% endif %}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Loss -->
+
+        <tr>
+
+            <td class="field-label">
+                Loss Before
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.loss_before %}
+
+                    <div class="text-content">
+
+                        {{ kaizen.loss_before }}
+
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+
+                        No loss information provided.
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     4. AFTER CONDITION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        4. AFTER CONDITION
+
+    </div>
+
+
+    <table class="field-table">
+
+
+        <!-- Condition -->
+
+        <tr>
+
+            <td class="field-label">
+                After Condition
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.after_condition %}
+
+                    <div class="text-content">
+
+                        {{ kaizen.after_condition }}
+
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+
+                        No after condition provided.
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Value -->
+
+        <tr>
+
+            <td class="field-label">
+                After Value
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.after_value is not none %}
+
+                    {{ "{:,.2f}".format(
+                        kaizen.after_value
+                    ) }}
+
+                    {% if kaizen.after_unit %}
+
+                        {{ kaizen.after_unit }}
+
+                    {% endif %}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <!-- Benefit -->
+
+        <tr>
+
+            <td class="field-label">
+                Benefit
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.benefit %}
+
+                    <div class="text-content">
+
+                        {{ kaizen.benefit }}
+
+                    </div>
+
+                {% else %}
+
+                    <span class="empty-content">
+
+                        No benefit information provided.
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     5. COST SAVING
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        5. COST SAVING
+
+    </div>
+
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+
+                <th style="width: 60%;">
+                    Item
+                </th>
+
+                <th
+                    style="width: 40%;"
+                    class="text-right"
+                >
+                    Value
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            <tr class="highlight-row">
+
+                <td>
+                    Cost Saving
+                </td>
+
+                <td class="currency benefit-positive">
+
+                    {% if kaizen.cost_saving is not none %}
+
+                        {{ "{:,.2f}".format(
+                            kaizen.cost_saving
+                        ) }}
+
+                    {% else %}
+
+                        0.00
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <div
+        class="text-muted"
+        style="
+            margin-top: 5px;
+            font-size: 7.5pt;
+        "
+    >
+
+        Cost saving is based on the value recorded
+        in the Kaizen record.
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     6. IMPLEMENTATION
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        6. IMPLEMENTATION
+
+    </div>
+
+
+    <table class="field-table">
+
+        <tr>
+
+            <td class="field-label">
+                Implementation Date
+            </td>
+
+            <td class="field-value">
+
+                {% if kaizen.implementation_date %}
+
+                    {{ kaizen.implementation_date.strftime(
+                        '%d-%m-%Y'
+                    ) }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     7. ATTACHMENT LIST
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        7. ATTACHMENT LIST
+
+    </div>
+
+
+    {% if kaizen.attachments %}
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+
+                <th
+                    style="width: 7%;"
+                    class="text-center"
+                >
+                    No.
+                </th>
+
+                <th style="width: 28%;">
+                    File
+                </th>
+
+                <th style="width: 17%;">
+                    Attachment Type
+                </th>
+
+                <th style="width: 16%;">
+                    File Type
+                </th>
+
+                <th
+                    style="width: 13%;"
+                    class="text-right"
+                >
+                    Size
+                </th>
+
+                <th style="width: 19%;">
+                    Description
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+            {% for attachment in kaizen.attachments|sort(
+                attribute="sort_order"
+            ) %}
+
+
+            <tr>
+
+
+                <td class="text-center">
+
+                    {{ loop.index }}
+
+                </td>
+
+
+                <td>
+
+                    <div class="attachment-name">
+
+                        {{ attachment.file_name or '-' }}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    {{ attachment.attachment_type or '-' }}
+
+                </td>
+
+
+                <td>
+
+                    {{ attachment.file_type or '-' }}
+
+                </td>
+
+
+                <td class="attachment-size">
+
+
+                    {% if attachment.file_size is not none %}
+
+
+                        {% if attachment.file_size >= 1048576 %}
+
+                            {{ "%.2f"|format(
+                                attachment.file_size / 1048576
+                            ) }}
+
+                            MB
+
+
+                        {% elif attachment.file_size >= 1024 %}
+
+                            {{ "%.2f"|format(
+                                attachment.file_size / 1024
+                            ) }}
+
+                            KB
+
+
+                        {% else %}
+
+                            {{ attachment.file_size }}
+
+                            B
+
+                        {% endif %}
+
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+
+                </td>
+
+
+                <td>
+
+
+                    {% if attachment.description %}
+
+                        <div class="attachment-description">
+
+                            {{ attachment.description }}
+
+                        </div>
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+
+                </td>
+
+
+            </tr>
+
+
+            {% endfor %}
+
+
+        </tbody>
+
+    </table>
+
+
+    {% else %}
+
+
+    <div class="empty-data">
+
+        No attachments available.
+
+    </div>
+
+
+    {% endif %}
+
+</div>
+
+
+<!-- =========================================================
+     8. ATTACHMENT EVIDENCE
+========================================================= -->
+
+{% set image_attachments = [] %}
+
+
+{% for attachment in kaizen.attachments|sort(
+    attribute="sort_order"
+) %}
+
+
+    {% if attachment.id in attachment_images %}
+
+        {% set dummy = image_attachments.append(
+            attachment
+        ) %}
+
+    {% endif %}
+
+
+{% endfor %}
+
+
+{% if image_attachments %}
+
+
+<div class="section">
+
+    <div class="section-title">
+
+        8. ATTACHMENT EVIDENCE
+
+    </div>
+
+
+    <div class="evidence-container">
+
+
+        {% for attachment in image_attachments %}
+
+
+        <div class="evidence-item">
+
+
+            <div class="evidence-title">
+
+                Evidence {{ loop.index }}
+
+                &nbsp;–&nbsp;
+
+                {{ attachment.file_name or 'Attachment' }}
+
+            </div>
+
+
+            <div class="evidence-image">
+
+                <img
+                    src="{{ attachment_images[attachment.id] }}"
+                    alt="{{ attachment.file_name or 'Attachment Evidence' }}"
+                >
+
+            </div>
+
+
+            {% if attachment.description %}
+
+            <div class="evidence-description">
+
+                <strong>
+                    Description:
+                </strong>
+
+                {{ attachment.description }}
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+
+{% endif %}
+
+
+<!-- =========================================================
+     9. APPROVAL
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        9. APPROVAL
+
+    </div>
+
+
+    <table class="approval-table">
+
+        <thead>
+
+            <tr>
+
+                <th style="width: 25%;">
+                    Item
+                </th>
+
+                <th style="width: 35%;">
+                    Information
+                </th>
+
+                <th style="width: 40%;">
+                    Signature
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+            <!-- Approval Status -->
+
+            <tr>
+
+                <td class="approval-label">
+
+                    Approval Status
+
+                </td>
+
+
+                <td>
+
+
+                    {% if kaizen.status == 'Approved' %}
+
+
+                        <div class="approval-status">
+
+                            Approved
+
+                        </div>
+
+
+                    {% elif kaizen.status == 'Rejected' %}
+
+
+                        <div class="rejected-status">
+
+                            Rejected
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <span class="text-muted">
+
+                            {{ kaizen.status or 'Pending' }}
+
+                        </span>
+
+
+                    {% endif %}
+
+
+                </td>
+
+
+                <td>
+
+                    <div class="signature-space"></div>
+
+                </td>
+
+            </tr>
+
+
+            <!-- Approved By -->
+
+            <tr>
+
+                <td class="approval-label">
+
+                    Approved By
+
+                </td>
+
+
+                <td>
+
+
+                    {% if kaizen.approved_by %}
+
+
+                        <strong>
+
+                            {{ kaizen.approved_by.full_name or '-' }}
+
+                        </strong>
+
+
+                        {% if kaizen.approved_by.nik %}
+
+                            <br>
+
+                            <span class="text-muted">
+
+                                {{ kaizen.approved_by.nik }}
+
+                            </span>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+
+                        <span class="text-muted">
+
+                            -
+
+                        </span>
+
+
+                    {% endif %}
+
+
+                </td>
+
+
+                <td>
+
+                    <div class="signature-space"></div>
+
+                </td>
+
+            </tr>
+
+
+            <!-- Approved At -->
+
+            <tr>
+
+                <td class="approval-label">
+
+                    Approval Date
+
+                </td>
+
+
+                <td>
+
+
+                    {% if kaizen.approved_at %}
+
+                        {{ kaizen.approved_at.strftime(
+                            '%d-%m-%Y %H:%M'
+                        ) }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+
+                </td>
+
+
+                <td>
+
+                    <div class="signature-space"></div>
+
+                </td>
+
+            </tr>
+
+
+            <!-- Rejection Information -->
+
+            {% if kaizen.status == 'Rejected'
+                  or kaizen.rejection_reason
+                  or kaizen.rejected_by
+                  or kaizen.rejected_at %}
+
+
+            <tr>
+
+                <td class="approval-label">
+
+                    Rejection Information
+
+                </td>
+
+
+                <td colspan="2">
+
+
+                    {% if kaizen.rejected_by %}
+
+                        <strong>
+
+                            Rejected By:
+
+                        </strong>
+
+                        {{ kaizen.rejected_by.full_name or '-' }}
+
+
+                        {% if kaizen.rejected_by.nik %}
+
+                            ({{ kaizen.rejected_by.nik }})
+
+                        {% endif %}
+
+                        <br>
+
+                    {% endif %}
+
+
+                    {% if kaizen.rejected_at %}
+
+                        <strong>
+
+                            Rejected At:
+
+                        </strong>
+
+                        {{ kaizen.rejected_at.strftime(
+                            '%d-%m-%Y %H:%M'
+                        ) }}
+
+                        <br>
+
+                    {% endif %}
+
+
+                    {% if kaizen.rejection_reason %}
+
+                        <strong>
+
+                            Reason:
+
+                        </strong>
+
+                        <div class="text-content">
+
+                            {{ kaizen.rejection_reason }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                </td>
+
+            </tr>
+
+
+            {% endif %}
+
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     10. DOCUMENT CONTROL
+========================================================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        10. DOCUMENT CONTROL
+
+    </div>
+
+
+    <table class="document-control">
+
+
+        <tr>
+
+            <td class="document-control-label">
+
+                Kaizen No.
+
+            </td>
+
+            <td>
+
+                {{ kaizen.kaizen_no or '-' }}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="document-control-label">
+
+                Printed By
+
+            </td>
+
+            <td>
+
+                {% if printed_by %}
+
+                    {{ printed_by }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="document-control-label">
+
+                Print Date &amp; Time
+
+            </td>
+
+            <td>
+
+                {% if print_datetime %}
+
+                    {{ print_datetime.strftime(
+                        '%d-%m-%Y %H:%M'
+                    ) }}
+
+                {% else %}
+
+                    -
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="document-control-label">
+
+                System
+
+            </td>
+
+            <td>
+
+                CIMS – Continuous Improvement Management System
+
+            </td>
+
+        </tr>
+
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER MESSAGE
+========================================================= -->
+
+<div class="footer-message">
+
+    Small Improvement, Big Impact
+
+</div>
+
+
+</body>
+
+</html>

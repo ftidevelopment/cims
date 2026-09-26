@@ -1,0 +1,432 @@
+{% from "components/sortable_header.html" import sortable_header %}
+{% extends "layouts/base.html" %}
+
+{% block title %}Department{% endblock %}
+
+{% block content %}
+
+<!-- Content Header -->
+<section class="content-header">
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+                <h1>Department</h1>
+            </div>
+
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Department
+                    </li>
+                </ol>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <!-- Card Header -->
+            <div class="card-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- Left -->
+                    <div class="d-flex align-items-center">
+
+                        <h3 class="card-title mb-0 mr-4">
+
+                            <i class="fas fa-building mr-2"></i>
+
+                            Department List
+
+                        </h3>
+
+                        <!-- Status -->
+                        <form method="GET" class="mb-0">
+
+                            <input type="hidden" name="keyword" value="{{ keyword }}">
+
+                            <input type="hidden" name="sort" value="{{ sort_by }}">
+
+                            <input type="hidden" name="order" value="{{ sort_order }}">
+
+                            <select name="is_active" class="custom-select" style="width:160px;"
+                                onchange="this.form.submit()">
+
+                                <option value="true" {% if is_active=="true" %}selected{% endif %}>
+                                    Active
+                                </option>
+
+                                <option value="false" {% if is_active=="false" %}selected{% endif %}>
+                                    Inactive
+                                </option>
+
+                                <option value="all" {% if is_active=="all" %}selected{% endif %}>
+                                    All
+                                </option>
+
+                            </select>
+                        </form>
+                    </div>
+
+                    <!-- Right -->
+                    <div class="d-flex align-items-center">
+
+                        <a href="{{ url_for(
+                                'department.export',
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}" class="btn btn-warning mr-2">
+
+                            <i class="fas fa-file-excel mr-1"></i>
+
+                            Export Excel
+
+                        </a>
+                        {% if has_permission("DEPARTMENT_CREATE") %}
+                        <a href="{{ url_for('department.create') }}" class="btn btn-success mr-3">
+
+                            <i class="fas fa-plus"></i>
+
+                            Add Department
+
+                        </a>
+                        {% endif %}
+
+                        <!-- Search -->
+                        <form method="GET" class="mb-0">
+
+                            <input type="hidden" name="is_active" value="{{ is_active }}">
+
+                            <input type="hidden" name="sort" value="{{ sort_by }}">
+
+                            <input type="hidden" name="order" value="{{ sort_order }}">
+
+                            <div class="input-group">
+
+                                <input type="text" name="keyword" class="form-control" style="width:280px;"
+                                    placeholder="Search code, name or description..." value="{{ keyword }}">
+
+                                <div class="input-group-append">
+
+                                    <button class="btn btn-primary" type="submit">
+
+                                        <i class="fas fa-search"></i>
+
+                                    </button>
+
+                                    <a href="{{ url_for('department.index') }}" class="btn btn-secondary ml-1">
+
+                                        <i class="fas fa-sync-alt"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search"></i>
+
+                    Search keyword :
+
+                    <strong>{{ keyword }}</strong>
+
+                </div>
+
+                {% endif %}
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr class="text-center">
+                            <th width="60" class="text-center">
+                                No
+                            </th>
+
+                            {{ sortable_header(
+                            "Code",
+                            "department_code",
+                            "department.index",
+                            keyword,
+                            is_active,
+                            sort_by,
+                            sort_order
+                            ) }}
+
+                            {{ sortable_header(
+                            "Department Name",
+                            "department_name",
+                            "department.index",
+                            keyword,
+                            is_active,
+                            sort_by,
+                            sort_order
+                            ) }}
+
+                            {{ sortable_header(
+                            "Description",
+                            "description",
+                            "department.index",
+                            keyword,
+                            status,
+                            sort_by,
+                            sort_order
+                            ) }}
+
+                            <th width="120">
+                                Status
+                            </th>
+
+                            <th width="150">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% if departments %}
+
+                        {% for department in departments.items %}
+
+                        <tr>
+                            <td class="text-center">
+                                {{ departments.first + loop.index0 }}
+                            </td>
+
+                            <td>
+                                {{ department.department_code }}
+                            </td>
+
+                            <td>
+                                {{ department.department_name }}
+                            </td>
+
+                            <td>
+                                {{ department.description }}
+                            </td>
+                            <td class="text-center">
+                                {% if department.is_active %}
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-danger">
+                                    Inactive
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center">
+
+                                {% if department.is_active %}
+                                {% if has_permission("DEPARTMENT_EDIT") %}
+
+
+                                <a href="{{ url_for(
+                                    'department.edit',
+                                    department_id=department.id) }}" class="btn btn-warning btn-sm">
+
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                {% if has_permission("DEPARTMENT_DELETE") %}
+                                <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                    data-name="{{ department.department_name }}" data-url="{{ url_for(
+                                    'department.delete',
+                                    department_id=department.id) }}">
+
+                                    <i class="fas fa-trash"></i>
+
+                                </button>
+                                {% endif %}
+
+                                {% else %}
+                                {% if has_permission("DEPARTMENT_EDIT") %}
+
+                                <form method="POST" action="{{ url_for(
+                                    'department.restore',
+                                    department_id=department.id) }}">
+
+                                    <button class="btn btn-success btn-sm">
+
+                                        <i class="fas fa-undo"></i>
+
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="4" class="text-center text-muted">
+
+                                No department found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>{% include "components/delete_modal.html" %}
+
+            <!-- Card Footer -->
+            <div class="card-footer clearfix">
+
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+
+                        {{ departments.first if departments.total > 0 else 0 }}
+
+                    </strong>
+
+                    to
+
+                    <strong>
+
+                        {{ departments.last if departments.total > 0 else 0 }}
+
+                    </strong>
+
+                    of
+
+                    <strong>
+
+                        {{ departments.total }}
+
+                    </strong>
+
+                    department(s)
+
+                </div>
+
+            </div>
+
+            <nav>
+
+                <ul class="pagination pagination-sm float-right">
+
+                    {% if departments.has_prev %}
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="{{ url_for('department.index',
+                                page=departments.prev_num,
+                                keyword=keyword,is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order) }}">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% for page_num in departments.iter_pages() %}
+
+                    {% if page_num %}
+
+                    <li class="page-item {% if page_num == departments.page %}active{% endif %}">
+
+                        <a class="page-link" href="{{ url_for('department.index',
+                                        page=page_num,
+                                        keyword=keyword,is_active=is_active,
+                                        sort=sort_by,
+                                        order=sort_order) }}">
+
+                            {{ page_num }}
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    {% if departments.has_next %}
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="{{ url_for('department.index',
+                                page=departments.next_num,
+                                keyword=keyword,is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order) }}">
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

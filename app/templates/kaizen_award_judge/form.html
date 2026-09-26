@@ -1,0 +1,168 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Add Judge{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-1">Add Judge</h1>
+            <p class="text-muted mb-0">
+                Assign an Employee as Judge for this Award Period.
+            </p>
+        </div>
+
+        <a href="{{ url_for(
+            'kaizen_award_judge.index',
+            award_period_id=award_period.id
+        ) }}"
+           class="btn btn-secondary">
+
+            <i class="fas fa-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+
+    <!-- Award Period Information -->
+    <div class="card mb-3">
+
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-trophy mr-1"></i>
+                Award Period
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <strong>Award Code</strong>
+                    <div>
+                        {{ award_period.award_code }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Award Name</strong>
+                    <div>
+                        {{ award_period.award_name }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Start Date</strong>
+                    <div>
+                        {{ award_period.start_date.strftime('%d-%m-%Y') }}
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>End Date</strong>
+                    <div>
+                        {{ award_period.end_date.strftime('%d-%m-%Y') }}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Add Judge Form -->
+    <div class="card">
+
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-user-plus mr-1"></i>
+                Select Employee
+            </h3>
+        </div>
+
+        <form method="POST">
+
+            <div class="card-body">
+
+                <div class="form-group">
+
+                    <label for="employee_id">
+                        Employee
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <select
+                        name="employee_id"
+                        id="employee_id"
+                        class="form-control"
+                        required
+                    >
+
+                        <option value="">
+                            -- Select Employee --
+                        </option>
+
+                        {% for employee in employees %}
+
+                            <option value="{{ employee.id }}">
+
+                                {{ employee.nik }}
+                                -
+                                {{ employee.full_name }}
+
+                                {% if employee.department %}
+                                    - {{ employee.department.department_name }}
+                                {% endif %}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                    {% if not employees %}
+                        <small class="text-danger">
+                            No active employees available.
+                        </small>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="card-footer">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    {% if not employees %}disabled{% endif %}
+                >
+                    <i class="fas fa-save"></i>
+                    Add Judge
+                </button>
+
+                <a
+                    href="{{ url_for(
+                        'kaizen_award_judge.index',
+                        award_period_id=award_period.id
+                    ) }}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

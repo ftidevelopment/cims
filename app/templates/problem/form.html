@@ -1,0 +1,570 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{% if problem %}
+Edit Problem
+{% else %}
+Create Problem
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================
+Content Header
+========================================== -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+
+                    {% if problem %}
+                    Edit Problem
+                    {% else %}
+                    Create Problem
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        Continuous Improvement
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('problem.index') }}">
+
+                            Problem
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if problem %}
+                        Edit
+                        {% else %}
+                        Create
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+Main Content
+========================================== -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <!-- ==========================================
+            Card Header
+            ========================================== -->
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-clipboard-list mr-2"></i>
+
+                    {% if problem %}
+                    Edit Problem
+                    {% else %}
+                    Create Problem
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+            <!-- ==========================================
+            Form
+            ========================================== -->
+            <form id="problem-form" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+                <div class="card-body">
+
+                    <!-- ==========================================
+                    Row 1
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Problem Date -->
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Date
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <input type="date" name="problem_date" class="form-control" required
+                                    data-label="Problem Date"
+                                    value="{{ problem.problem_date.strftime('%Y-%m-%d') if problem and problem.problem_date else '' }}">
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Department -->
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Department
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <select name="department_id" class="form-control" required data-label="Department">
+
+                                    <option value="">
+
+                                        -- Select Department --
+
+                                    </option>
+
+                                    {% for department in departments %}
+
+                                    <option value="{{ department.id }}" {% if problem and
+                                        problem.department_id==department.id %} selected {% endif %}>
+
+                                        {{ department.department_name }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==========================================
+                    Row 2
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Problem Category -->
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Category
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <select name="problem_category_id" class="form-control" required
+                                    data-label="Problem Category">
+
+                                    <option value="">
+
+                                        -- Select Category --
+
+                                    </option>
+
+                                    {% for category in problem_categories %}
+
+                                    <option value="{{ category.id }}" {% if problem and
+                                        problem.problem_category_id==category.id %} selected {% endif %}>
+
+                                        {{ category.problem_category_name }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Problem Source -->
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Source
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <input type="text" name="problem_source" class="form-control" maxlength="100" required
+                                    data-label="Problem Source" value="{{ problem.problem_source if problem else '' }}">
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- ==========================================
+                    Row 3
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Problem Location -->
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Location
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <input type="text" name="problem_location" class="form-control" maxlength="200" required
+                                    data-label="Problem Location"
+                                    value="{{ problem.problem_location if problem else '' }}">
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==========================================
+                    Row 4
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Title -->
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Title
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <input type="text" name="title" class="form-control" maxlength="200" required
+                                    data-label="Problem Title" value="{{ problem.title if problem else '' }}">
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==========================================
+                    Row 5
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Description -->
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Description
+                                    <span class="text-danger">*</span>
+
+                                </label>
+
+                                <textarea name="description" class="form-control" rows="5" required
+                                    data-label="Problem Description">{{ problem.description if problem else '' }}</textarea>
+
+                                <div class="invalid-feedback"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==========================================
+                    Row 6
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Problem Cause -->
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Cause
+
+                                </label>
+
+                                <textarea
+                                    name="problem_cause"
+                                    id="problem_cause"
+                                    class="form-control"
+                                    rows="4"
+                                    maxlength="2000"
+                                    data-jodit-plain-text="true"
+                                >{{ problem.problem_cause if problem else '' }}</textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==========================================
+                    Row 7
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Problem Impact -->
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Problem Impact
+
+                                </label>
+
+                                <textarea
+                                    name="problem_impact"
+                                    id="problem_impact"
+                                    class="form-control"
+                                    rows="4"
+                                    maxlength="2000"
+                                    data-jodit-plain-text="true"
+                                >{{ problem.problem_impact if problem else '' }}</textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- ==========================================
+                    Row 8
+                    ========================================== -->
+                    <div class="row">
+
+                        <!-- Loss Quantity -->
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Loss Quantity
+
+                                </label>
+
+                                <input type="number" name="loss_quantity" class="form-control text-right" min="0"
+                                    step="0.01" value="{{ problem.loss_quantity if problem else '' }}">
+
+                            </div>
+
+                        </div>
+
+                        <!-- Loss Cost -->
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Loss Cost
+
+                                </label>
+
+                                <input type="number" name="loss_cost" class="form-control text-right" min="0"
+                                    step="0.01" value="{{ problem.loss_cost if problem else '' }}">
+
+                            </div>
+
+                        </div>
+
+                        <!-- Loss Time -->
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Loss Time (Minute)
+
+                                </label>
+
+                                <input type="number" name="loss_time" class="form-control text-right" min="0" step="1"
+                                    value="{{ problem.loss_time if problem else '' }}">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ==========================================
+                    Row 9
+                    ========================================== -->
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            {% with
+
+                            attachments=problem.attachments if problem else None,
+
+                            input_id="attachments",
+
+                            field_name="attachments",
+
+                            list_id="attachment-list"
+
+                            %}
+
+                            {% include "components/attachment_manager.html" %}
+
+                            {% endwith %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ==========================================
+                Card Footer
+                ========================================== -->
+                <div class="card-footer">
+
+                    <button type="submit" class="btn btn-primary">
+
+                        <i class="fas fa-save mr-1"></i>
+
+                        Save
+
+                    </button>
+
+                    <a href="{{ url_for('problem.index') }}" class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left mr-1"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% block scripts %}
+
+{{ super() }}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // ==========================================
+        // Initialize Jodit - Problem Cause
+        // ==========================================
+        const causeElement = document.getElementById("problem_cause");
+
+        if (causeElement) {
+            Jodit.make(causeElement, {
+                height: 300
+            });
+        }
+
+
+        // ==========================================
+        // Initialize Jodit - Problem Impact
+        // ==========================================
+        const impactElement = document.getElementById("problem_impact");
+
+        if (impactElement) {
+            Jodit.make(impactElement, {
+                height: 300
+            });
+        }
+
+    });
+</script>
+
+
+<script src="{{ url_for(
+            'static',
+            filename='js/attachment-manager.js'
+        ) }}"></script>
+
+<script src="{{ url_for(
+            'static',
+            filename='js/delete-modal.js'
+        ) }}"></script>
+
+{% endblock %}
+{% include "components/delete_modal.html" %}
+{% endblock %}

@@ -1,0 +1,683 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+
+    {% if mode == "create" %}
+        Create Improvement
+    {% else %}
+        Edit Improvement
+    {% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ==================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="mb-1">
+
+                {% if mode == "create" %}
+                    Create Improvement
+                {% else %}
+                    Edit Improvement
+                {% endif %}
+
+            </h3>
+
+            <p class="text-muted mb-0">
+
+                {% if mode == "create" %}
+                    Create improvement action for the selected problem.
+                {% else %}
+                    Update improvement information.
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <div>
+
+           <a
+                href="{{ url_for('improvement.select_problem') }}"
+                class="btn btn-secondary"
+            >
+                Back to Problem
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         PROBLEM INFORMATION
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+                Problem Information
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Problem No -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Problem No
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ problem.problem_no }}"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- Problem Date -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Problem Date
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ problem.problem_date }}"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ problem.status }}"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <!-- Problem Title -->
+
+                <div class="col-md-8 mb-3">
+
+                    <label class="form-label">
+                        Problem Title
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ problem.title }}"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- Target Date -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Target Date
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ problem.target_date or '-' }}"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Problem Description -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Problem Description
+                </label>
+
+                <textarea
+                    class="form-control"
+                    rows="4"
+                    readonly
+                >{{ problem.description }}</textarea>
+
+            </div>
+
+
+            <!-- Problem Cause -->
+
+            {% if problem.problem_cause %}
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Problem Cause
+                </label>
+
+                <textarea
+                    class="form-control"
+                    rows="3"
+                    readonly
+                >{{ problem.problem_cause }}</textarea>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         IMPROVEMENT FORM
+    ================================================== -->
+
+    <form
+        method="POST"
+        action="{% if mode == 'create' %}
+
+                    {{ url_for(
+                        'improvement.create',
+                        problem_id=problem.id
+                    ) }}
+
+                {% else %}
+
+                    {{ url_for(
+                        'improvement.edit',
+                        improvement_id=improvement.id
+                    ) }}
+
+                {% endif %}"
+    >
+
+
+        <!-- ==================================================
+             IMPROVEMENT INFORMATION
+        ================================================== -->
+
+        <div class="card mb-4">
+
+            <div class="card-header">
+
+                <strong>
+                    Improvement Information
+                </strong>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Improvement No -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label
+                            for="improvement_no"
+                            class="form-label"
+                        >
+
+                            Improvement No
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+        type="text"
+        id="improvement_no"
+        class="form-control"
+        value="{{ improvement.improvement_no if improvement else 'Auto Generate' }}"
+        readonly
+    >
+
+    {% if not improvement %}
+
+        <small class="form-text text-muted">
+            Improvement number will be generated automatically.
+        </small>
+
+    {% endif %}
+
+                    </div>
+
+
+                    <!-- Title -->
+
+                    <div class="col-md-8 mb-3">
+
+                        <label
+                            for="title"
+                            class="form-label"
+                        >
+
+                            Improvement Title
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            class="form-control"
+                            maxlength="200"
+                            value="{{ improvement.title if improvement else '' }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="description"
+                        class="form-label"
+                    >
+
+                        Improvement Description
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="form-control"
+                        rows="5"
+                        required
+                    >{{ improvement.description if improvement else '' }}</textarea>
+
+                </div>
+
+
+                <!-- Root Cause -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="root_cause"
+                        class="form-label"
+                    >
+                        Root Cause
+                    </label>
+
+
+                    <textarea
+                        id="root_cause"
+                        name="root_cause"
+                        class="form-control"
+                        rows="4"
+                        data-jodit-plain-text="true"
+                    >{{ improvement.root_cause if improvement else '' }}</textarea>
+
+                </div>
+
+
+                <!-- Improvement Plan -->
+
+                <div class="mb-3">
+
+                    <label
+                        for="improvement_plan"
+                        class="form-label"
+                    >
+                        Improvement Plan
+                    </label>
+
+
+                    <textarea
+                        id="improvement_plan"
+                        name="improvement_plan"
+                        class="form-control"
+                        rows="5"
+                        data-jodit-plain-text="true"
+                    >{{ improvement.improvement_plan if improvement else '' }}</textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             COST & BENEFIT
+        ================================================== -->
+
+        <div class="card mb-4">
+
+            <div class="card-header">
+
+                <strong>
+                    Cost & Benefit Estimation
+                </strong>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Improvement Cost -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="improvement_cost"
+                            class="form-label"
+                        >
+                            Improvement Cost
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="improvement_cost"
+                            name="improvement_cost"
+                            class="form-control"
+                            min="0"
+                            step="0.01"
+                            value="{{ improvement.improvement_cost if improvement else 0 }}"
+                        >
+
+
+                        <div class="form-text">
+
+                            Estimated cost required to implement
+                            the improvement.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Cost Saving -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="estimated_cost_saving"
+                            class="form-label"
+                        >
+                            Estimated Cost Saving
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="estimated_cost_saving"
+                            name="estimated_cost_saving"
+                            class="form-control"
+                            min="0"
+                            step="0.01"
+                            value="{{ improvement.estimated_cost_saving if improvement else 0 }}"
+                        >
+
+
+                        <div class="form-text">
+
+                            Estimated monetary saving after
+                            improvement.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Time Saving -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="estimated_time_saving"
+                            class="form-label"
+                        >
+                            Estimated Time Saving
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <input
+                                type="number"
+                                id="estimated_time_saving"
+                                name="estimated_time_saving"
+                                class="form-control"
+                                min="0"
+                                value="{{ improvement.estimated_time_saving if improvement else 0 }}"
+                            >
+
+
+                            <span class="input-group-text">
+                                Minutes
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-text">
+
+                            Estimated time saving after
+                            improvement.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Estimated Benefit -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="estimated_benefit"
+                            class="form-label"
+                        >
+                            Estimated Benefit
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="estimated_benefit"
+                            name="estimated_benefit"
+                            class="form-control"
+                            min="0"
+                            step="0.01"
+                            value="{{ improvement.estimated_benefit if improvement else 0 }}"
+                        >
+
+
+                        <div class="form-text">
+
+                            Estimated total monetary benefit.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             ACTION BUTTON
+        ================================================== -->
+
+        <div class="d-flex justify-content-end gap-2 mb-5">
+
+
+             <a
+                href="{{ url_for('improvement.index') }}"
+                class="btn btn-secondary"
+            >
+                Cancel
+            </a>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+
+                {% if mode == "create" %}
+
+                    Save Improvement
+
+                {% else %}
+
+                    Update Improvement
+
+                {% endif %}
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+{% block scripts %}
+
+{{ super() }}
+
+
+
+
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            // ==========================================
+            // Initialize Jodit - Root Cause
+            // ==========================================
+
+            const rootCauseElement =
+                document.getElementById("root_cause");
+
+            if (
+                rootCauseElement &&
+                typeof Jodit !== "undefined"
+            ) {
+
+                Jodit.make(
+                    rootCauseElement,
+                    {
+                        height: 300
+                    }
+                );
+
+            }
+
+
+            // ==========================================
+            // Initialize Jodit - Improvement Plan
+            // ==========================================
+
+            const improvementPlanElement =
+                document.getElementById(
+                    "improvement_plan"
+                );
+
+            if (
+                improvementPlanElement &&
+                typeof Jodit !== "undefined"
+            ) {
+
+                Jodit.make(
+                    improvementPlanElement,
+                    {
+                        height: 300
+                    }
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+{% endblock %}
+{% endblock %}

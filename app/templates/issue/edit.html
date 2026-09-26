@@ -1,0 +1,370 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Edit Issue{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid px-4">
+
+    <!-- ======================================================
+         PAGE HEADER
+    ======================================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h4 class="mb-1">
+                <i class="bi bi-pencil-square me-2"></i>
+                Edit Issue
+            </h4>
+
+            <div class="text-muted small">
+                Update Issue information
+            </div>
+        </div>
+
+        <div>
+            <a href="{{ url_for('issue.detail', issue_id=issue.id) }}"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Back
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         ISSUE INFORMATION
+    ======================================================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+
+            <h6 class="mb-0 fw-semibold">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Issue Information
+            </h6>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form method="POST"
+                  action="{{ url_for('issue.edit', issue_id=issue.id) }}">
+
+                <!-- ==================================================
+                     ISSUE NO
+                =================================================== -->
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Issue No
+                        </label>
+
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="{{ issue.issue_no }}"
+                               readonly>
+
+                        <div class="form-text">
+                            Issue No cannot be changed.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     MODULE
+                =================================================== -->
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <label for="module"
+                               class="form-label fw-semibold">
+
+                            Module
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <select name="module"
+                                id="module"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                -- Select Module --
+                            </option>
+
+                            {% for value, label in modules %}
+
+                                <option value="{{ value }}"
+                                    {% if issue.module == value %}
+                                        selected
+                                    {% endif %}>
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         CATEGORY
+                    =================================================== -->
+
+                    <div class="col-md-6">
+
+                        <label for="category"
+                               class="form-label fw-semibold">
+
+                            Category
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <select name="category"
+                                id="category"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                -- Select Category --
+                            </option>
+
+                            {% for value, label in categories %}
+
+                                <option value="{{ value }}"
+                                    {% if issue.category == value %}
+                                        selected
+                                    {% endif %}>
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     PRIORITY
+                =================================================== -->
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <label for="priority"
+                               class="form-label fw-semibold">
+
+                            Priority
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <select name="priority"
+                                id="priority"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                -- Select Priority --
+                            </option>
+
+                            {% for value, label in priorities %}
+
+                                <option value="{{ value }}"
+                                    {% if issue.priority == value %}
+                                        selected
+                                    {% endif %}>
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         STATUS - READ ONLY
+                    =================================================== -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Status
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            {% if issue.status == "OPEN" %}
+
+                                <span class="badge bg-secondary">
+                                    Open
+                                </span>
+
+                            {% elif issue.status == "IN_PROGRESS" %}
+
+                                <span class="badge bg-primary">
+                                    In Progress
+                                </span>
+
+                            {% elif issue.status == "FINISH" %}
+
+                                <span class="badge bg-success">
+                                    Finish
+                                </span>
+
+                            {% elif issue.status == "CLOSE" %}
+
+                                <span class="badge bg-dark">
+                                    Close
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ issue.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="form-text">
+                            Status is controlled by the Issue workflow.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     DESCRIPTION
+                =================================================== -->
+
+                <div class="mb-4">
+
+                    <label for="description"
+                           class="form-label fw-semibold">
+
+                        Description
+                        <span class="text-danger">*</span>
+
+                    </label>
+
+                    <textarea name="description"
+                              id="description"
+                              class="form-control"
+                              rows="6"
+                              maxlength="5000"
+                              required>{{ issue.description }}</textarea>
+
+                    <div class="form-text">
+                        Please provide a clear description of the issue.
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     DEVELOPER - READ ONLY
+                =================================================== -->
+
+                <div class="row mb-4">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Requestor
+                        </label>
+
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="{% if issue.requestor %}{{ issue.requestor.nik }} - {{ issue.requestor.full_name }}{% else %}-{% endif %}"
+                               readonly>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Developer
+                        </label>
+
+                        <input type="text"
+                               class="form-control bg-light"
+                               value="{% if issue.developer %}{{ issue.developer.nik }} - {{ issue.developer.full_name }}{% else %}-{% endif %}"
+                               readonly>
+
+                        <div class="form-text">
+                            Developer is assigned automatically when the Issue is started.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     ACTION BUTTONS
+                =================================================== -->
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <a href="{{ url_for('issue.detail', issue_id=issue.id) }}"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-x-lg me-1"></i>
+                        Cancel
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-lg me-1"></i>
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

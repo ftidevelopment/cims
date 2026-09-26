@@ -1,0 +1,1454 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Improvement Detail
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ==================================================
+         PAGE HEADER
+    ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="mb-1">
+                Improvement Detail
+            </h3>
+
+            <p class="text-muted mb-0">
+                Improvement information and implementation status.
+            </p>
+
+        </div>
+
+
+        <!-- ==================================================
+             ACTION BUTTONS
+        ================================================== -->
+
+        <div class="d-flex flex-wrap">
+
+            <!-- ==============================================
+                 VIEW ASSIGNMENT
+            =============================================== -->
+
+            {% if can_assign_improvement %}
+
+            <a
+                href="{{ url_for(
+                    'improvement.assign',
+                    improvement_id=improvement.id
+                ) }}"
+                class="btn btn-primary mr-2 mb-2"
+            >
+
+                <i class="fas fa-users mr-1"></i>
+
+                View Assignment
+
+            </a>
+
+            {% endif %}
+
+
+            <!-- ==============================================
+                 EDIT
+            =============================================== -->
+
+            {% if can_edit_improvement
+                  and not improvement.approved_date %}
+
+            <a
+                href="{{ url_for(
+                    'improvement.edit',
+                    improvement_id=improvement.id
+                ) }}"
+                class="btn btn-warning mr-2 mb-2"
+            >
+
+                <i class="fas fa-edit mr-1"></i>
+
+                Edit
+
+            </a>
+
+            {% endif %}
+
+
+            <!-- ==============================================
+                 BACK TO PROBLEM
+            =============================================== -->
+            <a
+                href="{{ url_for(
+                    'improvement.export_pdf',
+                    improvement_id=improvement.id
+                ) }}"
+                class="btn btn-danger mr-2 mb-2"
+                target="_blank"
+            >
+
+                <i class="fas fa-file-pdf mr-1"></i>
+
+                Export PDF
+
+            </a>
+            <a
+                href="{{ url_for(
+                    'improvement.select_problem'
+                ) }}"
+                class="btn btn-secondary mb-2"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back to Problem
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         FLASH MESSAGE
+    ================================================== -->
+
+    {% with messages = get_flashed_messages(
+        with_categories=true
+    ) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="alert"
+                        aria-label="Close"
+                    >
+
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- ==================================================
+         IMPROVEMENT HEADER
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+                Improvement Information
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Improvement No -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label text-muted">
+                        Improvement No
+                    </label>
+
+                    <div class="fw-bold">
+
+                        {{ improvement.improvement_no }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Problem No -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label text-muted">
+                        Problem No
+                    </label>
+
+                    <div>
+
+                        {% if improvement.problem %}
+
+                        <a
+                            href="{{ url_for(
+                                'problem.show',
+                                problem_id=improvement.problem.id
+                            ) }}"
+                            class="fw-bold text-decoration-none"
+                        >
+
+                            {{ improvement.problem.problem_no }}
+
+                        </a>
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Problem Status -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label text-muted">
+                        Problem Status
+                    </label>
+
+                    <div>
+
+                        {% if improvement.problem %}
+
+                            {% if improvement.problem.status == "Closed" %}
+
+                                <span class="badge bg-success">
+                                    Closed
+                                </span>
+
+                            {% elif improvement.problem.status == "On Progress" %}
+
+                                <span class="badge bg-warning text-dark">
+                                    On Progress
+                                </span>
+
+                            {% elif improvement.problem.status == "Open" %}
+
+                                <span class="badge bg-primary">
+                                    Open
+                                </span>
+
+                            {% elif improvement.problem.status == "Completed" %}
+
+                                <span class="badge bg-info">
+                                    Completed
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ improvement.problem.status }}
+                                </span>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Title -->
+
+            <div class="mb-3">
+
+                <label class="form-label text-muted">
+                    Improvement Title
+                </label>
+
+                <div class="fs-5 fw-semibold">
+
+                    {{ improvement.title }}
+
+                </div>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <div class="mb-3">
+
+                <label class="form-label text-muted">
+                    Improvement Description
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {{ improvement.description
+                        | replace('\n', '<br>')
+                        | safe
+                    }}
+
+                </div>
+
+            </div>
+
+
+            <!-- Root Cause -->
+
+            {% if improvement.root_cause %}
+
+            <div class="mb-3">
+
+                <label class="form-label text-muted">
+                    Root Cause
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {{ improvement.root_cause
+                        | replace('\n', '<br>')
+                        | safe
+                    }}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- Improvement Plan -->
+
+            {% if improvement.improvement_plan %}
+
+            <div class="mb-3">
+
+                <label class="form-label text-muted">
+                    Improvement Plan
+                </label>
+
+                <div class="border rounded p-3 bg-light">
+
+                    {{ improvement.improvement_plan
+                        | replace('\n', '<br>')
+                        | safe
+                    }}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         ASSIGNMENT / PIC
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-users mr-2"></i>
+
+                Assignment / PIC
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <!-- ==========================================
+                 Improvement Owner
+            ========================================== -->
+
+            <div class="mb-4">
+
+                <h5 class="mb-3">
+
+                    <i class="fas fa-user-tie mr-2"></i>
+
+                    Improvement Owner
+
+                </h5>
+
+
+                {% if improvement.owner_employee %}
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <label class="text-muted">
+                                Employee ID
+                            </label>
+
+                            <div class="font-weight-bold">
+
+                                {{
+                                    improvement.owner_employee.nik
+                                }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <label class="text-muted">
+                                Name
+                            </label>
+
+                            <div class="font-weight-bold">
+
+                                {{
+                                    improvement.owner_employee.full_name
+                                }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <label class="text-muted">
+                                Role
+                            </label>
+
+                            <div>
+
+                                <span class="badge badge-primary">
+
+                                    Owner
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-warning">
+
+                        <i
+                            class="fas fa-exclamation-triangle mr-1"
+                        ></i>
+
+                        Improvement Owner has not been assigned.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- ==========================================
+                 Improvement PIC
+            ========================================== -->
+
+            <div>
+
+                <h5 class="mb-3">
+
+                    <i class="fas fa-users mr-2"></i>
+
+                    Improvement PIC
+
+                </h5>
+
+
+                {% if improvement_pics %}
+
+                    <div class="table-responsive">
+
+                        <table
+                            class="table table-bordered table-hover"
+                        >
+
+                            <thead class="thead-light">
+
+                                <tr>
+
+                                    <th
+                                        style="width: 60px;"
+                                        class="text-center"
+                                    >
+                                        No
+                                    </th>
+
+                                    <th>
+                                        Employee ID
+                                    </th>
+
+                                    <th>
+                                        Employee Name
+                                    </th>
+
+                                    <th
+                                        style="width: 120px;"
+                                        class="text-center"
+                                    >
+                                        Role
+                                    </th>
+
+                                    <th
+                                        style="width: 120px;"
+                                        class="text-center"
+                                    >
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for pic in improvement_pics %}
+
+                                <tr>
+
+                                    <td class="text-center">
+
+                                        {{ loop.index }}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ pic.employee.nik }}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ pic.employee.full_name }}
+
+                                    </td>
+
+
+                                    <td class="text-center">
+
+                                        {% if pic.is_leader %}
+
+                                            <span
+                                                class="badge badge-primary"
+                                            >
+
+                                                <i
+                                                    class="fas fa-star mr-1"
+                                                ></i>
+
+                                                Leader
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span
+                                                class="badge badge-secondary"
+                                            >
+
+                                                PIC
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td class="text-center">
+
+                                        {% if pic.is_active %}
+
+                                            <span
+                                                class="badge badge-success"
+                                            >
+
+                                                Active
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span
+                                                class="badge badge-secondary"
+                                            >
+
+                                                Inactive
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-warning">
+
+                        <i
+                            class="fas fa-exclamation-triangle mr-1"
+                        ></i>
+
+                        No Improvement PIC has been assigned.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ==========================================
+                 Assignment Button
+            ========================================== -->
+
+            {% if can_assign_improvement %}
+
+                <div class="text-right mt-3">
+
+                    <a
+                        href="{{ url_for(
+                            'improvement.assign',
+                            improvement_id=improvement.id
+                        ) }}"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-users mr-1"></i>
+
+                        View Assignment
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         COST & BENEFIT
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+                Cost & Benefit
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Improvement Cost -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label text-muted">
+                        Improvement Cost
+                    </label>
+
+                    <div class="fs-5">
+
+                        {{ "{:,.2f}".format(
+                            improvement.improvement_cost or 0
+                        ) }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Cost Saving -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label text-muted">
+                        Estimated Cost Saving
+                    </label>
+
+                    <div class="fs-5">
+
+                        {{ "{:,.2f}".format(
+                            improvement.estimated_cost_saving or 0
+                        ) }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Time Saving -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label text-muted">
+                        Estimated Time Saving
+                    </label>
+
+                    <div class="fs-5">
+
+                        {{ improvement.estimated_time_saving or 0 }}
+                        Minutes
+
+                    </div>
+
+                </div>
+
+
+                <!-- Benefit -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label text-muted">
+                        Estimated Benefit
+                    </label>
+
+                    <div class="fs-5">
+
+                        {{ "{:,.2f}".format(
+                            improvement.estimated_benefit or 0
+                        ) }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Calculated Benefit -->
+
+            {% if benefit %}
+
+            <hr>
+
+            <div class="row">
+
+                <!-- Net Benefit -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label text-muted">
+                        Net Benefit
+                    </label>
+
+                    <div class="fs-4 fw-bold">
+
+                        {{ "{:,.2f}".format(
+                            benefit.net_benefit
+                        ) }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROI -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label text-muted">
+                        ROI
+                    </label>
+
+                    <div class="fs-4 fw-bold">
+
+                        {{ "{:,.2f}".format(
+                            benefit.roi
+                        ) }} %
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         IMPLEMENTATION
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+                Implementation
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            {% if improvement.implementation_result %}
+
+                <div class="border rounded p-3 bg-light mb-3">
+
+                    {{ improvement.implementation_result
+                        | replace('\n', '<br>')
+                        | safe
+                    }}
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-secondary">
+
+                    Implementation result has not been entered yet.
+
+                </div>
+
+            {% endif %}
+
+
+            {% if not improvement.approved_date %}
+
+                {% if can_update_implementation_result %}
+
+                    <a
+                        href="{{ url_for(
+                            'improvement.implementation',
+                            improvement_id=improvement.id
+                        ) }}"
+                        class="btn btn-primary"
+                    >
+
+                        {% if improvement.implementation_result %}
+
+                            <i class="fas fa-edit mr-1"></i>
+
+                            Edit Implementation
+
+                        {% else %}
+
+                            <i class="fas fa-plus mr-1"></i>
+
+                            Add Implementation Result
+
+                        {% endif %}
+
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         ATTACHMENTS
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-paperclip mr-2"></i>
+
+                Attachments
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <!-- ==========================================
+                 Upload Attachment
+            ========================================== -->
+
+            {% if improvement.problem
+                  and improvement.problem.status != "Closed" %}
+
+                {% if can_edit_improvement %}
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'improvement_attachment.upload',
+                        improvement_id=improvement.id
+                    ) }}"
+                    enctype="multipart/form-data"
+                >
+
+                    <div class="row">
+
+                        <!-- File -->
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label
+                                    for="improvement_attachment_file"
+                                >
+
+                                    Attachment
+
+                                </label>
+
+                                <div class="custom-file">
+
+                                    <input
+                                        type="file"
+                                        id="improvement_attachment_file"
+                                        name="file"
+                                        class="custom-file-input"
+                                        accept=".jpg,.jpeg,.png,.webp,.pdf,.xls,.xlsx"
+                                        required
+                                    >
+
+                                    <label
+                                        class="custom-file-label"
+                                        for="improvement_attachment_file"
+                                    >
+
+                                        Add File
+
+                                    </label>
+
+                                </div>
+
+                                <small class="form-text text-muted">
+
+                                    Allowed:
+                                    JPG, JPEG, PNG, WEBP, PDF, XLS, XLSX
+
+                                    <br>
+
+                                    Maximum File Size: 10 MB
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Description -->
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label
+                                    for="improvement_attachment_description"
+                                >
+
+                                    Description
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="improvement_attachment_description"
+                                    name="description"
+                                    class="form-control"
+                                    maxlength="255"
+                                    placeholder="Attachment description"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Upload Button -->
+
+                    <div class="text-right">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+
+                            <i class="fas fa-upload mr-1"></i>
+
+                            Upload Attachment
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                {% else %}
+
+                    <div class="alert alert-info">
+
+                        <i class="fas fa-lock mr-1"></i>
+
+                        This Problem is closed.
+                        Attachment upload and delete are disabled.
+
+                    </div>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            <!-- ==========================================
+                 Existing Attachments
+            ========================================== -->
+
+            {% include
+                "components/improvement_attachment_manager.html"
+            %}
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         VERIFICATION
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+                Verification
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            {% if improvement.verification_result %}
+
+                <div class="border rounded p-3 bg-light mb-3">
+
+                    {{ improvement.verification_result
+                        | replace('\n', '<br>')
+                        | safe
+                    }}
+
+                </div>
+
+                <span class="badge bg-success">
+
+                    <i class="fas fa-check mr-1"></i>
+
+                    Verified
+
+                </span>
+
+            {% else %}
+
+                <div class="alert alert-secondary">
+
+                    Improvement has not been verified yet.
+
+                </div>
+
+            {% endif %}
+
+
+            {% if not improvement.approved_date %}
+
+                {% if improvement.implementation_result %}
+
+                    {% if can_verify_improvement %}
+
+                        <a
+                            href="{{ url_for(
+                                'improvement.verification',
+                                improvement_id=improvement.id
+                            ) }}"
+                            class="btn btn-info mt-3"
+                        >
+
+                            {% if improvement.verification_result %}
+
+                                <i class="fas fa-edit mr-1"></i>
+
+                                Edit Verification
+
+                            {% else %}
+
+                                <i class="fas fa-check mr-1"></i>
+
+                                Verify Improvement
+
+                            {% endif %}
+
+                        </a>
+
+                    {% endif %}
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         APPROVAL
+    ================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-check-circle mr-1"></i>
+
+                Approval
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            {% if improvement.approved_date %}
+
+                <!-- ======================================
+                     APPROVED
+                ======================================= -->
+
+                <div class="alert alert-success">
+
+                    <strong>
+
+                        <i class="fas fa-check-circle mr-1"></i>
+
+                        Improvement Approved
+
+                    </strong>
+
+                    <br>
+
+                    Approved Date:
+
+                    {{
+                        improvement.approved_date.strftime(
+                            '%d-%b-%Y'
+                        )
+                        if improvement.approved_date
+                        else '-'
+                    }}
+
+
+                    {% if improvement.approved_by %}
+
+                        <br>
+
+                        Approved By:
+
+                        <strong>
+                            {{ improvement.approved_by.full_name }}
+                        </strong>
+
+                        <br>
+
+                        Employee NIK:
+
+                        {{
+                            improvement.approved_by.nik
+                            if improvement.approved_by
+                            else '-'
+                        }}
+
+                    {% endif %}
+
+                </div>
+
+
+            {% else %}
+
+                <!-- ======================================
+                     NOT APPROVED
+                ======================================= -->
+
+                <div class="alert alert-warning">
+
+                    <i class="fas fa-clock mr-1"></i>
+
+                    Improvement has not been approved yet.
+
+                </div>
+
+
+                <!-- ======================================
+                     APPROVAL AUTHORITY
+                ======================================= -->
+
+                {% if can_approve_improvement %}
+
+                    {% if improvement.verification_result %}
+
+                        <!-- ==================================
+                             APPROVE FORM
+                        =================================== -->
+
+                        <form
+                            id="approve-form"
+                            method="POST"
+                            action="{{ url_for(
+                                'improvement.approve',
+                                improvement_id=improvement.id
+                            ) }}"
+                        >
+
+                            <div class="row align-items-end">
+
+
+                                <!-- ==============================
+                                     Approved By
+                                =============================== -->
+
+                                <div class="col-md-6">
+
+                                    <label
+                                        for="approved_by_employee"
+                                        class="form-label"
+                                    >
+
+                                        Approved By
+
+                                    </label>
+
+
+                                    <input
+                                        type="text"
+                                        id="approved_by_employee"
+                                        class="form-control"
+                                        value="{{
+                                            current_employee.full_name
+                                            if current_employee
+                                            else '-'
+                                        }}"
+                                        readonly
+                                    >
+
+
+                                    <div class="form-text">
+
+                                        Automatically assigned from
+                                        the logged-in user.
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- ==============================
+                                     Approve Button
+                                =============================== -->
+
+                                <div class="col-md-6">
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        data-toggle="modal"
+                                        data-target="#approveImprovementModal"
+                                    >
+
+                                        <i class="fas fa-check mr-1"></i>
+
+                                        Approve Improvement
+
+                                    </button>
+
+                                </div>
+
+
+                            </div>
+
+                        </form>
+
+
+                    {% else %}
+
+                        <!-- ==================================
+                             WAITING FOR VERIFICATION
+                        =================================== -->
+
+                        <div class="text-muted">
+
+                            <i class="fas fa-info-circle mr-1"></i>
+
+                            Verification must be completed before
+                            approval.
+
+                        </div>
+
+                    {% endif %}
+
+
+                {% else %}
+
+                    <!-- ======================================
+                         NO APPROVAL AUTHORITY
+                    ======================================= -->
+
+                    <div class="text-muted">
+
+                        <i class="fas fa-lock mr-1"></i>
+
+                        You do not have authority to approve
+                        this Improvement.
+
+                    </div>
+
+                {% endif %}
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         BACK BUTTON
+    ================================================== -->
+
+    <div class="d-flex justify-content-end mb-5">
+
+        <a
+            href="{{ url_for(
+                'improvement.index'
+            ) }}"
+            class="btn btn-secondary"
+        >
+
+            <i class="fas fa-arrow-left mr-1"></i>
+
+            Back to Improvement List
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     APPROVE IMPROVEMENT MODAL
+================================================== -->
+
+{% include
+    "components/approve_improvement.html"
+%}
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+{{ super() }}
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/delete-modal.js'
+    ) }}"
+></script>
+
+{% endblock %}
+
+
+{% include "components/delete_modal.html" %}

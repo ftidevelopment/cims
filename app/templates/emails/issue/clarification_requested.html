@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Clarification Required</title>
+</head>
+
+<body style="font-family: Arial, sans-serif;">
+
+    <h3>
+        Issue Clarification Required
+    </h3>
+
+    <p>
+        Dear {{ requestor.full_name }},
+    </p>
+
+    <p>
+        Additional information is required for the following Issue:
+    </p>
+
+    <table cellpadding="6" cellspacing="0">
+
+        <tr>
+            <td><strong>Issue No</strong></td>
+            <td>{{ issue.issue_no }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Module</strong></td>
+            <td>{{ issue.module }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Priority</strong></td>
+            <td>{{ issue.priority }}</td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <p>
+        <strong>Developer Request:</strong>
+    </p>
+
+    <div
+        style="
+            background:#f5f5f5;
+            padding:15px;
+            border-left:4px solid #f0ad4e;
+        "
+    >
+        {{ clarification.question }}
+    </div>
+
+    <br>
+
+    <p>
+        Please open CIMS and provide the requested information.
+    </p>
+
+    <p>
+        <a href="{{ cims_url }}">
+            Open CIMS
+        </a>
+    </p>
+
+    <br>
+
+    <p>
+        Thank you.
+    </p>
+
+    <p>
+        <strong>CIMS</strong>
+    </p>
+
+</body>
+</html>

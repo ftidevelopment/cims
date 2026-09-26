@@ -1,0 +1,2012 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Improvement Dashboard
+{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   MAIN DASHBOARD
+   ========================================================= */
+
+.improvement-dashboard {
+    width: 100%;
+    padding: 24px 28px 45px 28px;
+    background: #f4f7fb;
+    min-height: calc(100vh - 60px);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.improvement-dashboard .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 22px 24px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e7edf4;
+    box-shadow: 0 4px 16px rgba(15, 42, 67, 0.06);
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.improvement-dashboard .dashboard-title-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.improvement-dashboard .dashboard-title-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(
+        135deg,
+        #0f4c81,
+        #1976b8
+    );
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+    font-size: 21px;
+    box-shadow: 0 5px 12px rgba(25, 118, 184, 0.25);
+}
+
+.improvement-dashboard .dashboard-title {
+    margin: 0;
+    font-size: 27px;
+    font-weight: 700;
+    color: #183247;
+    line-height: 1.2;
+}
+
+.improvement-dashboard .dashboard-subtitle {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #7b8a99;
+}
+
+.improvement-dashboard .dashboard-period {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 7px;
+    padding: 5px 10px;
+    background: #eef6fc;
+    color: #1976b8;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.improvement-dashboard .dashboard-period i {
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.improvement-dashboard .dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.improvement-dashboard .dashboard-actions-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.improvement-dashboard .dashboard-actions-top .btn {
+    margin-left: 7px;
+    margin-bottom: 6px;
+    border-radius: 7px;
+    font-weight: 500;
+}
+
+.improvement-dashboard .dashboard-actions-list {
+    margin-top: 2px;
+}
+
+.improvement-dashboard .dashboard-actions-list .btn {
+    margin-left: 7px;
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   KPI SECTION
+   ========================================================= */
+
+.improvement-dashboard .kpi-section {
+    margin-bottom: 4px;
+}
+
+.improvement-dashboard .kpi-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #40566a;
+}
+
+.improvement-dashboard .kpi-title i {
+    color: #1976b8;
+    margin-right: 7px;
+}
+
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
+
+.improvement-dashboard .summary-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e7edf4;
+    border-radius: 13px;
+    background: #ffffff;
+    height: 100%;
+    min-height: 126px;
+    box-shadow: 0 4px 14px rgba(15, 42, 67, 0.06);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.improvement-dashboard .summary-card.clickable {
+    display: block;
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.improvement-dashboard .summary-card.clickable:hover {
+    transform: translateY(-3px);
+    border-color: #c9ddeb;
+    box-shadow: 0 8px 22px rgba(15, 42, 67, 0.11);
+}
+
+.improvement-dashboard .summary-card::after {
+    content: "";
+    position: absolute;
+    right: -28px;
+    bottom: -38px;
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    background: rgba(25, 118, 184, 0.045);
+}
+
+.improvement-dashboard .summary-card .card-body {
+    position: relative;
+    z-index: 2;
+    padding: 17px 18px;
+}
+
+.improvement-dashboard .summary-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.improvement-dashboard .summary-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #718294;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+}
+
+.improvement-dashboard .summary-value {
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #243b53;
+    white-space: nowrap;
+}
+
+.improvement-dashboard .summary-sub {
+    font-size: 11px;
+    color: #8a99a8;
+    margin-top: 6px;
+}
+
+.improvement-dashboard .summary-arrow {
+    position: absolute;
+    right: 16px;
+    top: 18px;
+    color: #a4b2bf;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   KPI COLORS
+   ========================================================= */
+
+.improvement-dashboard .kpi-total .summary-icon {
+    background: #eaf4fb;
+    color: #1976b8;
+}
+
+.improvement-dashboard .kpi-completed .summary-icon {
+    background: #e9f7ef;
+    color: #28a745;
+}
+
+.improvement-dashboard .kpi-open .summary-icon {
+    background: #fff5df;
+    color: #e09b00;
+}
+
+.improvement-dashboard .kpi-implemented .summary-icon {
+    background: #edf0ff;
+    color: #5b67c8;
+}
+
+.improvement-dashboard .kpi-verified .summary-icon {
+    background: #e9f7f7;
+    color: #138f8f;
+}
+
+.improvement-dashboard .kpi-cost .summary-icon {
+    background: #f1edf9;
+    color: #7651a9;
+}
+
+.improvement-dashboard .kpi-saving .summary-icon {
+    background: #e9f7ef;
+    color: #209447;
+}
+
+.improvement-dashboard .kpi-benefit .summary-icon {
+    background: #e9f2ff;
+    color: #1769aa;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.improvement-dashboard .status-mini {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 7px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 12px;
+}
+
+.improvement-dashboard .status-mini i {
+    font-size: 7px;
+    margin-right: 4px;
+}
+
+.improvement-dashboard .status-completed {
+    background: #e9f7ef;
+    color: #238b45;
+}
+
+.improvement-dashboard .status-open {
+    background: #fff5df;
+    color: #b87900;
+}
+
+.improvement-dashboard .status-implemented {
+    background: #edf0ff;
+    color: #515db8;
+}
+
+.improvement-dashboard .status-verified {
+    background: #e9f7f7;
+    color: #117b7b;
+}
+
+
+/* =========================================================
+   DASHBOARD SECTION
+   ========================================================= */
+
+.improvement-dashboard .dashboard-section {
+    margin-top: 25px;
+}
+
+.improvement-dashboard .section-title {
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 13px;
+    color: #30475b;
+}
+
+.improvement-dashboard .section-title i {
+    color: #1976b8;
+    margin-right: 7px;
+}
+
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
+
+.improvement-dashboard .chart-card {
+    border: 1px solid #e7edf4;
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(15, 42, 67, 0.06);
+    height: 100%;
+    overflow: hidden;
+}
+
+.improvement-dashboard .chart-card .card-header {
+    background: #ffffff;
+    border-bottom: 1px solid #edf1f5;
+    padding: 14px 17px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #30475b;
+}
+
+.improvement-dashboard .chart-card .card-header i {
+    color: #1976b8;
+}
+
+.improvement-dashboard .chart-card .card-body {
+    padding: 12px 15px 15px 15px;
+}
+
+.improvement-dashboard .chart-container {
+    position: relative;
+    height: 310px;
+    width: 100%;
+}
+
+
+/* =========================================================
+   FINANCIAL SUMMARY
+   ========================================================= */
+
+.improvement-dashboard .financial-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 3px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.improvement-dashboard .financial-row:last-child {
+    border-bottom: none;
+}
+
+.improvement-dashboard .financial-label {
+    color: #667788;
+    font-size: 13px;
+}
+
+.improvement-dashboard .financial-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #30475b;
+}
+
+.improvement-dashboard .financial-total {
+    margin-top: 4px;
+    padding: 14px 12px;
+    background: #eef6fc;
+    border-radius: 9px;
+}
+
+.improvement-dashboard .financial-total .financial-label {
+    color: #1976b8;
+    font-weight: 600;
+}
+
+.improvement-dashboard .financial-total .financial-value {
+    color: #1769aa;
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   DEPARTMENT CARD
+   ========================================================= */
+
+.improvement-dashboard .department-card {
+    border: 1px solid #e7edf4;
+    border-radius: 13px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(15, 42, 67, 0.06);
+    overflow: hidden;
+}
+
+.improvement-dashboard .department-card .card-body {
+    padding: 0;
+}
+
+.improvement-dashboard .department-card .table {
+    margin-bottom: 0;
+}
+
+.improvement-dashboard .department-card thead th {
+    background: #f5f8fb;
+    color: #647789;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-top: none;
+    border-bottom: 1px solid #e5ebf0;
+    padding: 12px 15px;
+}
+
+.improvement-dashboard .department-card tbody td {
+    font-size: 13px;
+    color: #465a6d;
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-top: 1px solid #f0f3f6;
+}
+
+.improvement-dashboard .department-card tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.improvement-dashboard .department-card tbody tr:hover {
+    background: #f8fbfd;
+}
+
+.improvement-dashboard .department-number {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #eef6fc;
+    color: #1976b8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.improvement-dashboard .department-total {
+    display: inline-flex;
+    min-width: 36px;
+    justify-content: center;
+    padding: 4px 9px;
+    border-radius: 15px;
+    background: #eaf4fb;
+    color: #1976b8;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.improvement-dashboard .dashboard-footer {
+    text-align: center;
+    color: #8a99a8;
+    font-size: 11px;
+    margin-top: 32px;
+    padding-top: 18px;
+    border-top: 1px solid #e4eaf0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1199px) {
+
+    .improvement-dashboard .summary-value {
+        font-size: 23px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .improvement-dashboard {
+        padding: 15px 12px 30px 12px;
+    }
+
+    .improvement-dashboard .dashboard-header {
+        padding: 18px;
+        align-items: flex-start;
+    }
+
+    .improvement-dashboard .dashboard-title {
+        font-size: 22px;
+    }
+
+    .improvement-dashboard .dashboard-title-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+
+    .improvement-dashboard .dashboard-actions {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .improvement-dashboard .dashboard-actions-top {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .improvement-dashboard .dashboard-actions-top .btn {
+        margin-left: 0;
+        margin-right: 6px;
+    }
+
+    .improvement-dashboard .dashboard-actions-list {
+        margin-top: 5px;
+    }
+
+    .improvement-dashboard .dashboard-actions-list .btn {
+        margin-left: 0;
+    }
+
+    .improvement-dashboard .chart-container {
+        height: 275px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .improvement-dashboard .dashboard-title-wrapper {
+        align-items: flex-start;
+    }
+
+    .improvement-dashboard .dashboard-title {
+        font-size: 20px;
+    }
+
+    .improvement-dashboard .summary-value {
+        font-size: 22px;
+    }
+
+    .improvement-dashboard .summary-card {
+        min-height: 118px;
+    }
+
+}
+
+</style>
+
+
+<div class="improvement-dashboard">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="dashboard-header">
+
+        <div class="dashboard-title-wrapper">
+
+            <div class="dashboard-title-icon">
+
+                <i class="fas fa-tools"></i>
+
+            </div>
+
+            <div>
+
+                <h1 class="dashboard-title">
+
+                    Improvement Dashboard
+
+                </h1>
+
+                <div class="dashboard-subtitle">
+
+                    Continuous Improvement Performance Overview
+
+                </div>
+
+                <div class="dashboard-period">
+
+                    <i class="far fa-calendar-alt"></i>
+
+                    {{ dashboard.period.start_date.strftime('%d %b %Y') }}
+
+                    <span class="mx-1">-</span>
+
+                    {{ dashboard.period.end_date.strftime('%d %b %Y') }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <div class="dashboard-actions">
+
+            <div class="dashboard-actions-top">
+
+
+    <!-- PERFORMANCE -->
+
+    <a
+        href="{{ url_for('dashboard.index') }}"
+        class="btn btn-outline-primary btn-sm"
+    >
+
+        <i class="fas fa-chart-line mr-1"></i>
+
+        Performance
+
+    </a>
+
+
+    <!-- PROBLEM -->
+
+    <a
+        href="{{ url_for('problem_dashboard.index') }}"
+        class="btn btn-outline-danger btn-sm"
+    >
+
+        <i class="fas fa-exclamation-triangle mr-1"></i>
+
+        Problem
+
+    </a>
+
+
+    <!-- IMPROVEMENT - ACTIVE -->
+
+    <a
+        href="{{ url_for('improvement_dashboard.index') }}"
+        class="btn btn-success btn-sm"
+    >
+
+        <i class="fas fa-tools mr-1"></i>
+
+        Improvement
+
+    </a>
+
+
+    <!-- KAIZEN -->
+
+    <a
+        href="{{ url_for('kaizen_dashboard.index') }}"
+        class="btn btn-outline-warning btn-sm"
+    >
+
+        <i class="fas fa-lightbulb mr-1"></i>
+
+        Kaizen
+
+    </a>
+
+
+    <!-- LOGIN -->
+
+    <a
+        href="{{ url_for('auth.login') }}"
+        class="btn btn-primary btn-sm"
+    >
+
+        <i class="fas fa-sign-in-alt mr-1"></i>
+
+        Login
+
+    </a>
+
+</div>
+
+            <div class="dashboard-actions-list">
+
+                <a
+                    href="{{ url_for('improvement_dashboard.improvements') }}"
+                    class="btn btn-outline-primary btn-sm"
+                >
+
+                    <i class="fas fa-list mr-1"></i>
+
+                    Improvement List
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         KPI
+         ====================================================== -->
+
+    <div class="kpi-section">
+
+        <div class="kpi-title">
+
+            <i class="fas fa-chart-pie"></i>
+
+            Improvement Performance
+
+        </div>
+
+
+        <div class="row">
+
+
+            <!-- =================================================
+                 TOTAL IMPROVEMENT
+                 6 MONTHS
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        period='6_months'
+                    ) }}"
+                    class="summary-card clickable kpi-total"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-layer-group"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Total Improvement
+
+                        </div>
+
+                        <div class="summary-value">
+
+                            {{ dashboard.summary.total }}
+
+                        </div>
+
+                        <div class="summary-sub">
+
+                            Last 6 months
+
+                        </div>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 COMPLETED
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        status='Completed',
+                        period='6_months'
+                    ) }}"
+                    class="summary-card clickable kpi-completed"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-check-circle"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Completed
+
+                        </div>
+
+                        <div class="summary-value text-success">
+
+                            {{ dashboard.summary.completed }}
+
+                        </div>
+
+                        <span class="status-mini status-completed">
+
+                            <i class="fas fa-circle"></i>
+
+                            Approved
+
+                        </span>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 OPEN
+                 ALL DATA
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        status='Open'
+                    ) }}"
+                    class="summary-card clickable kpi-open"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-folder-open"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Open
+
+                        </div>
+
+                        <div class="summary-value text-warning">
+
+                            {{ dashboard.summary.open }}
+
+                        </div>
+
+                        <span class="status-mini status-open">
+
+                            <i class="fas fa-circle"></i>
+
+                            Pending
+
+                        </span>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 IMPLEMENTED
+                 ALL DATA
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        status='Implemented'
+                    ) }}"
+                    class="summary-card clickable kpi-implemented"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-cogs"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Implemented
+
+                        </div>
+
+                        <div class="summary-value">
+
+                            {{ dashboard.summary.implemented }}
+
+                        </div>
+
+                        <span class="status-mini status-implemented">
+
+                            <i class="fas fa-circle"></i>
+
+                            Implemented
+
+                        </span>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 VERIFIED
+                 ALL DATA
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        status='Verified'
+                    ) }}"
+                    class="summary-card clickable kpi-verified"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-clipboard-check"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Verified
+
+                        </div>
+
+                        <div class="summary-value">
+
+                            {{ dashboard.summary.verified }}
+
+                        </div>
+
+                        <span class="status-mini status-verified">
+
+                            <i class="fas fa-circle"></i>
+
+                            Verified
+
+                        </span>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 IMPROVEMENT COST
+                 6 MONTHS
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        period='6_months'
+                    ) }}"
+                    class="summary-card clickable kpi-cost"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-file-invoice-dollar"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Improvement Cost
+
+                        </div>
+
+                        <div class="summary-value">
+
+                            {{ "{:,.0f}".format(
+                                dashboard.summary.total_cost
+                            ) }}
+
+                        </div>
+
+                        <div class="summary-sub">
+
+                            Last 6 months
+
+                        </div>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 COST SAVING
+                 6 MONTHS
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        period='6_months'
+                    ) }}"
+                    class="summary-card clickable kpi-saving"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-hand-holding-usd"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Cost Saving
+
+                        </div>
+
+                        <div class="summary-value text-success">
+
+                            {{ "{:,.0f}".format(
+                                dashboard.summary.total_saving
+                            ) }}
+
+                        </div>
+
+                        <div class="summary-sub">
+
+                            Estimated saving
+
+                        </div>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 NET BENEFIT
+                 6 MONTHS
+                 ================================================= -->
+
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                <a
+                    href="{{ url_for(
+                        'improvement_dashboard.improvements',
+                        period='6_months'
+                    ) }}"
+                    class="summary-card clickable kpi-benefit"
+                >
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-chart-line"></i>
+
+                        </div>
+
+                        <div class="summary-label">
+
+                            Net Benefit
+
+                        </div>
+
+                        <div class="summary-value text-primary">
+
+                            {{ "{:,.0f}".format(
+                                dashboard.summary.net_benefit
+                            ) }}
+
+                        </div>
+
+                        <div class="summary-sub">
+
+                            Benefit - Cost
+
+                        </div>
+
+                        <i class="fas fa-chevron-right summary-arrow"></i>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TREND CHARTS
+         ====================================================== -->
+
+    <div class="dashboard-section">
+
+        <div class="section-title">
+
+            <i class="fas fa-chart-line"></i>
+
+            Improvement Trend Analysis
+
+        </div>
+
+
+        <div class="row">
+
+
+            <!-- IMPROVEMENT TREND -->
+
+            <div class="col-lg-6 mb-3">
+
+                <div class="card chart-card">
+
+                    <div class="card-header">
+
+                        <i class="fas fa-chart-line mr-1"></i>
+
+                        Improvement Trend
+
+                        <span class="float-right text-muted"
+                              style="font-size: 11px; font-weight: 400;">
+
+                            Last 6 Months
+
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="improvementTrendChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVING TREND -->
+
+            <div class="col-lg-6 mb-3">
+
+                <div class="card chart-card">
+
+                    <div class="card-header">
+
+                        <i class="fas fa-coins mr-1"></i>
+
+                        Cost Saving Trend
+
+                        <span class="float-right text-muted"
+                              style="font-size: 11px; font-weight: 400;">
+
+                            Last 6 Months
+
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="savingTrendChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         COST + FINANCIAL
+         ====================================================== -->
+
+    <div class="dashboard-section">
+
+        <div class="section-title">
+
+            <i class="fas fa-money-check-alt"></i>
+
+            Financial Performance
+
+        </div>
+
+
+        <div class="row">
+
+
+            <!-- COST TREND -->
+
+            <div class="col-lg-6 mb-3">
+
+                <div class="card chart-card">
+
+                    <div class="card-header">
+
+                        <i class="fas fa-chart-bar mr-1"></i>
+
+                        Improvement Cost Trend
+
+                        <span class="float-right text-muted"
+                              style="font-size: 11px; font-weight: 400;">
+
+                            Last 6 Months
+
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="costTrendChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FINANCIAL SUMMARY -->
+
+            <div class="col-lg-6 mb-3">
+
+                <div class="card chart-card">
+
+                    <div class="card-header">
+
+                        <i class="fas fa-wallet mr-1"></i>
+
+                        Financial Summary
+
+                    </div>
+
+                    <div class="card-body">
+
+
+                        <div class="financial-row">
+
+                            <div class="financial-label">
+
+                                <i class="fas fa-file-invoice-dollar mr-1 text-muted"></i>
+
+                                Improvement Cost
+
+                            </div>
+
+                            <div class="financial-value">
+
+                                {{ "{:,.0f}".format(
+                                    dashboard.summary.total_cost
+                                ) }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="financial-row">
+
+                            <div class="financial-label">
+
+                                <i class="fas fa-hand-holding-usd mr-1 text-success"></i>
+
+                                Estimated Cost Saving
+
+                            </div>
+
+                            <div class="financial-value text-success">
+
+                                {{ "{:,.0f}".format(
+                                    dashboard.summary.total_saving
+                                ) }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="financial-row">
+
+                            <div class="financial-label">
+
+                                <i class="fas fa-gift mr-1 text-info"></i>
+
+                                Estimated Benefit
+
+                            </div>
+
+                            <div class="financial-value">
+
+                                {{ "{:,.0f}".format(
+                                    dashboard.summary.total_benefit
+                                ) }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="financial-row">
+
+                            <div class="financial-label">
+
+                                <i class="fas fa-clock mr-1 text-warning"></i>
+
+                                Time Saving
+
+                            </div>
+
+                            <div class="financial-value">
+
+                                {{ dashboard.summary.total_time_saving }}
+
+                                min
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="financial-row financial-total">
+
+                            <div class="financial-label">
+
+                                <i class="fas fa-chart-line mr-1"></i>
+
+                                Net Benefit
+
+                            </div>
+
+                            <div class="financial-value">
+
+                                {{ "{:,.0f}".format(
+                                    dashboard.summary.net_benefit
+                                ) }}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DEPARTMENT
+         ====================================================== -->
+
+    <div class="dashboard-section">
+
+        <div class="section-title">
+
+            <i class="fas fa-building"></i>
+
+            Improvement by Department
+
+        </div>
+
+
+        <div class="card department-card">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width: 70px;">
+                                    No
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th
+                                    class="text-right"
+                                    style="width: 200px;"
+                                >
+                                    Total Improvement
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for item in dashboard.by_department %}
+
+                            <tr>
+
+                                <td>
+
+                                    <span class="department-number">
+
+                                        {{ loop.index }}
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <i class="fas fa-building mr-2 text-muted"></i>
+
+                                    {{ item.department }}
+
+                                </td>
+
+                                <td class="text-right">
+
+                                    <span class="department-total">
+
+                                        {{ item.total }}
+
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="text-center text-muted py-4"
+                                >
+
+                                    <i class="fas fa-inbox d-block mb-2"
+                                       style="font-size: 24px;">
+                                    </i>
+
+                                    No department data found.
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="dashboard-footer">
+
+        <i class="fas fa-cogs mr-1"></i>
+
+        CIMS - Continuous Improvement Management System
+
+        &copy;
+
+        {{ dashboard.period.end_date.year }}
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CHART.JS
+     ========================================================== -->
+
+<script src="{{ url_for(
+    'static',
+    filename='js/chart.js'
+) }}"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           CHECK CHART.JS
+           ===================================================== */
+
+        if (typeof Chart === "undefined") {
+
+            console.error(
+                "Chart.js is not loaded."
+            );
+
+            return;
+
+        }
+
+
+        /* =====================================================
+           COMMON OPTIONS
+           ===================================================== */
+
+        const commonOptions = {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    mode: "index",
+                    intersect: false
+                }
+
+            },
+
+            interaction: {
+
+                mode: "index",
+
+                intersect: false
+
+            }
+
+        };
+
+
+        /* =====================================================
+           IMPROVEMENT TREND
+           ===================================================== */
+
+        const improvementTrendCanvas =
+            document.getElementById(
+                "improvementTrendChart"
+            );
+
+
+        if (improvementTrendCanvas) {
+
+            new Chart(
+
+                improvementTrendCanvas,
+
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: [
+
+                            {% for item in dashboard.trend %}
+
+                            "{{ item.label }}"
+
+                            {% if not loop.last %},{% endif %}
+
+                            {% endfor %}
+
+                        ],
+
+                        datasets: [
+
+                            {
+
+                                label: "Improvement",
+
+                                data: [
+
+                                    {% for item in dashboard.trend %}
+
+                                    {{ item.total }}
+
+                                    {% if not loop.last %},{% endif %}
+
+                                    {% endfor %}
+
+                                ],
+
+                                borderWidth: 3,
+
+                                tension: 0.35,
+
+                                fill: false,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        ...commonOptions,
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+                                    display: false
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        /* =====================================================
+           SAVING TREND
+           ===================================================== */
+
+        const savingTrendCanvas =
+            document.getElementById(
+                "savingTrendChart"
+            );
+
+
+        if (savingTrendCanvas) {
+
+            new Chart(
+
+                savingTrendCanvas,
+
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: [
+
+                            {% for item in dashboard.saving_trend %}
+
+                            "{{ item.label }}"
+
+                            {% if not loop.last %},{% endif %}
+
+                            {% endfor %}
+
+                        ],
+
+                        datasets: [
+
+                            {
+
+                                label: "Cost Saving",
+
+                                data: [
+
+                                    {% for item in dashboard.saving_trend %}
+
+                                    {{ item.saving }}
+
+                                    {% if not loop.last %},{% endif %}
+
+                                    {% endfor %}
+
+                                ],
+
+                                borderWidth: 3,
+
+                                tension: 0.35,
+
+                                fill: false,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        ...commonOptions,
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+                                    display: false
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    callback: function(value) {
+
+                                        return Number(
+                                            value
+                                        ).toLocaleString(
+                                            "id-ID"
+                                        );
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        /* =====================================================
+           COST TREND
+           ===================================================== */
+
+        const costTrendCanvas =
+            document.getElementById(
+                "costTrendChart"
+            );
+
+
+        if (costTrendCanvas) {
+
+            new Chart(
+
+                costTrendCanvas,
+
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: [
+
+                            {% for item in dashboard.cost_trend %}
+
+                            "{{ item.label }}"
+
+                            {% if not loop.last %},{% endif %}
+
+                            {% endfor %}
+
+                        ],
+
+                        datasets: [
+
+                            {
+
+                                label: "Improvement Cost",
+
+                                data: [
+
+                                    {% for item in dashboard.cost_trend %}
+
+                                    {{ item.cost }}
+
+                                    {% if not loop.last %},{% endif %}
+
+                                    {% endfor %}
+
+                                ],
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+                    options: {
+
+                        ...commonOptions,
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+                                    display: false
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    callback: function(value) {
+
+                                        return Number(
+                                            value
+                                        ).toLocaleString(
+                                            "id-ID"
+                                        );
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    }
+
+);
+
+</script>
+
+{% endblock %}

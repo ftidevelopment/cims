@@ -1,0 +1,1098 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Login - CIMS
+{% endblock %}
+
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   CIMS LOGIN
+   ========================================================= */
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.public-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.cims-login-page {
+    min-height: calc(100vh - 0px);
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f8fa 0%,
+            #ffffff 55%,
+            #edf6fb 100%
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 35px 5%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.cims-login-container {
+    width: 100%;
+    max-width: 1150px;
+
+    min-height: 620px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 50px rgba(15, 42, 67, 0.13);
+
+    display: grid;
+
+    grid-template-columns:
+        1.15fr 0.85fr;
+}
+
+
+/* =========================================================
+   LEFT SIDE
+   ========================================================= */
+
+.cims-login-left {
+    position: relative;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0F2A43 0%,
+            #164E73 55%,
+            #1976B8 100%
+        );
+
+    color: #ffffff;
+
+    padding: 55px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATION
+   ========================================================= */
+
+.cims-login-left::before {
+    content: "";
+
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    right: -170px;
+    top: -150px;
+}
+
+.cims-login-left::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    left: -120px;
+    bottom: -120px;
+}
+
+
+/* =========================================================
+   COMPANY
+   ========================================================= */
+
+.cims-login-company {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 55px;
+}
+
+.cims-login-company-logo {
+    width: 55px;
+    height: 55px;
+
+    background: #ffffff;
+
+    border-radius: 9px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+.cims-login-company-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+.cims-login-company-name strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+.cims-login-company-name span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #bcd1df;
+
+    font-size: 10px;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   LEFT CONTENT
+   ========================================================= */
+
+.cims-login-content {
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 510px;
+}
+
+.cims-login-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #a9d4ed;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 13px;
+}
+
+.cims-login-label i {
+    font-size: 13px;
+}
+
+.cims-login-title {
+    margin: 0;
+
+    font-size: 43px;
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+}
+
+.cims-login-title span {
+    display: block;
+
+    color: #8fc9ec;
+
+    margin-top: 4px;
+}
+
+.cims-login-description {
+    margin: 18px 0 0 0;
+
+    max-width: 420px;
+
+    color: #d7e6ef;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   IMPROVEMENT VISUAL
+   ========================================================= */
+
+.cims-login-chart {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 38px;
+
+    max-width: 470px;
+
+    height: 125px;
+
+    border-left: 1px solid rgba(255,255,255,0.25);
+
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.cims-login-chart svg {
+    width: 100%;
+    height: 100%;
+}
+
+.cims-login-chart-label {
+    position: absolute;
+
+    right: 0;
+
+    top: 4px;
+
+    color: #9fe0a9;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.cims-login-chart-label i {
+    margin-right: 4px;
+}
+
+
+/* =========================================================
+   MODULE INDICATORS
+   ========================================================= */
+
+.cims-login-modules {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.cims-login-module {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 11px;
+
+    border-radius: 5px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    color: #e3edf4;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.cims-login-module i {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RIGHT SIDE
+   ========================================================= */
+
+.cims-login-right {
+    background: #ffffff;
+
+    padding: 55px 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.cims-login-form-container {
+    width: 100%;
+
+    max-width: 360px;
+}
+
+
+/* =========================================================
+   LOGIN LOGO
+   ========================================================= */
+
+.cims-login-form-logo {
+    text-align: center;
+
+    margin-bottom: 22px;
+}
+
+.cims-login-form-logo img {
+    width: 82px;
+    height: 82px;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   LOGIN TITLE
+   ========================================================= */
+
+.cims-login-form-title {
+    text-align: center;
+
+    margin-bottom: 28px;
+}
+
+.cims-login-form-title h2 {
+    margin: 0;
+
+    color: #0F2A43;
+
+    font-size: 25px;
+
+    font-weight: 700;
+}
+
+.cims-login-form-title p {
+    margin: 6px 0 0 0;
+
+    color: #89949d;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FLASH MESSAGE
+   ========================================================= */
+
+.cims-login-alert {
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.cims-login-field {
+    margin-bottom: 17px;
+}
+
+.cims-login-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #46535e;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.cims-login-input {
+    position: relative;
+}
+
+.cims-login-input .form-control {
+    height: 45px;
+
+    padding-left: 43px;
+
+    padding-right: 40px;
+
+    border:
+        1px solid #dce3e8;
+
+    border-radius: 7px;
+
+    color: #212529;
+
+    font-size: 13px;
+
+    box-shadow: none;
+}
+
+.cims-login-input .form-control:focus {
+    border-color: #1976B8;
+
+    box-shadow:
+        0 0 0 2px rgba(25,118,184,0.10);
+}
+
+.cims-login-input-icon {
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #8b98a3;
+
+    font-size: 14px;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+   ========================================================= */
+
+.cims-password-toggle {
+    position: absolute;
+
+    right: 13px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: 0;
+
+    background: transparent;
+
+    color: #8b98a3;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+.cims-password-toggle:hover {
+    color: #1976B8;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.cims-login-button {
+    width: 100%;
+
+    height: 45px;
+
+    margin-top: 8px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1976B8,
+            #164E73
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 5px 12px rgba(25,118,184,0.20);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.cims-login-button:hover {
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 16px rgba(25,118,184,0.25);
+}
+
+
+/* =========================================================
+   SECURITY NOTE
+   ========================================================= */
+
+.cims-login-security {
+    text-align: center;
+
+    margin-top: 25px;
+
+    color: #9aa4ac;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+.cims-login-security i {
+    margin-right: 4px;
+
+    color: #1976B8;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.cims-login-footer {
+    text-align: center;
+
+    margin-top: 30px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #edf0f2;
+
+    color: #a0a9b0;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .cims-login-container {
+        grid-template-columns: 1fr;
+    }
+
+    .cims-login-left {
+        padding: 40px;
+    }
+
+    .cims-login-company {
+        margin-bottom: 35px;
+    }
+
+    .cims-login-chart {
+        display: none;
+    }
+
+    .cims-login-modules {
+        margin-top: 25px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .cims-login-page {
+        padding: 15px;
+    }
+
+    .cims-login-left {
+        padding: 30px 25px;
+    }
+
+    .cims-login-right {
+        padding: 35px 25px;
+    }
+
+    .cims-login-title {
+        font-size: 34px;
+    }
+
+    .cims-login-company-name strong {
+        font-size: 12px;
+    }
+
+    .cims-login-modules {
+        flex-wrap: wrap;
+    }
+
+}
+
+</style>
+
+
+<div class="cims-login-page">
+
+
+    <div class="cims-login-container">
+
+
+        <!-- =================================================
+             LEFT PANEL
+             ================================================= -->
+
+        <div class="cims-login-left">
+
+
+            <!-- COMPANY -->
+
+            <div class="cims-login-company">
+
+                <div class="cims-login-company-logo">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/cims_logo.png'
+                        ) }}"
+                        alt="CIMS Logo"
+                    >
+
+                </div>
+
+
+                <div class="cims-login-company-name">
+
+                    <strong>
+                        FOXCONN TECHNOLOGIES INDONESIA
+                    </strong>
+
+                    <span>
+                        CONTINUOUS IMPROVEMENT MANAGEMENT SYSTEM
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTENT -->
+
+            <div class="cims-login-content">
+
+                <div class="cims-login-label">
+
+                    <i class="fas fa-chart-line"></i>
+
+                    Continuous Improvement
+
+                </div>
+
+
+                <h1 class="cims-login-title">
+
+                    Turn Problems
+
+                    <span>
+                        into Better Results
+                    </span>
+
+                </h1>
+
+
+                <p class="cims-login-description">
+
+                    Problem → Improvement → Kaizen
+
+                </p>
+
+
+                <!-- GRAPH -->
+
+                <div class="cims-login-chart">
+
+                    <div class="cims-login-chart-label">
+
+                        <i class="fas fa-arrow-up"></i>
+
+                        Improvement
+
+                    </div>
+
+
+                    <svg
+                        viewBox="0 0 600 130"
+                        preserveAspectRatio="none"
+                    >
+
+                        <polyline
+                            points="
+                            0,105
+                            70,99
+                            130,91
+                            190,85
+                            250,72
+                            310,68
+                            370,55
+                            430,43
+                            500,27
+                            590,8
+                            "
+                            fill="none"
+                            stroke="#8fd19e"
+                            stroke-width="5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <!-- MODULES -->
+
+                <div class="cims-login-modules">
+
+
+                    <div class="cims-login-module">
+
+                        <i class="fas fa-exclamation-triangle"></i>
+
+                        Problem
+
+                    </div>
+
+
+                    <div class="cims-login-module">
+
+                        <i class="fas fa-tools"></i>
+
+                        Improvement
+
+                    </div>
+
+
+                    <div class="cims-login-module">
+
+                        <i class="fas fa-lightbulb"></i>
+
+                        Kaizen
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT PANEL
+             ================================================= -->
+
+        <div class="cims-login-right">
+
+
+            <div class="cims-login-form-container">
+
+
+                <!-- LOGO -->
+
+                <div class="cims-login-form-logo">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/cims_logo.png'
+                        ) }}"
+                        alt="CIMS Logo"
+                    >
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <div class="cims-login-form-title">
+
+                    <h2>
+                        Welcome Back
+                    </h2>
+
+                    <p>
+                        Sign in to continue to CIMS
+                    </p>
+
+                </div>
+
+
+                <!-- FLASH MESSAGE -->
+
+                {% with messages = get_flashed_messages(
+                    with_categories=true
+                ) %}
+
+                    {% if messages %}
+
+                        {% for category, message in messages %}
+
+                            <div
+                                class="alert alert-{{ category }} cims-login-alert"
+                            >
+
+                                {{ message }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endwith %}
+
+
+                <!-- FORM -->
+
+                <form method="POST">
+
+
+                    <!-- USERNAME -->
+
+                    <div class="cims-login-field">
+
+                        <label for="username">
+
+                            Username
+
+                        </label>
+
+
+                        <div class="cims-login-input">
+
+                            <i
+                                class="fas fa-user cims-login-input-icon"
+                            ></i>
+
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control"
+                                placeholder="Enter your username"
+                                autocomplete="username"
+                                required
+                                autofocus
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="cims-login-field">
+
+                        <label for="password">
+
+                            Password
+
+                        </label>
+
+
+                        <div class="cims-login-input">
+
+                            <i
+                                class="fas fa-lock cims-login-input-icon"
+                            ></i>
+
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+
+                            <button
+                                type="button"
+                                class="cims-password-toggle"
+                                onclick="togglePassword()"
+                                aria-label="Show password"
+                            >
+
+                                <i
+                                    id="password-icon"
+                                    class="fas fa-eye"
+                                ></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOGIN -->
+
+                    <button
+                        type="submit"
+                        class="btn cims-login-button"
+                    >
+
+                        <i class="fas fa-sign-in-alt mr-1"></i>
+
+                        Sign In
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- SECURITY -->
+
+                <div class="cims-login-security">
+
+                    <i class="fas fa-shield-alt"></i>
+
+                    Secure access to Continuous Improvement Management System
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="cims-login-footer">
+
+                    FOXCONN TECHNOLOGIES INDONESIA
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+function togglePassword() {
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const passwordIcon =
+        document.getElementById("password-icon");
+
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        passwordIcon.classList.remove("fa-eye");
+
+        passwordIcon.classList.add("fa-eye-slash");
+
+    } else {
+
+        passwordInput.type = "password";
+
+        passwordIcon.classList.remove("fa-eye-slash");
+
+        passwordIcon.classList.add("fa-eye");
+
+    }
+
+}
+
+</script>
+
+
+{% endblock %}

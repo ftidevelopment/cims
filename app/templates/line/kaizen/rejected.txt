@@ -1,0 +1,14 @@
+🔔 CIMS - Kaizen Rejected
+
+Kaizen No: {{ kaizen.kaizen_no }}
+Title: {{ kaizen.title }}
+Employee: {% if kaizen.employee %}{{ kaizen.employee.full_name }}{% else %}-{% endif %}
+Improvement: {% if kaizen.improvement %}{{ kaizen.improvement.improvement_no }} - {{ kaizen.improvement.title }}{% else %}-{% endif %}
+Problem: {% if kaizen.problem %}{{ kaizen.problem.problem_no }} - {{ kaizen.problem.title }}{% else %}-{% endif %}
+Rejected By: {% if kaizen.rejected_by %}{{ kaizen.rejected_by.full_name }}{% else %}-{% endif %}
+Rejected Date: {% if kaizen.rejected_at %}{{ kaizen.rejected_at.strftime('%d-%m-%Y %H:%M') }}{% else %}-{% endif %}
+Rejection Reason: {{ kaizen.rejection_reason or '-' }}
+Status: Rejected
+
+The Kaizen proposal has been rejected in CIMS.
+Please check CIMS for the latest information.

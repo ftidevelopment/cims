@@ -1,0 +1,139 @@
+<div
+    class="modal fade"
+    id="requestClarificationModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="requestClarificationModalLabel"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal-dialog modal-dialog-centered"
+        role="document"
+    >
+
+        <div class="modal-content">
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'issue.create_clarification',
+                    issue_id=issue.id
+                ) }}"
+            >
+
+                <!-- Header -->
+
+                <div class="modal-header">
+
+                    <h5
+                        class="modal-title"
+                        id="requestClarificationModalLabel"
+                    >
+
+                        <i class="fas fa-question-circle mr-2"></i>
+
+                        Request Clarification
+
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                    >
+
+                        <span aria-hidden="true">
+                            &times;
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- Body -->
+
+                <div class="modal-body">
+
+                    <div class="alert alert-light border">
+
+                        <i class="fas fa-info-circle mr-1"></i>
+
+                        Please specify the information or data
+                        that is required from the requestor.
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="clarification_question">
+
+                            Clarification Request
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+                        <textarea
+                            name="question"
+                            id="clarification_question"
+                            class="form-control"
+                            rows="5"
+                            maxlength="5000"
+                            required
+                            placeholder="Example: Please provide the PO number and screenshot of the error."
+                        ></textarea>
+
+                        <small class="form-text text-muted">
+
+                            Please provide a clear explanation
+                            of the additional information required.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Footer -->
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        data-dismiss="modal"
+                    >
+
+                        <i class="fas fa-times mr-1"></i>
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-warning"
+                    >
+
+                        <i class="fas fa-paper-plane mr-1"></i>
+
+                        Send Request
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

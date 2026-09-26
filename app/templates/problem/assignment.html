@@ -1,0 +1,1023 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+Assign Problem
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+
+    <!-- ==================================================
+         Header
+    ================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h4 class="mb-1">
+                Assign Problem
+            </h4>
+
+            <small class="text-muted">
+                Assign PIC for this Problem
+            </small>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{{ url_for(
+                    'problem.show',
+                    problem_id=problem.id
+                ) }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Problem Information
+    ================================================== -->
+
+    <div class="card mb-3">
+
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-exclamation-circle mr-2"></i>
+
+                Problem Information
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- Problem No -->
+
+                <div class="col-md-3">
+
+                    <strong>
+                        Problem No
+                    </strong>
+
+                    <div>
+                        {{ problem.problem_no }}
+                    </div>
+
+                </div>
+
+
+                <!-- Problem -->
+
+                <div class="col-md-5">
+
+                    <strong>
+                        Problem
+                    </strong>
+
+                    <div>
+                        {{ problem.title }}
+                    </div>
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Problem Department
+                    </strong>
+
+                    <div>
+                        {{ problem.department.department_name }}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         Assignment Card
+    ================================================== -->
+
+    <div class="card">
+
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-user-check mr-2"></i>
+
+                Assignment
+
+            </strong>
+
+        </div>
+
+
+        <form
+            method="POST"
+            id="assignment-form"
+        >
+
+
+            <div class="card-body">
+
+
+                <!-- ==========================================
+                     Priority
+                =========================================== -->
+
+                <div class="form-group">
+
+                    <label for="priority">
+
+                        Priority
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <select
+                        id="priority"
+                        name="priority"
+                        class="form-control"
+                        required
+                    >
+
+                        <option value="">
+
+                            -- Select Priority --
+
+                        </option>
+
+
+                        {% for value, label in PROBLEM_PRIORITY %}
+
+                        <option
+                            value="{{ value }}"
+
+                            {% if problem.priority == value %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ label }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- ==========================================
+                     Target Date
+                =========================================== -->
+
+                <div class="form-group">
+
+                    <label for="target_date">
+
+                        Target Date
+
+                    </label>
+
+
+                    <input
+                        type="date"
+                        id="target_date"
+                        name="target_date"
+                        class="form-control"
+
+                        value="{{
+                            problem.target_date.strftime('%Y-%m-%d')
+                            if problem.target_date
+                            else ''
+                        }}"
+                    >
+
+                </div>
+
+
+                <!-- ==========================================
+                     Problem PIC
+                =========================================== -->
+
+                <div class="form-group">
+
+
+                    <label>
+
+                        Problem PIC
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <small class="text-muted d-block mb-3">
+
+                        Select a department to display
+                        eligible Manager and Supervisor.
+
+                        PIC can be selected from
+                        different departments.
+
+                    </small>
+
+
+                    <!-- ======================================
+                         Department Selector
+                    ======================================= -->
+
+                    <div class="card card-light mb-3">
+
+
+                        <div class="card-header">
+
+                            <strong>
+
+                                <i class="fas fa-building mr-2"></i>
+
+                                Select PIC Department
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+
+                            <select
+                                id="pic_department"
+                                class="form-control"
+                            >
+
+                                <option value="">
+
+                                    -- Select Department --
+
+                                </option>
+
+
+                                {% for department in departments %}
+
+                                <option
+                                    value="{{ department.id }}"
+                                >
+
+                                    {{ department.department_name }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         PIC Selection
+                    ======================================= -->
+
+                    {% if employees %}
+
+
+                    <div
+                        id="pic-selection"
+                        style="display: none;"
+                    >
+
+
+                        <!-- ==================================
+                             PIC Header
+                        ================================== -->
+
+                        <div class="card card-light">
+
+
+                            <div class="card-header">
+
+
+                                <div
+                                    class="d-flex justify-content-between align-items-center"
+                                >
+
+
+                                    <div>
+
+                                        <strong>
+
+                                            <i class="fas fa-users mr-2"></i>
+
+                                            Available PIC
+
+                                        </strong>
+
+                                        <span
+                                            id="selected-department-name"
+                                            class="text-muted ml-2"
+                                        ></span>
+
+                                    </div>
+
+
+                                    <!-- Select All -->
+
+                                    <div>
+
+                                        <div
+                                            class="custom-control custom-checkbox"
+                                        >
+
+                                            <input
+                                                type="checkbox"
+                                                class="custom-control-input"
+                                                id="select-all-pic"
+                                            >
+
+                                            <label
+                                                class="custom-control-label"
+                                                for="select-all-pic"
+                                            >
+
+                                                Select All
+
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- ==================================
+                                 PIC List
+                            ================================== -->
+
+                            <div class="card-body">
+
+
+                                <div
+                                    class="row"
+                                    id="pic-container"
+                                >
+
+
+                                    {% for employee in employees %}
+
+
+                                    <div
+                                        class="col-md-6 col-lg-4 mb-3 pic-item"
+
+                                        data-department-id="{{ employee.department_id }}"
+
+                                        data-department-name="{{
+                                            employee.department.department_name
+                                            if employee.department
+                                            else ''
+                                        }}"
+                                    >
+
+
+                                        <div
+                                            class="border rounded p-3 h-100"
+                                        >
+
+
+                                            <div
+                                                class="custom-control custom-checkbox"
+                                            >
+
+
+                                                <input
+                                                    type="checkbox"
+
+                                                    class="custom-control-input pic-checkbox"
+
+                                                    id="employee_{{ employee.id }}"
+
+                                                    name="employee_ids"
+
+                                                    value="{{ employee.id }}"
+
+                                                    {% if
+                                                        employee.id|string
+                                                        in selected_employee_ids
+                                                    %}
+                                                        checked
+                                                    {% endif %}
+                                                >
+
+
+                                                <label
+                                                    class="custom-control-label"
+
+                                                    for="employee_{{ employee.id }}"
+                                                >
+
+
+                                                    <strong>
+
+                                                        {{ employee.full_name }}
+
+                                                    </strong>
+
+
+                                                    <small
+                                                        class="text-muted d-block mt-1"
+                                                    >
+
+                                                        {{ employee.nik }}
+
+                                                    </small>
+
+
+
+                                                </label>
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                    {% endfor %}
+
+
+                                </div>
+
+
+                                <!-- ==================================
+                                     No PIC
+                                ================================== -->
+
+                                <div
+                                    id="no-pic-message"
+                                    class="alert alert-warning mb-0"
+                                    style="display: none;"
+                                >
+
+                                    <i
+                                        class="fas fa-exclamation-triangle mr-2"
+                                    ></i>
+
+                                    No eligible Manager or Supervisor
+                                    found in this department.
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    {% else %}
+
+
+                    <!-- ==================================
+                         No Employees
+                    ================================== -->
+
+                    <div class="alert alert-warning">
+
+                        <i
+                            class="fas fa-exclamation-triangle mr-2"
+                        ></i>
+
+                        No eligible PIC is available.
+
+                    </div>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ==================================================
+                 Footer
+            ================================================== -->
+
+            <div class="card-footer">
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+
+                    {% if not employees %}
+                        disabled
+                    {% endif %}
+                >
+
+                    <i class="fas fa-save"></i>
+
+                    Save Assignment
+
+                </button>
+
+
+                <a
+                    href="{{ url_for(
+                        'problem.show',
+                        problem_id=problem.id
+                    ) }}"
+                    class="btn btn-secondary"
+                >
+
+                    <i class="fas fa-times"></i>
+
+                    Cancel
+
+                </a>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- ==========================================================
+     Department / PIC Filter
+========================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const departmentSelect =
+            document.getElementById(
+                "pic_department"
+            );
+
+
+        const picSelection =
+            document.getElementById(
+                "pic-selection"
+            );
+
+
+        const picItems =
+            document.querySelectorAll(
+                ".pic-item"
+            );
+
+
+        const selectAll =
+            document.getElementById(
+                "select-all-pic"
+            );
+
+
+        const noPicMessage =
+            document.getElementById(
+                "no-pic-message"
+            );
+
+
+        const departmentName =
+            document.getElementById(
+                "selected-department-name"
+            );
+
+
+        if (!departmentSelect) {
+            return;
+        }
+
+
+        // ==================================================
+        // Get visible PIC
+        // ==================================================
+
+        function getVisibleCheckboxes() {
+
+            return Array.from(
+                document.querySelectorAll(
+                    ".pic-item"
+                )
+            )
+            .filter(
+                function (item) {
+
+                    return (
+                        item.style.display !== "none"
+                    );
+
+                }
+            )
+            .map(
+                function (item) {
+
+                    return item.querySelector(
+                        ".pic-checkbox"
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ==================================================
+        // Update Select All State
+        // ==================================================
+
+        function updateSelectAll() {
+
+
+            const visibleCheckboxes =
+                getVisibleCheckboxes();
+
+
+            if (
+                visibleCheckboxes.length === 0
+            ) {
+
+                selectAll.checked = false;
+
+                selectAll.indeterminate = false;
+
+                return;
+
+            }
+
+
+            const checkedCount =
+                visibleCheckboxes.filter(
+                    function (checkbox) {
+
+                        return checkbox.checked;
+
+                    }
+                ).length;
+
+
+            if (
+                checkedCount ===
+                visibleCheckboxes.length
+            ) {
+
+                selectAll.checked = true;
+
+                selectAll.indeterminate = false;
+
+            }
+            else if (
+                checkedCount > 0
+            ) {
+
+                selectAll.checked = false;
+
+                selectAll.indeterminate = true;
+
+            }
+            else {
+
+                selectAll.checked = false;
+
+                selectAll.indeterminate = false;
+
+            }
+
+        }
+
+
+        // ==================================================
+        // Department Change
+        // ==================================================
+
+        departmentSelect.addEventListener(
+            "change",
+            function () {
+
+
+                const departmentId =
+                    this.value;
+
+
+                const selectedOption =
+                    this.options[
+                        this.selectedIndex
+                    ];
+
+
+                const selectedName =
+                    selectedOption
+                    ? selectedOption.text
+                    : "";
+
+
+                let visibleCount = 0;
+
+
+                // ------------------------------------------
+                // No Department Selected
+                // ------------------------------------------
+
+                if (!departmentId) {
+
+
+                    picSelection.style.display =
+                        "none";
+
+
+                    picItems.forEach(
+                        function (item) {
+
+                            item.style.display =
+                                "none";
+
+                        }
+                    );
+
+
+                    noPicMessage.style.display =
+                        "none";
+
+
+                    selectAll.checked =
+                        false;
+
+                    selectAll.indeterminate =
+                        false;
+
+
+                    departmentName.textContent =
+                        "";
+
+
+                    return;
+
+                }
+
+
+                // ------------------------------------------
+                // Show PIC Selection
+                // ------------------------------------------
+
+                picSelection.style.display =
+                    "block";
+
+
+                departmentName.textContent =
+                    "(" + selectedName + ")";
+
+
+                // ------------------------------------------
+                // Filter PIC
+                // ------------------------------------------
+
+                picItems.forEach(
+                    function (item) {
+
+
+                        const itemDepartmentId =
+                            item.dataset.departmentId;
+
+
+                        if (
+                            itemDepartmentId ===
+                            departmentId
+                        ) {
+
+                            item.style.display =
+                                "";
+
+                            visibleCount++;
+
+                        }
+                        else {
+
+                            item.style.display =
+                                "none";
+
+                        }
+
+                    }
+                );
+
+
+                // ------------------------------------------
+                // No PIC
+                // ------------------------------------------
+
+                if (
+                    visibleCount === 0
+                ) {
+
+                    noPicMessage.style.display =
+                        "block";
+
+                }
+                else {
+
+                    noPicMessage.style.display =
+                        "none";
+
+                }
+
+
+                updateSelectAll();
+
+            }
+        );
+
+
+        // ==================================================
+        // Select All
+        // ==================================================
+
+        if (selectAll) {
+
+            selectAll.addEventListener(
+                "change",
+                function () {
+
+
+                    const visibleCheckboxes =
+                        getVisibleCheckboxes();
+
+
+                    visibleCheckboxes.forEach(
+                        function (checkbox) {
+
+                            checkbox.checked =
+                                selectAll.checked;
+
+                        }
+                    );
+
+
+                    selectAll.indeterminate =
+                        false;
+
+                }
+            );
+
+        }
+
+
+        // ==================================================
+        // Individual Checkbox Change
+        // ==================================================
+
+        document.querySelectorAll(
+            ".pic-checkbox"
+        ).forEach(
+            function (checkbox) {
+
+
+                checkbox.addEventListener(
+                    "change",
+                    function () {
+
+                        updateSelectAll();
+
+                    }
+                );
+
+
+            }
+        );
+
+
+        // ==================================================
+        // Existing Selected PIC
+        //
+        // Automatically open departments
+        // containing selected PIC.
+        // ==================================================
+
+        const selectedCheckboxes =
+            document.querySelectorAll(
+                ".pic-checkbox:checked"
+            );
+
+
+        if (
+            selectedCheckboxes.length > 0
+        ) {
+
+
+            /*
+             * Select the department of the
+             * first existing PIC.
+             */
+
+            const firstSelected =
+                selectedCheckboxes[0];
+
+
+            const firstSelectedItem =
+                firstSelected.closest(
+                    ".pic-item"
+                );
+
+
+            if (firstSelectedItem) {
+
+
+                const departmentId =
+                    firstSelectedItem.dataset.departmentId;
+
+
+                departmentSelect.value =
+                    departmentId;
+
+
+                departmentSelect.dispatchEvent(
+                    new Event(
+                        "change"
+                    )
+                );
+
+            }
+
+        }
+
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

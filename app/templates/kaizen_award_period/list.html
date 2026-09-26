@@ -1,0 +1,715 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Kaizen Award Period
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="mb-1">Kaizen Award Period</h4>
+            <small class="text-muted">
+                Manage Kaizen award periods
+            </small>
+        </div>
+
+        <div>
+            <a href="{{ url_for('kaizen_award_period.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add Award Period
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Search & Action -->
+    <div class="card mb-3">
+
+        <div class="card-body">
+
+            <form method="GET" action="{{ url_for('kaizen_award_period.index') }}">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- ==========================================
+                     Search
+                     ========================================== -->
+
+                    <div class="col-md-5">
+
+                        <label for="keyword" class="form-label mb-2">
+                            Search
+                        </label>
+
+                        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ keyword }}"
+                            placeholder="Search award code, name, description...">
+
+                    </div>
+
+
+                    <!-- ==========================================
+                     Show
+                     ========================================== -->
+
+                    <div class="col-md-2">
+
+                        <label for="per_page" class="form-label mb-2">
+                            Show
+                        </label>
+
+                        <select id="per_page" name="per_page" class="form-control" onchange="this.form.submit()">
+
+                            <option value="10" {% if per_page==10 %}selected{% endif %}>
+                                10
+                            </option>
+
+                            <option value="25" {% if per_page==25 %}selected{% endif %}>
+                                25
+                            </option>
+
+                            <option value="50" {% if per_page==50 %}selected{% endif %}>
+                                50
+                            </option>
+
+                            <option value="100" {% if per_page==100 %}selected{% endif %}>
+                                100
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ==========================================
+                     Search Button
+                     ========================================== -->
+
+                    <div class="col-md-auto">
+
+                        <button type="submit" class="btn btn-primary">
+
+                            <i class="fas fa-search mr-1"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- ==========================================
+                     Reset
+                     ========================================== -->
+
+                    <div class="col-md-auto">
+
+                        <a href="{{ url_for('kaizen_award_period.index') }}" class="btn btn-secondary">
+
+                            Reset
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- ==========================================
+                     Spacer
+                     ========================================== -->
+
+                    <div class="col-md"></div>
+
+
+                    <!-- ==========================================
+                     Inactive
+                     ========================================== -->
+
+                    <div class="col-md-auto">
+
+                        <a href="{{ url_for('kaizen_award_period.inactive') }}" class="btn btn-secondary">
+
+                            <i class="fas fa-archive mr-1"></i>
+
+                            Inactive
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- ==========================================
+                     Export
+                     ========================================== -->
+
+                    <div class="col-md-auto">
+
+                        <a href="{{ url_for(
+                            'kaizen_award_period.export',
+                            keyword=keyword,
+                            sort_by=sort_by,
+                            sort_order=sort_order
+                        ) }}" class="btn btn-success">
+
+                            <i class="fas fa-file-excel mr-1"></i>
+
+                            Export
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Award Period Table -->
+    <div class="card">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <!-- No -->
+                            <th style="width: 60px;" class="text-center">
+                                No
+                            </th>
+
+
+                            <!-- Award Code -->
+                            <th>
+                                <a href="{{ url_for(
+                                        'kaizen_award_period.index',
+                                        keyword=keyword,
+                                        page=award_periods.page,
+                                        per_page=per_page,
+                                        sort_by='award_code',
+                                        sort_order='desc'
+                                        if sort_by == 'award_code'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    ) }}" class="text-decoration-none text-dark">
+
+                                    Award Code
+
+                                    {% if sort_by == 'award_code' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                    <i class="fas fa-sort-up"></i>
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort-down"></i>
+
+                                    {% endif %}
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort text-muted"></i>
+
+                                    {% endif %}
+
+                                </a>
+                            </th>
+
+
+                            <!-- Award Name -->
+                            <th>
+                                <a href="{{ url_for(
+                                        'kaizen_award_period.index',
+                                        keyword=keyword,
+                                        page=award_periods.page,
+                                        per_page=per_page,
+                                        sort_by='award_name',
+                                        sort_order='desc'
+                                        if sort_by == 'award_name'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    ) }}" class="text-decoration-none text-dark">
+
+                                    Award Name
+
+                                    {% if sort_by == 'award_name' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                    <i class="fas fa-sort-up"></i>
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort-down"></i>
+
+                                    {% endif %}
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort text-muted"></i>
+
+                                    {% endif %}
+
+                                </a>
+                            </th>
+
+
+                            <!-- Start Date -->
+                            <th style="width: 140px;">
+
+                                <a href="{{ url_for(
+                                        'kaizen_award_period.index',
+                                        keyword=keyword,
+                                        page=award_periods.page,
+                                        per_page=per_page,
+                                        sort_by='start_date',
+                                        sort_order='desc'
+                                        if sort_by == 'start_date'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    ) }}" class="text-decoration-none text-dark">
+
+                                    Start Date
+
+                                    {% if sort_by == 'start_date' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                    <i class="fas fa-sort-up"></i>
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort-down"></i>
+
+                                    {% endif %}
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort text-muted"></i>
+
+                                    {% endif %}
+
+                                </a>
+
+                            </th>
+
+
+                            <!-- End Date -->
+                            <th style="width: 140px;">
+
+                                <a href="{{ url_for(
+                                        'kaizen_award_period.index',
+                                        keyword=keyword,
+                                        page=award_periods.page,
+                                        per_page=per_page,
+                                        sort_by='end_date',
+                                        sort_order='desc'
+                                        if sort_by == 'end_date'
+                                        and sort_order == 'asc'
+                                        else 'asc'
+                                    ) }}" class="text-decoration-none text-dark">
+
+                                    End Date
+
+                                    {% if sort_by == 'end_date' %}
+
+                                    {% if sort_order == 'asc' %}
+
+                                    <i class="fas fa-sort-up"></i>
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort-down"></i>
+
+                                    {% endif %}
+
+                                    {% else %}
+
+                                    <i class="fas fa-sort text-muted"></i>
+
+                                    {% endif %}
+
+                                </a>
+
+                            </th>
+
+
+                            <!-- Description -->
+                            <th>
+                                Description
+                            </th>
+
+
+                            <!-- Status -->
+                            <th style="width: 100px;" class="text-center">
+                                Status
+                            </th>
+
+
+                            <!-- Action -->
+                            <th style="width: 150px;" class="text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if award_periods.items %}
+
+                        {% for award_period in award_periods.items %}
+
+                        <tr>
+
+                            <!-- No -->
+                            <td class="text-center">
+                                {{ (award_periods.page - 1) * award_periods.per_page + loop.index }}
+                            </td>
+
+
+                            <!-- Award Code -->
+                            <td>
+                                <strong>
+                                    {{ award_period.award_code }}
+                                </strong>
+                            </td>
+
+
+                            <!-- Award Name -->
+                            <td>
+                                {{ award_period.award_name }}
+                            </td>
+
+
+                            <!-- Start Date -->
+                            <td>
+                                {{ award_period.start_date.strftime('%d-%m-%Y') }}
+                            </td>
+
+
+                            <!-- End Date -->
+                            <td>
+                                {{ award_period.end_date.strftime('%d-%m-%Y') }}
+                            </td>
+
+
+                            <!-- Description -->
+                            <td>
+
+                                {% if award_period.description %}
+
+                                {{ award_period.description }}
+
+                                {% else %}
+
+                                <span class="text-muted">
+                                    -
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td class="text-center">
+
+                                {% if award_period.status == "Open" %}
+
+                                <span class="badge bg-success">
+
+                                    <i class="fas fa-unlock mr-1"></i>
+
+                                    Open
+
+                                </span>
+
+                                {% elif award_period.status == "Closed" %}
+
+                                <span class="badge bg-secondary">
+
+                                    <i class="fas fa-lock mr-1"></i>
+
+                                    Closed
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    {{ award_period.status or "Unknown" }}
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Action -->
+                            <td class="text-center">
+
+                                <div class="btn-group">
+
+                                    <!-- Scoring / View -->
+                                    <a href="{{ url_for(
+                'kaizen_award_score.index',
+                award_period_id=award_period.id
+            ) }}" class="btn btn-sm btn-success"
+                                        title="{% if award_period.status == 'Open' %}Scoring{% else %}View Score{% endif %}">
+
+                                        {% if award_period.status == "Open" %}
+
+                                        <i class="fas fa-star"></i>
+
+                                        {% else %}
+
+                                        <i class="fas fa-eye"></i>
+
+                                        {% endif %}
+
+                                    </a>
+
+
+                                    {% if award_period.status == "Open" %}
+
+                                    <!-- Edit -->
+                                    <a href="{{ url_for(
+                    'kaizen_award_period.edit',
+                    award_period_id=award_period.id
+                ) }}" class="btn btn-sm btn-warning" title="Edit">
+
+                                        <i class="fas fa-edit"></i>
+
+                                    </a>
+
+
+                                    <!-- Judges -->
+                                    <a href="{{ url_for(
+                    'kaizen_award_judge.index',
+                    award_period_id=award_period.id
+                ) }}" class="btn btn-sm btn-info" title="Manage Judges">
+
+                                        <i class="fas fa-user-tie"></i>
+
+                                    </a>
+
+
+                                    <!-- Delete -->
+                                    <form method="POST" action="{{ url_for(
+                    'kaizen_award_period.delete',
+                    award_period_id=award_period.id
+                ) }}" style="display:inline;">
+
+                                        <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                            data-name="{{ award_period.award_name }}" data-url="{{ url_for(
+                        'kaizen_award_period.delete',
+                        award_period_id=award_period.id
+                    ) }}" title="Delete">
+
+                                            <i class="fas fa-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="8" class="text-center text-muted py-4">
+
+                                No award period found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+
+                {% include "components/delete_modal.html" %}
+
+
+            </div>
+
+        </div>
+
+
+        <!-- Pagination -->
+        {% if award_periods.pages > 1 %}
+
+        <div class="card-footer">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div class="text-muted">
+
+                    Showing
+
+                    {{ (award_periods.page - 1) * award_periods.per_page + 1
+                    if award_periods.total > 0 else 0 }}
+
+                    -
+
+                    {{ [award_periods.page * award_periods.per_page,
+                    award_periods.total] | min }}
+
+                    of
+
+                    {{ award_periods.total }}
+
+                    records
+
+                </div>
+
+
+                <nav>
+
+                    <ul class="pagination mb-0">
+
+                        <!-- Previous -->
+                        <li class="page-item
+                                {% if not award_periods.has_prev %}disabled{% endif %}">
+
+                            {% if award_periods.has_prev %}
+
+                            <a class="page-link" href="{{ url_for(
+                                            'kaizen_award_period.index',
+                                            keyword=keyword,
+                                            page=award_periods.prev_num,
+                                            per_page=per_page,
+                                            sort_by=sort_by,
+                                            sort_order=sort_order
+                                        ) }}">
+
+                                Previous
+
+                            </a>
+
+                            {% else %}
+
+                            <span class="page-link">
+                                Previous
+                            </span>
+
+                            {% endif %}
+
+                        </li>
+
+
+                        <!-- Page Numbers -->
+                        {% for page_num in award_periods.iter_pages(
+                        left_edge=1,
+                        right_edge=1,
+                        left_current=2,
+                        right_current=2
+                        ) %}
+
+                        {% if page_num %}
+
+                        <li class="page-item
+                                        {% if page_num == award_periods.page %}active{% endif %}">
+
+                            <a class="page-link" href="{{ url_for(
+                                                'kaizen_award_period.index',
+                                                keyword=keyword,
+                                                page=page_num,
+                                                per_page=per_page,
+                                                sort_by=sort_by,
+                                                sort_order=sort_order
+                                            ) }}">
+
+                                {{ page_num }}
+
+                            </a>
+
+                        </li>
+
+                        {% else %}
+
+                        <li class="page-item disabled">
+
+                            <span class="page-link">
+                                ...
+                            </span>
+
+                        </li>
+
+                        {% endif %}
+
+                        {% endfor %}
+
+
+                        <!-- Next -->
+                        <li class="page-item
+                                {% if not award_periods.has_next %}disabled{% endif %}">
+
+                            {% if award_periods.has_next %}
+
+                            <a class="page-link" href="{{ url_for(
+                                            'kaizen_award_period.index',
+                                            keyword=keyword,
+                                            page=award_periods.next_num,
+                                            per_page=per_page,
+                                            sort_by=sort_by,
+                                            sort_order=sort_order
+                                        ) }}">
+
+                                Next
+
+                            </a>
+
+                            {% else %}
+
+                            <span class="page-link">
+                                Next
+                            </span>
+
+                            {% endif %}
+
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

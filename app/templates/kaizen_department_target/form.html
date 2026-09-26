@@ -1,0 +1,594 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+    {% if target %}
+        Edit Kaizen Department Target
+    {% else %}
+        Add Kaizen Department Target
+    {% endif %}
+{% endblock %}
+
+
+{% block page_title %}
+    {% if target %}
+        Edit Kaizen Department Target
+    {% else %}
+        Add Kaizen Department Target
+    {% endif %}
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('dashboard.index') }}">
+        Home
+    </a>
+</li>
+
+<li class="breadcrumb-item">
+    <a href="{{ url_for('kaizen_department_target.index') }}">
+        Kaizen Department Target
+    </a>
+</li>
+
+<li class="breadcrumb-item active">
+
+    {% if target %}
+        Edit
+    {% else %}
+        Add
+    {% endif %}
+
+</li>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card card-primary card-outline">
+
+    <!-- ===================================================== -->
+    <!-- CARD HEADER -->
+    <!-- ===================================================== -->
+
+    <div class="card-header">
+
+        <h3 class="card-title">
+
+            {% if target %}
+
+                <i class="fas fa-edit mr-2"></i>
+                Edit Kaizen Department Target
+
+            {% else %}
+
+                <i class="fas fa-plus mr-2"></i>
+                Add Kaizen Department Target
+
+            {% endif %}
+
+        </h3>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- FORM -->
+    <!-- ===================================================== -->
+
+    <form
+        id="targetForm"
+        method="POST"
+        action=""
+    >
+
+        <div class="card-body">
+
+
+            <!-- ================================================= -->
+            <!-- REPORTING PERIOD -->
+            <!-- ================================================= -->
+
+            <div class="form-group">
+
+                <label for="reporting_period_id">
+
+                    Reporting Period
+
+                    <span class="text-danger">
+                        *
+                    </span>
+
+                </label>
+
+
+                <select
+                    name="reporting_period_id"
+                    id="reporting_period_id"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        -- Select Reporting Period --
+                    </option>
+
+
+                    {% for period in reporting_periods %}
+
+                    <option
+                        value="{{ period.id }}"
+
+                        {% if target and target.reporting_period_id == period.id %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ period.period_code }}
+                        -
+                        {{ period.period_name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <small class="form-text text-muted">
+
+                    Select the reporting period for this target.
+
+                </small>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DEPARTMENT -->
+            <!-- ================================================= -->
+
+            <div class="form-group">
+
+                <label for="department_id">
+
+                    Department
+
+                    <span class="text-danger">
+                        *
+                    </span>
+
+                </label>
+
+
+                <select
+                    name="department_id"
+                    id="department_id"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        -- Select Department --
+                    </option>
+
+
+                    {% for department in departments %}
+
+                    <option
+                        value="{{ department.id }}"
+
+                        {% if target and target.department_id == department.id %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ department.department_code }}
+                        -
+                        {{ department.department_name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <small class="form-text text-muted">
+
+                    Select the department for this target.
+
+                </small>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- TARGET QUANTITY -->
+            <!-- ================================================= -->
+
+            <div class="form-group">
+
+                <label for="target_quantity">
+
+                    Target Quantity
+
+                    <span class="text-danger">
+                        *
+                    </span>
+
+                </label>
+
+
+                <input
+                    type="number"
+                    name="target_quantity"
+                    id="target_quantity"
+                    class="form-control"
+                    min="1"
+                    step="1"
+                    required
+
+                    value="{% if target %}{{ target.target_quantity }}{% endif %}"
+
+                    placeholder="Enter target quantity"
+                >
+
+
+                <small class="form-text text-muted">
+
+                    Enter the target number of Kaizen.
+
+                </small>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DESCRIPTION -->
+            <!-- ================================================= -->
+
+            <div class="form-group">
+
+                <label for="description">
+
+                    Description
+
+                </label>
+
+
+                <textarea
+                    name="description"
+                    id="description"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Enter description (optional)"
+                >{% if target %}{{ target.description or '' }}{% endif %}</textarea>
+
+
+                <small class="form-text text-muted">
+
+                    Additional information related to this target.
+
+                </small>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- CARD FOOTER -->
+        <!-- ===================================================== -->
+
+        <div class="card-footer">
+
+            <a
+                href="{{ url_for('kaizen_department_target.index') }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Cancel
+
+            </a>
+
+
+            <button
+                type="button"
+                id="btnSubmit"
+                class="btn btn-primary float-right"
+            >
+
+                {% if target %}
+
+                    <i class="fas fa-save mr-1"></i>
+                    Update
+
+                {% else %}
+
+                    <i class="fas fa-save mr-1"></i>
+                    Save
+
+                {% endif %}
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- CONFIRM SUBMIT MODAL -->
+<!-- ========================================================= -->
+
+<div
+    class="modal fade"
+    id="confirmSubmitModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <!-- HEADER -->
+
+            <div class="modal-header bg-primary">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-save mr-2"></i>
+
+                    Confirm
+
+                </h5>
+
+
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                >
+
+                    <span>
+                        &times;
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="modal-body">
+
+                <p class="mb-3">
+
+                    {% if target %}
+
+                        Are you sure you want to update this
+                        Kaizen Department Target?
+
+                    {% else %}
+
+                        Are you sure you want to save this
+                        Kaizen Department Target?
+
+                    {% endif %}
+
+                </p>
+
+
+                <table class="table table-sm table-bordered mb-0">
+
+                    <tr>
+
+                        <th style="width: 35%;">
+                            Reporting Period
+                        </th>
+
+                        <td id="confirm-period">
+                            -
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <td id="confirm-department">
+                            -
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <th>
+                            Target
+                        </th>
+
+                        <td id="confirm-target">
+                            -
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnConfirmSubmit"
+                    class="btn btn-primary"
+                >
+
+                    {% if target %}
+
+                        <i class="fas fa-save mr-1"></i>
+                        Update
+
+                    {% else %}
+
+                        <i class="fas fa-save mr-1"></i>
+                        Save
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    const form = document.getElementById("targetForm");
+
+    const btnSubmit = document.getElementById("btnSubmit");
+
+    const btnConfirmSubmit =
+        document.getElementById("btnConfirmSubmit");
+
+
+    const reportingPeriod =
+        document.getElementById("reporting_period_id");
+
+    const department =
+        document.getElementById("department_id");
+
+    const targetQuantity =
+        document.getElementById("target_quantity");
+
+
+    const confirmPeriod =
+        document.getElementById("confirm-period");
+
+    const confirmDepartment =
+        document.getElementById("confirm-department");
+
+    const confirmTarget =
+        document.getElementById("confirm-target");
+
+
+    // ========================================================
+    // OPEN CONFIRMATION MODAL
+    // ========================================================
+
+    btnSubmit.addEventListener("click", function () {
+
+
+        // Browser validation
+
+        if (!form.checkValidity()) {
+
+            form.reportValidity();
+
+            return;
+
+        }
+
+
+        // Get selected Reporting Period
+
+        const selectedPeriod =
+            reportingPeriod.options[
+                reportingPeriod.selectedIndex
+            ];
+
+
+        // Get selected Department
+
+        const selectedDepartment =
+            department.options[
+                department.selectedIndex
+            ];
+
+
+        // Display confirmation data
+
+        confirmPeriod.textContent =
+            selectedPeriod.textContent.trim();
+
+
+        confirmDepartment.textContent =
+            selectedDepartment.textContent.trim();
+
+
+        confirmTarget.textContent =
+            targetQuantity.value;
+
+
+        // Show modal
+
+        $("#confirmSubmitModal").modal("show");
+
+    });
+
+
+    // ========================================================
+    // CONFIRM SUBMIT
+    // ========================================================
+
+    btnConfirmSubmit.addEventListener("click", function () {
+
+        btnConfirmSubmit.disabled = true;
+
+        form.submit();
+
+    });
+
+
+});
+
+</script>
+
+
+{% endblock %}

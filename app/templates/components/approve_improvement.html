@@ -1,0 +1,116 @@
+<!-- ==================================================
+     APPROVE IMPROVEMENT CONFIRMATION MODAL
+================================================== -->
+
+<div
+    class="modal fade"
+    id="approveImprovementModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+            <!-- ======================================
+                 Header
+            ======================================= -->
+
+            <div class="modal-header bg-success">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-check-circle mr-2"></i>
+
+                    Confirm Approval
+
+                </h5>
+
+
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- ======================================
+                 Body
+            ======================================= -->
+
+            <div class="modal-body">
+
+                <p class="mb-2">
+
+                    Are you sure you want to approve
+                    this Improvement?
+
+                </p>
+
+
+                <div class="alert alert-warning mb-0">
+
+                    <i class="fas fa-info-circle mr-1"></i>
+
+                    After approval, this Improvement
+                    will be marked as completed and
+                    the related Problem will be closed.
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 Footer
+            ======================================= -->
+
+            <div class="modal-footer">
+
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="
+                        document
+                        .getElementById('approve-form')
+                        .submit();
+                    "
+                >
+
+                    <i class="fas fa-check mr-1"></i>
+
+                    Approve
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

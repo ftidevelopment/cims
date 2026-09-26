@@ -1,0 +1,69 @@
+{% macro sortable_header(
+    title,
+    field,
+    endpoint,
+    keyword="",
+    status="",
+    priority="",
+    department_id="",
+    date_from="",
+    date_to="",
+    sort_by="",
+    sort_order="asc",
+    approval="",
+    mine=""
+) %}
+
+    {% if sort_by == field and sort_order == 'asc' %}
+
+        {% set next_order = 'desc' %}
+
+    {% else %}
+
+        {% set next_order = 'asc' %}
+
+    {% endif %}
+
+
+    <th>
+
+        <a href="{{ url_for(
+            endpoint,
+            keyword=keyword,
+            status=status,
+            priority=priority,
+            department_id=department_id,
+            date_from=date_from,
+            date_to=date_to,
+            approval=approval,
+            mine=mine,
+            page=1,
+            sort=field,
+            order=next_order
+        ) }}">
+
+            {{ title }}
+
+            {% if sort_by == field %}
+
+                {% if sort_order == 'asc' %}
+
+                    <i class="fas fa-sort-up ml-1"></i>
+
+                {% else %}
+
+                    <i class="fas fa-sort-down ml-1"></i>
+
+                {% endif %}
+
+            {% else %}
+
+                <i class="fas fa-sort text-muted ml-1"></i>
+
+            {% endif %}
+
+        </a>
+
+    </th>
+
+{% endmacro %}

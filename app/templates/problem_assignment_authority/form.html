@@ -1,0 +1,307 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+Assign Problem Authority
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Assign Problem Authority
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for(
+                            'problem_assignment_authority.index'
+                        ) }}">
+                            Problem Assignment Authority
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Assign
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <div class="card card-primary card-outline">
+
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-user-check mr-2"></i>
+
+                    Assign Problem Assignment Authority
+
+                </h3>
+
+            </div>
+
+
+            <form method="POST">
+
+
+                <div class="card-body">
+
+
+                    <!-- ======================================
+                         Department
+                    ======================================= -->
+
+                    <div class="form-group">
+
+                        <label for="department_id">
+
+                            Department
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <select
+                            id="department_id"
+                            name="department_id"
+                            class="form-control"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select Department --
+                            </option>
+
+
+                            {% for department in departments %}
+
+                            <option
+                                value="{{ department.id }}"
+                            >
+
+                                {{ department.department_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         Employee
+                    ======================================= -->
+
+                    <div class="form-group">
+
+                        <label for="employee_id">
+
+                            Employee
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <select
+                            id="employee_id"
+                            name="employee_id"
+                            class="form-control"
+                            required
+                        >
+
+                            <option value="">
+                                -- Select Employee --
+                            </option>
+
+
+                            {% for employee in employees %}
+
+                            <option
+                                value="{{ employee.id }}"
+                                data-department-id="{{ employee.department_id }}"
+                            >
+
+                                {{ employee.full_name }}
+                                -
+                                {{ employee.nik }}
+
+                                {% if employee.user %}
+
+                                    ({{ employee.user.role_name }})
+
+                                {% endif %}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <small class="form-text text-muted">
+
+                            Only ACTIVE employees with a User Account
+                            can be selected.
+
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- Footer -->
+
+                <div class="card-footer">
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+
+                    <a
+                        href="{{ url_for(
+                            'problem_assignment_authority.index'
+                        ) }}"
+                        class="btn btn-secondary"
+                    >
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const departmentSelect =
+            document.getElementById(
+                "department_id"
+            );
+
+        const employeeSelect =
+            document.getElementById(
+                "employee_id"
+            );
+
+
+        departmentSelect.addEventListener(
+            "change",
+            function () {
+
+                const departmentId =
+                    this.value;
+
+
+                const options =
+                    employeeSelect.querySelectorAll(
+                        "option[data-department-id]"
+                    );
+
+
+                employeeSelect.value = "";
+
+
+                options.forEach(
+                    function (option) {
+
+                        if (
+                            !departmentId ||
+                            option.dataset.departmentId
+                            === departmentId
+                        ) {
+
+                            option.style.display = "";
+
+                        } else {
+
+                            option.style.display = "none";
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

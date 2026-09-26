@@ -1,0 +1,325 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Verification Result
+{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================
+Content Header
+========================================== -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>Verification Result</h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Continuous Improvement
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Improvement
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Verification
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+Main Content
+========================================== -->
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <!-- ==========================================
+        Improvement Information
+        ========================================== -->
+        <div class="card card-primary card-outline mb-4">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-lightbulb mr-2"></i>
+
+                    Improvement Information
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+
+                    <!-- Improvement No -->
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Improvement No
+                            </label>
+
+                            <input type="text" class="form-control" value="{{ improvement.improvement_no }}" readonly>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Problem No -->
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Problem No
+                            </label>
+
+                            <input type="text" class="form-control"
+                                value="{{ improvement.problem.problem_no if improvement.problem else '-' }}" readonly>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Title -->
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Improvement Title
+                            </label>
+
+                            <input type="text" class="form-control" value="{{ improvement.title }}" readonly>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group">
+
+                    <label>
+                        Improvement Description
+                    </label>
+
+                    <textarea class="form-control" rows="4" readonly>{{ improvement.description }}</textarea>
+
+                </div>
+
+
+                <!-- ==========================================
+                Implementation Result
+                ========================================== -->
+                <div class="form-group">
+
+                    <label for="implementation_result_display">
+
+                        Implementation Result
+
+                    </label>
+
+
+                    <textarea id="implementation_result_display" class="form-control" rows="6"
+                        readonly>{{ improvement.implementation_result or '' }}</textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+        Verification Form
+        ========================================== -->
+        <div class="card card-success card-outline">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-check-circle mr-2"></i>
+
+                    Verification Result
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <form method="POST" action="{{ url_for(
+                        'improvement.verification',
+                        improvement_id=improvement.id
+                    ) }}">
+
+
+                    <!-- Verification Result -->
+                    <div class="form-group">
+
+                        <label for="verification_result">
+
+                            Verification Result
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <textarea id="verification_result" name="verification_result" class="form-control" rows="5"
+                            required>{{ improvement.verification_result or '' }}</textarea>
+
+
+                        <small class="form-text text-muted">
+
+                            Enter the result of the improvement verification.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
+
+                        <a href="{{ url_for(
+                                'improvement.detail',
+                                improvement_id=improvement.id
+                            ) }}" class="btn btn-secondary">
+
+                            <i class="fas fa-arrow-left mr-1"></i>
+
+                            Cancel
+
+                        </a>
+
+
+                        <button type="submit" class="btn btn-success">
+
+                            <i class="fas fa-check mr-1"></i>
+
+                            Save Verification
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+<!-- ==========================================
+Scripts
+========================================== -->
+{% block scripts %}
+
+{{ super() }}
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // ==========================================
+        // Initialize Jodit - Implementation Result
+        // Read Only
+        // ==========================================
+
+        const implementationElement =
+            document.getElementById("implementation_result_display");
+
+
+        if (implementationElement) {
+
+            Jodit.make(implementationElement, {
+
+                height: 300,
+
+                readonly: true,
+
+                toolbar: false,
+
+                statusbar: false
+
+            });
+
+        }
+
+
+        // ==========================================
+        // Initialize Jodit - Verification Result
+        // Editable
+        // ==========================================
+
+        const verificationElement =
+            document.getElementById("verification_result");
+
+
+        if (verificationElement) {
+
+            Jodit.make(verificationElement, {
+
+                height: 300
+
+            });
+
+        }
+
+    });
+
+</script>
+
+{% endblock %}

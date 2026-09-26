@@ -1,0 +1,117 @@
+<div
+    class="modal fade"
+    id="closePeriodModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger">
+
+                <h5 class="modal-title">
+
+                    <i class="fas fa-lock mr-2"></i>
+
+                    Confirm Close Period
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal">
+
+                    <span>&times;</span>
+
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <p class="mb-2">
+
+                    Are you sure you want to close this
+                    Kaizen Award Period?
+
+                </p>
+
+                <strong>
+                    {{ award_period.award_code }}
+                    -
+                    {{ award_period.award_name }}
+                </strong>
+
+
+                <div class="alert alert-warning mt-3 mb-0">
+
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+
+                    <strong>After closing:</strong>
+
+                    <ul class="mb-0 mt-2">
+
+                        <li>
+                            Award Period cannot be edited.
+                        </li>
+
+                        <li>
+                            Judges cannot be added or changed.
+                        </li>
+
+                        <li>
+                            Kaizen scores cannot be changed.
+                        </li>
+
+                        <li>
+                            Score data will become read-only.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'kaizen_award_period.close',
+                        award_period_id=award_period.id
+                    ) }}"
+                >
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger">
+
+                        <i class="fas fa-lock mr-1"></i>
+
+                        Close Period
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,11 @@
+🔔 CIMS - Kaizen Submitted
+
+Kaizen No : {{ kaizen.kaizen_no }}
+Title     : {{ kaizen.title }}
+Employee  : {% if kaizen.employee %}{{ kaizen.employee.full_name }}{% else %}-{% endif %}
+Improvement : {% if kaizen.improvement %}{{ kaizen.improvement.improvement_no }} - {{ kaizen.improvement.title }}{% else %}-{% endif %}
+Problem     : {% if kaizen.problem %}{{ kaizen.problem.problem_no }} - {{ kaizen.problem.title }}{% else %}-{% endif %}
+Status    : Submitted
+
+The Kaizen proposal has been submitted in CIMS.
+Please check CIMS for the latest information.

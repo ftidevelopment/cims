@@ -1,0 +1,1142 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Improvement Detail
+{% endblock %}
+
+{% block public_content %}
+
+<style>
+
+/* =========================================================
+   IMPROVEMENT DETAIL - FULL WIDTH
+   ========================================================= */
+
+.improvement-detail-page {
+
+    width: 100vw;
+    max-width: none;
+    min-height: 100vh;
+
+    /*
+     * Membuat halaman menggunakan seluruh lebar browser
+     * walaupun parent dari base.html mempunyai max-width.
+     */
+    margin-left: calc(50% - 50vw);
+
+    padding: 25px 40px 40px 40px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.improvement-detail-page .detail-header {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+}
+
+
+.improvement-detail-page .detail-title {
+
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #343a40;
+}
+
+
+.improvement-detail-page .detail-number {
+
+    margin-top: 5px;
+
+    color: #6c757d;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   DETAIL CARD
+   ========================================================= */
+
+.improvement-detail-page .detail-card {
+
+    width: 100%;
+
+    max-width: none;
+
+    background: #ffffff;
+
+    border: none;
+
+    border-radius: 10px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    margin-bottom: 20px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.improvement-detail-page .detail-card-header {
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #343a40;
+
+    background: #ffffff;
+}
+
+
+.improvement-detail-page .detail-card-header i {
+
+    margin-right: 7px;
+
+}
+
+
+/* =========================================================
+   CARD BODY
+   ========================================================= */
+
+.improvement-detail-page .detail-card-body {
+
+    padding: 22px;
+
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.improvement-detail-page .detail-label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #6c757d;
+
+}
+
+
+/* =========================================================
+   NORMAL VALUE
+   ========================================================= */
+
+.improvement-detail-page .detail-value {
+
+    color: #343a40;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   BOLD VALUE
+   ========================================================= */
+
+.improvement-detail-page .detail-value-bold {
+
+    color: #343a40;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   RICH TEXT CONTENT
+   ========================================================= */
+
+.improvement-detail-page .rich-text-content {
+
+    width: 100%;
+
+    color: #343a40;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    word-wrap: break-word;
+
+    overflow-wrap: break-word;
+}
+
+
+/*
+ * Jodit menggunakan tag <p>.
+ * Kita tidak menghapus tag tersebut karena
+ * tag ini diperlukan untuk mempertahankan format.
+ */
+
+.improvement-detail-page .rich-text-content p {
+
+    margin-top: 0;
+
+    margin-bottom: 12px;
+
+}
+
+
+.improvement-detail-page .rich-text-content p:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+/* =========================================================
+   LIST DARI JODIT
+   ========================================================= */
+
+.improvement-detail-page .rich-text-content ul {
+
+    margin-top: 5px;
+
+    margin-bottom: 12px;
+
+    padding-left: 25px;
+
+}
+
+
+.improvement-detail-page .rich-text-content ol {
+
+    margin-top: 5px;
+
+    margin-bottom: 12px;
+
+    padding-left: 25px;
+
+}
+
+
+.improvement-detail-page .rich-text-content li {
+
+    margin-bottom: 4px;
+
+}
+
+
+/* =========================================================
+   TEXT FORMAT DARI JODIT
+   ========================================================= */
+
+.improvement-detail-page .rich-text-content strong {
+
+    font-weight: 700;
+
+}
+
+
+.improvement-detail-page .rich-text-content b {
+
+    font-weight: 700;
+
+}
+
+
+.improvement-detail-page .rich-text-content em {
+
+    font-style: italic;
+
+}
+
+
+.improvement-detail-page .rich-text-content u {
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================================================
+   LINK DARI JODIT
+   ========================================================= */
+
+.improvement-detail-page .rich-text-content a {
+
+    color: #0d6efd;
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================================================
+   FINANCIAL TABLE
+   ========================================================= */
+
+.improvement-detail-page .financial-table {
+
+    width: 100%;
+
+    margin-bottom: 0;
+
+}
+
+
+.improvement-detail-page .financial-table th {
+
+    width: 55%;
+
+    background: #f8f9fa;
+
+    font-weight: 600;
+
+    color: #343a40;
+
+}
+
+
+.improvement-detail-page .financial-table td,
+.improvement-detail-page .financial-table th {
+
+    padding: 12px;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.improvement-detail-page .status-badge {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 12px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================================
+   BOTTOM BUTTON
+   ========================================================= */
+
+.improvement-detail-page .detail-footer {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .improvement-detail-page {
+
+        padding: 20px 25px 30px 25px;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .improvement-detail-page {
+
+        width: 100%;
+
+        margin-left: 0;
+
+        padding: 15px;
+
+    }
+
+
+    .improvement-detail-page .detail-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .improvement-detail-page .detail-title {
+
+        font-size: 22px;
+
+    }
+
+
+    .improvement-detail-page .detail-card-body {
+
+        padding: 15px;
+
+    }
+
+
+    .improvement-detail-page .financial-table th {
+
+        width: 50%;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .improvement-detail-page {
+
+        padding: 12px;
+
+    }
+
+
+    .improvement-detail-page .detail-title {
+
+        font-size: 20px;
+
+    }
+
+
+    .improvement-detail-page .detail-card-header {
+
+        padding: 13px 15px;
+
+        font-size: 15px;
+
+    }
+
+
+    .improvement-detail-page .detail-card-body {
+
+        padding: 13px;
+
+    }
+
+}
+
+</style>
+
+
+<div class="improvement-detail-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="detail-header">
+
+        <div>
+
+            <h1 class="detail-title">
+
+                Improvement Detail
+
+            </h1>
+
+
+            <div class="detail-number">
+
+                {{ improvement.improvement_no }}
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{{ url_for('improvement_dashboard.index') }}"
+                class="btn btn-outline-secondary"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BASIC INFORMATION
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-info-circle"></i>
+
+            Basic Information
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+            <div class="row g-3">
+
+
+                <!-- IMPROVEMENT NO -->
+
+                <div class="col-md-4">
+
+                    <span class="detail-label">
+
+                        Improvement No
+
+                    </span>
+
+
+                    <div class="detail-value-bold">
+
+                        {{ improvement.improvement_no }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROBLEM NO -->
+
+                <div class="col-md-4">
+
+                    <span class="detail-label">
+
+                        Problem No
+
+                    </span>
+
+
+                    <div class="detail-value-bold">
+
+                        {% if improvement.problem %}
+
+                            {{ improvement.problem.problem_no }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="col-md-4">
+
+                    <span class="detail-label">
+
+                        Department
+
+                    </span>
+
+
+                    <div class="detail-value-bold">
+
+                        {% if improvement.problem
+                              and improvement.problem.department %}
+
+                            {{ improvement.problem.department.department_name }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <div class="col-md-12">
+
+                    <span class="detail-label">
+
+                        Title
+
+                    </span>
+
+
+                    <div class="detail-value-bold">
+
+                        {{ improvement.title }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         IMPROVEMENT DETAIL
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-lightbulb"></i>
+
+            Improvement Detail
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+
+            <!-- =================================================
+                 DESCRIPTION
+                 ================================================== -->
+
+            <div class="mb-4">
+
+                <span class="detail-label">
+
+                    Description
+
+                </span>
+
+
+                <div class="rich-text-content">
+
+                    {% if improvement.description %}
+
+                        {{ improvement.description|safe }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ROOT CAUSE
+                 ================================================== -->
+
+            <div class="mb-4">
+
+                <span class="detail-label">
+
+                    Root Cause
+
+                </span>
+
+
+                <div class="rich-text-content">
+
+                    {% if improvement.root_cause %}
+
+                        {{ improvement.root_cause|safe }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 IMPROVEMENT PLAN
+                 ================================================== -->
+
+            <div class="mb-4">
+
+                <span class="detail-label">
+
+                    Improvement Plan
+
+                </span>
+
+
+                <div class="rich-text-content">
+
+                    {% if improvement.improvement_plan %}
+
+                        {{ improvement.improvement_plan|safe }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 IMPLEMENTATION RESULT
+                 ================================================== -->
+
+            <div class="mb-4">
+
+                <span class="detail-label">
+
+                    Implementation Result
+
+                </span>
+
+
+                <div class="rich-text-content">
+
+                    {% if improvement.implementation_result %}
+
+                        {{ improvement.implementation_result|safe }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 VERIFICATION RESULT
+                 ================================================== -->
+
+            <div>
+
+                <span class="detail-label">
+
+                    Verification Result
+
+                </span>
+
+
+                <div class="rich-text-content">
+
+                    {% if improvement.verification_result %}
+
+                        {{ improvement.verification_result|safe }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FINANCIAL INFORMATION
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-chart-line"></i>
+
+            Benefit & Cost
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered financial-table">
+
+                    <tbody>
+
+
+                        <!-- IMPROVEMENT COST -->
+
+                        <tr>
+
+                            <th>
+
+                                Improvement Cost
+
+                            </th>
+
+
+                            <td class="text-end">
+
+                                Rp
+                                {{ "{:,.0f}".format(
+                                    benefit.improvement_cost or 0
+                                ) }}
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- ESTIMATED COST SAVING -->
+
+                        <tr>
+
+                            <th>
+
+                                Estimated Cost Saving
+
+                            </th>
+
+
+                            <td class="text-end">
+
+                                Rp
+                                {{ "{:,.0f}".format(
+                                    benefit.estimated_cost_saving or 0
+                                ) }}
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- ESTIMATED BENEFIT -->
+
+                        <tr>
+
+                            <th>
+
+                                Estimated Benefit
+
+                            </th>
+
+
+                            <td class="text-end">
+
+                                Rp
+                                {{ "{:,.0f}".format(
+                                    benefit.estimated_benefit or 0
+                                ) }}
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- NET BENEFIT -->
+
+                        <tr>
+
+                            <th>
+
+                                Net Benefit
+
+                            </th>
+
+
+                            <td class="text-end fw-bold text-primary">
+
+                                Rp
+                                {{ "{:,.0f}".format(
+                                    benefit.net_benefit or 0
+                                ) }}
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- TIME SAVING -->
+
+                        <tr>
+
+                            <th>
+
+                                Time Saving
+
+                            </th>
+
+
+                            <td class="text-end">
+
+                                {{ benefit.estimated_time_saving or 0 }}
+
+                                minutes
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- ROI -->
+
+                        <tr>
+
+                            <th>
+
+                                ROI
+
+                            </th>
+
+
+                            <td class="text-end fw-bold">
+
+                                {{ "{:,.2f}".format(
+                                    benefit.roi or 0
+                                ) }}
+
+                                %
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         APPROVAL INFORMATION
+         ====================================================== -->
+
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+
+            <i class="fas fa-check-circle"></i>
+
+            Approval Information
+
+        </div>
+
+
+        <div class="detail-card-body">
+
+            <div class="row g-3">
+
+
+                <!-- APPROVED DATE -->
+
+                <div class="col-md-6">
+
+                    <span class="detail-label">
+
+                        Approved Date
+
+                    </span>
+
+
+                    <div class="detail-value">
+
+                        {% if improvement.approved_date %}
+
+                            {{ improvement.approved_date.strftime(
+                                '%d %b %Y'
+                            ) }}
+
+                        {% else %}
+
+                            Not Approved
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-md-6">
+
+                    <span class="detail-label">
+
+                        Status
+
+                    </span>
+
+
+                    <div>
+
+
+                        {% if improvement.approved_date %}
+
+                            <span
+                                class="status-badge bg-success text-white"
+                            >
+
+                                Completed
+
+                            </span>
+
+
+                        {% elif improvement.verification_result %}
+
+                            <span
+                                class="status-badge bg-info text-white"
+                            >
+
+                                Verified
+
+                            </span>
+
+
+                        {% elif improvement.implementation_result %}
+
+                            <span
+                                class="status-badge bg-primary text-white"
+                            >
+
+                                Implemented
+
+                            </span>
+
+
+                        {% else %}
+
+                            <span
+                                class="status-badge bg-warning text-dark"
+                            >
+
+                                Open
+
+                            </span>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOTTOM BUTTON
+         ====================================================== -->
+
+    <div class="detail-footer">
+
+        <a
+            href="{{ url_for('improvement_dashboard.index') }}"
+            class="btn btn-secondary"
+        >
+
+            <i class="fas fa-arrow-left"></i>
+
+            Back to Improvement Dashboard
+
+        </a>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

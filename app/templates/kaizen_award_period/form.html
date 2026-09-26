@@ -1,0 +1,534 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    {% if award_period %}
+        Edit Kaizen Award Period
+    {% else %}
+        Add Kaizen Award Period
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h4 class="mb-1">
+
+                {% if award_period %}
+                    Edit Kaizen Award Period
+                {% else %}
+                    Add Kaizen Award Period
+                {% endif %}
+
+            </h4>
+
+
+            <small class="text-muted">
+
+                {% if award_period %}
+                    Update Kaizen award period
+                {% else %}
+                    Create a new Kaizen award period
+                {% endif %}
+
+            </small>
+
+
+            <!-- STATUS -->
+
+            {% if award_period %}
+
+                <div class="mt-2">
+
+                    {% if award_period.status == "Open" %}
+
+                        <span class="badge badge-success">
+
+                            <i class="fas fa-unlock mr-1"></i>
+
+                            OPEN
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge badge-secondary">
+
+                            <i class="fas fa-lock mr-1"></i>
+
+                            CLOSED
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- BACK -->
+
+        <div>
+
+            <a
+                href="{{ url_for('kaizen_award_period.index') }}"
+                class="btn btn-secondary"
+            >
+
+                <i class="fas fa-arrow-left mr-1"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM CARD
+         ====================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <strong>
+
+                <i class="fas fa-calendar-alt mr-1"></i>
+
+                Award Period Information
+
+            </strong>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <!-- =================================================
+                 MAIN FORM
+                 ================================================== -->
+
+            <form
+                method="POST"
+                action=""
+            >
+
+
+                <!-- =================================================
+                     BASIC INFORMATION
+                     ================================================== -->
+
+                <div class="row">
+
+
+                    <!-- Award Code -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label
+                            for="award_code"
+                            class="form-label"
+                        >
+
+                            Award Code
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="award_code"
+                            name="award_code"
+                            class="form-control"
+                            value="{{ award_period.award_code if award_period else '' }}"
+                            placeholder="Example: 2026-AWARD-01"
+                            maxlength="20"
+                            {% if award_period %}
+                                readonly
+                            {% endif %}
+                            required
+                        >
+
+
+                        {% if award_period %}
+
+                            <small class="text-muted">
+
+                                Award code cannot be changed
+                                after creation.
+
+                            </small>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- Award Name -->
+
+                    <div class="col-md-8 mb-3">
+
+                        <label
+                            for="award_name"
+                            class="form-label"
+                        >
+
+                            Award Name
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="award_name"
+                            name="award_name"
+                            class="form-control"
+                            value="{{ award_period.award_name if award_period else '' }}"
+                            placeholder="Example: Kaizen Award 2026"
+                            maxlength="100"
+                            required
+
+                            {% if award_period
+                                  and award_period.status == "Closed" %}
+
+                                disabled
+
+                            {% endif %}
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DATE
+                     ================================================== -->
+
+                <div class="row">
+
+
+                    <!-- Start Date -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="start_date"
+                            class="form-label"
+                        >
+
+                            Start Date
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="date"
+                            id="start_date"
+                            name="start_date"
+                            class="form-control"
+
+                            value="{{
+                                award_period.start_date.strftime('%Y-%m-%d')
+                                if award_period
+                                and award_period.start_date
+                                else ''
+                            }}"
+
+                            required
+
+                            {% if award_period
+                                  and award_period.status == "Closed" %}
+
+                                disabled
+
+                            {% endif %}
+                        >
+
+                    </div>
+
+
+
+                    <!-- End Date -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="end_date"
+                            class="form-label"
+                        >
+
+                            End Date
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="date"
+                            id="end_date"
+                            name="end_date"
+                            class="form-control"
+
+                            value="{{
+                                award_period.end_date.strftime('%Y-%m-%d')
+                                if award_period
+                                and award_period.end_date
+                                else ''
+                            }}"
+
+                            required
+
+                            {% if award_period
+                                  and award_period.status == "Closed" %}
+
+                                disabled
+
+                            {% endif %}
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                     ================================================== -->
+
+                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+
+                        <label
+                            for="description"
+                            class="form-label"
+                        >
+
+                            Description
+
+                        </label>
+
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            class="form-control"
+                            rows="4"
+                            maxlength="500"
+                            placeholder="Enter award period description..."
+
+                            {% if award_period
+                                  and award_period.status == "Closed" %}
+
+                                disabled
+
+                            {% endif %}
+                        >{{ award_period.description if award_period else '' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     INFORMATION
+                     ================================================== -->
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-info-circle mr-1"></i>
+
+                    <strong>
+                        Award Period Information:
+                    </strong>
+
+
+                    <ul class="mb-0 mt-2">
+
+                        <li>
+                            Start Date must be earlier than
+                            or equal to End Date.
+                        </li>
+
+                        <li>
+                            An active award period cannot overlap
+                            with another active award period.
+                        </li>
+
+                        <li>
+                            Award Code cannot be changed
+                            after creation.
+                        </li>
+
+                        <li>
+                            Once the Award Period is closed,
+                            the period and scoring data become
+                            read-only.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FORM ACTION
+                     ================================================== -->
+
+                <div
+                    class="d-flex justify-content-between align-items-center"
+                >
+
+
+                    <!-- LEFT : CLOSE -->
+
+                    <div>
+
+                        {% if award_period %}
+
+
+                            {% if award_period.status == "Open" %}
+
+                                <button
+                                    type="button"
+                                    class="btn btn-danger"
+                                    data-toggle="modal"
+                                    data-target="#closePeriodModal"
+                                >
+
+                                    <i class="fas fa-lock mr-1"></i>
+
+                                    Close Period
+
+                                </button>
+
+
+                            {% else %}
+
+                                <span
+                                    class="badge badge-secondary p-2"
+                                >
+
+                                    <i class="fas fa-lock mr-1"></i>
+
+                                    Period Closed
+
+                                </span>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- RIGHT : CANCEL / SAVE -->
+
+                    <div class="d-flex">
+
+                        <a
+                            href="{{ url_for('kaizen_award_period.index') }}"
+                            class="btn btn-secondary mr-2"
+                        >
+
+                            <i class="fas fa-times mr-1"></i>
+
+                            Cancel
+
+                        </a>
+
+
+
+                        {% if not award_period
+                              or award_period.status != "Closed" %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="fas fa-save mr-1"></i>
+
+
+                                {% if award_period %}
+
+                                    Update
+
+                                {% else %}
+
+                                    Save
+
+                                {% endif %}
+
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =============================================================
+     CLOSE PERIOD MODAL
+     ============================================================= -->
+
+{% if award_period
+      and award_period.status == "Open" %}
+
+    {% include "components/modal_close_period.html" %}
+
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+
+{% if permission %}
+Edit Permission
+{% else %}
+Add Permission
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     Content Header
+========================================================= -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+
+                    {% if permission %}
+                        Edit Permission
+                    {% else %}
+                        Add Permission
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+                        Security
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('permission.index') }}">
+                            Permission
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+
+                        {% if permission %}
+                            Edit
+                        {% else %}
+                            Add
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     Main Content
+========================================================= -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+
+            <!-- =================================================
+                 Card Header
+            ================================================== -->
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-key mr-2"></i>
+
+
+                    {% if permission %}
+
+                        Edit Permission
+
+                    {% else %}
+
+                        Add Permission
+
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+
+            <!-- =================================================
+                 Form
+            ================================================== -->
+
+            <form
+                id="permission-form"
+                method="POST"
+                class="needs-validation"
+                novalidate
+            >
+
+                <div class="card-body">
+
+
+                    <!-- =========================================
+                         Permission Code
+                    ========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Permission Code
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="permission_code"
+                            class="form-control"
+                            maxlength="50"
+                            required
+                            data-label="Permission Code"
+                            value="{{ permission.permission_code if permission else '' }}"
+                        >
+
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         Permission Name
+                    ========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Permission Name
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="permission_name"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                            data-label="Permission Name"
+                            value="{{ permission.permission_name if permission else '' }}"
+                        >
+
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         Description
+                    ========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Description
+                        </label>
+
+
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="3"
+                            data-label="Description"
+                        >{{ permission.description if permission else '' }}</textarea>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     Footer
+                ================================================== -->
+
+                <div class="card-footer">
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('permission.index') }}"
+                        class="btn btn-secondary"
+                    >
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

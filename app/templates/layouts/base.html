@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        {% block title %}CIMS{% endblock %}
+    </title>
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='adminlte/plugins/fontawesome-free/css/all.min.css'
+        ) }}"
+    >
+
+
+    <!-- AdminLTE -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='adminlte/dist/css/adminlte.min.css'
+        ) }}"
+    >
+
+
+    <!-- SweetAlert -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/sweetalert2.min.css'
+        ) }}"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for(
+            'static',
+            filename='css/attachment-manager.css'
+        ) }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='jodit/jodit.min.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+
+    {% block styles %}
+    {% endblock %}
+
+</head>
+
+
+<body
+    class="{% if current_user.is_authenticated %}
+                hold-transition sidebar-mini layout-fixed
+           {% else %}
+                hold-transition login-page
+           {% endif %}"
+>
+
+
+{% if current_user.is_authenticated %}
+
+<div class="wrapper">
+
+    <!-- ========================================== -->
+    <!-- Navbar -->
+    <!-- ========================================== -->
+
+    {% include "components/navbar.html" %}
+
+
+    <!-- ========================================== -->
+    <!-- Sidebar -->
+    <!-- ========================================== -->
+
+    {% include "components/sidebar.html" %}
+
+
+    <!-- ========================================== -->
+    <!-- Content -->
+    <!-- ========================================== -->
+
+    <div class="content-wrapper">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- Flash Messages -->
+    <!-- ========================================== -->
+
+    {% include "components/flash_messages.html" %}
+
+
+    <!-- ========================================== -->
+    <!-- Footer -->
+    <!-- ========================================== -->
+
+    {% include "components/footer.html" %}
+
+</div>
+
+
+{% else %}
+
+    <!-- ========================================== -->
+    <!-- Public / Login Page -->
+    <!-- ========================================== -->
+
+    {% block public_content %}
+    {% endblock %}
+
+{% endif %}
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='adminlte/plugins/jquery/jquery.min.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='adminlte/dist/js/adminlte.min.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/sweetalert2.min.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/delete-modal.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/flash-message.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/tooltip.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/form-validation.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/file-upload.js'
+    ) }}"
+></script>
+
+<script
+    src="{{ url_for('static', filename='jodit/jodit.min.js') }}">
+</script>
+
+{% endblock %}
+
+
+</body>
+
+</html>

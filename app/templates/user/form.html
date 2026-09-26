@@ -1,0 +1,235 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{% if user %}
+Edit User
+{% else %}
+Add User
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    {% if user %}
+                    Edit User
+                    {% else %}
+                    Add User
+                    {% endif %}
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Security
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('user.index') }}">
+                            User
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if user %}
+                        Edit
+                        {% else %}
+                        Add
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-user-lock mr-2"></i>
+
+                    {% if user %}
+                    Edit User
+                    {% else %}
+                    Add User
+                    {% endif %}
+
+                </h3>
+
+            </div>
+
+            <form method="POST">
+
+                <div class="card-body">
+
+                    <!-- Employee -->
+
+                    <div class="form-group">
+
+                        <label>Employee</label>
+
+                        {% if user %}
+
+                        <input type="text" class="form-control"
+                            value="{{ user.employee.nik }} - {{ user.employee.full_name }}" readonly>
+
+                        <input type="hidden" name="employee_id" value="{{ user.employee_id }}">
+
+                        {% else %}
+
+                        <select name="employee_id" class="form-control" required>
+
+                            <option value="">
+                                -- Select Employee --
+                            </option>
+
+                            {% for employee in employees %}
+
+                            <option value="{{ employee.id }}">
+
+                                {{ employee.nik }} - {{ employee.full_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- ==========================================
+Role
+========================================== -->
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Role
+
+                        </label>
+
+                        <select name="role_id" class="form-control" required>
+
+                            <option value="">
+
+                                -- Select Role --
+
+                            </option>
+
+                            {% for role in roles %}
+
+                            <option value="{{ role.id }}" {% if user and user.role_id==role.id %} selected {% endif %}>
+
+                                {{ role.role_code }}
+                                -
+                                {{ role.role_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <!-- Username -->
+
+                    <div class="form-group">
+
+                        <label>Username</label>
+
+                        <input type="text" name="username" class="form-control" required maxlength="50"
+                            value="{{ user.username if user else '' }}">
+
+                    </div>
+
+                    {% if not user %}
+
+                    <!-- Password -->
+
+                    <div class="form-group">
+
+                        <label>Password</label>
+
+                        <input type="password" name="password" class="form-control" required>
+
+                    </div>
+
+                    <!-- Confirm Password -->
+
+                    <div class="form-group">
+
+                        <label>Confirm Password</label>
+
+                        <input type="password" name="confirm_password" class="form-control" required>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="card-footer">
+
+                    <button type="submit" class="btn btn-primary">
+
+                        <i class="fas fa-save"></i>
+
+                        Save
+
+                    </button>
+
+                    <a href="{{ url_for('user.index') }}" class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

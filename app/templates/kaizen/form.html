@@ -1,0 +1,860 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{% if kaizen %}
+Edit Kaizen
+{% else %}
+Create Kaizen
+{% endif %}
+{% endblock %}
+
+
+{% block content_header %}
+
+<div class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1 class="m-0">
+
+                    {% if kaizen %}
+                    Edit Kaizen
+                    {% else %}
+                    Create Kaizen
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('kaizen.index') }}">
+                            Kaizen
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if kaizen %}
+                        Edit
+                        {% else %}
+                        Create
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <form
+    id="kaizen-form"
+    method="POST"
+    action="{% if mode == 'edit' %}
+
+                {{ url_for(
+                    'kaizen.edit',
+                    kaizen_id=kaizen.id
+                ) }}
+
+            {% elif source == 'problem' %}
+
+                {{ url_for(
+                    'kaizen.create_from_problem',
+                    problem_id=problem.id
+                ) }}
+
+            {% elif source == 'direct' %}
+
+                {{ url_for(
+                    'kaizen.create_direct'
+                ) }}
+
+            {% else %}
+
+                {{ url_for(
+                    'kaizen.create',
+                    improvement_id=improvement.id
+                ) }}
+
+            {% endif %}"
+
+    class="needs-validation"
+    novalidate
+>
+
+        <!-- ==================================================
+     Related Information
+================================================== -->
+
+<div class="card card-primary">
+
+    <div class="card-header">
+
+        <h3 class="card-title">
+
+            <i class="fas fa-link mr-1"></i>
+
+            Related Information
+
+        </h3>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <!-- Improvement -->
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+
+                    <label>
+                        Improvement
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if kaizen and kaizen.improvement %}
+                                   {{ kaizen.improvement.improvement_no }} - {{ kaizen.improvement.title }}
+                               {% elif improvement %}
+                                   {{ improvement.improvement_no }} - {{ improvement.title }}
+                               {% else %}
+                                   -
+                               {% endif %}"
+                        readonly
+                    >
+
+                    <input
+                        type="hidden"
+                        name="improvement_id"
+                        value="{% if kaizen %}
+                                   {{ kaizen.improvement_id or '' }}
+                               {% elif improvement %}
+                                   {{ improvement.id }}
+                               {% else %}
+                                   ''
+                               {% endif %}"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Problem -->
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+
+                    <label>
+                        Problem
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if kaizen and kaizen.problem %}
+                                   {{ kaizen.problem.problem_no }} - {{ kaizen.problem.title }}
+                               {% elif improvement and improvement.problem %}
+                                   {{ improvement.problem.problem_no }} - {{ improvement.problem.title }}
+                               {% elif problem %}
+                                   {{ problem.problem_no }} - {{ problem.title }}
+                               {% else %}
+                                   -
+                               {% endif %}"
+                        readonly
+                    >
+
+                    <input
+                        type="hidden"
+                        name="problem_id"
+                        value="{% if kaizen %}
+                                   {{ kaizen.problem_id or '' }}
+                               {% elif problem %}
+                                   {{ problem.id }}
+                               {% elif improvement and improvement.problem %}
+                                   {{ improvement.problem.id }}
+                               {% else %}
+                                   ''
+                               {% endif %}"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+        <!-- ==================================================
+             Kaizen Information
+        ================================================== -->
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-lightbulb mr-1"></i>
+
+                    Kaizen Information
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Kaizen No -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Kaizen No
+                            </label>
+
+                            <input type="text" class="form-control"
+                                value="{{ kaizen.kaizen_no if kaizen else 'Auto Generate' }}" readonly>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Category -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Category
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select name="kaizen_category_id" class="form-control" required>
+
+                                <option value="">
+                                    -- Select Category --
+                                </option>
+
+                                {% for category in kaizen_categories %}
+
+                                <option value="{{ category.id }}" {% if kaizen and
+                                    kaizen.kaizen_category_id==category.id %} selected {% endif %}>
+                                    {{ category.kaizen_category_code }}
+                                    -
+                                    {{ category.kaizen_category_name }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            <div class="invalid-feedback">
+                                Please select a category.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Title -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Title
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text" name="title" class="form-control"
+                                value="{{ kaizen.title if kaizen else '' }}" required>
+
+                            <div class="invalid-feedback">
+                                Please enter Kaizen title.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea name="description" id="kaizen_description" class="form-control"
+                        rows="5">{{ kaizen.description if kaizen else '' }}</textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             Responsible
+        ================================================== -->
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-user mr-1"></i>
+
+                    Responsible
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+<!-- Employee -->
+
+<div class="col-md-6">
+
+    <div class="form-group">
+
+        <label>
+            Employee
+        </label>
+
+        <input
+            type="text"
+            class="form-control"
+            value="{{ employee.full_name if employee else '' }}"
+            readonly
+        >
+
+        <small class="form-text text-muted">
+            Automatically taken from the logged-in user.
+        </small>
+
+    </div>
+
+</div>
+                    <!-- Department -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                Department
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select name="department_id" class="form-control" required>
+
+                                <option value="">
+                                    -- Select Department --
+                                </option>
+
+                                {% for department in departments %}
+
+                                <option value="{{ department.id }}" {% if kaizen and kaizen.department_id==department.id
+                                    %} selected {% endif %}>
+
+                                    {{ department.department_name }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            <div class="invalid-feedback">
+                                Please select department.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             BEFORE CONDITION
+        ================================================== -->
+
+        <div class="card card-warning">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-exclamation-circle mr-1"></i>
+
+                    Before Condition
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <!-- Before Condition -->
+
+                <div class="form-group">
+
+                    <label>
+                        Before Condition
+                    </label>
+
+                    <textarea name="before_condition" id="before_condition" class="form-control"
+                        rows="5">{{ kaizen.before_condition if kaizen else '' }}</textarea>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Before Value -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Before Value
+                            </label>
+
+                            <input type="number" step="0.01" name="before_value" class="form-control"
+                                value="{{ kaizen.before_value if kaizen and kaizen.before_value is not none else '' }}">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Before Unit -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Before Unit
+                            </label>
+
+                            <input type="text" name="before_unit" class="form-control"
+                                value="{{ kaizen.before_unit if kaizen else '' }}">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Loss Before -->
+
+                <div class="form-group">
+
+                    <label>
+                        Loss Before
+                    </label>
+
+                    <textarea name="loss_before" id="loss_before" class="form-control"
+                        rows="4">{{ kaizen.loss_before if kaizen else '' }}</textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             AFTER CONDITION
+        ================================================== -->
+
+        <div class="card card-success">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-check-circle mr-1"></i>
+
+                    After Condition
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <!-- After Condition -->
+
+                <div class="form-group">
+
+                    <label>
+                        After Condition
+                    </label>
+
+                    <textarea name="after_condition" id="after_condition" class="form-control"
+                        rows="5">{{ kaizen.after_condition if kaizen else '' }}</textarea>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- After Value -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                After Value
+                            </label>
+
+                            <input type="number" step="0.01" name="after_value" class="form-control"
+                                value="{{ kaizen.after_value if kaizen and kaizen.after_value is not none else '' }}">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- After Unit -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                After Unit
+                            </label>
+
+                            <input type="text" name="after_unit" class="form-control"
+                                value="{{ kaizen.after_unit if kaizen else '' }}">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             BENEFIT
+        ================================================== -->
+
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-chart-line mr-1"></i>
+
+                    Benefit
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <!-- Benefit -->
+
+                <div class="form-group">
+
+                    <label>
+                        Benefit
+                    </label>
+
+                    <textarea name="benefit" id="benefit" class="form-control"
+                        rows="5">{{ kaizen.benefit if kaizen else '' }}</textarea>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Cost Saving -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                Cost Saving
+                            </label>
+
+                            <input type="number" step="0.01" name="cost_saving" class="form-control"
+                                value="{{ kaizen.cost_saving if kaizen and kaizen.cost_saving is not none else '' }}">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Implementation Date -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                Implementation Date
+                            </label>
+
+                            <input type="date" name="implementation_date" class="form-control"
+                                value="{{ kaizen.implementation_date.strftime('%Y-%m-%d') if kaizen and kaizen.implementation_date else '' }}">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==================================================
+             FORM ACTION
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <a href="{{ url_for('kaizen.index') }}" class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left mr-1"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button type="submit" class="btn btn-primary">
+
+                        <i class="fas fa-save mr-1"></i>
+
+                        {% if kaizen %}
+                        Update Kaizen
+                        {% else %}
+                        Save Kaizen
+                        {% endif %}
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<!-- ==================================================
+     Jodit Editor
+================================================== -->
+
+<script src="{{ url_for(
+    'static',
+    filename='jodit/jodit.js'
+) }}"></script>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        /* ==========================================
+           Jodit - Description
+        ========================================== */
+
+        new Jodit("#kaizen_description", {
+            height: 250
+        });
+
+
+        /* ==========================================
+           Jodit - Before Condition
+        ========================================== */
+
+        new Jodit("#before_condition", {
+            height: 250
+        });
+
+
+        /* ==========================================
+           Jodit - Loss Before
+        ========================================== */
+
+        new Jodit("#loss_before", {
+            height: 200
+        });
+
+
+        /* ==========================================
+           Jodit - After Condition
+        ========================================== */
+
+        new Jodit("#after_condition", {
+            height: 250
+        });
+
+
+        /* ==========================================
+           Jodit - Benefit
+        ========================================== */
+
+        new Jodit("#benefit", {
+            height: 250
+        });
+
+    });
+
+
+
+    /* ==================================================
+       Bootstrap Form Validation
+    ================================================== */
+
+    (function () {
+
+        "use strict";
+
+
+        const forms =
+            document.querySelectorAll(
+                ".needs-validation"
+            );
+
+
+        Array.prototype.slice
+            .call(forms)
+            .forEach(function (form) {
+
+                form.addEventListener(
+                    "submit",
+                    function (event) {
+
+                        if (!form.checkValidity()) {
+
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                        }
+
+                        form.classList.add(
+                            "was-validated"
+                        );
+
+                    },
+                    false
+                );
+
+            });
+
+    })();
+
+</script>
+
+
+<!-- ==================================================
+     Delete Modal
+================================================== -->
+
+<script src="{{ url_for(
+    'static',
+    filename='js/delete-modal.js'
+) }}"></script>
+
+
+{% include "components/delete_modal.html" %}
+
+{% endblock %}

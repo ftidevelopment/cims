@@ -1,0 +1,16 @@
+🔔 CIMS - Improvement Implemented
+
+Improvement No: {{ improvement.improvement_no }}
+Title: {{ improvement.title }}
+Problem No: {% if problem %}{{ problem.problem_no }}{% else %}-{% endif %}
+Problem Title: {% if problem %}{{ problem.title }}{% else %}-{% endif %}
+Owner: {% if improvement.owner_employee %}{{ improvement.owner_employee.full_name }}{% else %}-{% endif %}
+
+PIC:
+{% if improvement.improvement_pics %}{% for pic in improvement.improvement_pics %}{% if pic.is_active and pic.employee %}- {{ pic.employee.full_name }}{% if pic.is_leader %} (Leader){% else %} (PIC){% endif %}
+{% endif %}{% endfor %}{% else %}- No PIC assigned
+{% endif %}
+Implementation Result: {{ improvement.implementation_result or '-' }}
+
+The improvement has been implemented in CIMS.
+Please check CIMS for the latest information.

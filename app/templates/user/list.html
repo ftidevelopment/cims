@@ -1,0 +1,518 @@
+{% from "components/sortable_header.html" import sortable_header %}
+{% extends "layouts/base.html" %}
+
+{% block title %}User{% endblock %}
+
+{% block content %}
+
+<!-- Content Header -->
+<section class="content-header">
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+                <h1>User</h1>
+            </div>
+
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        User
+                    </li>
+
+                </ol>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <!-- Card Header -->
+            <div class="card-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- Left -->
+                    <div class="d-flex align-items-center">
+
+                        <h3 class="card-title mb-0 mr-4">
+
+                            <i class="fas fa-user-lock mr-2"></i>
+
+                            User List
+
+                        </h3>
+
+
+
+
+                    </div>
+
+                    <!-- Right -->
+                    <div class="d-flex align-items-center">
+
+                        <a href="{{ url_for(
+                            'user.export',
+                            keyword=keyword,
+                            sort=sort,
+                            order=order
+                        ) }}" class="btn btn-warning mr-2">
+
+                            <i class="fas fa-file-excel mr-1"></i>
+
+                            Export Excel
+
+                        </a>
+
+                        {% if has_permission("USER_CREATE") %}
+
+                        <a href="{{ url_for('user.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add User
+                        </a>
+
+                        {% endif %}
+
+                        <!-- Search -->
+                        <form method="GET" class="mb-0">
+
+
+
+                            <input type="hidden" name="sort_by" value="{{ sort_by }}">
+                            <input type="hidden" name="sort_order" value="{{ sort_order }}">
+
+                            <div class="input-group">
+
+                                <input type="text" name="keyword" class="form-control" style="width:300px;"
+                                    placeholder="Search username, NIK or full name..." value="{{ keyword }}">
+
+                                <div class="input-group-append">
+
+                                    <button class="btn btn-primary" type="submit">
+
+                                        <i class="fas fa-search"></i>
+
+                                    </button>
+
+                                    <a href="{{ url_for('user.index') }}" class="btn btn-secondary ml-1">
+
+                                        <i class="fas fa-sync-alt"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search"></i>
+
+                    Search keyword :
+
+                    <strong>{{ keyword }}</strong>
+
+                </div>
+
+                {% endif %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead>
+
+                            <tr class="text-center">
+
+                                <th width="60">
+                                    No
+                                </th>
+
+                                {{ sortable_header(
+                                "Username",
+                                "username",
+                                "user.index",
+                                keyword,
+                                "",
+                                sort_by,
+                                sort_order
+                                ) }}
+
+                                <th>
+                                    NIK
+                                </th>
+
+                                <th>
+                                    Full Name
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                {{ sortable_header(
+                                "Role",
+                                "role_name",
+                                "user.index",
+                                keyword,
+                                "",
+                                sort_by,
+                                sort_order
+                                ) }}
+
+                                {{ sortable_header(
+                                "Last Login",
+                                "last_login",
+                                "user.index",
+                                keyword,
+                                "",
+                                sort_by,
+                                sort_order
+                                ) }}
+
+                                <th width="90">
+                                    Locked
+                                </th>
+
+
+
+                                <th width="220">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+                            {% if users %}
+
+                            {% for user in users.items %}
+
+                            <tr>
+
+                                <td class="text-center">
+
+                                    {{ users.first + loop.index0 }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ user.username }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ user.nik }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ user.full_name }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ user.employee.department.department_name }}
+
+                                </td>
+                                <td class="text-center">
+
+                                    {% if user.role %}
+
+                                    <span class="badge badge-primary">
+
+                                        {{ user.role.role_code }}
+
+                                    </span>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        {{ user.role.role_name }}
+
+                                    </small>
+
+                                    {% else %}
+
+                                    <span class="text-danger">
+
+                                        No Role
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    {% if user.last_login %}
+
+                                    {{ user.last_login.strftime("%d-%m-%Y %H:%M") }}
+
+                                    {% else %}
+
+                                    -
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    {% if user.is_locked %}
+
+                                    <span class="badge badge-danger">
+
+                                        Locked
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-success">
+
+                                        Normal
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <td class="text-center">
+                                    {% if current_user.role_code == "ADMIN" or has_permission("USER_EDIT") %}
+
+                                    <a href="{{ url_for(
+                                            'user.edit',
+                                            user_id=user.id
+                                        ) }}" class="btn btn-warning btn-sm" title="Edit">
+
+                                        <i class="fas fa-edit"></i>
+
+                                    </a>
+                                    {% endif %}
+
+                                    <form method="POST" action="{{ url_for(
+                                            'user.reset_password',
+                                            id=user.id
+                                        ) }}" style="display:inline;">
+
+                                        <button type="submit" class="btn btn-info btn-sm" title="Reset Password">
+
+                                            <i class="fas fa-key"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                    {% if user.is_locked %}
+
+                                    <form method="POST" action="{{ url_for(
+                                            'user.unlock',
+                                            id=user.id
+                                        ) }}" style="display:inline;">
+
+                                        <button type="submit" class="btn btn-success btn-sm" title="Unlock User">
+
+                                            <i class="fas fa-unlock"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                    {% endif %}
+
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                        data-name="{{ user.username }}" data-url="{{ url_for(
+                                                    'user.delete',
+                                                    user_id=user.id
+                                                ) }}" title="Delete">
+
+                                        <i class="fas fa-trash"></i>
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                            {% else %}
+
+                            <tr>
+
+                                <td colspan="10" class="text-center text-muted">
+
+                                    No user found.
+
+                                </td>
+
+                            </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            {% include "components/delete_modal.html" %}
+
+            <!-- Card Footer -->
+            <div class="card-footer clearfix">
+
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+
+                        {{ users.first if users.total > 0 else 0 }}
+
+                    </strong>
+
+                    to
+
+                    <strong>
+
+                        {{ users.last if users.total > 0 else 0 }}
+
+                    </strong>
+
+                    of
+
+                    <strong>
+
+                        {{ users.total }}
+
+                    </strong>
+
+                    user(s)
+
+                </div>
+
+            </div>
+
+            <nav>
+
+                <ul class="pagination pagination-sm float-right">
+
+                    {% if users.has_prev %}
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="{{ url_for(
+                                'user.index',
+                                page=users.prev_num,
+                                keyword=keyword,
+                                sort_by=sort_by,
+                                sort_order=sort_order
+                            ) }}">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% for page_num in users.iter_pages() %}
+
+                    {% if page_num %}
+
+                    <li class="page-item {% if page_num == users.page %}active{% endif %}">
+
+                        <a class="page-link" href="{{ url_for(
+                                'user.index',
+                                page=page_num,
+                                keyword=keyword,                             
+                               sort_by=sort_by,
+                                sort_order=sort_order
+                            ) }}">
+
+                            {{ page_num }}
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                    {% if users.has_next %}
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="{{ url_for(
+                                'user.index',
+                                page=users.next_num,
+                                keyword=keyword,                               
+                                sort_by=sort_by,
+                                sort_order=sort_order
+                            ) }}">
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

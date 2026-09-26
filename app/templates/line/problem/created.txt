@@ -1,0 +1,12 @@
+🔔 CIMS - New Problem
+
+Problem No: {{ problem.problem_no }}
+Title: {{ problem.title }}
+Source: {{ problem.problem_source }}
+Location: {{ problem.problem_location }}
+Department: {% if problem.department %}{{ problem.department.department_name }}{% else %}-{% endif %}
+Reporter: {% if problem.reporter %}{{ problem.reporter.full_name }}{% else %}-{% endif %}
+Problem Date: {% if problem.problem_date %}{{ problem.problem_date.strftime('%d-%m-%Y') }}{% else %}-{% endif %}
+
+A new problem has been created in CIMS.
+Please check CIMS for details.

@@ -1,0 +1,1326 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+My Dashboard
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid px-4 py-4">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="mb-1">
+
+                <i class="fas fa-tachometer-alt mr-2"></i>
+
+                My Dashboard
+
+            </h2>
+
+            <div class="text-muted">
+
+                Welcome,
+
+                <strong>
+                    {{ current_user.username }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Dashboard Period -->
+
+        <div class="text-end">
+
+            <div class="small text-muted">
+                Dashboard Period
+            </div>
+
+            {% if dashboard["period"]["start_date"]
+            and dashboard["period"]["end_date"] %}
+
+            <strong>
+
+                {{ dashboard["period"]["start_date"].strftime('%d %b %Y') }}
+
+                -
+
+                {{ dashboard["period"]["end_date"].strftime('%d %b %Y') }}
+
+            </strong>
+
+            {% else %}
+
+            <strong>
+                Last 6 Months
+            </strong>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         KPI CARDS
+         ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- =================================================
+             MY PROBLEM
+             ================================================= -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <a href="{{ url_for('problem.index', mine='1') }}" class="dashboard-kpi-link">
+
+                <div class="card border-0 shadow-sm h-100 dashboard-kpi-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between">
+
+
+                            <div>
+
+                                <div class="text-muted small">
+                                    My Problem
+                                </div>
+
+                                <h2 class="fw-bold mb-0 text-dark">
+
+                                    {{ dashboard["kpi"]["problem"] }}
+
+                                </h2>
+
+                                <small class="text-muted">
+
+                                    Problems created by you
+
+                                </small>
+
+                            </div>
+
+
+                            <div class="text-danger dashboard-kpi-icon">
+
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MY IMPROVEMENT
+             ================================================= -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <a href="{{ url_for('improvement.index', mine='1') }}" class="dashboard-kpi-link">
+
+                <div class="card border-0 shadow-sm h-100 dashboard-kpi-card dashboard-kpi-improvement">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between">
+
+
+                            <div>
+
+                                <div class="text-muted small">
+                                    My Improvement
+                                </div>
+
+                                <h2 class="fw-bold mb-0">
+
+                                    {{ dashboard["kpi"]["improvement"] }}
+
+                                </h2>
+
+                                <small class="text-muted">
+                                    Last 6 months
+                                </small>
+
+                            </div>
+
+
+                            <div class="text-primary dashboard-kpi-icon">
+
+                                <i class="fas fa-tools fa-2x"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MY KAIZEN
+             ================================================= -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <a href="{{ url_for('kaizen.index', mine='1') }}" class="dashboard-kpi-link">
+
+                <div class="card border-0 shadow-sm h-100 dashboard-kpi-card dashboard-kpi-kaizen">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between">
+
+
+                            <div>
+
+                                <div class="text-muted small">
+                                    My Kaizen
+                                </div>
+
+                                <h2 class="fw-bold mb-0">
+
+                                    {{ dashboard["kpi"]["kaizen"] }}
+
+                                </h2>
+
+                                <small class="text-muted">
+                                    Last 6 months
+                                </small>
+
+                            </div>
+
+
+                            <div class="text-warning dashboard-kpi-icon">
+
+                                <i class="fas fa-lightbulb fa-2x"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             KAIZEN AWARD
+             ================================================= -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <a href="{{ url_for('kaizen_award_result.index') }}" class="dashboard-kpi-link">
+
+                <div class="card border-0 shadow-sm h-100 dashboard-kpi-card dashboard-kpi-award">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between">
+
+
+                            <div>
+
+                                <div class="text-muted small">
+                                    Kaizen Award
+                                </div>
+
+                                <h2 class="fw-bold mb-0">
+
+                                    {{ dashboard["kpi"]["award"] }}
+
+                                </h2>
+
+                                <small class="text-muted">
+                                    Award Periods
+                                </small>
+
+                            </div>
+
+
+                            <div class="text-success dashboard-kpi-icon">
+
+                                <i class="fas fa-trophy fa-2x"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MY ACTIVITY - MONTHLY
+         ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-12">
+
+            <div class="card border-0 shadow-sm h-100">
+
+
+                <!-- ==========================================
+                     HEADER
+                     ========================================== -->
+
+                <div class="card-header bg-white">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <strong>
+
+                                <i class="fas fa-chart-line mr-2"></i>
+
+                                My Activity
+
+                            </strong>
+
+                            <span class="text-muted small ml-2">
+
+                                Last 6 months
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="text-muted small">
+
+                            Monthly Activity
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==========================================
+                     CHART
+                     ========================================== -->
+
+                <div class="card-body">
+
+                    <div style="
+                            position: relative;
+                            width: 100%;
+                            height: 350px;
+                        ">
+
+                        <canvas id="myActivityChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ACTION REQUIRED
+         ====================================================== -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <strong>
+
+                    <i class="fas fa-bell mr-2"></i>
+
+                    Action Required
+
+                </strong>
+
+                {% if dashboard["action_required"]["total"] > 0 %}
+
+                <span class="badge badge-danger">
+
+                    {{ dashboard["action_required"]["total"] }}
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- =================================================
+                     PROBLEM
+                     ================================================= -->
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+                    <a href="{{ url_for('dashboard.problem_action_required') }}" class="dashboard-kpi-link">
+
+                        <div class="border rounded p-3 h-100 dashboard-kpi-card">
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+
+                                    <div class="text-muted small">
+                                        Problem
+                                    </div>
+
+                                    <h4 class="mb-0 text-danger">
+
+                                        {{ dashboard["action_required"]["problem"] | length }}
+
+                                    </h4>
+
+                                </div>
+
+                                <i class="fas fa-exclamation-circle
+                          text-danger
+                          fa-2x
+                          dashboard-kpi-icon"></i>
+
+                            </div>
+
+                            <small class="text-muted dashboard-kpi-action">
+
+                                Waiting for your action
+
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+                <!-- =================================================
+                     IMPROVEMENT
+                     ================================================= -->
+
+
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+                    <a href="{{ url_for('dashboard.improvement_action_required') }}" class="dashboard-kpi-link">
+
+                        <div class="border rounded p-3 h-100 dashboard-kpi-improvement">
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+
+                                    <div class="text-muted small">
+                                        Improvement
+                                    </div>
+
+                                    <h4 class="mb-0 text-primary">
+
+                                        {{ dashboard["action_required"]["improvement"] | length }}
+
+                                    </h4>
+
+                                </div>
+
+                                <i class="fas fa-tools
+                          text-primary
+                          fa-2x
+                          dashboard-kpi-icon"></i>
+
+                            </div>
+
+                            <small class="text-muted dashboard-kpi-action">
+
+                                Waiting for your action
+
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     KAIZEN
+                     ================================================= -->
+
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+    <a href="{{ url_for('dashboard.kaizen_action_required') }}"
+       class="dashboard-kpi-link">
+
+        <div class="border rounded p-3 h-100 dashboard-kpi-card dashboard-kpi-kaizen">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+
+                    <div class="text-muted small">
+                        Kaizen
+                    </div>
+
+                    <h4 class="mb-0 text-warning">
+
+                        {{ dashboard["action_required"]["kaizen"] | length }}
+
+                    </h4>
+
+                </div>
+
+                <i class="fas fa-lightbulb
+                          text-warning
+                          fa-2x
+                          dashboard-kpi-icon"></i>
+
+            </div>
+
+            <small class="text-muted dashboard-kpi-action">
+
+                Waiting for your action
+
+            </small>
+
+        </div>
+
+    </a>
+
+</div>
+
+                <!-- =================================================
+                 PROBLEM ACTION LIST
+                 ================================================= -->
+
+                {% if dashboard["action_required"]["problem"] %}
+
+                <div class="mt-4">
+
+                    <div class="border-top pt-3">
+
+                        <div class="small text-muted mb-2">
+
+                            Problems waiting for assignment
+
+                        </div>
+
+
+                        <div class="list-group">
+
+                            {% for action in dashboard["action_required"]["problem"] %}
+
+                            {% set problem = action["item"] %}
+
+                            <a href="{{ url_for('problem.show', problem_id=problem.id) }}"
+                                class="list-group-item list-group-item-action">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div>
+
+                                        <div class="font-weight-bold">
+
+                                            {{ problem.problem_no }}
+
+                                        </div>
+
+                                        <div class="small text-muted">
+
+                                            {{ problem.title }}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="text-right">
+
+                                        <span class="badge badge-danger">
+
+                                            Assign Problem
+
+                                        </span>
+
+
+                                        {% if problem.problem_date %}
+
+                                        <div class="small text-muted mt-1">
+
+                                            {{ problem.problem_date.strftime('%d %b %Y') }}
+
+                                        </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="mt-4">
+
+                    <div class="border-top pt-3 text-center text-muted">
+
+                        <i class="fas fa-check-circle text-success mr-1"></i>
+
+                        No problem action required.
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+         RECENT MY ACTIVITIES
+         ====================================================== -->
+
+        <div class="row g-4 mb-4">
+
+
+            <!-- =================================================
+             MY PROBLEMS
+             ================================================= -->
+
+            <div class="col-xl-4">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-header bg-white">
+
+                        <strong>
+
+                            <i class="fas fa-exclamation-triangle text-danger mr-2"></i>
+
+                            My Recent Problems
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="card-body p-0">
+
+
+                        {% if dashboard["my_problem"]["items"] %}
+
+                        <div class="list-group list-group-flush">
+
+
+                            {% for item in dashboard["my_problem"]["items"] %}
+
+                            <div class="list-group-item">
+
+
+                                <div class="d-flex justify-content-between">
+
+                                    <strong>
+
+                                        {{ item.problem_no }}
+
+                                    </strong>
+
+
+                                    <small class="text-muted">
+
+                                        {% if item.problem_date %}
+
+                                        {{ item.problem_date.strftime('%d %b %Y') }}
+
+                                        {% endif %}
+
+                                    </small>
+
+                                </div>
+
+
+                                <div class="text-muted small text-truncate">
+
+                                    {{ item.title }}
+
+                                </div>
+
+
+                                {% if item.status %}
+
+                                <div class="mt-1">
+
+                                    <span class="badge badge-light">
+
+                                        {{ item.status }}
+
+                                    </span>
+
+                                </div>
+
+                                {% endif %}
+
+
+                            </div>
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                        {% else %}
+
+                        <div class="text-center text-muted py-4">
+
+                            No problem activity.
+
+                        </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             MY IMPROVEMENTS
+             ================================================= -->
+
+            <div class="col-xl-4">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-header bg-white">
+
+                        <strong>
+
+                            <i class="fas fa-tools text-primary mr-2"></i>
+
+                            My Recent Improvements
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="card-body p-0">
+
+
+                        {% if dashboard["my_improvement"]["items"] %}
+
+                        <div class="list-group list-group-flush">
+
+
+                            {% for item in dashboard["my_improvement"]["items"] %}
+
+                            <div class="list-group-item">
+
+
+                                <div class="d-flex justify-content-between">
+
+                                    <strong>
+
+                                        {{ item.improvement_no }}
+
+                                    </strong>
+
+
+                                    <small class="text-muted">
+
+                                        {% if item.created_at %}
+
+                                        {{ item.created_at.strftime('%d %b %Y') }}
+
+                                        {% endif %}
+
+                                    </small>
+
+                                </div>
+
+
+                                <div class="text-muted small text-truncate">
+
+                                    {{ item.title }}
+
+                                </div>
+
+
+                                {% if item.approved_date %}
+
+                                <div class="mt-1">
+
+                                    <span class="badge badge-success">
+
+                                        Approved
+
+                                    </span>
+
+                                </div>
+
+                                {% endif %}
+
+
+                            </div>
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                        {% else %}
+
+                        <div class="text-center text-muted py-4">
+
+                            No improvement activity.
+
+                        </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             MY KAIZEN
+             ================================================= -->
+
+            <div class="col-xl-4">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-header bg-white">
+
+                        <strong>
+
+                            <i class="fas fa-lightbulb text-warning mr-2"></i>
+
+                            My Recent Kaizen
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="card-body p-0">
+
+
+                        {% if dashboard["my_kaizen"]["items"] %}
+
+                        <div class="list-group list-group-flush">
+
+
+                            {% for item in dashboard["my_kaizen"]["items"] %}
+
+                            <div class="list-group-item">
+
+
+                                <div class="d-flex justify-content-between">
+
+                                    <strong>
+
+                                        {{ item.kaizen_no }}
+
+                                    </strong>
+
+
+                                    <small class="text-muted">
+
+                                        {% if item.created_at %}
+
+                                        {{ item.created_at.strftime('%d %b %Y') }}
+
+                                        {% endif %}
+
+                                    </small>
+
+                                </div>
+
+
+                                <div class="text-muted small text-truncate">
+
+                                    {{ item.title }}
+
+                                </div>
+
+
+                                {% if item.status %}
+
+                                <div class="mt-1">
+
+                                    <span class="badge badge-light">
+
+                                        {{ item.status }}
+
+                                    </span>
+
+                                </div>
+
+                                {% endif %}
+
+
+                            </div>
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                        {% else %}
+
+                        <div class="text-center text-muted py-4">
+
+                            No kaizen activity.
+
+                        </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+         QUICK ACTIONS
+         ====================================================== -->
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-white">
+
+                <strong>
+
+                    <i class="fas fa-bolt mr-2"></i>
+
+                    Quick Actions
+
+                </strong>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="d-flex flex-wrap gap-2">
+
+
+                    <!-- =================================================
+                     CREATE PROBLEM
+                     ================================================= -->
+
+                    <a href="{{ url_for('problem.create') }}" class="btn btn-danger">
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Create Problem
+
+                    </a>
+
+
+
+                    <!-- =================================================
+                     SELECT PROBLEM FOR IMPROVEMENT
+                     ================================================= -->
+
+                    <a href="{{ url_for('problem.index') }}" class="btn btn-primary">
+
+                        <i class="fas fa-tools mr-1"></i>
+
+                        Select Problem for Improvement
+
+                    </a>
+
+
+
+                    <!-- =================================================
+                     SELECT IMPROVEMENT FOR KAIZEN
+                     ================================================= -->
+
+                    <a href="{{ url_for('improvement.index') }}" class="btn btn-warning">
+
+                        <i class="fas fa-lightbulb mr-1"></i>
+
+                        Select Improvement for Kaizen
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+     CHART.JS
+     ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                /* =================================================
+                   GET CANVAS
+                   ================================================= */
+
+                const canvas =
+                    document.getElementById(
+                        "myActivityChart"
+                    );
+
+
+                if (!canvas) {
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                   GET CONTEXT
+                   ================================================= */
+
+                const ctx =
+                    canvas.getContext("2d");
+
+
+                /* =================================================
+                   MONTHLY ACTIVITY DATA
+                   ================================================= */
+
+                const monthlyActivity =
+                    {{ dashboard["monthly_activity"] | tojson
+            }};
+
+
+        /* =================================================
+           SAFETY CHECK
+           ================================================= */
+
+        if (
+            !monthlyActivity ||
+            monthlyActivity.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        /* =================================================
+           LABELS
+           ================================================= */
+
+        const labels =
+            monthlyActivity.map(
+                function (item) {
+
+                    return item.month;
+
+                }
+            );
+
+
+        /* =================================================
+           PROBLEM
+           ================================================= */
+
+        const problemData =
+            monthlyActivity.map(
+                function (item) {
+
+                    return item.problem;
+
+                }
+            );
+
+
+        /* =================================================
+           IMPROVEMENT
+           ================================================= */
+
+        const improvementData =
+            monthlyActivity.map(
+                function (item) {
+
+                    return item.improvement;
+
+                }
+            );
+
+
+        /* =================================================
+           KAIZEN
+           ================================================= */
+
+        const kaizenData =
+            monthlyActivity.map(
+                function (item) {
+
+                    return item.kaizen;
+
+                }
+            );
+
+
+        /* =================================================
+           CREATE CHART
+           ================================================= */
+
+        new Chart(
+            ctx,
+            {
+
+                type: "bar",
+
+
+                data: {
+
+                    labels: labels,
+
+
+                    datasets: [
+
+                        {
+                            label: "Problem",
+
+                            data: problemData,
+
+                            backgroundColor:
+                                "rgba(220, 53, 69, 0.65)",
+
+                            borderColor:
+                                "rgba(220, 53, 69, 1)",
+
+                            borderWidth: 1
+                        },
+
+
+                        {
+                            label: "Improvement",
+
+                            data: improvementData,
+
+                            backgroundColor:
+                                "rgba(0, 123, 255, 0.65)",
+
+                            borderColor:
+                                "rgba(0, 123, 255, 1)",
+
+                            borderWidth: 1
+                        },
+
+
+                        {
+                            label: "Kaizen",
+
+                            data: kaizenData,
+
+                            backgroundColor:
+                                "rgba(255, 193, 7, 0.70)",
+
+                            borderColor:
+                                "rgba(255, 193, 7, 1)",
+
+                            borderWidth: 1
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+
+                    interaction: {
+
+                        mode: "index",
+
+                        intersect: false
+
+                    },
+
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true,
+
+                            position: "top"
+
+                        },
+
+
+                        tooltip: {
+
+                            mode: "index",
+
+                            intersect: false
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+
+                            ticks: {
+
+                                precision: 0,
+
+                                stepSize: 1
+
+                            },
+
+
+                            title: {
+
+                                display: true,
+
+                                text: "Activity Count"
+
+                            }
+
+                        },
+
+
+                        x: {
+
+                            title: {
+
+                                display: true,
+
+                                text: "Month"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+);
+
+    </script>
+
+
+    {% endblock %}

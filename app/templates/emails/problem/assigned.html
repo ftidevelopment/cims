@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CIMS - Problem Assigned</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f6f8;
+            margin: 0;
+            padding: 20px;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        .header {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .info-table td {
+            padding: 8px 5px;
+            vertical-align: top;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .label {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .pic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pic-table th,
+        .pic-table td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .pic-table th {
+            background-color: #f2f2f2;
+        }
+
+        .message {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #777777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        🔔 CIMS - Problem Assigned
+    </div>
+
+    <table class="info-table">
+
+        <tr>
+            <td class="label">Problem No</td>
+            <td>{{ problem.problem_no }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Title</td>
+            <td>{{ problem.title }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Priority</td>
+            <td>{{ problem.priority }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Status</td>
+            <td>{{ problem.status }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Source</td>
+            <td>{{ problem.problem_source }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Location</td>
+            <td>{{ problem.problem_location }}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Department</td>
+            <td>
+                {% if problem.department %}
+                    {{ problem.department.department_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="label">Reporter</td>
+            <td>
+                {% if problem.reporter %}
+                    {{ problem.reporter.full_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="label">Problem Date</td>
+            <td>
+                {% if problem.problem_date %}
+                    {{ problem.problem_date.strftime('%d-%m-%Y') }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+
+    </table>
+
+
+    <h3>PIC</h3>
+
+    <table class="pic-table">
+
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% if problem.problem_pics %}
+
+                {% set ns = namespace(no=0) %}
+
+                {% for pic in problem.problem_pics %}
+
+                    {% if pic.is_active and pic.employee %}
+
+                        {% set ns.no = ns.no + 1 %}
+
+                        <tr>
+                            <td>{{ ns.no }}</td>
+
+                            <td>
+                                {{ pic.employee.full_name }}
+                            </td>
+
+                            <td>
+                                {% if pic.is_leader %}
+                                    Leader
+                                {% else %}
+                                    PIC
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr>
+                    <td colspan="3">
+                        No PIC assigned
+                    </td>
+                </tr>
+
+            {% endif %}
+
+        </tbody>
+
+    </table>
+
+
+    <div class="message">
+
+        <strong>You have been assigned to this Problem.</strong>
+
+        <p>
+            Please check CIMS for the latest information and follow up accordingly.
+        </p>
+
+    </div>
+
+
+    <div class="footer">
+
+        This is an automated notification from CIMS.<br>
+        Please do not reply to this email.
+
+    </div>
+
+</div>
+
+</body>
+</html>
