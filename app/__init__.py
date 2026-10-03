@@ -4,7 +4,7 @@ from flask import (
     redirect,
     url_for,
 )
-
+from werkzeug.middleware.proxy_fix import ProxyFix
 from app.config import Config
 from app.extensions import (
     db,
@@ -111,7 +111,13 @@ from app.routes.kaizen_target_result import (
 def create_app():
 
     app = Flask(__name__)
-
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app,
+        x_for=1,
+        x_proto=1,
+        x_host=1,
+        x_prefix=1
+    )
     app.config.from_object(
         Config
     )
