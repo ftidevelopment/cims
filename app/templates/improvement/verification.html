@@ -208,8 +208,14 @@ Main Content
                         </label>
 
 
-                        <textarea id="verification_result" name="verification_result" class="form-control" rows="5"
-                            required>{{ improvement.verification_result or '' }}</textarea>
+                        <textarea
+                            id="verification_result"
+                            name="verification_result"
+                            class="form-control"
+                            rows="5"
+                            required
+                            data-jodit-plain-text="true"
+                        >{{ improvement.verification_result if improvement else '' }}</textarea>
 
 
                         <small class="form-text text-muted">

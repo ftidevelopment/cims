@@ -146,8 +146,8 @@ Implementation Result
         name="implementation_result"
         class="form-control"
         rows="5"
-        required
-    >{{ improvement.implementation_result or '' }}</textarea>
+        data-jodit-plain-text="true"
+    >{{ improvement.implementation_result if improvement else '' }}</textarea>
 
 </div>
 
