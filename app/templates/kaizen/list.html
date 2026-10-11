@@ -20,9 +20,9 @@ Content Header
 
                 <h1>
                     {% if is_mine == "1" %}
-                        My Kaizen
+                    My Kaizen
                     {% else %}
-                        Kaizen Management
+                    Kaizen Management
                     {% endif %}
                 </h1>
 
@@ -43,9 +43,9 @@ Content Header
                     <li class="breadcrumb-item active">
 
                         {% if is_mine == "1" %}
-                            My Kaizen
+                        My Kaizen
                         {% else %}
-                            Kaizen
+                        Kaizen
                         {% endif %}
 
                     </li>
@@ -68,474 +68,194 @@ Main Content
 
     <div class="container-fluid">
 
-        <div class="card card-primary card-outline">
+        <div class="card card-primary card-outline kaizen-list-page">
 
 
             <!-- ==========================================
             Card Header
             ========================================== -->
-            <div class="card-header">
+
+            <div class="card-header kaizen-toolbar">
+
+                <!-- ==========================================
+         ROW 1: TITLE + CREATE BUTTONS
+         ========================================== -->
+                <div class="kaizen-toolbar-top">
+
+                    <!-- Title -->
+                    <div class="kaizen-toolbar-title">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            {% if is_mine == "1" %}
+                            My Kaizens
+                            {% else %}
+                            Kaizen List
+                            {% endif %}
+                        </h3>
+                    </div>
+
+                    <!-- Create buttons: top right -->
+                    <div class="kaizen-create-actions">
+
+                        <a href="{{ url_for('kaizen.select_improvement') }}" class="btn btn-success"
+                            title="Create Kaizen from Improvement">
+                            <i class="fas fa-plus mr-1"></i>
+                            Create from Improvement
+                        </a>
+
+                        <a href="{{ url_for('kaizen.select_problem') }}" class="btn btn-primary"
+                            title="Create Kaizen from Problem">
+                            <i class="fas fa-plus mr-1"></i>
+                            Create from Problem
+                        </a>
+
+                        <a href="{{ url_for('kaizen.create_direct') }}" class="btn btn-secondary"
+                            title="Create Kaizen Directly">
+                            <i class="fas fa-plus mr-1"></i>
+                            Create Direct
+                        </a>
+
+                    </div>
+                </div>
 
 
                 <!-- ==========================================
-                     ROW 1
-                     Title + Filters
-                =========================================== -->
-                <div class="d-flex align-items-center flex-wrap">
+         ROW 2: FILTERS + SEARCH
+         ========================================== -->
+                <div class="kaizen-toolbar-bottom">
 
+                    <!-- Status filter -->
+                    <form method="GET" class="kaizen-filter-form">
 
-                    <!-- Title -->
-                    <div
-                        class="d-flex align-items-center flex-shrink-0 mr-3"
-                        style="min-width:160px;"
-                    >
+                        <input type="hidden" name="mine" value="{{ is_mine }}">
+                        <input type="hidden" name="keyword" value="{{ keyword }}">
+                        <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+                        <input type="hidden" name="date_from" value="{{ date_from or '' }}">
+                        <input type="hidden" name="date_to" value="{{ date_to or '' }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
 
-                        <h3
-                            class="card-title mb-0"
-                            style="white-space: nowrap;"
-                        >
+                        <select name="status" class="custom-select custom-select-sm kaizen-status-select"
+                            aria-label="Filter status" onchange="this.form.submit()">
 
-                            <i class="fas fa-lightbulb mr-2"></i>
-
-                            {% if is_mine == "1" %}
-                                My Kaizens
-                            {% else %}
-                                Kaizen List
-                            {% endif %}
-
-                        </h3>
-
-                    </div>
-
-
-                    <!-- ==========================================
-                         Status Filter
-                    =========================================== -->
-                    <form
-                        method="GET"
-                        class="mb-0 mr-2 flex-shrink-0"
-                    >
-
-                        <input
-                            type="hidden"
-                            name="mine"
-                            value="{{ is_mine }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="keyword"
-                            value="{{ keyword }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="department_id"
-                            value="{{ department_id or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="date_from"
-                            value="{{ date_from or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="date_to"
-                            value="{{ date_to or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="sort"
-                            value="{{ sort_by }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="order"
-                            value="{{ sort_order }}"
-                        >
-
-
-                        <select
-                            name="status"
-                            class="custom-select custom-select-sm"
-                            style="width:150px;"
-                            onchange="this.form.submit()"
-                        >
-
-                            <option value="">
+                            <option value="" {% if not status %}selected{% endif %}>
                                 All Status
                             </option>
 
-                            <option
-                                value="Draft"
-                                {% if status == "Draft" %}selected{% endif %}
-                            >
+                            <option value="Draft" {% if status=="Draft" %}selected{% endif %}>
                                 Draft
                             </option>
 
-                            <option
-                                value="Proposal"
-                                {% if status == "Proposal" %}selected{% endif %}
-                            >
+                            <option value="Proposal" {% if status=="Proposal" %}selected{% endif %}>
                                 Proposal
                             </option>
 
-                            <option
-                                value="Approved"
-                                {% if status == "Approved" %}selected{% endif %}
-                            >
+                            <option value="Approved" {% if status=="Approved" %}selected{% endif %}>
                                 Approved
                             </option>
 
-                            <option
-                                value="Rejected"
-                                {% if status == "Rejected" %}selected{% endif %}
-                            >
+                            <option value="Rejected" {% if status=="Rejected" %}selected{% endif %}>
                                 Rejected
                             </option>
 
-                            <option
-                                value="Implemented"
-                                {% if status == "Implemented" %}selected{% endif %}
-                            >
+                            <option value="Implemented" {% if status=="Implemented" %}selected{% endif %}>
                                 Implemented
                             </option>
 
                         </select>
-
                     </form>
 
 
-                    <!-- ==========================================
-                         Department Filter
-                    =========================================== -->
-                    <form
-                        method="GET"
-                        class="mb-0 mr-2 flex-shrink-0"
-                    >
+                    <!-- Department filter -->
+                    <form method="GET" class="kaizen-filter-form">
 
-                        <input
-                            type="hidden"
-                            name="mine"
-                            value="{{ is_mine }}"
-                        >
+                        <input type="hidden" name="mine" value="{{ is_mine }}">
+                        <input type="hidden" name="keyword" value="{{ keyword }}">
+                        <input type="hidden" name="status" value="{{ status }}">
+                        <input type="hidden" name="date_from" value="{{ date_from or '' }}">
+                        <input type="hidden" name="date_to" value="{{ date_to or '' }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
 
-                        <input
-                            type="hidden"
-                            name="keyword"
-                            value="{{ keyword }}"
-                        >
+                        <select name="department_id" class="custom-select custom-select-sm kaizen-department-select"
+                            aria-label="Filter department" onchange="this.form.submit()">
 
-                        <input
-                            type="hidden"
-                            name="status"
-                            value="{{ status }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="date_from"
-                            value="{{ date_from or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="date_to"
-                            value="{{ date_to or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="sort"
-                            value="{{ sort_by }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="order"
-                            value="{{ sort_order }}"
-                        >
-
-
-                        <select
-                            name="department_id"
-                            class="custom-select custom-select-sm"
-                            style="width:180px;"
-                            onchange="this.form.submit()"
-                        >
-
-                            <option value="">
+                            <option value="" {% if not department_id %}selected{% endif %}>
                                 All Department
                             </option>
 
                             {% for department in departments %}
-
-                            <option
-                                value="{{ department.id }}"
-                                {% if department_id == department.id %}
-                                    selected
-                                {% endif %}
-                            >
-
+                            <option value="{{ department.id }}" {% if department_id==department.id %}selected{% endif
+                                %}>
                                 {{ department.department_name }}
-
                             </option>
-
                             {% endfor %}
 
                         </select>
-
                     </form>
 
 
-                    <!-- ==========================================
-                         Date Filter
-                    =========================================== -->
-                    <form
-                        method="GET"
-                        class="mb-0 mr-2 flex-shrink-0"
-                    >
+                    <!-- Date filter -->
+                    <form method="GET" class="kaizen-date-form">
 
-                        <input
-                            type="hidden"
-                            name="mine"
-                            value="{{ is_mine }}"
-                        >
+                        <input type="hidden" name="mine" value="{{ is_mine }}">
+                        <input type="hidden" name="keyword" value="{{ keyword }}">
+                        <input type="hidden" name="status" value="{{ status }}">
+                        <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
 
-                        <input
-                            type="hidden"
-                            name="keyword"
-                            value="{{ keyword }}"
-                        >
+                        <div class="kaizen-date-controls">
 
-                        <input
-                            type="hidden"
-                            name="status"
-                            value="{{ status }}"
-                        >
+                            <input type="date" name="date_from" class="form-control form-control-sm"
+                                value="{{ date_from or '' }}" title="From Date" aria-label="From date">
 
-                        <input
-                            type="hidden"
-                            name="department_id"
-                            value="{{ department_id or '' }}"
-                        >
+                            <span class="kaizen-date-separator">–</span>
 
-                        <input
-                            type="hidden"
-                            name="sort"
-                            value="{{ sort_by }}"
-                        >
+                            <input type="date" name="date_to" class="form-control form-control-sm"
+                                value="{{ date_to or '' }}" title="To Date" aria-label="To date">
 
-                        <input
-                            type="hidden"
-                            name="order"
-                            value="{{ sort_order }}"
-                        >
-
-
-                        <div class="d-flex align-items-center">
-
-                            <!-- From Date -->
-                            <input
-                                type="date"
-                                name="date_from"
-                                class="form-control form-control-sm"
-                                style="width:145px;"
-                                value="{{ date_from or '' }}"
-                                title="From Date"
-                            >
-
-                            <span class="mx-1">
-                                -
-                            </span>
-
-                            <!-- To Date -->
-                            <input
-                                type="date"
-                                name="date_to"
-                                class="form-control form-control-sm"
-                                style="width:145px;"
-                                value="{{ date_to or '' }}"
-                                title="To Date"
-                            >
-
-                            <!-- Filter -->
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-sm ml-1"
-                                title="Filter"
-                            >
-
+                            <button type="submit" class="btn btn-primary kaizen-filter-button" title="Filter by date"
+                                aria-label="Filter by date">
                                 <i class="fas fa-filter"></i>
-
                             </button>
 
                         </div>
-
                     </form>
 
 
-                </div>
+                    <!-- Search + Reset -->
+                    <form method="GET" class="kaizen-search-form">
 
+                        <input type="hidden" name="mine" value="{{ is_mine }}">
+                        <input type="hidden" name="status" value="{{ status }}">
+                        <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+                        <input type="hidden" name="date_from" value="{{ date_from or '' }}">
+                        <input type="hidden" name="date_to" value="{{ date_to or '' }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
 
-                <!-- ==========================================
-                     ROW 2
-                     Create + Search
-                =========================================== -->
-                <div class="d-flex align-items-center flex-wrap mt-2">
+                        <div class="kaizen-search-group">
 
+                            <input type="text" name="keyword" class="form-control"
+                                placeholder="Search Kaizen No, title..." value="{{ keyword }}"
+                                aria-label="Search Kaizen">
 
-                    <!-- ==========================================
-                         Create from Improvement
-                    =========================================== -->
-                    <a
-                        href="{{ url_for('kaizen.select_improvement') }}"
-                        class="btn btn-success mr-2 mb-1"
-                    >
+                            <button class="btn btn-primary" type="submit" title="Search" aria-label="Search">
+                                <i class="fas fa-search"></i>
+                            </button>
 
-                        <i class="fas fa-plus mr-1"></i>
-
-                        Create Kaizen from Improvement
-
-                    </a>
-
-
-                    <!-- ==========================================
-                         Create from Problem
-                    =========================================== -->
-                    <a
-                        href="{{ url_for('kaizen.select_problem') }}"
-                        class="btn btn-primary mr-2 mb-1"
-                    >
-
-                        <i class="fas fa-plus mr-1"></i>
-
-                        Create Kaizen from Problem
-
-                    </a>
-
-
-                    <!-- ==========================================
-                         Create Direct
-                    =========================================== -->
-                    <a
-                        href="{{ url_for('kaizen.create_direct') }}"
-                        class="btn btn-secondary mr-2 mb-1"
-                    >
-
-                        <i class="fas fa-plus mr-1"></i>
-
-                        Create Kaizen Directly
-
-                    </a>
-
-
-                    <!-- ==========================================
-                         Search
-                    =========================================== -->
-                    <form
-                        method="GET"
-                        class="mb-1"
-                        style="flex:1; min-width:300px;"
-                    >
-
-                        <input
-                            type="hidden"
-                            name="mine"
-                            value="{{ is_mine }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="status"
-                            value="{{ status }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="department_id"
-                            value="{{ department_id or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="date_from"
-                            value="{{ date_from or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="date_to"
-                            value="{{ date_to or '' }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="sort"
-                            value="{{ sort_by }}"
-                        >
-
-                        <input
-                            type="hidden"
-                            name="order"
-                            value="{{ sort_order }}"
-                        >
-
-
-                        <div class="input-group">
-
-
-                            <input
-                                type="text"
-                                name="keyword"
-                                class="form-control"
-                                placeholder="Search kaizen no, title..."
-                                value="{{ keyword }}"
-                            >
-
-
-                            <div class="input-group-append">
-
-
-                                <!-- Search -->
-                                <button
-                                    class="btn btn-primary"
-                                    type="submit"
-                                    title="Search"
-                                >
-
-                                    <i class="fas fa-search"></i>
-
-                                </button>
-
-
-                                <!-- Reset -->
-                                <a
-                                    href="{{ url_for(
-                                        'kaizen.index',
-                                        mine=is_mine
-                                    ) }}"
-                                    class="btn btn-secondary ml-1"
-                                    title="Reset"
-                                >
-
-                                    <i class="fas fa-sync-alt"></i>
-
-                                </a>
-
-                            </div>
+                            <a href="{{ url_for('kaizen.index', mine=is_mine) }}" class="btn btn-secondary"
+                                title="Reset" aria-label="Reset filters">
+                                <i class="fas fa-sync-alt"></i>
+                            </a>
 
                         </div>
-
                     </form>
 
                 </div>
-
             </div>
+
 
 
             <!-- ==========================================
@@ -545,10 +265,8 @@ Main Content
 
             <div class="card-body pb-2">
 
-                <div
-                    class="alert alert-info mb-0 d-flex align-items-center justify-content-between"
-                    style="background-color:#17a2b8; border-color:#17a2b8; color:white;"
-                >
+                <div class="alert alert-info mb-0 d-flex align-items-center justify-content-between"
+                    style="background-color:#17a2b8; border-color:#17a2b8; color:white;">
 
                     <div class="d-flex align-items-center">
 
@@ -565,10 +283,7 @@ Main Content
                     </div>
 
 
-                    <a
-                        href="{{ url_for('kaizen.index') }}"
-                        class="btn btn-outline-light btn-sm"
-                    >
+                    <a href="{{ url_for('kaizen.index') }}" class="btn btn-outline-light btn-sm">
 
                         <i class="fas fa-list mr-1"></i>
 
@@ -636,11 +351,11 @@ Main Content
 
                         {% for department in departments %}
 
-                            {% if department.id == department_id %}
+                        {% if department.id == department_id %}
 
-                                {{ department.department_name }}
+                        {{ department.department_name }}
 
-                            {% endif %}
+                        {% endif %}
 
                         {% endfor %}
 
@@ -674,7 +389,8 @@ Main Content
                 <!-- ==========================================
                      Kaizen Table
                 =========================================== -->
-                <table class="table table-bordered table-hover">
+                <div class="table-responsive kaizen-table-wrapper">
+    <table class="table table-bordered table-hover kaizen-list-table">
 
                     <thead>
 
@@ -688,33 +404,33 @@ Main Content
 
                             <!-- Kaizen No -->
                             {{ sortable_header(
-                                title="Kaizen No",
-                                field="kaizen_no",
-                                endpoint="kaizen.index",
-                                keyword=keyword,
-                                status=status,
-                                department_id=department_id,
-                                date_from=date_from,
-                                date_to=date_to,
-                                sort_by=sort_by,
-                                sort_order=sort_order,
-                                mine=is_mine
+                            title="Kaizen No",
+                            field="kaizen_no",
+                            endpoint="kaizen.index",
+                            keyword=keyword,
+                            status=status,
+                            department_id=department_id,
+                            date_from=date_from,
+                            date_to=date_to,
+                            sort_by=sort_by,
+                            sort_order=sort_order,
+                            mine=is_mine
                             ) }}
 
 
                             <!-- Create Date -->
                             {{ sortable_header(
-                                title="Create Date",
-                                field="created_at",
-                                endpoint="kaizen.index",
-                                keyword=keyword,
-                                status=status,
-                                department_id=department_id,
-                                date_from=date_from,
-                                date_to=date_to,
-                                sort_by=sort_by,
-                                sort_order=sort_order,
-                                mine=is_mine
+                            title="Create Date",
+                            field="created_at",
+                            endpoint="kaizen.index",
+                            keyword=keyword,
+                            status=status,
+                            department_id=department_id,
+                            date_from=date_from,
+                            date_to=date_to,
+                            sort_by=sort_by,
+                            sort_order=sort_order,
+                            mine=is_mine
                             ) }}
 
 
@@ -725,33 +441,33 @@ Main Content
 
                             <!-- Title -->
                             {{ sortable_header(
-                                title="Title",
-                                field="title",
-                                endpoint="kaizen.index",
-                                keyword=keyword,
-                                status=status,
-                                department_id=department_id,
-                                date_from=date_from,
-                                date_to=date_to,
-                                sort_by=sort_by,
-                                sort_order=sort_order,
-                                mine=is_mine
+                            title="Title",
+                            field="title",
+                            endpoint="kaizen.index",
+                            keyword=keyword,
+                            status=status,
+                            department_id=department_id,
+                            date_from=date_from,
+                            date_to=date_to,
+                            sort_by=sort_by,
+                            sort_order=sort_order,
+                            mine=is_mine
                             ) }}
 
 
                             <!-- Category -->
                             {{ sortable_header(
-                                title="Category",
-                                field="category",
-                                endpoint="kaizen.index",
-                                keyword=keyword,
-                                status=status,
-                                department_id=department_id,
-                                date_from=date_from,
-                                date_to=date_to,
-                                sort_by=sort_by,
-                                sort_order=sort_order,
-                                mine=is_mine
+                            title="Category",
+                            field="category",
+                            endpoint="kaizen.index",
+                            keyword=keyword,
+                            status=status,
+                            department_id=department_id,
+                            date_from=date_from,
+                            date_to=date_to,
+                            sort_by=sort_by,
+                            sort_order=sort_order,
+                            mine=is_mine
                             ) }}
 
 
@@ -767,17 +483,17 @@ Main Content
 
                             <!-- Status -->
                             {{ sortable_header(
-                                title="Status",
-                                field="status",
-                                endpoint="kaizen.index",
-                                keyword=keyword,
-                                status=status,
-                                department_id=department_id,
-                                date_from=date_from,
-                                date_to=date_to,
-                                sort_by=sort_by,
-                                sort_order=sort_order,
-                                mine=is_mine
+                            title="Status",
+                            field="status",
+                            endpoint="kaizen.index",
+                            keyword=keyword,
+                            status=status,
+                            department_id=department_id,
+                            date_from=date_from,
+                            date_to=date_to,
+                            sort_by=sort_by,
+                            sort_order=sort_order,
+                            mine=is_mine
                             ) }}
 
 
@@ -822,11 +538,11 @@ Main Content
 
                                 {% if kaizen.created_at %}
 
-                                    {{ kaizen.created_at.strftime('%d-%m-%Y') }}
+                                {{ kaizen.created_at.strftime('%d-%m-%Y') }}
 
                                 {% else %}
 
-                                    -
+                                -
 
                                 {% endif %}
 
@@ -838,11 +554,11 @@ Main Content
 
                                 {% if kaizen.department %}
 
-                                    {{ kaizen.department.department_name }}
+                                {{ kaizen.department.department_name }}
 
                                 {% else %}
 
-                                    -
+                                -
 
                                 {% endif %}
 
@@ -862,13 +578,13 @@ Main Content
 
                                 {% if kaizen.kaizen_category %}
 
-                                    {{ kaizen.kaizen_category.kaizen_category_code }}
-                                    -
-                                    {{ kaizen.kaizen_category.kaizen_category_name }}
+                                {{ kaizen.kaizen_category.kaizen_category_code }}
+                                -
+                                {{ kaizen.kaizen_category.kaizen_category_name }}
 
                                 {% else %}
 
-                                    -
+                                -
 
                                 {% endif %}
 
@@ -880,12 +596,10 @@ Main Content
 
                                 {% if kaizen.improvement %}
 
-                                <a
-                                    href="{{ url_for(
+                                <a href="{{ url_for(
                                         'improvement.detail',
                                         improvement_id=kaizen.improvement.id
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     {{ kaizen.improvement.improvement_no }}
 
@@ -893,7 +607,7 @@ Main Content
 
                                 {% else %}
 
-                                    -
+                                -
 
                                 {% endif %}
 
@@ -905,12 +619,10 @@ Main Content
 
                                 {% if kaizen.problem %}
 
-                                <a
-                                    href="{{ url_for(
+                                <a href="{{ url_for(
                                         'problem.show',
                                         problem_id=kaizen.problem.id
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     {{ kaizen.problem.problem_no }}
 
@@ -918,7 +630,7 @@ Main Content
 
                                 {% else %}
 
-                                    -
+                                -
 
                                 {% endif %}
 
@@ -980,14 +692,10 @@ Main Content
 
 
                                 <!-- View -->
-                                <a
-                                    href="{{ url_for(
+                                <a href="{{ url_for(
                                         'kaizen.detail',
                                         kaizen_id=kaizen.id
-                                    ) }}"
-                                    class="btn btn-info btn-sm"
-                                    title="View"
-                                >
+                                    ) }}" class="btn btn-info btn-sm" title="View">
 
                                     <i class="fas fa-eye"></i>
 
@@ -995,32 +703,23 @@ Main Content
 
                                 <!-- PDF -->
 
-<a
-    href="{{ url_for(
+                                <a href="{{ url_for(
         'kaizen.export_pdf',
         kaizen_id=kaizen.id
-    ) }}"
-    class="btn btn-danger btn-sm"
-    target="_blank"
-    title="Export PDF"
->
+    ) }}" class="btn btn-danger btn-sm" target="_blank" title="Export PDF">
 
-    <i class="fas fa-file-pdf"></i>
+                                    <i class="fas fa-file-pdf"></i>
 
-</a>
+                                </a>
 
 
                                 <!-- Edit -->
                                 {% if kaizen.status in ["Draft", "Rejected"] %}
 
-                                <a
-                                    href="{{ url_for(
+                                <a href="{{ url_for(
                                         'kaizen.edit',
                                         kaizen_id=kaizen.id
-                                    ) }}"
-                                    class="btn btn-warning btn-sm"
-                                    title="Edit"
-                                >
+                                    ) }}" class="btn btn-warning btn-sm" title="Edit">
 
                                     <i class="fas fa-edit"></i>
 
@@ -1040,10 +739,7 @@ Main Content
 
                         <tr>
 
-                            <td
-                                colspan="10"
-                                class="text-center text-muted py-4"
-                            >
+                            <td colspan="10" class="text-center text-muted py-4">
 
                                 <i class="fas fa-folder-open fa-2x mb-2"></i>
 
@@ -1059,7 +755,8 @@ Main Content
 
                     </tbody>
 
-                </table>
+                  </table>
+</div>
 
             </div>
 
@@ -1109,9 +806,7 @@ Main Content
 
                             <li class="page-item">
 
-                                <a
-                                    class="page-link"
-                                    href="{{ url_for(
+                                <a class="page-link" href="{{ url_for(
                                         'kaizen.index',
                                         page=kaizens.prev_num,
                                         mine=is_mine,
@@ -1122,8 +817,7 @@ Main Content
                                         date_to=date_to,
                                         sort=sort_by,
                                         order=sort_order
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     Previous
 
@@ -1139,16 +833,12 @@ Main Content
 
                             {% if page_num %}
 
-                            <li
-                                class="page-item
+                            <li class="page-item
                                 {% if page_num == kaizens.page %}
                                     active
-                                {% endif %}"
-                            >
+                                {% endif %}">
 
-                                <a
-                                    class="page-link"
-                                    href="{{ url_for(
+                                <a class="page-link" href="{{ url_for(
                                         'kaizen.index',
                                         page=page_num,
                                         mine=is_mine,
@@ -1159,8 +849,7 @@ Main Content
                                         date_to=date_to,
                                         sort=sort_by,
                                         order=sort_order
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     {{ page_num }}
 
@@ -1188,9 +877,7 @@ Main Content
 
                             <li class="page-item">
 
-                                <a
-                                    class="page-link"
-                                    href="{{ url_for(
+                                <a class="page-link" href="{{ url_for(
                                         'kaizen.index',
                                         page=kaizens.next_num,
                                         mine=is_mine,
@@ -1201,8 +888,7 @@ Main Content
                                         date_to=date_to,
                                         sort=sort_by,
                                         order=sort_order
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     Next
 

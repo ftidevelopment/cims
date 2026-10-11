@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        Audit Finding Waiting for Verification
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+
+        .container {
+            width: 100%;
+            padding: 30px 0;
+        }
+
+        .email-box {
+            width: 680px;
+            max-width: 94%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            background-color: #1f4e78;
+            color: #ffffff;
+            padding: 22px 30px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .content p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 15px 0;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-table td {
+            padding: 10px 12px;
+            border: 1px solid #dddddd;
+            font-size: 13px;
+            vertical-align: top;
+        }
+
+        .info-table td:first-child {
+            width: 180px;
+            font-weight: bold;
+            background-color: #f5f7fa;
+        }
+
+        .finding-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-left: 4px solid #1f4e78;
+            background-color: #f5f7fa;
+        }
+
+        .finding-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .action-box {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #fff4e5;
+            border: 1px solid #f0d8a8;
+            border-radius: 5px;
+        }
+
+        .action-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0 10px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 22px;
+            background-color: #1f4e78;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background-color: #f5f7fa;
+            color: #777777;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="email-box">
+
+        <!-- HEADER -->
+        <div class="header">
+
+            <h2>
+                Audit Finding Waiting for Verification
+            </h2>
+
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <p>
+                Dear
+                <strong>
+                    {{ auditor.full_name if auditor else "Auditor" }}
+                </strong>,
+            </p>
+
+            <p>
+                An Audit Finding has been submitted for
+                <strong>Auditor Verification</strong>.
+            </p>
+
+            <p>
+                The corrective action has been completed by the PIC
+                and the finding is now waiting for your verification.
+            </p>
+
+
+            <!-- FINDING INFORMATION -->
+            <table class="info-table">
+
+                <tr>
+                    <td>Finding No.</td>
+                    <td>
+                        {{ finding.finding_no }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Audit No.</td>
+                    <td>
+                        {% if finding.audit_execution
+                              and finding.audit_execution.audit_assignment
+                              and finding.audit_execution.audit_assignment.audit %}
+                            {{ finding.audit_execution.audit_assignment.audit.audit_no }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Audit Title</td>
+                    <td>
+                        {% if finding.audit_execution
+                              and finding.audit_execution.audit_assignment
+                              and finding.audit_execution.audit_assignment.audit %}
+                            {{ finding.audit_execution.audit_assignment.audit.title }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Department</td>
+                    <td>
+                        {% if finding.audit_execution
+                              and finding.audit_execution.audit_assignment
+                              and finding.audit_execution.audit_assignment.department %}
+                            {{ finding.audit_execution.audit_assignment.department.department_code }}
+                            -
+                            {{ finding.audit_execution.audit_assignment.department.department_name }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Location</td>
+                    <td>
+                        {% if finding.audit_execution
+                              and finding.audit_execution.audit_assignment %}
+                            {{ finding.audit_execution.audit_assignment.location }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Severity</td>
+                    <td>
+                        {{ finding.severity or "-" }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>PIC</td>
+                    <td>
+                        {% if finding.pic_employee %}
+                            {{ finding.pic_employee.nik }}
+                            -
+                            {{ finding.pic_employee.full_name }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Target Date</td>
+                    <td>
+                        {{ finding.target_date or "-" }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        {{ finding.status }}
+                    </td>
+                </tr>
+
+            </table>
+
+
+            <!-- FINDING -->
+            <div class="finding-box">
+
+                <strong>
+                    Finding:
+                </strong>
+
+                {{ finding.finding }}
+
+            </div>
+
+
+            <!-- CORRECTIVE ACTION -->
+            <div class="finding-box">
+
+                <strong>
+                    Corrective Action:
+                </strong>
+
+                {% if finding.corrective_action %}
+                    {{ finding.corrective_action }}
+                {% else %}
+                    -
+                {% endif %}
+
+            </div>
+
+
+            <!-- VERIFICATION ACTION -->
+            <div class="action-box">
+
+                <strong>
+                    Action Required:
+                </strong>
+
+                Please review the corrective action and perform
+                verification for this Audit Finding.
+
+            </div>
+
+
+            <!-- BUTTON -->
+            <div class="button-container">
+
+                <a
+                    href="{{ cims_url }}"
+                    class="button"
+                >
+                    Open CIMS
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="footer">
+
+            This is an automated notification from
+            <strong>Continuous Improvement Management System (CIMS)</strong>.
+
+            <br>
+
+            Please do not reply directly to this email.
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

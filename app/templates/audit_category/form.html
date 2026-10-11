@@ -1,0 +1,217 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    {{ "Edit Audit Category" if audit_category else "Add Audit Category" }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Content Header -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    {{ "Edit Audit Category" if audit_category else "Add Audit Category" }}
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('audit_category.index') }}">
+                            Audit Category
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {{ "Edit" if audit_category else "Add" }}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Main Content -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-tags mr-2"></i>
+
+                    {{ "Edit Audit Category" if audit_category else "Add Audit Category" }}
+
+                </h3>
+
+            </div>
+
+
+            <form method="POST">
+
+                <div class="card-body">
+
+                    <!-- Audit Category Code -->
+                    <div class="form-group">
+
+                        <label for="audit_category_code">
+
+                            Audit Category Code
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="audit_category_code"
+                            name="audit_category_code"
+                            maxlength="10"
+                            required
+                            value="{{
+                                audit_category.audit_category_code
+                                if audit_category
+                                else request.form.get('audit_category_code', '')
+                            }}"
+                            {% if audit_category %}
+                            readonly
+                            {% endif %}
+                        >
+
+                        {% if audit_category %}
+
+                        <small class="form-text text-muted">
+
+                            Audit Category Code cannot be changed.
+
+                        </small>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Audit Category Name -->
+                    <div class="form-group">
+
+                        <label for="audit_category_name">
+
+                            Audit Category Name
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="audit_category_name"
+                            name="audit_category_name"
+                            maxlength="100"
+                            required
+                            value="{{
+                                audit_category.audit_category_name
+                                if audit_category
+                                else request.form.get('audit_category_name', '')
+                            }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="form-group">
+
+                        <label for="description">
+
+                            Description
+
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            rows="4"
+                            placeholder="Enter description..."
+                        >{{
+                            audit_category.description
+                            if audit_category
+                            else request.form.get('description', '')
+                        }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Card Footer -->
+                <div class="card-footer">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-save mr-1"></i>
+
+                        Save
+
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('audit_category.index') }}"
+                        class="btn btn-secondary"
+                    >
+
+                        <i class="fas fa-arrow-left mr-1"></i>
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

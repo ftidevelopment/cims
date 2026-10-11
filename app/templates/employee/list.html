@@ -1,507 +1,379 @@
-{% from "components/sortable_header.html" import sortable_header %}
+
 {% extends "layouts/base.html" %}
+{% from "components/sortable_header.html" import sortable_header %}
 
 {% block title %}Employee{% endblock %}
 
 {% block content %}
 
-<!-- Content Header -->
-<section class="content-header">
+<section class="content-header employee-page-header">
     <div class="container-fluid">
-
         <div class="row mb-2">
-
             <div class="col-sm-6">
                 <h1>Employee</h1>
             </div>
-
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                        <a href="#">Dashboard</a>
+                        <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
                     </li>
-
-                    <li class="breadcrumb-item">
-                        Master Data
-                    </li>
-
-                    <li class="breadcrumb-item active">
-                        Employee
-                    </li>
+                    <li class="breadcrumb-item">Master Data</li>
+                    <li class="breadcrumb-item active">Employee</li>
                 </ol>
             </div>
-
         </div>
-
     </div>
 </section>
 
-<!-- Main Content -->
-<section class="content">
-
+<section class="content employee-page">
     <div class="container-fluid">
 
-        <div class="card card-primary card-outline">
+        <div class="card card-primary card-outline employee-card">
 
-            <!-- Card Header -->
-            <div class="card-header">
+            <!-- HEADER / TOOLBAR -->
+            <div class="card-header employee-card-header">
 
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="employee-toolbar-heading">
+                    <h3 class="card-title">
+                        <i class="fas fa-users mr-2"></i>
+                        Employee List
+                    </h3>
 
-                    <!-- Left -->
-                    <div class="d-flex align-items-center">
+                    <form method="GET"
+                          action="{{ url_for('employee.index') }}"
+                          class="employee-status-form">
 
-                        <h3 class="card-title mb-0 mr-4">
+                        <input type="hidden" name="keyword" value="{{ keyword }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
 
-                            <i class="fas fa-users mr-2"></i>
-
-                            Employee List
-
-                        </h3>
-
-                        <!-- Status -->
-                        <form method="GET" class="mb-0">
-
-                            <input type="hidden" name="keyword" value="{{ keyword }}">
-                            <input type="hidden" name="sort" value="{{ sort_by }}">
-                            <input type="hidden" name="order" value="{{ sort_order }}">
-
-                            <select
-                                name="is_active"
-                                class="custom-select"
-                                style="width:160px;"
+                        <select name="is_active"
+                                class="form-control form-control-sm"
+                                aria-label="Filter employee status"
                                 onchange="this.form.submit()">
 
-                                <option value="true" {% if is_active == "true" %}selected{% endif %}>
-                                    Active
-                                </option>
+                            <option value="true"
+                                {% if is_active == "true" %}selected{% endif %}>
+                                Active
+                            </option>
 
-                                <option value="false" {% if is_active == "false" %}selected{% endif %}>
-                                    Inactive
-                                </option>
+                            <option value="false"
+                                {% if is_active == "false" %}selected{% endif %}>
+                                Inactive
+                            </option>
 
-                                <option value="all" {% if is_active == "all" %}selected{% endif %}>
-                                    All
-                                </option>
-
-                            </select>
-
-                        </form>
-
-                    </div>
-
-                    <!-- Right -->
-                    <div class="d-flex align-items-center">
-
-                        <a href="{{ url_for(
-                            'employee.export',
-                            keyword=keyword,
-                            is_active=is_active,
-                            sort=sort_by,
-                            order=sort_order
-                        ) }}" class="btn btn-warning mr-2">
-
-                            <i class="fas fa-file-excel mr-1"></i>
-
-                            Export Excel
-
-                        </a>
-
-                        <a href="{{ url_for('employee.create') }}" class="btn btn-success mr-3">
-
-                            <i class="fas fa-plus"></i>
-
-                            Add Employee
-
-                        </a>
-
-                        <!-- Search -->
-                        <form method="GET" class="mb-0">
-
-                            <input type="hidden" name="is_active" value="{{ is_active }}">
-                            <input type="hidden" name="sort" value="{{ sort_by }}">
-                            <input type="hidden" name="order" value="{{ sort_order }}">
-
-                            <div class="input-group">
-
-                                <input type="text" name="keyword" class="form-control" style="width:300px;"
-                                    placeholder="Search NIK, name, email or phone..." value="{{ keyword }}">
-
-                                <div class="input-group-append">
-
-                                    <button class="btn btn-primary" type="submit">
-
-                                        <i class="fas fa-search"></i>
-
-                                    </button>
-
-                                    <a href="{{ url_for('employee.index') }}" class="btn btn-secondary ml-1">
-
-                                        <i class="fas fa-sync-alt"></i>
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
+                            <option value="all"
+                                {% if is_active == "all" %}selected{% endif %}>
+                                All
+                            </option>
+                        </select>
+                    </form>
                 </div>
 
+                <div class="employee-toolbar-actions">
+
+                    <a href="{{ url_for(
+                        'employee.export',
+                        keyword=keyword,
+                        is_active=is_active,
+                        sort=sort_by,
+                        order=sort_order
+                    ) }}"
+                       class="btn btn-warning btn-sm">
+                        <i class="fas fa-file-excel mr-1"></i>
+                        Export Excel
+                    </a>
+
+                    <a href="{{ url_for('employee.create') }}"
+                       class="btn btn-success btn-sm">
+                        <i class="fas fa-plus mr-1"></i>
+                        Add Employee
+                    </a>
+
+                    <form method="GET"
+                          action="{{ url_for('employee.index') }}"
+                          class="employee-search-form">
+
+                        <input type="hidden" name="is_active" value="{{ is_active }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
+
+                        <div class="input-group input-group-sm">
+                            <input type="text"
+                                   name="keyword"
+                                   class="form-control"
+                                   placeholder="Search NIK, name, email or phone..."
+                                   value="{{ keyword }}"
+                                   aria-label="Search employees">
+
+                            <div class="input-group-append">
+                                <button class="btn btn-primary"
+                                        type="submit"
+                                        title="Search">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                                <a href="{{ url_for('employee.index') }}"
+                                   class="btn btn-secondary"
+                                   title="Reset"
+                                   aria-label="Reset filters">
+                                    <i class="fas fa-sync-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
             </div>
 
-            <!-- Card Body -->
-            <div class="card-body">
+            <!-- TABLE -->
+            <div class="card-body employee-card-body">
 
                 {% if keyword %}
-
-                <div class="alert alert-info">
-
-                    <i class="fas fa-search"></i>
-
-                    Search keyword :
-
-                    <strong>{{ keyword }}</strong>
-
+                <div class="alert alert-info employee-search-info">
+                    <i class="fas fa-search mr-1"></i>
+                    Search keyword: <strong>{{ keyword }}</strong>
                 </div>
-
                 {% endif %}
 
-                <div class="table-responsive">
-
-                    <table class="table table-bordered table-hover">
-
+                <div class="table-responsive employee-table-wrapper">
+                    <table class="table table-bordered table-hover employee-table">
                         <thead>
-
-                            <tr class="text-center">
-
-                                <th width="60">
-                                    No
-                                </th>
+                            <tr>
+                                <th class="employee-number">No</th>
 
                                 {{ sortable_header(
-                                "NIK",
-                                "nik",
-                                "employee.index",
-                                keyword,
-                                is_active,
-                                sort_by,
-                                sort_order
+                                    "NIK",
+                                    "nik",
+                                    "employee.index",
+                                    keyword,
+                                    is_active,
+                                    sort_by,
+                                    sort_order
                                 ) }}
 
                                 {{ sortable_header(
-                                "Full Name",
-                                "full_name",
-                                "employee.index",
-                                keyword,
-                                is_active,
-                                sort_by,
-                                sort_order
+                                    "Full Name",
+                                    "full_name",
+                                    "employee.index",
+                                    keyword,
+                                    is_active,
+                                    sort_by,
+                                    sort_order
                                 ) }}
 
-                                <th>
-                                    Department
-                                </th>
+                                <th>Department</th>
 
                                 {{ sortable_header(
-                                "Email",
-                                "email",
-                                "employee.index",
-                                keyword,
-                                is_active,
-                                sort_by,
-                                sort_order
+                                    "Email",
+                                    "email",
+                                    "employee.index",
+                                    keyword,
+                                    is_active,
+                                    sort_by,
+                                    sort_order
                                 ) }}
 
-                                <th>
-                                    Phone Number
-                                </th>
-
-                                <th>
-                                    LINE ID
-                                </th>
-
-                                <th width="100">
-                                    Status
-                                </th>
-
-                                <th width="150">
-                                    Action
-                                </th>
-
+                                <th>Phone Number</th>
+                                <th class="employee-line-column">LINE ID</th>
+                                <th class="employee-status-column">Status</th>
+                                <th class="employee-action-column">Action</th>
                             </tr>
-
                         </thead>
 
                         <tbody>
+                            {% if employees.items %}
 
-                            {% if employees %}
+                                {% for employee in employees.items %}
+                                <tr>
+                                    <td class="text-center">
+                                        {{ employees.first + loop.index0 }}
+                                    </td>
 
-                            {% for employee in employees.items %}
+                                    <td class="employee-nik">
+                                        {{ employee.nik }}
+                                    </td>
 
-                            <tr>
+                                    <td class="employee-name">
+                                        {{ employee.full_name }}
+                                    </td>
 
-                                <td class="text-center">
+                                    <td class="employee-department">
+                                        {{ employee.department.department_name if employee.department else '-' }}
+                                    </td>
 
-                                    {{ employees.first + loop.index0 }}
+                                    <td class="employee-email">
+                                        {{ employee.email or '-' }}
+                                    </td>
 
-                                </td>
+                                    <td class="employee-phone">
+                                        {{ employee.phone_number or '-' }}
+                                    </td>
 
-                                <td>
+                                    <td class="employee-line-id">
+                                        {{ employee.line_user_id or '-' }}
+                                    </td>
 
-                                    {{ employee.nik }}
+                                    <td class="text-center">
+                                        {% if employee.is_active %}
+                                            <span class="badge badge-success">Active</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">Inactive</span>
+                                        {% endif %}
+                                    </td>
 
-                                </td>
+                                    <td class="text-center employee-actions">
+                                        {% if employee.is_active %}
 
-                                <td>
-
-                                    {{ employee.full_name }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ employee.department.department_name }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ employee.email }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ employee.phone_number }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ employee.line_user_id }}
-
-                                </td>
-
-                                <td class="text-center">
-
-                                    {% if employee.is_active %}
-
-                                    <span class="badge badge-success">
-                                        Active
-                                    </span>
-
-                                    {% else %}
-
-                                    <span class="badge badge-danger">
-                                        Inactive
-                                    </span>
-
-                                    {% endif %}
-
-                                </td>
-
-                                <td class="text-center">
-
-                                    {% if employee.is_active %}
-
-                                    <a href="{{ url_for(
-                                            'employee.edit',
-                                            employee_id=employee.id
-                                        ) }}" class="btn btn-warning btn-sm">
-
-                                        <i class="fas fa-edit"></i>
-
-                                    </a>
-
-                                    {% if employee.line_user_id %}
-
-<a href="{{ url_for(
-    'employee.test_line',
-    employee_id=employee.id
-) }}"
-class="btn btn-success btn-sm"
-title="Test LINE">
-
-    <i class="fab fa-line"></i>
-
-</a>
-
-{% endif %}
-
-                                    <button type="button" class="btn btn-danger btn-sm btn-delete"
-                                        data-name="{{ employee.full_name }}" data-url="{{ url_for(
-                                                'employee.delete',
+                                            <a href="{{ url_for(
+                                                'employee.edit',
                                                 employee_id=employee.id
-                                            ) }}">
+                                            ) }}"
+                                               class="btn btn-warning btn-sm"
+                                               title="Edit"
+                                               aria-label="Edit employee">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
 
-                                        <i class="fas fa-trash"></i>
-
-                                    </button>
-
-                                    {% else %}
-
-                                    <form method="POST" action="{{ url_for(
-                                                'employee.restore',
+                                            {% if employee.line_user_id %}
+                                            <a href="{{ url_for(
+                                                'employee.test_line',
                                                 employee_id=employee.id
-                                            ) }}">
-                                        <button type="submit" class="btn btn-success btn-sm">
+                                            ) }}"
+                                               class="btn btn-success btn-sm"
+                                               title="Test LINE"
+                                               aria-label="Test LINE">
+                                                <i class="fab fa-line"></i>
+                                            </a>
+                                            {% endif %}
 
-                                            <i class="fas fa-undo"></i>
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm btn-delete"
+                                                    data-name="{{ employee.full_name }}"
+                                                    data-url="{{ url_for(
+                                                        'employee.delete',
+                                                        employee_id=employee.id
+                                                    ) }}"
+                                                    title="Delete"
+                                                    aria-label="Delete employee">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
 
-                                        </button>
+                                        {% else %}
 
-                                    </form>
+                                            <form method="POST"
+                                                  action="{{ url_for(
+                                                      'employee.restore',
+                                                      employee_id=employee.id
+                                                  ) }}"
+                                                  class="employee-restore-form">
 
-                                    {% endif %}
+                                                <button type="submit"
+                                                        class="btn btn-success btn-sm"
+                                                        title="Restore"
+                                                        aria-label="Restore employee">
+                                                    <i class="fas fa-undo"></i>
+                                                </button>
+                                            </form>
 
-                                </td>
-
-                            </tr>
-
-                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
 
                             {% else %}
-
-                            <tr>
-
-                                <td colspan="9" class="text-center text-muted">
-
-                                    No employee found.
-
-                                </td>
-
-                            </tr>
-
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted employee-empty">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        No employee found.
+                                    </td>
+                                </tr>
                             {% endif %}
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
 
             {% include "components/delete_modal.html" %}
 
-            <!-- Card Footer -->
-            <div class="card-footer clearfix">
+            <!-- FOOTER / PAGINATION -->
+            <div class="card-footer employee-card-footer">
 
-                <div class="float-left">
-
+                <div class="employee-record-info">
                     Showing
-
-                    <strong>
-
-                        {{ employees.first if employees.total > 0 else 0 }}
-
-                    </strong>
-
+                    <strong>{{ employees.first if employees.total > 0 else 0 }}</strong>
                     to
-
-                    <strong>
-
-                        {{ employees.last if employees.total > 0 else 0 }}
-
-                    </strong>
-
+                    <strong>{{ employees.last if employees.total > 0 else 0 }}</strong>
                     of
-
-                    <strong>
-
-                        {{ employees.total }}
-
-                    </strong>
-
+                    <strong>{{ employees.total }}</strong>
                     employee(s)
-
                 </div>
 
+                <nav class="employee-pagination" aria-label="Employee pagination">
+                    <ul class="pagination pagination-sm mb-0">
+
+                        {% if employees.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'employee.index',
+                                   page=employees.prev_num,
+                                   keyword=keyword,
+                                   is_active=is_active,
+                                   sort=sort_by,
+                                   order=sort_order
+                               ) }}"
+                               aria-label="Previous page">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for page_num in employees.iter_pages() %}
+                            {% if page_num %}
+                            <li class="page-item {% if page_num == employees.page %}active{% endif %}">
+                                <a class="page-link"
+                                   href="{{ url_for(
+                                       'employee.index',
+                                       page=page_num,
+                                       keyword=keyword,
+                                       is_active=is_active,
+                                       sort=sort_by,
+                                       order=sort_order
+                                   ) }}">
+                                    {{ page_num }}
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&hellip;</span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if employees.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'employee.index',
+                                   page=employees.next_num,
+                                   keyword=keyword,
+                                   is_active=is_active,
+                                   sort=sort_by,
+                                   order=sort_order
+                               ) }}"
+                               aria-label="Next page">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
             </div>
 
-            <nav>
-
-                <ul class="pagination pagination-sm float-right">
-
-                    {% if employees.has_prev %}
-
-                    <li class="page-item">
-
-                        <a class="page-link" href="{{ url_for(
-                                'employee.index',
-                                page=employees.prev_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}">
-
-                            Previous
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-                    {% for page_num in employees.iter_pages() %}
-
-                    {% if page_num %}
-
-                    <li class="page-item {% if page_num == employees.page %}active{% endif %}">
-
-                        <a class="page-link" href="{{ url_for(
-                                    'employee.index',
-                                    page=page_num,
-                                    keyword=keyword,
-                                    is_active=is_active,
-                                    sort=sort_by,
-                                    order=sort_order
-                                ) }}">
-
-                            {{ page_num }}
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-                    {% endfor %}
-
-                    {% if employees.has_next %}
-
-                    <li class="page-item">
-
-                        <a class="page-link" href="{{ url_for(
-                                'employee.index',
-                                page=employees.next_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}">
-
-                            Next
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-                </ul>
-
-            </nav>
-
         </div>
-
     </div>
-
 </section>
 
 {% endblock %}

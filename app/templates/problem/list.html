@@ -13,7 +13,7 @@ Problem
 CONTENT HEADER
 ========================================== -->
 
-<section class="content-header">
+<section class="content-header problem-list-header">
 
     <div class="container-fluid">
 
@@ -67,618 +67,292 @@ CONTENT HEADER
 MAIN CONTENT
 ========================================== -->
 
-<section class="content">
+<section class="content problem-list-page">
 
     <div class="container-fluid">
 
         <div class="card card-primary card-outline">
 
+<!-- ==========================================
+     CARD HEADER - PROBLEM LIST
+     Row 1: Title + Create
+     Row 2: Filters + Search
+     ========================================== -->
 
-            <!-- ==========================================
-            CARD HEADER
-            ========================================== -->
+<div class="card-header problem-toolbar">
 
-            <div class="card-header py-2">
+    <!-- ======================================
+         ROW 1: TITLE + CREATE BUTTON
+         ====================================== -->
 
-                <div
-                    class="d-flex align-items-center justify-content-between flex-wrap"
-                    style="gap: 10px;"
+    <div class="problem-toolbar-top">
+
+        <!-- Title -->
+        <h3 class="card-title problem-toolbar-title">
+            <i class="fas fa-clipboard-list mr-2"></i>
+
+            {% if mine == "1" %}
+                My Problems
+            {% else %}
+                Problem List
+            {% endif %}
+        </h3>
+
+        <!-- Create Problem -->
+        {% if has_permission("PROBLEM_CREATE") %}
+        <a
+            href="{{ url_for('problem.create') }}"
+            class="btn btn-success btn-sm problem-create-button"
+        >
+            <i class="fas fa-plus mr-1"></i>
+            <span>Create Problem</span>
+        </a>
+        {% endif %}
+
+    </div>
+
+
+    <!-- ======================================
+         ROW 2: FILTERS + SEARCH
+         ====================================== -->
+
+    <div class="problem-toolbar-bottom">
+
+        <!-- FILTER GROUP -->
+        <div class="problem-filter-row">
+
+            <!-- STATUS FILTER -->
+            <form method="GET" class="problem-filter-form">
+
+                <input type="hidden" name="mine" value="{{ mine }}">
+                <input type="hidden" name="keyword" value="{{ keyword }}">
+                <input type="hidden" name="priority" value="{{ priority }}">
+                <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+                <input type="hidden" name="date_from" value="{{ date_from }}">
+                <input type="hidden" name="date_to" value="{{ date_to }}">
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+                <input type="hidden" name="order" value="{{ sort_order }}">
+
+                <select
+                    name="status"
+                    class="custom-select custom-select-sm problem-filter-select"
+                    onchange="this.form.submit()"
+                    aria-label="Filter by status"
+                >
+                    <option value="" {% if not status %}selected{% endif %}>
+                        All Status
+                    </option>
+
+                    {% for value, text in PROBLEM_STATUS %}
+                    <option
+                        value="{{ value }}"
+                        {% if status == value %}selected{% endif %}
+                    >
+                        {{ text }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+            </form>
+
+
+            <!-- PRIORITY FILTER -->
+            <form method="GET" class="problem-filter-form">
+
+                <input type="hidden" name="mine" value="{{ mine }}">
+                <input type="hidden" name="keyword" value="{{ keyword }}">
+                <input type="hidden" name="status" value="{{ status }}">
+                <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+                <input type="hidden" name="date_from" value="{{ date_from }}">
+                <input type="hidden" name="date_to" value="{{ date_to }}">
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+                <input type="hidden" name="order" value="{{ sort_order }}">
+
+                <select
+                    name="priority"
+                    class="custom-select custom-select-sm problem-filter-select"
+                    onchange="this.form.submit()"
+                    aria-label="Filter by priority"
+                >
+                    <option value="" {% if not priority %}selected{% endif %}>
+                        All Priority
+                    </option>
+
+                    {% for value, text in PROBLEM_PRIORITY %}
+                    <option
+                        value="{{ value }}"
+                        {% if priority == value %}selected{% endif %}
+                    >
+                        {{ text }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+            </form>
+
+
+            <!-- DEPARTMENT FILTER -->
+            <form method="GET" class="problem-filter-form">
+
+                <input type="hidden" name="mine" value="{{ mine }}">
+                <input type="hidden" name="keyword" value="{{ keyword }}">
+                <input type="hidden" name="status" value="{{ status }}">
+                <input type="hidden" name="priority" value="{{ priority }}">
+                <input type="hidden" name="date_from" value="{{ date_from }}">
+                <input type="hidden" name="date_to" value="{{ date_to }}">
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+                <input type="hidden" name="order" value="{{ sort_order }}">
+
+                <select
+                    name="department_id"
+                    class="custom-select custom-select-sm problem-filter-select problem-department-select"
+                    onchange="this.form.submit()"
+                    aria-label="Filter by department"
+                >
+                    <option value="" {% if not department_id %}selected{% endif %}>
+                        All Department
+                    </option>
+
+                    {% for department in departments %}
+                    <option
+                        value="{{ department.id }}"
+                        {% if department_id == department.id %}selected{% endif %}
+                    >
+                        {{ department.department_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+            </form>
+
+
+            <!-- DATE RANGE FILTER -->
+            <form method="GET" class="problem-date-form">
+
+                <input type="hidden" name="mine" value="{{ mine }}">
+                <input type="hidden" name="keyword" value="{{ keyword }}">
+                <input type="hidden" name="status" value="{{ status }}">
+                <input type="hidden" name="priority" value="{{ priority }}">
+                <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+                <input type="hidden" name="sort" value="{{ sort_by }}">
+                <input type="hidden" name="order" value="{{ sort_order }}">
+
+                <div class="problem-date-controls">
+
+                    <!-- From Date -->
+                    <div class="input-group input-group-sm problem-date-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                        </div>
+
+                        <input
+                            type="date"
+                            name="date_from"
+                            class="form-control"
+                            value="{{ date_from or '' }}"
+                            title="From Date"
+                            aria-label="From date"
+                        >
+                    </div>
+
+                    <span class="problem-date-separator">—</span>
+
+                    <!-- To Date -->
+                    <div class="input-group input-group-sm problem-date-input">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-calendar-alt"></i>
+                            </span>
+                        </div>
+
+                        <input
+                            type="date"
+                            name="date_to"
+                            class="form-control"
+                            value="{{ date_to or '' }}"
+                            title="To Date"
+                            aria-label="To date"
+                        >
+                    </div>
+
+                    <!-- Filter Button -->
+                    <button
+                        type="submit"
+                        class="btn btn-primary problem-filter-button"
+                        form="problem-date-filter-form"
+                        title="Filter by date"
+                        aria-label="Filter by date"
+                    >
+                        <i class="fas fa-filter"></i>
+                        <span>Filter</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- SEARCH + RESET -->
+        <form
+            method="GET"
+            class="problem-search-form"
+        >
+
+            <input type="hidden" name="mine" value="{{ mine }}">
+            <input type="hidden" name="status" value="{{ status }}">
+            <input type="hidden" name="priority" value="{{ priority }}">
+            <input type="hidden" name="department_id" value="{{ department_id or '' }}">
+            <input type="hidden" name="date_from" value="{{ date_from }}">
+            <input type="hidden" name="date_to" value="{{ date_to }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <div class="input-group input-group-sm problem-search-group">
+
+                <input
+                    type="text"
+                    name="keyword"
+                    class="form-control problem-search-input"
+                    placeholder="Search problem no, title, location..."
+                    value="{{ keyword }}"
+                    aria-label="Search problems"
                 >
 
+                <div class="input-group-append">
 
-                    <!-- ======================================
-                    LEFT : TITLE + FILTERS
-                    ====================================== -->
-
-                    <div
-                        class="d-flex align-items-center flex-wrap"
-                        style="gap: 8px;"
+                    <!-- Search -->
+                    <button
+                        class="btn btn-primary problem-search-button"
+                        type="submit"
+                        title="Search"
+                        aria-label="Search"
                     >
-
-
-                        <!-- ==================================
-                        TITLE
-                        ================================== -->
-
-                        <h3
-                            class="card-title mb-0 mr-2"
-                            style="white-space: nowrap;"
-                        >
-
-                            <i class="fas fa-clipboard-list mr-2"></i>
-
-                            {% if mine == "1" %}
-
-                                My Problems
-
-                            {% else %}
-
-                                Problem List
-
-                            {% endif %}
-
-                        </h3>
-
-
-
-                        <!-- ==================================
-                        STATUS FILTER
-                        ================================== -->
-
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
-
-                            <input
-                                type="hidden"
-                                name="mine"
-                                value="{{ mine }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="keyword"
-                                value="{{ keyword }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="priority"
-                                value="{{ priority }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="department_id"
-                                value="{{ department_id or '' }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_from"
-                                value="{{ date_from }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_to"
-                                value="{{ date_to }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <select
-                                name="status"
-                                class="custom-select custom-select-sm"
-                                style="width:150px;"
-                                onchange="this.form.submit()"
-                            >
-
-                                <option value="">
-                                    All Status
-                                </option>
-
-
-                                {% for value, text in PROBLEM_STATUS %}
-
-                                <option
-                                    value="{{ value }}"
-                                    {% if status == value %}
-                                    selected
-                                    {% endif %}
-                                >
-
-                                    {{ text }}
-
-                                </option>
-
-                                {% endfor %}
-
-                            </select>
-
-                        </form>
-
-
-
-                        <!-- ==================================
-                        PRIORITY FILTER
-                        ================================== -->
-
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
-
-                            <input
-                                type="hidden"
-                                name="mine"
-                                value="{{ mine }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="keyword"
-                                value="{{ keyword }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="status"
-                                value="{{ status }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="department_id"
-                                value="{{ department_id or '' }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_from"
-                                value="{{ date_from }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_to"
-                                value="{{ date_to }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <select
-                                name="priority"
-                                class="custom-select custom-select-sm"
-                                style="width:150px;"
-                                onchange="this.form.submit()"
-                            >
-
-                                <option value="">
-                                    All Priority
-                                </option>
-
-
-                                {% for value, text in PROBLEM_PRIORITY %}
-
-                                <option
-                                    value="{{ value }}"
-                                    {% if priority == value %}
-                                    selected
-                                    {% endif %}
-                                >
-
-                                    {{ text }}
-
-                                </option>
-
-                                {% endfor %}
-
-                            </select>
-
-                        </form>
-
-
-
-                        <!-- ==================================
-                        DEPARTMENT FILTER
-                        ================================== -->
-
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
-
-                            <input
-                                type="hidden"
-                                name="mine"
-                                value="{{ mine }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="keyword"
-                                value="{{ keyword }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="status"
-                                value="{{ status }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="priority"
-                                value="{{ priority }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_from"
-                                value="{{ date_from }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_to"
-                                value="{{ date_to }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <select
-                                name="department_id"
-                                class="custom-select custom-select-sm"
-                                style="width:160px;"
-                                onchange="this.form.submit()"
-                            >
-
-                                <option value="">
-                                    All Department
-                                </option>
-
-
-                                {% for department in departments %}
-
-                                <option
-                                    value="{{ department.id }}"
-                                    {% if department_id == department.id %}
-                                    selected
-                                    {% endif %}
-                                >
-
-                                    {{ department.department_name }}
-
-                                </option>
-
-                                {% endfor %}
-
-                            </select>
-
-                        </form>
-
-
-
-                        <!-- ==================================
-                        DATE RANGE FILTER
-                        ================================== -->
-
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
-
-                            <input
-                                type="hidden"
-                                name="mine"
-                                value="{{ mine }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="keyword"
-                                value="{{ keyword }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="status"
-                                value="{{ status }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="priority"
-                                value="{{ priority }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="department_id"
-                                value="{{ department_id or '' }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <div
-                                class="d-flex align-items-center"
-                                style="gap:6px;"
-                            >
-
-
-                                <!-- From Date -->
-
-                                <div
-                                    class="input-group input-group-sm"
-                                    style="width:145px;"
-                                >
-
-                                    <div class="input-group-prepend">
-
-                                        <span class="input-group-text">
-
-                                            <i class="fas fa-calendar-alt"></i>
-
-                                        </span>
-
-                                    </div>
-
-
-                                    <input
-                                        type="date"
-                                        name="date_from"
-                                        class="form-control"
-                                        value="{{ date_from or '' }}"
-                                        title="From Date"
-                                    >
-
-                                </div>
-
-
-                                <span class="text-muted">
-                                    -
-                                </span>
-
-
-                                <!-- To Date -->
-
-                                <div
-                                    class="input-group input-group-sm"
-                                    style="width:145px;"
-                                >
-
-                                    <div class="input-group-prepend">
-
-                                        <span class="input-group-text">
-
-                                            <i class="fas fa-calendar-alt"></i>
-
-                                        </span>
-
-                                    </div>
-
-
-                                    <input
-                                        type="date"
-                                        name="date_to"
-                                        class="form-control"
-                                        value="{{ date_to or '' }}"
-                                        title="To Date"
-                                    >
-
-                                </div>
-
-
-                                <!-- Filter Button -->
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary btn-sm"
-                                    title="Filter by Date"
-                                >
-
-                                    <i class="fas fa-filter"></i>
-
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
-
-
-                    <!-- ======================================
-                    RIGHT : CREATE + SEARCH
-                    ====================================== -->
-
-                    <div
-                        class="d-flex align-items-center flex-wrap"
-                        style="gap:8px;"
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                    <!-- Reset -->
+                    <a
+                        href="{{ url_for('problem.index', mine=mine) }}"
+                        class="btn btn-secondary problem-reset-button"
+                        title="Reset Filter"
+                        aria-label="Reset filters"
                     >
-
-
-                        <!-- ==================================
-                        CREATE
-                        ================================== -->
-
-                        <a
-                            href="{{ url_for('problem.create') }}"
-                            class="btn btn-success btn-sm"
-                            style="white-space: nowrap;"
-                        >
-
-                            <i class="fas fa-plus mr-1"></i>
-
-                            Create Problem
-
-                        </a>
-
-
-
-                        <!-- ==================================
-                        SEARCH
-                        ================================== -->
-
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
-
-                            <input
-                                type="hidden"
-                                name="mine"
-                                value="{{ mine }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="status"
-                                value="{{ status }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="priority"
-                                value="{{ priority }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="department_id"
-                                value="{{ department_id or '' }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_from"
-                                value="{{ date_from }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="date_to"
-                                value="{{ date_to }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
-
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <div
-                                class="input-group input-group-sm"
-                            >
-
-                                <input
-                                    type="text"
-                                    name="keyword"
-                                    class="form-control"
-                                    style="width:270px;"
-                                    placeholder="Search problem no, title, location..."
-                                    value="{{ keyword }}"
-                                >
-
-
-                                <div class="input-group-append">
-
-
-                                    <!-- Search -->
-
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                        title="Search"
-                                    >
-
-                                        <i class="fas fa-search"></i>
-
-                                    </button>
-
-
-                                    <!-- Reset -->
-
-                                    <a
-                                        href="{{ url_for(
-                                            'problem.index',
-                                            mine=mine
-                                        ) }}"
-                                        class="btn btn-secondary ml-1"
-                                        title="Reset Filter"
-                                    >
-
-                                        <i class="fas fa-sync-alt"></i>
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        </form>
-
-                    </div>
+                        <i class="fas fa-sync-alt"></i>
+                    </a>
 
                 </div>
 
             </div>
 
+        </form>
 
+    </div>
+
+</div>
 
             <!-- ==========================================
             CARD BODY
@@ -758,7 +432,7 @@ MAIN CONTENT
                 <div class="table-responsive">
 
                     <table
-                        class="table table-bordered table-hover mb-0"
+                        class="table table-bordered table-hover mb-0 problem-list-table"
                     >
 
                         <thead>

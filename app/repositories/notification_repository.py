@@ -11,3 +11,19 @@ class NotificationRepository(BaseRepository):
         super().__init__(
             model=NotificationLog
         )
+
+    def exists_sent_notification_by_subject(
+        self,
+        event,
+        subject,
+    ):
+        return (
+            self.model.query
+            .filter(
+                self.model.event == event,
+                self.model.subject == subject,
+                self.model.status == "SENT",
+            )
+            .first()
+            is not None
+        )

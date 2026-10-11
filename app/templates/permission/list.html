@@ -1,734 +1,393 @@
-{% from "components/sortable_header.html" import sortable_header %}
 
 {% extends "layouts/base.html" %}
+{% from "components/sortable_header.html" import sortable_header %}
 
-
-{% block title %}
-Permission
-{% endblock %}
-
+{% block title %}Permission{% endblock %}
 
 {% block content %}
 
-
-<!-- =========================================================
-     Content Header
-========================================================= -->
-
-<section class="content-header">
-
+<!-- Content Header -->
+<section class="content-header permission-content-header">
     <div class="container-fluid">
-
-        <div class="row mb-2">
-
+        <div class="row mb-2 align-items-center">
             <div class="col-sm-6">
-
-                <h1>
-                    Permission
-                </h1>
-
+                <h1>Permission</h1>
             </div>
 
-
             <div class="col-sm-6">
-
                 <ol class="breadcrumb float-sm-right">
-
                     <li class="breadcrumb-item">
-
-                        <a href="{{ url_for('dashboard.index') }}">
-                            Dashboard
-                        </a>
-
+                        <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
                     </li>
-
-                    <li class="breadcrumb-item">
-                        Security
-                    </li>
-
-                    <li class="breadcrumb-item active">
-                        Permission
-                    </li>
-
+                    <li class="breadcrumb-item">Security</li>
+                    <li class="breadcrumb-item active">Permission</li>
                 </ol>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
-
-<!-- =========================================================
-     Main Content
-========================================================= -->
-
-<section class="content">
-
+<!-- Main Content -->
+<section class="content permission-page">
     <div class="container-fluid">
 
-        <div class="card card-primary card-outline">
+        <div class="card card-primary card-outline permission-page-card">
 
+            <!-- Toolbar -->
+            <div class="card-header permission-card-header">
+                <div class="permission-toolbar">
 
-            <!-- =================================================
-                 Card Header
-            ================================================== -->
-
-            <div class="card-header">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-
-                    <!-- =========================================
-                         Left
-                    ========================================== -->
-
-                    <div class="d-flex align-items-center">
-
-                        <h3 class="card-title mb-0 mr-4">
-
+                    <!-- Title and Status Filter -->
+                    <div class="permission-toolbar-left">
+                        <h3 class="card-title">
                             <i class="fas fa-key mr-2"></i>
-
                             Permission List
-
                         </h3>
 
+                        <form method="GET"
+                              action="{{ url_for('permission.index') }}"
+                              class="permission-status-form">
 
-                        <!-- =====================================
-                             Status
-                        ====================================== -->
+                            <input type="hidden"
+                                   name="keyword"
+                                   value="{{ keyword }}">
 
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
+                            <input type="hidden"
+                                   name="sort"
+                                   value="{{ sort_by }}">
 
-                            <input
-                                type="hidden"
-                                name="keyword"
-                                value="{{ keyword }}"
-                            >
+                            <input type="hidden"
+                                   name="order"
+                                   value="{{ sort_order }}">
 
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
+                            <select name="is_active"
+                                    class="custom-select custom-select-sm"
+                                    aria-label="Filter permission status"
+                                    onchange="this.form.submit()">
 
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <select
-                                name="is_active"
-                                class="custom-select"
-                                style="width:160px;"
-                                onchange="this.form.submit()"
-                            >
-
-                                <option
-                                    value="true"
-                                    {% if is_active == "true" %}
-                                    selected
-                                    {% endif %}
-                                >
+                                <option value="true"
+                                    {% if is_active == "true" %}selected{% endif %}>
                                     Active
                                 </option>
 
-
-                                <option
-                                    value="false"
-                                    {% if is_active == "false" %}
-                                    selected
-                                    {% endif %}
-                                >
+                                <option value="false"
+                                    {% if is_active == "false" %}selected{% endif %}>
                                     Inactive
                                 </option>
 
-
-                                <option
-                                    value="all"
-                                    {% if is_active == "all" %}
-                                    selected
-                                    {% endif %}
-                                >
+                                <option value="all"
+                                    {% if is_active == "all" %}selected{% endif %}>
                                     All
                                 </option>
-
                             </select>
-
                         </form>
-
                     </div>
 
+                    <!-- Add and Search -->
+                    <div class="permission-toolbar-right">
 
-                    <!-- =========================================
-                         Right
-                    ========================================== -->
-
-                    <div class="d-flex align-items-center">
-
-
-                        <!-- =====================================
-                             Add Permission
-                        ====================================== -->
-
-                        <a
-                            href="{{ url_for('permission.create') }}"
-                            class="btn btn-success mr-3"
-                        >
-
-                            <i class="fas fa-plus"></i>
-
+                        <a href="{{ url_for('permission.create') }}"
+                           class="btn btn-success btn-sm permission-add-button">
+                            <i class="fas fa-plus mr-1"></i>
                             Add Permission
-
                         </a>
 
+                        <form method="GET"
+                              action="{{ url_for('permission.index') }}"
+                              class="permission-search-form">
 
-                        <!-- =====================================
-                             Search
-                        ====================================== -->
+                            <input type="hidden"
+                                   name="is_active"
+                                   value="{{ is_active }}">
 
-                        <form
-                            method="GET"
-                            class="mb-0"
-                        >
+                            <input type="hidden"
+                                   name="sort"
+                                   value="{{ sort_by }}">
 
-                            <input
-                                type="hidden"
-                                name="is_active"
-                                value="{{ is_active }}"
-                            >
+                            <input type="hidden"
+                                   name="order"
+                                   value="{{ sort_order }}">
 
-                            <input
-                                type="hidden"
-                                name="sort"
-                                value="{{ sort_by }}"
-                            >
+                            <div class="input-group input-group-sm">
 
-                            <input
-                                type="hidden"
-                                name="order"
-                                value="{{ sort_order }}"
-                            >
-
-
-                            <div class="input-group">
-
-                                <input
-                                    type="text"
-                                    name="keyword"
-                                    class="form-control"
-                                    style="width:280px;"
-                                    placeholder="Search code, name or description..."
-                                    value="{{ keyword }}"
-                                >
-
+                                <input type="text"
+                                       name="keyword"
+                                       class="form-control"
+                                       placeholder="Search code, name or description..."
+                                       value="{{ keyword }}"
+                                       aria-label="Search permission">
 
                                 <div class="input-group-append">
-
-                                    <button
-                                        class="btn btn-primary"
-                                        type="submit"
-                                    >
-
+                                    <button type="submit"
+                                            class="btn btn-primary"
+                                            title="Search"
+                                            aria-label="Search">
                                         <i class="fas fa-search"></i>
-
                                     </button>
 
-
-                                    <a
-                                        href="{{ url_for('permission.index') }}"
-                                        class="btn btn-secondary ml-1"
-                                    >
-
+                                    <a href="{{ url_for('permission.index') }}"
+                                       class="btn btn-secondary"
+                                       title="Reset"
+                                       aria-label="Reset search and filters">
                                         <i class="fas fa-sync-alt"></i>
-
                                     </a>
-
                                 </div>
 
                             </div>
-
                         </form>
 
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- =================================================
-                 Card Body
-            ================================================== -->
-
-            <div class="card-body">
-
-
-                <!-- =============================================
-                     Search Information
-                ============================================== -->
+            <!-- Table Body -->
+            <div class="card-body permission-card-body">
 
                 {% if keyword %}
-
-                <div class="alert alert-info">
-
-                    <i class="fas fa-search"></i>
-
-                    Search keyword :
-
-                    <strong>
-                        {{ keyword }}
-                    </strong>
-
+                <div class="alert alert-info permission-search-info">
+                    <i class="fas fa-search mr-1"></i>
+                    Search keyword:
+                    <strong>{{ keyword }}</strong>
                 </div>
-
                 {% endif %}
 
-
-                <!-- =============================================
-                     Table
-                ============================================== -->
-
-                <table class="table table-bordered table-hover">
-
-                    <thead>
-
-                        <tr class="text-center">
-
-
-                            <!-- No -->
-
-                            <th
-                                width="60"
-                                class="text-center"
-                            >
-                                No
-                            </th>
-
-
-                            <!-- Permission Code -->
-
-                            {{ sortable_header(
-                                "Permission Code",
-                                "permission_code",
-                                "permission.index",
-                                keyword,
-                                is_active,
-                                sort_by,
-                                sort_order
-                            ) }}
-
-
-                            <!-- Permission Name -->
-
-                            {{ sortable_header(
-                                "Permission Name",
-                                "permission_name",
-                                "permission.index",
-                                keyword,
-                                is_active,
-                                sort_by,
-                                sort_order
-                            ) }}
-
-
-                            <!-- Description -->
-
-                            <th>
-                                Description
-                            </th>
-
-
-                            <!-- Status -->
-
-                            <th width="120">
-                                Status
-                            </th>
-
-
-                            <!-- Action -->
-
-                            <th width="150">
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-
-                        {% if permissions %}
-
-
-                        {% for permission in permissions.items %}
-
-
-                        <tr>
-
-
-                            <!-- =================================
-                                 No
-                            ================================== -->
-
-                            <td class="text-center">
-
-                                {{ permissions.first + loop.index0 }}
-
-                            </td>
-
-
-                            <!-- =================================
-                                 Permission Code
-                            ================================== -->
-
-                            <td>
-
-                                {{ permission.permission_code }}
-
-                            </td>
-
-
-                            <!-- =================================
-                                 Permission Name
-                            ================================== -->
-
-                            <td>
-
-                                {{ permission.permission_name }}
-
-                            </td>
-
-
-                            <!-- =================================
-                                 Description
-                            ================================== -->
-
-                            <td>
-
-                                {{ permission.description or "-" }}
-
-                            </td>
-
-
-                            <!-- =================================
-                                 Status
-                            ================================== -->
-
-                            <td class="text-center">
-
-                                {% if permission.is_active %}
-
-                                <span class="badge badge-success">
-
-                                    Active
-
-                                </span>
-
-                                {% else %}
-
-                                <span class="badge badge-danger">
-
-                                    Inactive
-
-                                </span>
-
-                                {% endif %}
-
-                            </td>
-
-
-                            <!-- =================================
-                                 Action
-                            ================================== -->
-
-                            <td class="text-center">
-
-
-                                {% if permission.is_active %}
-
-
-                                <!-- Edit -->
-
-                                <a
-                                    href="{{ url_for(
-                                        'permission.edit',
-                                        permission_id=permission.id
-                                    ) }}"
-                                    class="btn btn-warning btn-sm"
-                                    title="Edit"
-                                >
-
-                                    <i class="fas fa-edit"></i>
-
+                <div class="table-responsive permission-table-wrapper">
+                    <table class="table table-bordered table-hover permission-table">
+
+                        <thead>
+                            <tr>
+                                <th class="text-center permission-col-no">
+                                    No
+                                </th>
+
+                                {{ sortable_header(
+                                    "Permission Code",
+                                    "permission_code",
+                                    "permission.index",
+                                    keyword,
+                                    is_active,
+                                    sort_by,
+                                    sort_order
+                                ) }}
+
+                                {{ sortable_header(
+                                    "Permission Name",
+                                    "permission_name",
+                                    "permission.index",
+                                    keyword,
+                                    is_active,
+                                    sort_by,
+                                    sort_order
+                                ) }}
+
+                                <th>Description</th>
+
+                                <th class="text-center permission-col-status">
+                                    Status
+                                </th>
+
+                                <th class="text-center permission-col-action">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% if permissions.items %}
+
+                                {% for permission in permissions.items %}
+                                <tr>
+                                    <!-- Number -->
+                                    <td class="text-center">
+                                        {{ permissions.first + loop.index0 }}
+                                    </td>
+
+                                    <!-- Permission Code -->
+                                    <td class="permission-code-cell">
+                                        {{ permission.permission_code }}
+                                    </td>
+
+                                    <!-- Permission Name -->
+                                    <td>
+                                        {{ permission.permission_name }}
+                                    </td>
+
+                                    <!-- Description -->
+                                    <td class="permission-description-cell">
+                                        {{ permission.description or "-" }}
+                                    </td>
+
+                                    <!-- Status -->
+                                    <td class="text-center">
+                                        {% if permission.is_active %}
+                                            <span class="badge badge-success">
+                                                Active
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-danger">
+                                                Inactive
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <!-- Actions -->
+                                    <td class="text-center permission-action-cell">
+
+                                        {% if permission.is_active %}
+
+                                            <a href="{{ url_for(
+                                                'permission.edit',
+                                                permission_id=permission.id
+                                            ) }}"
+                                               class="btn btn-warning btn-sm"
+                                               title="Edit"
+                                               aria-label="Edit permission">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm btn-delete"
+                                                    data-name="{{ permission.permission_name }}"
+                                                    data-url="{{ url_for(
+                                                        'permission.delete',
+                                                        permission_id=permission.id
+                                                    ) }}"
+                                                    title="Delete"
+                                                    aria-label="Delete permission">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+
+                                        {% else %}
+
+                                            <form method="POST"
+                                                  action="{{ url_for(
+                                                      'permission.restore',
+                                                      permission_id=permission.id
+                                                  ) }}"
+                                                  class="permission-restore-form">
+
+                                                <button type="submit"
+                                                        class="btn btn-success btn-sm"
+                                                        title="Restore"
+                                                        aria-label="Restore permission">
+                                                    <i class="fas fa-undo"></i>
+                                                </button>
+                                            </form>
+
+                                        {% endif %}
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            {% else %}
+                                <tr>
+                                    <td colspan="6"
+                                        class="text-center text-muted permission-empty-cell">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        No permission found.
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Modal -->
+            {% include "components/delete_modal.html" %}
+
+            <!-- Footer -->
+            <div class="card-footer permission-card-footer">
+
+                <div class="permission-record-info">
+                    Showing
+                    <strong>
+                        {{ permissions.first if permissions.total > 0 else 0 }}
+                    </strong>
+                    to
+                    <strong>
+                        {{ permissions.last if permissions.total > 0 else 0 }}
+                    </strong>
+                    of
+                    <strong>{{ permissions.total }}</strong>
+                    permission(s)
+                </div>
+
+                <!-- Pagination -->
+                <nav class="permission-pagination"
+                     aria-label="Permission pagination">
+
+                    <ul class="pagination pagination-sm mb-0">
+
+                        {% if permissions.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'permission.index',
+                                   page=permissions.prev_num,
+                                   keyword=keyword,
+                                   is_active=is_active,
+                                   sort=sort_by,
+                                   order=sort_order
+                               ) }}"
+                               aria-label="Previous page"
+                               title="Previous">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for page_num in permissions.iter_pages() %}
+
+                            {% if page_num %}
+                            <li class="page-item {% if page_num == permissions.page %}active{% endif %}">
+                                <a class="page-link"
+                                   href="{{ url_for(
+                                       'permission.index',
+                                       page=page_num,
+                                       keyword=keyword,
+                                       is_active=is_active,
+                                       sort=sort_by,
+                                       order=sort_order
+                                   ) }}">
+                                    {{ page_num }}
                                 </a>
-
-
-                                <!-- Delete -->
-
-                                <button
-                                    type="button"
-                                    class="btn btn-danger btn-sm btn-delete"
-
-                                    data-name="{{ permission.permission_name }}"
-
-                                    data-url="{{ url_for(
-                                        'permission.delete',
-                                        permission_id=permission.id
-                                    ) }}"
-
-                                    title="Delete"
-                                >
-
-                                    <i class="fas fa-trash"></i>
-
-                                </button>
-
-
-                                {% else %}
-
-
-                                <!-- Restore -->
-
-                                <form
-                                    method="POST"
-                                    action="{{ url_for(
-                                        'permission.restore',
-                                        permission_id=permission.id
-                                    ) }}"
-                                    style="display:inline;"
-                                >
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-success btn-sm"
-                                        title="Restore"
-                                    >
-
-                                        <i class="fas fa-undo"></i>
-
-                                    </button>
-
-                                </form>
-
-
-                                {% endif %}
-
-
-                            </td>
-
-
-                        </tr>
-
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&hellip;</span>
+                            </li>
+                            {% endif %}
 
                         {% endfor %}
 
-
-                        {% else %}
-
-
-                        <tr>
-
-                            <td
-                                colspan="6"
-                                class="text-center text-muted"
-                            >
-
-                                No permission found.
-
-                            </td>
-
-                        </tr>
-
-
+                        {% if permissions.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'permission.index',
+                                   page=permissions.next_num,
+                                   keyword=keyword,
+                                   is_active=is_active,
+                                   sort=sort_by,
+                                   order=sort_order
+                               ) }}"
+                               aria-label="Next page"
+                               title="Next">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
                         {% endif %}
 
-
-                    </tbody>
-
-                </table>
+                    </ul>
+                </nav>
 
             </div>
-
-
-            <!-- =================================================
-                 Delete Modal
-            ================================================== -->
-
-            {% include "components/delete_modal.html" %}
-
-
-            <!-- =================================================
-                 Card Footer
-            ================================================== -->
-
-            <div class="card-footer clearfix">
-
-
-                <div class="float-left">
-
-                    Showing
-
-                    <strong>
-
-                        {{
-                            permissions.first
-                            if permissions.total > 0
-                            else 0
-                        }}
-
-                    </strong>
-
-                    to
-
-                    <strong>
-
-                        {{
-                            permissions.last
-                            if permissions.total > 0
-                            else 0
-                        }}
-
-                    </strong>
-
-                    of
-
-                    <strong>
-
-                        {{ permissions.total }}
-
-                    </strong>
-
-                    permission(s)
-
-                </div>
-
-
-            </div>
-
-
-            <!-- =================================================
-                 Pagination
-            ================================================== -->
-
-            <nav>
-
-                <ul class="pagination pagination-sm float-right">
-
-
-                    <!-- Previous -->
-
-                    {% if permissions.has_prev %}
-
-                    <li class="page-item">
-
-                        <a
-                            class="page-link"
-                            href="{{ url_for(
-                                'permission.index',
-                                page=permissions.prev_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}"
-                        >
-
-                            Previous
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-
-                    <!-- Page Numbers -->
-
-                    {% for page_num in permissions.iter_pages() %}
-
-
-                    {% if page_num %}
-
-
-                    <li
-                        class="page-item
-                        {% if page_num == permissions.page %}
-                        active
-                        {% endif %}"
-                    >
-
-                        <a
-                            class="page-link"
-                            href="{{ url_for(
-                                'permission.index',
-                                page=page_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}"
-                        >
-
-                            {{ page_num }}
-
-                        </a>
-
-                    </li>
-
-
-                    {% endif %}
-
-
-                    {% endfor %}
-
-
-                    <!-- Next -->
-
-                    {% if permissions.has_next %}
-
-                    <li class="page-item">
-
-                        <a
-                            class="page-link"
-                            href="{{ url_for(
-                                'permission.index',
-                                page=permissions.next_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}"
-                        >
-
-                            Next
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-
-                </ul>
-
-            </nav>
-
 
         </div>
-
     </div>
-
 </section>
-
 
 {% endblock %}

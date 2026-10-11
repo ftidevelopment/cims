@@ -10,27 +10,32 @@
         </span>
     </a>
 
-
     <div class="sidebar">
 
-        <!-- ====================================== -->
-        <!-- USER PANEL -->
-        <!-- ====================================== -->
-
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center cims-user-panel">
             <div class="image">
-                <i class="fas fa-user-circle text-white" style="font-size: 30px;">
-                </i>
+                <i class="fas fa-user-circle text-white cims-user-avatar"></i>
             </div>
-
-            <div class="info">
-                <a href="#" class="d-block">
+            <div class="info cims-user-info">
+                <!-- Full Name -->
+                <span class="d-block cims-user-fullname"
+                    title="{{ current_user.employee.full_name if current_user.employee else current_user.username }}">
+                    {{ current_user.employee.full_name if current_user.employee and current_user.employee.full_name else
+                    current_user.username }}
+                </span>
+                <!-- Username -->
+                <span class="d-block cims-user-username">
                     {{ current_user.username }}
-                </a>
-            </div>
+                </span>
 
+                <!-- Role -->
+                <span class="d-block cims-user-role">
+                    <i class="fas fa-user-shield mr-1"></i>
+                    {{ current_user.role_code or 'USER' }}
+                </span>
+            </div>
         </div>
+
 
 
         <!-- ====================================== -->
@@ -166,15 +171,12 @@
                 </li>
 
                 <!-- Kaizen Target vs Result -->
-<li class="nav-item">
-    <a
-        href="{{ url_for('kaizen_target_result.index') }}"
-        class="nav-link"
-    >
-        <i class="fas fa-chart-bar nav-icon"></i>
-        <p>Kaizen Target vs Result</p>
-    </a>
-</li>
+                <li class="nav-item">
+                    <a href="{{ url_for('kaizen_target_result.index') }}" class="nav-link">
+                        <i class="fas fa-chart-bar nav-icon"></i>
+                        <p>Kaizen Target vs Result</p>
+                    </a>
+                </li>
 
                 <!-- Award Result -->
 
@@ -191,7 +193,7 @@
                     </a>
 
                 </li>
-                
+
 
                 {% if current_user.role_code in ["ADMIN", "KZN"] %}
 
@@ -223,20 +225,59 @@
                 {% endif %}
 
 
-                {% if current_user.role_code in ["ADMIN", "KZN"] %}
-
                 <!-- Kaizen Department Target -->
+                {% if (current_user.role_code or '')|trim|upper in ['ADMIN', 'KZN'] %}
                 <li class="nav-item">
                     <a href="{{ url_for('kaizen_department_target.index') }}" class="nav-link">
                         <i class="fas fa-bullseye nav-icon"></i>
-                        <p>
-                            Kaizen Target
-                        </p>
+                        <p>Kaizen Target</p>
+                    </a>
+                </li>
+                {% endif %}
+
+
+                <!-- ================================== -->
+                <!-- AUDIT -->
+                <!-- ================================== -->
+
+                {% if (current_user.role_code or '')|trim|upper
+                in ['ADMIN', 'AUDIT_ADMIN']
+                or current_user.has_permission("AUDIT_VIEW") %}
+
+                <li class="nav-item">
+                    <a href="{{ url_for('audit.index') }}" class="nav-link">
+                        <i class="fas fa-clipboard-check nav-icon"></i>
+                        <p>Audit</p>
                     </a>
                 </li>
 
                 {% endif %}
 
+
+                <!-- ================================== -->
+                <!-- FINDING MONITORING -->
+                <!-- ================================== -->
+
+                {% if (current_user.role_code or '')|trim|upper
+                in ['ADMIN', 'AUDIT_ADMIN']
+                or current_user.has_permission("AUDIT_FINDING_VIEW") %}
+
+                <li class="nav-item">
+                    <a href="{{ url_for('audit_finding.monitoring') }}" class="nav-link">
+                        <i class="fas fa-tasks nav-icon"></i>
+                        <p>Finding Monitoring</p>
+                    </a>
+                </li>
+
+                <!-- Overdue Finding -->
+                <li class="nav-item">
+                    <a href="{{ url_for('audit_finding.overdue') }}" class="nav-link">
+                        <i class="fas fa-exclamation-triangle nav-icon"></i>
+                        <p>Overdue Finding</p>
+                    </a>
+                </li>
+
+                {% endif %}
 
                 {% if current_user.role_code == "ADMIN" %}
                 <!-- ================================== -->
@@ -284,6 +325,8 @@
                         </li>
 
 
+
+
                         <!-- Problem Category -->
 
                         <li class="nav-item">
@@ -297,31 +340,68 @@
                                 </p>
 
                             </a>
+                        </li>
+                        {% endif %}
+                        {% if (current_user.role_code or '')|trim|upper in ['ADMIN', 'KZN'] %}
+                        <li class="nav-item">
+                            <a href="{{ url_for('kaizen_category.index') }}" class="nav-link">
+                                <i class="fas fa-tags nav-icon"></i>
+                                <p>
+                                    Kaizen Category
+                                </p>
+                            </a>
 
                         </li>
+                        {% endif %}
+                        {% if (current_user.role_code or '')|trim|upper in ['ADMIN', 'AUDIT_ADMIN'] %}
 
-
-                        <!-- Kaizen Category -->
 
                         <li class="nav-item">
 
-                            <a href="{{ url_for('kaizen_category.index') }}" class="nav-link">
+                            <a href="{{ url_for('audit_type.index') }}" class="nav-link">
 
-                                <i class="fas fa-tags nav-icon"></i>
+                                <i class="fas fa-clipboard-check nav-icon"></i>
 
                                 <p>
-                                    Kaizen Category
+                                    Audit Type
                                 </p>
 
                             </a>
 
                         </li>
 
+                        <li class="nav-item">
+                            <a href="{{ url_for('audit_checklist.index') }}" class="nav-link">
+
+                                <i class="fas fa-clipboard-list nav-icon"></i>
+
+                                <p>
+                                    Audit Checklist
+                                </p>
+
+                            </a>
+                        </li>
+
+                        <!-- Audit Category -->
+
+                        <li class="nav-item">
+
+                            <a href="{{ url_for('audit_category.index') }}" class="nav-link">
+
+                                <i class="fas fa-clipboard-list nav-icon"></i>
+
+                                <p>
+                                    Audit Category
+                                </p>
+
+                            </a>
+
+                        </li>
+
+                        {% endif %}
                     </ul>
 
                 </li>
-
-                {% endif %}
                 <!-- ================================== -->
                 <!-- ADMINISTRATION -->
                 <!-- ================================== -->
@@ -573,4 +653,4 @@
 
     </div>
 
-</aside>
+</aside>q

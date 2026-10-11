@@ -1,0 +1,421 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Create Audit Execution
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- ====================================================== -->
+    <!-- HEADER -->
+    <!-- ====================================================== -->
+
+    <section class="content-header">
+
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+
+                <div class="col-sm-6">
+
+                    <h1>
+
+                        <i class="fas fa-play-circle mr-2"></i>
+
+                        Create Audit Execution
+
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <ol class="breadcrumb float-sm-right">
+
+                        <li class="breadcrumb-item">
+
+                            <a href="{{ url_for('dashboard.index') }}">
+                                Dashboard
+                            </a>
+
+                        </li>
+
+                        <li class="breadcrumb-item">
+
+                            <a href="{{ url_for('audit.index') }}">
+                                Audit
+                            </a>
+
+                        </li>
+
+                        <li class="breadcrumb-item">
+
+                            <a href="{{ url_for(
+                                'audit_execution.index',
+                                audit_id=audit.id
+                            ) }}">
+                                Execution
+                            </a>
+
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            Create
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- CONTENT -->
+    <!-- ====================================================== -->
+
+    <section class="content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+
+
+                <!-- ================================================== -->
+                <!-- FORM -->
+                <!-- ================================================== -->
+
+                <div class="col-md-8">
+
+                    <div class="card card-primary">
+
+                        <div class="card-header">
+
+                            <h3 class="card-title">
+
+                                <i class="fas fa-play mr-2"></i>
+
+                                Execution Setup
+
+                            </h3>
+
+                        </div>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'audit_execution.create',
+                                audit_id=audit.id
+                            ) }}"
+                        >
+
+                            <div class="card-body">
+
+
+                                <!-- ================================== -->
+                                <!-- ASSIGNMENT -->
+                                <!-- ================================== -->
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Assignment
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select
+                                        name="audit_assignment_id"
+                                        class="form-control"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            -- Select Assignment --
+                                        </option>
+
+                                        {% for assignment in assignments %}
+
+                                            <option
+                                                value="{{ assignment.id }}"
+                                                {% if selected_assignment_id == assignment.id %}
+                                                    selected
+                                                {% endif %}
+                                            >
+
+                                                {{ assignment.location }}
+
+                                                -
+
+                                                {% if assignment.auditor %}
+
+                                                    {{ assignment.auditor.nik }}
+                                                    -
+                                                    {{ assignment.auditor.full_name }}
+
+                                                {% else %}
+
+                                                    Auditor not found
+
+                                                {% endif %}
+
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                    <small class="form-text text-muted">
+
+                                        Select the auditor and location
+                                        for this audit execution.
+
+                                    </small>
+
+                                </div>
+
+
+                                <!-- ================================== -->
+                                <!-- CHECKLIST -->
+                                <!-- ================================== -->
+
+                                <div class="form-group">
+
+                                    <label>
+
+                                        Audit Checklist
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <select
+                                        name="audit_checklist_id"
+                                        class="form-control"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            -- Select Checklist --
+                                        </option>
+
+                                        {% for checklist in checklists.items %}
+
+                                            <option
+                                                value="{{ checklist.id }}"
+                                                {% if selected_checklist_id == checklist.id %}
+                                                    selected
+                                                {% endif %}
+                                            >
+
+                                                {{ checklist.audit_checklist_code }}
+                                                -
+                                                {{ checklist.audit_checklist_name }}
+
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                    <small class="form-text text-muted">
+
+                                        Select the checklist to be used
+                                        for this audit execution.
+
+                                    </small>
+
+                                </div>
+
+
+                                <!-- ================================== -->
+                                <!-- DATE -->
+                                <!-- ================================== -->
+
+                                <div class="form-group">
+
+                                    <label>
+
+                                        Execution Date
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        name="execution_date"
+                                        class="form-control"
+                                        value="{{ request.form.get(
+                                            'execution_date',
+                                            audit.audit_date.strftime('%Y-%m-%d') if audit.audit_date else ''
+                                        ) }}"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- ================================== -->
+                                <!-- REMARK -->
+                                <!-- ================================== -->
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Remark
+                                    </label>
+
+                                    <textarea
+                                        name="remark"
+                                        class="form-control"
+                                        rows="4"
+                                        placeholder="Optional remark..."
+                                    >{{ request.form.get('remark', '') }}</textarea>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ====================================== -->
+                            <!-- FOOTER -->
+                            <!-- ====================================== -->
+
+                            <div class="card-footer">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+
+                                    <i class="fas fa-play mr-1"></i>
+
+                                    Create Execution
+
+                                </button>
+
+
+                                <a
+                                    href="{{ url_for(
+                                        'audit_execution.index',
+                                        audit_id=audit.id
+                                    ) }}"
+                                    class="btn btn-secondary"
+                                >
+
+                                    <i class="fas fa-times mr-1"></i>
+
+                                    Cancel
+
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================== -->
+                <!-- AUDIT SUMMARY -->
+                <!-- ================================================== -->
+
+                <div class="col-md-4">
+
+                    <div class="card card-secondary">
+
+                        <div class="card-header">
+
+                            <h3 class="card-title">
+
+                                <i class="fas fa-clipboard-check mr-2"></i>
+
+                                Audit Summary
+
+                            </h3>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <dl>
+
+                                <dt>
+                                    Audit No
+                                </dt>
+
+                                <dd class="text-muted">
+                                    {{ audit.audit_no }}
+                                </dd>
+
+
+                                <dt>
+                                    Title
+                                </dt>
+
+                                <dd class="text-muted">
+                                    {{ audit.title }}
+                                </dd>
+
+
+                                <dt>
+                                    Audit Type
+                                </dt>
+
+                                <dd class="text-muted">
+                                    {{ audit.audit_type_name }}
+                                </dd>
+
+
+                                <dt>
+                                    Audit Category
+                                </dt>
+
+                                <dd class="text-muted">
+                                    {{ audit.audit_category_name }}
+                                </dd>
+
+
+                                <dt>
+                                    Audit Date
+                                </dt>
+
+                                <dd class="text-muted">
+
+                                    {% if audit.audit_date %}
+
+                                        {{ audit.audit_date.strftime('%d-%m-%Y') }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                </dd>
+
+                            </dl>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+{% endblock %}

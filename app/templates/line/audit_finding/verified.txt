@@ -1,0 +1,52 @@
+🔔 [CIMS] Audit Finding - Verification Result
+
+Dear {{ pic.full_name if pic else "PIC" }},
+
+Audit Finding berikut telah diverifikasi oleh Auditor.
+
+Finding No.       : {{ finding.finding_no }}
+Severity          : {{ finding.severity or "-" }}
+Status            : {{ finding.status or "-" }}
+Verification      : {{ finding.verification_status or "-" }}
+Verified Date     : {{ finding.verified_date or "-" }}
+Verified By       : {% if finding.verified_by_employee %}{{ finding.verified_by_employee.nik }} - {{ finding.verified_by_employee.full_name }}{% else %}-{% endif %}
+
+AUDIT INFORMATION
+
+Audit No.   : {{ finding.audit_execution.audit_assignment.audit.audit_no if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.audit else "-" }}
+Audit Title : {{ finding.audit_execution.audit_assignment.audit.title if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.audit else "-" }}
+Department  : {% if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.department %}{{ finding.audit_execution.audit_assignment.department.department_code }} - {{ finding.audit_execution.audit_assignment.department.department_name }}{% else %}-{% endif %}
+Location    : {{ finding.audit_execution.audit_assignment.location if finding.audit_execution and finding.audit_execution.audit_assignment else "-" }}
+
+Finding:
+{{ finding.finding }}
+
+Corrective Action:
+{{ finding.corrective_action if finding.corrective_action else "-" }}
+
+AUDITOR VERIFICATION RESULT
+
+{{ finding.verification_result if finding.verification_result else "-" }}
+
+{% if finding.verification_status == "PASS" %}
+✅ VERIFICATION PASSED
+
+Corrective action has been verified and accepted by the auditor.
+
+The finding can proceed to the closing process.
+{% else %}
+❌ VERIFICATION FAILED
+
+The corrective action did not pass auditor verification.
+
+The finding has been returned to IN_PROGRESS.
+
+📌 ACTION REQUIRED
+
+Please review the auditor's verification result and perform the necessary corrective action.
+{% endif %}
+
+Please open CIMS for more details.
+
+CIMS Notification
+Continuous Improvement Management System

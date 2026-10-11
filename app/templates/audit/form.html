@@ -1,0 +1,399 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    {{ "Edit Audit" if audit else "Create Audit" }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Content Header -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    {{ "Edit Audit" if audit else "Create Audit" }}
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="#">Dashboard</a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        Audit
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {{ "Edit" if audit else "Create" }}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Main Content -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-md-10 offset-md-1">
+
+                <div class="card card-primary card-outline">
+
+                    <!-- Card Header -->
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i class="fas fa-clipboard-check mr-2"></i>
+
+                            {{ "Edit Audit" if audit else "Create Audit" }}
+
+                        </h3>
+
+                    </div>
+
+
+                    <!-- Form -->
+                    <form
+                        method="POST"
+                        novalidate
+                    >
+
+                        <div class="card-body">
+
+                            <!-- Title -->
+                            <div class="form-group">
+
+                                <label for="title">
+
+                                    Audit Title
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="title"
+                                    name="title"
+                                    maxlength="200"
+                                    value="{{
+                                        audit.title
+                                        if audit
+                                        else ''
+                                    }}"
+                                    placeholder="Enter audit title"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <!-- Audit Type -->
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label for="audit_type_id">
+
+                                            Audit Type
+
+                                            <span class="text-danger">
+                                                *
+                                            </span>
+
+                                        </label>
+
+                                        <select
+                                            class="form-control"
+                                            id="audit_type_id"
+                                            name="audit_type_id"
+                                            required
+                                        >
+
+                                            <option value="">
+                                                -- Select Audit Type --
+                                            </option>
+
+                                            {% for audit_type in audit_types.items %}
+
+                                            <option
+                                                value="{{ audit_type.id }}"
+                                                {% if audit and audit.audit_type_id == audit_type.id %}
+                                                selected
+                                                {% endif %}
+                                            >
+
+                                                {{ audit_type.audit_type_code }}
+                                                -
+                                                {{ audit_type.audit_type_name }}
+
+                                            </option>
+
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Audit Category -->
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label for="audit_category_id">
+
+                                            Audit Category
+
+                                            <span class="text-danger">
+                                                *
+                                            </span>
+
+                                        </label>
+
+                                        <select
+                                            class="form-control"
+                                            id="audit_category_id"
+                                            name="audit_category_id"
+                                            required
+                                        >
+
+                                            <option value="">
+                                                -- Select Audit Category --
+                                            </option>
+
+                                            {% for audit_category in audit_categories.items %}
+
+                                            <option
+                                                value="{{ audit_category.id }}"
+                                                {% if audit and audit.audit_category_id == audit_category.id %}
+                                                selected
+                                                {% endif %}
+                                            >
+
+                                                {{ audit_category.audit_category_code }}
+                                                -
+                                                {{ audit_category.audit_category_name }}
+
+                                            </option>
+
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <!-- Audit Date -->
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label for="audit_date">
+
+                                            Audit Date
+
+                                            <span class="text-danger">
+                                                *
+                                            </span>
+
+                                        </label>
+
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            id="audit_date"
+                                            name="audit_date"
+                                            value="{{
+                                                audit.audit_date.strftime('%Y-%m-%d')
+                                                if audit and audit.audit_date
+                                                else ''
+                                            }}"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Status -->
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label for="status">
+
+                                            Status
+
+                                            <span class="text-danger">
+                                                *
+                                            </span>
+
+                                        </label>
+
+                                        <select
+                                            class="form-control"
+                                            id="status"
+                                            name="status"
+                                            required
+                                        >
+
+                                            <option
+                                                value="DRAFT"
+                                                {% if not audit or audit.status == "DRAFT" %}
+                                                selected
+                                                {% endif %}
+                                            >
+                                                Draft
+                                            </option>
+
+                                            <option
+                                                value="PLANNED"
+                                                {% if audit and audit.status == "PLANNED" %}
+                                                selected
+                                                {% endif %}
+                                            >
+                                                Planned
+                                            </option>
+
+                                            <option
+                                                value="IN_PROGRESS"
+                                                {% if audit and audit.status == "IN_PROGRESS" %}
+                                                selected
+                                                {% endif %}
+                                            >
+                                                In Progress
+                                            </option>
+
+                                            <option
+                                                value="COMPLETED"
+                                                {% if audit and audit.status == "COMPLETED" %}
+                                                selected
+                                                {% endif %}
+                                            >
+                                                Completed
+                                            </option>
+
+                                            <option
+                                                value="CANCELLED"
+                                                {% if audit and audit.status == "CANCELLED" %}
+                                                selected
+                                                {% endif %}
+                                            >
+                                                Cancelled
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Description -->
+                            <div class="form-group">
+
+                                <label for="description">
+
+                                    Description
+
+                                </label>
+
+                                <textarea
+                                    class="form-control"
+                                    id="description"
+                                    name="description"
+                                    rows="5"
+                                    placeholder="Enter audit description"
+                                >{{ audit.description if audit else '' }}</textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Card Footer -->
+                        <div class="card-footer">
+
+                            <a
+                                href="{{ url_for('audit.index') }}"
+                                class="btn btn-secondary"
+                            >
+
+                                <i class="fas fa-arrow-left mr-1"></i>
+
+                                Back
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary float-right"
+                            >
+
+                                <i class="fas fa-save mr-1"></i>
+
+                                {{ "Update Audit" if audit else "Save Audit" }}
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        Audit Finding Overdue
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #dc3545;
+            color: #ffffff;
+            padding: 20px 25px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .header p {
+            margin: 6px 0 0 0;
+            font-size: 13px;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .alert {
+            background-color: #fff3f3;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .alert strong {
+            color: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 13px;
+        }
+
+        th {
+            width: 180px;
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .severity {
+            font-weight: bold;
+        }
+
+        .finding {
+            white-space: pre-line;
+        }
+
+        .action {
+            white-space: pre-line;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background-color: #0d6efd;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .footer {
+            border-top: 1px solid #eeeeee;
+            padding: 15px 25px;
+            font-size: 11px;
+            color: #777777;
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================== -->
+
+    <div class="header">
+
+        <h2>
+            Audit Finding Overdue
+        </h2>
+
+        <p>
+            Continuous Improvement Management System
+        </p>
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- CONTENT -->
+    <!-- ================================================== -->
+
+    <div class="content">
+
+        <p>
+            Dear
+            <strong>
+                {{ pic.full_name if pic else "PIC" }}
+            </strong>,
+        </p>
+
+        <div class="alert">
+
+            <strong>
+                Attention Required
+            </strong>
+
+            <br>
+
+            The following Audit Finding has passed its target date
+            and is still not closed.
+
+        </div>
+
+
+        <!-- ================================================== -->
+        <!-- FINDING INFORMATION -->
+        <!-- ================================================== -->
+
+        <table>
+
+            <tr>
+                <th>
+                    Finding No.
+                </th>
+
+                <td>
+                    {{ finding.finding_no }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Status
+                </th>
+
+                <td>
+                    {{ finding.status }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Severity
+                </th>
+
+                <td class="severity">
+                    {{ finding.severity }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Target Date
+                </th>
+
+                <td>
+                    {{ finding.target_date.strftime('%d %B %Y')
+                       if finding.target_date else '-' }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Finding
+                </th>
+
+                <td class="finding">
+                    {{ finding.finding }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Corrective Action
+                </th>
+
+                <td class="action">
+                    {{ finding.corrective_action
+                       if finding.corrective_action
+                       else '-' }}
+                </td>
+            </tr>
+
+        </table>
+
+
+        <!-- ================================================== -->
+        <!-- AUDIT INFORMATION -->
+        <!-- ================================================== -->
+
+        <h3>
+            Audit Information
+        </h3>
+
+        <table>
+
+            <tr>
+                <th>
+                    Audit No.
+                </th>
+
+                <td>
+                    {{ execution.audit_assignment.audit.audit_no
+                       if execution
+                       and execution.audit_assignment
+                       and execution.audit_assignment.audit
+                       else '-' }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Audit Title
+                </th>
+
+                <td>
+                    {{ execution.audit_assignment.audit.title
+                       if execution
+                       and execution.audit_assignment
+                       and execution.audit_assignment.audit
+                       else '-' }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Audit Date
+                </th>
+
+                <td>
+                    {{ execution.audit_assignment.audit.audit_date.strftime('%d %B %Y')
+                       if execution
+                       and execution.audit_assignment
+                       and execution.audit_assignment.audit
+                       and execution.audit_assignment.audit.audit_date
+                       else '-' }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Department
+                </th>
+
+                <td>
+                    {% if assignment and assignment.department %}
+                        {{ assignment.department.department_code }}
+                        -
+                        {{ assignment.department.department_name }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Location
+                </th>
+
+                <td>
+                    {{ assignment.location
+                       if assignment
+                       else '-' }}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    Auditor
+                </th>
+
+                <td>
+                    {% if assignment and assignment.auditor %}
+                        {{ assignment.auditor.nik }}
+                        -
+                        {{ assignment.auditor.full_name }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+
+        </table>
+
+
+        <!-- ================================================== -->
+        <!-- ACTION -->
+        <!-- ================================================== -->
+
+        <p style="margin-top: 25px;">
+
+            Please take the necessary action to complete this
+            finding and update the corrective action in CIMS.
+
+        </p>
+
+
+        {% if cims_url %}
+
+        <a
+            href="{{ cims_url }}"
+            class="button"
+        >
+            Open CIMS
+        </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================== -->
+    <!-- FOOTER -->
+    <!-- ================================================== -->
+
+    <div class="footer">
+
+        This is an automated notification from
+        Continuous Improvement Management System (CIMS).
+
+        <br>
+
+        Please do not reply directly to this email.
+
+    </div>
+
+</div>
+
+</body>
+</html>

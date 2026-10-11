@@ -146,6 +146,12 @@ class Employee(BaseModel):
         foreign_keys="IssueClarification.responded_by_employee_id",
         lazy="select",
     )
+
+    audit_assignments = db.relationship(
+        "AuditAssignment",
+        back_populates="auditor",
+        lazy="select",
+    )
   
     def __repr__(self):
         return f"<Employee {self.nik} - {self.full_name}>"

@@ -1232,3 +1232,537 @@ class NotificationService:
         # ==================================================
 
         return notification_sent
+
+    # ==================================================
+    # AUDIT FINDING CREATED
+    # ==================================================
+
+    def audit_finding_created(
+        self,
+        finding,
+    ):
+        """
+        Notify PIC when a new Audit Finding is created.
+
+        The PIC receives:
+            - Email
+            - LINE
+
+        The PIC is added as an additional employee
+        because the PIC is selected dynamically when
+        the finding is created.
+        """
+
+        # ----------------------------------------------
+        # Validate Finding
+        # ----------------------------------------------
+
+        if not finding:
+            return False
+
+        # ----------------------------------------------
+        # Get PIC
+        # ----------------------------------------------
+
+        pic = finding.pic_employee
+
+        if not pic:
+            return False
+
+        # ----------------------------------------------
+        # Subject
+        # ----------------------------------------------
+
+        subject = (
+            f"[CIMS] New Audit Finding - "
+            f"{finding.finding_no}"
+        )
+
+        # ----------------------------------------------
+        # Email Template
+        # ----------------------------------------------
+
+        body = (
+            self.render_email_template(
+                "emails/audit_finding/created.html",
+                finding=finding,
+                pic=pic,
+                cims_url="http://localhost:5000",
+            )
+        )
+
+        # ----------------------------------------------
+        # Get Audit Department
+        # ----------------------------------------------
+
+        department_id = None
+
+        if (
+            finding.audit_execution
+            and finding.audit_execution.audit_assignment
+        ):
+            department_id = (
+                finding
+                .audit_execution
+                .audit_assignment
+                .department_id
+            )
+
+
+        # ----------------------------------------------
+        # Send Email + LINE
+        # ----------------------------------------------
+
+        return self.notify(
+            module=NotificationEvent.AUDIT_FINDING,
+            event=(
+                NotificationEvent
+                .AUDIT_FINDING_CREATED
+            ),
+            department_id=department_id,
+            subject=subject,
+            body=body,
+            html=True,
+
+            # PIC receives:
+            # Email + LINE
+            additional_employees=[
+                pic,
+            ],
+
+            # Context for:
+            # line/audit_finding/created.txt
+            line_context={
+                "finding": finding,
+                "pic": pic,
+            },
+        )
+
+
+    # ==================================================
+    # AUDIT FINDING SUBMITTED FOR VERIFICATION
+    # ==================================================
+
+    def audit_finding_submitted_for_verification(
+        self,
+        finding,
+    ):
+        """
+        Notify Auditor when an Audit Finding is
+        submitted for verification.
+
+        The Auditor receives:
+            - Email
+            - LINE
+
+        Additional recipients configured through
+        Notification Rules will also receive the
+        notification according to their channel settings.
+        """
+
+        # ----------------------------------------------
+        # Validate Finding
+        # ----------------------------------------------
+
+        if not finding:
+            return False
+
+        # ----------------------------------------------
+        # Get Audit Execution
+        # ----------------------------------------------
+
+        execution = finding.audit_execution
+
+        if not execution:
+            return False
+
+        # ----------------------------------------------
+        # Get Audit Assignment
+        # ----------------------------------------------
+
+        assignment = execution.audit_assignment
+
+        if not assignment:
+            return False
+
+        # ----------------------------------------------
+        # Get Auditor
+        # ----------------------------------------------
+
+        auditor = assignment.auditor
+
+        if not auditor:
+            return False
+
+        # ----------------------------------------------
+        # Department
+        # ----------------------------------------------
+
+        department_id = assignment.department_id
+
+        # ----------------------------------------------
+        # Subject
+        # ----------------------------------------------
+
+        subject = (
+            f"[CIMS] Audit Finding "
+            f"Waiting for Verification - "
+            f"{finding.finding_no}"
+        )
+
+        # ----------------------------------------------
+        # Email Template
+        # ----------------------------------------------
+
+        body = (
+            self.render_email_template(
+                "emails/audit_finding/"
+                "submitted_for_verification.html",
+                finding=finding,
+                auditor=auditor,
+                cims_url="http://localhost:5000",
+            )
+        )
+
+        # ----------------------------------------------
+        # Send Email + LINE
+        # ----------------------------------------------
+
+        return self.notify(
+            module=NotificationEvent.AUDIT_FINDING,
+
+            event=(
+                NotificationEvent
+                .AUDIT_FINDING_SUBMITTED_FOR_VERIFICATION
+            ),
+
+            department_id=department_id,
+
+            subject=subject,
+
+            body=body,
+
+            html=True,
+
+            # Auditor receives:
+            # Email + LINE
+            additional_employees=[
+                auditor,
+            ],
+
+            # Context for:
+            # line/audit_finding/
+            # submitted_for_verification.txt
+            line_context={
+                "finding": finding,
+                "auditor": auditor,
+            },
+        )
+
+    # ==================================================
+    # AUDIT FINDING VERIFIED
+    # ==================================================
+
+    def audit_finding_verified(
+        self,
+        finding,
+    ):
+        """
+        Notify PIC when an Audit Finding
+        has been verified by the auditor.
+
+        The PIC receives:
+            - Email
+            - LINE
+
+        Verification result:
+            PASS -> Finding status becomes PASS
+            FAIL -> Finding status becomes IN_PROGRESS
+        """
+
+        # ----------------------------------------------
+        # Validate Finding
+        # ----------------------------------------------
+
+        if not finding:
+            return False
+
+        # ----------------------------------------------
+        # Get PIC
+        # ----------------------------------------------
+
+        pic = finding.pic_employee
+
+        if not pic:
+            return False
+
+        # ----------------------------------------------
+        # Verification Result
+        # ----------------------------------------------
+
+        verification_status = (
+            finding.verification_status
+            or "-"
+        )
+
+        # ----------------------------------------------
+        # Subject
+        # ----------------------------------------------
+
+        if verification_status == "PASS":
+
+            subject = (
+                f"[CIMS] Audit Finding Verification "
+                f"PASSED - {finding.finding_no}"
+            )
+
+        else:
+
+            subject = (
+                f"[CIMS] Audit Finding Verification "
+                f"FAILED - {finding.finding_no}"
+            )
+
+        # ----------------------------------------------
+        # Email Template
+        # ----------------------------------------------
+
+        body = (
+            self.render_email_template(
+                "emails/audit_finding/verified.html",
+                finding=finding,
+                pic=pic,
+                cims_url="http://localhost:5000",
+            )
+        )
+
+        # ----------------------------------------------
+        # Send Email + LINE
+        # ----------------------------------------------
+
+        return self.notify(
+            module=NotificationEvent.AUDIT_FINDING,
+            event=(
+                NotificationEvent
+                .AUDIT_FINDING_VERIFIED
+            ),
+            department_id=None,
+            subject=subject,
+            body=body,
+            html=True,
+
+            # PIC receives:
+            # Email + LINE
+            additional_employees=[
+                pic,
+            ],
+
+            # Context for:
+            # line/audit_finding/verified.txt
+            line_context={
+                "finding": finding,
+                "pic": pic,
+            },
+        )
+
+    # ==================================================
+    # AUDIT FINDING OVERDUE
+    # ==================================================
+
+    def audit_finding_overdue(
+        self,
+        finding,
+    ):
+        """
+        Notify PIC and Notification Recipients when
+        an Audit Finding becomes overdue.
+
+        Overdue condition:
+            target_date < today
+            AND
+            status != CLOSED
+
+        Recipients:
+            - PIC
+            - Notification Recipient configured
+            for AUDIT_FINDING + OVERDUE
+
+        Channels:
+            - PIC -> Email + LINE
+            - Notification Recipient -> based on
+            Notification Rule settings
+
+        Duplicate protection:
+            NotificationLog is checked using
+            event + subject.
+
+            If the same overdue notification was
+            already sent successfully, notification
+            will not be sent again.
+        """
+
+        # ==================================================
+        # VALIDATE FINDING
+        # ==================================================
+
+        if not finding:
+            return False
+
+        # ==================================================
+        # VALIDATE TARGET DATE
+        # ==================================================
+
+        if not finding.target_date:
+            return False
+
+        # ==================================================
+        # CHECK OVERDUE CONDITION
+        # ==================================================
+
+        from datetime import date
+
+        if finding.target_date >= date.today():
+            return False
+
+        # ==================================================
+        # CLOSED FINDING DOES NOT NEED NOTIFICATION
+        # ==================================================
+
+        if finding.status == "CLOSED":
+            return False
+
+        # ==================================================
+        # SUBJECT
+        # ==================================================
+
+        subject = (
+            f"[CIMS] Audit Finding Overdue - "
+            f"{finding.finding_no}"
+        )
+
+        # ==================================================
+        # CHECK DUPLICATE NOTIFICATION
+        # ==================================================
+        #
+        # Only a successfully SENT notification counts
+        # as already sent.
+        #
+        # FAILED notification can be retried.
+        #
+        # ==================================================
+
+        already_sent = (
+            self.notification_repository
+            .exists_sent_notification_by_subject(
+                event=(
+                    NotificationEvent
+                    .AUDIT_FINDING_OVERDUE
+                ),
+                subject=subject,
+            )
+        )
+
+        if already_sent:
+            return False
+
+        # ==================================================
+        # GET PIC
+        # ==================================================
+
+        pic = finding.pic_employee
+
+        if not pic:
+            return False
+
+        # ==================================================
+        # GET AUDIT EXECUTION
+        # ==================================================
+
+        execution = finding.audit_execution
+
+        if not execution:
+            return False
+
+        # ==================================================
+        # GET AUDIT ASSIGNMENT
+        # ==================================================
+
+        assignment = execution.audit_assignment
+
+        if not assignment:
+            return False
+
+        # ==================================================
+        # GET DEPARTMENT
+        # ==================================================
+
+        department_id = assignment.department_id
+
+        # ==================================================
+        # EMAIL TEMPLATE
+        # ==================================================
+
+        body = self.render_email_template(
+            "emails/audit_finding/overdue.html",
+            finding=finding,
+            pic=pic,
+            assignment=assignment,
+            execution=execution,
+            cims_url="http://localhost:5000",
+        )
+
+        # ==================================================
+        # SEND EMAIL + LINE
+        # ==================================================
+        #
+        # PIC:
+        #   additional_employees
+        #   -> Email + LINE
+        #
+        # Notification Recipient:
+        #   notify() gets them from NotificationRule
+        #   using:
+        #
+        #       AUDIT_FINDING
+        #       OVERDUE
+        #       department_id
+        #
+        # notify() automatically merges duplicate
+        # employees.
+        #
+        # ==================================================
+
+        return self.notify(
+            module=(
+                NotificationEvent
+                .AUDIT_FINDING
+            ),
+            event=(
+                NotificationEvent
+                .AUDIT_FINDING_OVERDUE
+            ),
+            department_id=department_id,
+            subject=subject,
+            body=body,
+            html=True,
+
+            # ----------------------------------------------
+            # PIC always receives Email + LINE
+            # ----------------------------------------------
+
+            additional_employees=[
+                pic,
+            ],
+
+            # ----------------------------------------------
+            # LINE context
+            # ----------------------------------------------
+
+            line_context={
+                "finding": finding,
+                "pic": pic,
+                "assignment": assignment,
+                "execution": execution,
+                "cims_url": "http://localhost:5000",
+            },
+        )

@@ -1,0 +1,134 @@
+
+/* =====================================================
+   CIMS GLOBAL UI
+   Standar visual umum untuk seluruh modul CIMS
+   Hanya mengatur tampilan, bukan logika program
+   ===================================================== */
+
+
+/* ---------- 1. Typography ---------- */
+
+.content-wrapper {
+    font-size: 13px;
+}
+
+.content-wrapper,
+.content-wrapper button,
+.content-wrapper input,
+.content-wrapper select,
+.content-wrapper textarea {
+    font-family: inherit;
+}
+
+.content-wrapper .content-header h1 {
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+
+/* ---------- 2. Form controls ---------- */
+
+.content-wrapper .form-control,
+.content-wrapper .custom-select {
+    border: 1px solid #ced6e0;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.content-wrapper .form-control:focus,
+.content-wrapper .custom-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.15);
+}
+
+.content-wrapper textarea.form-control {
+    height: auto;
+    min-height: 90px;
+}
+
+
+/* ---------- 3. Buttons ---------- */
+
+.content-wrapper .btn {
+    border-radius: 5px;
+    font-size: 13px;
+    transition:
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out;
+}
+
+.content-wrapper .btn:focus {
+    outline: 2px solid rgba(0, 123, 255, 0.35);
+    outline-offset: 1px;
+    box-shadow: none;
+}
+
+/* Button sizes */
+.content-wrapper .btn-sm {
+    font-size: 12px;
+}
+
+
+/* ---------- 4. Cards ---------- */
+
+.content-wrapper .card {
+    border-radius: 6px;
+}
+
+.content-wrapper .card-header {
+    border-bottom-color: #e2e8f0;
+}
+
+.content-wrapper .card-footer {
+    border-top-color: #e2e8f0;
+}
+
+
+/* ---------- 5. Tables ---------- */
+
+.content-wrapper .table th {
+    vertical-align: middle;
+}
+
+.content-wrapper .table td {
+    vertical-align: middle;
+}
+
+/* Tidak memaksakan lebar atau padding tabel.
+   Masing-masing modul dapat memiliki kebutuhannya sendiri. */
+
+
+/* ---------- 6. Labels and form spacing ---------- */
+
+.content-wrapper label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.content-wrapper .form-group {
+    margin-bottom: 14px;
+}
+
+
+/* ---------- 7. Responsive typography ---------- */
+
+@media (max-width: 767.98px) {
+    .content-wrapper .content-header h1 {
+        font-size: 20px;
+    }
+
+    .content-wrapper .form-control,
+    .content-wrapper .custom-select {
+        font-size: 13px;
+    }
+}
+
+
+/* ---------- 8. Accessibility ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .content-wrapper .btn {
+        transition: none;
+    }
+}

@@ -1,0 +1,164 @@
+
+/* =====================================================
+   CIMS SIDEBAR UI
+   Styling khusus sidebar AdminLTE
+   Lebar dan posisi tetap dikendalikan oleh AdminLTE
+   ===================================================== */
+
+
+/* ---------- 1. Brand / logo area ---------- */
+
+.main-sidebar .brand-link {
+    min-height: 48px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+}
+
+.main-sidebar .brand-text {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+
+/* ---------- 2. User panel ---------- */
+
+.main-sidebar .user-panel {
+    padding: 10px 10px 12px;
+}
+
+.main-sidebar .user-panel .info {
+    min-width: 0;
+    padding-left: 8px;
+}
+
+.main-sidebar .user-panel .info a {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+
+/* ---------- 3. Navigation menu ---------- */
+
+.main-sidebar .nav-sidebar {
+    padding-top: 4px;
+}
+
+.main-sidebar .nav-sidebar .nav-item {
+    margin-bottom: 1px;
+}
+
+.main-sidebar .nav-sidebar .nav-link {
+    padding: 8px 10px;
+    font-size: 12.5px;
+    line-height: 1.35;
+    border-radius: 4px;
+    margin: 1px 6px;
+    transition:
+        background-color 0.15s ease-in-out,
+        color 0.15s ease-in-out;
+}
+
+.main-sidebar .nav-sidebar .nav-link p {
+    margin: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.main-sidebar .nav-sidebar .nav-icon {
+    width: 20px;
+    margin-right: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* ---------- 4. Treeview / submenu ---------- */
+
+.main-sidebar .nav-treeview {
+    padding-left: 8px;
+}
+
+.main-sidebar .nav-treeview > .nav-item > .nav-link {
+    padding: 7px 8px;
+    font-size: 12px;
+}
+
+.main-sidebar .nav-treeview > .nav-item > .nav-link .nav-icon {
+    font-size: 11px;
+}
+
+
+/* ---------- 5. Menu interaction ---------- */
+
+.main-sidebar .nav-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.main-sidebar .nav-sidebar .nav-link.active {
+    font-weight: 600;
+}
+
+
+/* ---------- 6. Sidebar scrolling ---------- */
+
+.main-sidebar .sidebar {
+    height: calc(100vh - 48px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.main-sidebar .sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.main-sidebar .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+}
+
+
+/* ---------- 7. Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .main-sidebar .nav-sidebar .nav-link {
+        transition: none;
+    }
+}
+
+
+/* =====================================================
+   FIX: Jarak user panel saat sidebar minimized
+   ===================================================== */
+
+/* Kurangi ruang di area user panel */
+.sidebar-mini.sidebar-collapse .main-sidebar .user-panel {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-bottom: 0;
+}
+
+/* Hilangkan tinggi berlebih pada area informasi user */
+.sidebar-mini.sidebar-collapse .main-sidebar .user-panel .info {
+    display: none;
+}
+
+/* Pusatkan ikon user */
+.sidebar-mini.sidebar-collapse .main-sidebar .user-panel .image {
+    float: none;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+/* Kurangi jarak sebelum menu pertama */
+.sidebar-mini.sidebar-collapse .main-sidebar .nav-sidebar {
+    padding-top: 0;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar .nav-sidebar > .nav-item:first-child {
+    margin-top: 0;
+}

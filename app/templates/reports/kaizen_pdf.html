@@ -87,120 +87,84 @@
 
 
         /* =========================================================
-           HEADER
+        HEADER
         ========================================================= */
 
         .document-header {
-
             width: 100%;
-
-            border-bottom:
-                2px solid #1f4e78;
-
+            border-bottom: 2px solid #1f4e78;
             padding-bottom: 8px;
-
             margin-bottom: 12px;
         }
 
-
         .header-table {
-
             width: 100%;
-
             border-collapse: collapse;
-
             border: none;
         }
 
-
         .header-table td {
-
             border: none;
-
             vertical-align: middle;
-
             padding: 0;
         }
 
 
-        .header-logo {
+        /* ==========================================
+        CIMS LOGO
+        ========================================== */
 
-            width: 75px;
+        .header-logo {
+            width: 28px;
+            padding-right: 0 !important;
         }
 
-
-        .header-logo img {
-
-            width: 65px;
-
+        .cims-logo {
+            width: 52px;
             height: auto;
-
             display: block;
         }
 
 
-        .company-name {
+        /* ==========================================
+        FOXCONN COMPANY LOGO
+        ========================================== */
 
-            font-size: 16pt;
+        .company-logo-cell {
+            vertical-align: middle;
+            padding-left: 2px !important;
+            padding-right: 0 !important;
+        }
 
-            font-weight: 700;
-
-            color: #1f4e78;
-
-            line-height: 1.15;
+        .foxconn-logo {
+            width: 250px;
+            height: auto;
+            display: block;
         }
 
 
-        .company-subtitle {
-
-            font-size: 8.5pt;
-
-            color: #555;
-
-            margin-top: 2px;
-        }
-
-
-        .system-name {
-
-            font-size: 8.5pt;
-
-            color: #666;
-
-            margin-top: 4px;
-        }
-
+        /* ==========================================
+        DOCUMENT NUMBER
+        ========================================== */
 
         .header-right {
-
-            width: 145px;
-
+            width: 130px;
             text-align: right;
-
             vertical-align: top !important;
+            padding-left: 5px !important;
         }
 
-
         .document-label {
-
             font-size: 8pt;
-
             color: #777;
-
             text-transform: uppercase;
-
             letter-spacing: 0.5px;
         }
 
-
         .document-number {
-
             font-size: 10pt;
-
             font-weight: 700;
-
             color: #1f4e78;
-
             margin-top: 2px;
         }
 
@@ -839,13 +803,18 @@
 
         <tr>
 
+            <!-- ============================= -->
+            <!-- CIMS LOGO -->
+            <!-- ============================= -->
+
             <td class="header-logo">
 
-                {% if logo_uri %}
+                {% if cims_logo_uri %}
 
                 <img
-                    src="{{ logo_uri }}"
+                    src="{{ cims_logo_uri }}"
                     alt="CIMS Logo"
+                    class="cims-logo"
                 >
 
                 {% endif %}
@@ -853,31 +822,34 @@
             </td>
 
 
-            <td>
+            <!-- ============================= -->
+            <!-- FOXCONN COMPANY LOGO -->
+            <!-- ============================= -->
 
-                <div class="company-name">
-                    FOXCONN TECHNOLOGIES INDONESIA
-                </div>
+            <td class="company-logo-cell">
 
+                {% if foxconn_logo_uri %}
 
-                <div class="company-subtitle">
-                    component electronic
-                </div>
+                <img
+                    src="{{ foxconn_logo_uri }}"
+                    alt="FOXCONN"
+                    class="foxconn-logo"
+                >
 
-
-                <div class="system-name">
-                    CIMS – Continuous Improvement Management System
-                </div>
+                {% endif %}
 
             </td>
 
 
+            <!-- ============================= -->
+            <!-- DOCUMENT NUMBER -->
+            <!-- ============================= -->
+
             <td class="header-right">
 
                 <div class="document-label">
-                    Document
+                    Document No.
                 </div>
-
 
                 <div class="document-number">
                     {{ kaizen.kaizen_no }}
@@ -897,16 +869,11 @@
 ========================================================= -->
 
 <div class="report-title">
-
     KAIZEN REPORT
-
 </div>
 
-
 <div class="report-subtitle">
-
     Continuous Improvement Documentation
-
 </div>
 
 

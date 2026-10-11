@@ -107,6 +107,14 @@ from app.routes.issue import issue_bp
 from app.routes.kaizen_target_result import (
     kaizen_target_result_bp,
 )
+from app.routes.audit_type import audit_type_bp
+from app.routes.audit_category import audit_category_bp
+from app.routes.audit import audit_bp
+from app.routes.audit_assignment import audit_assignment_bp
+from app.routes.audit_checklist import audit_checklist_bp
+from app.routes.audit_execution import audit_execution_bp
+from app.routes.audit_finding import audit_finding_bp
+from app.routes.public.public_audit import public_audit_bp
 
 def create_app():
 
@@ -262,7 +270,15 @@ def create_app():
     app.register_blueprint(
         kaizen_target_result_bp
     )
-    
+    app.register_blueprint(audit_type_bp)
+    app.register_blueprint(audit_category_bp)
+    app.register_blueprint(audit_bp)
+    app.register_blueprint(audit_assignment_bp)
+    app.register_blueprint(audit_checklist_bp)
+    app.register_blueprint(audit_execution_bp)
+    app.register_blueprint(audit_finding_bp)
+    app.register_blueprint(public_audit_bp)
+
     logger.info(
         "Blueprint registered successfully."
     )

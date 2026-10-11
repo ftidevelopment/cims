@@ -57,6 +57,19 @@ class NotificationEvent:
     KAIZEN_AWARDED = "AWARDED"
 
     # ==========================================
+    # Audit Finding
+    # ==========================================
+
+    AUDIT_FINDING = "AUDIT_FINDING"
+
+    AUDIT_FINDING_CREATED = "CREATED"
+    AUDIT_FINDING_SUBMITTED_FOR_VERIFICATION = (
+        "SUBMITTED_FOR_VERIFICATION"
+    )
+    AUDIT_FINDING_VERIFIED = "VERIFIED"
+    AUDIT_FINDING_OVERDUE = "OVERDUE"
+
+    # ==========================================
     # Module List
     # ==========================================
 
@@ -65,6 +78,8 @@ class NotificationEvent:
         ISSUE,
         IMPROVEMENT,
         KAIZEN,
+        AUDIT_FINDING,
+
     ]
 
     # ==========================================
@@ -145,6 +160,17 @@ class NotificationEvent:
             KAIZEN_IMPLEMENTED,
 
             KAIZEN_AWARDED,
+        ],
+
+        # --------------------------------------
+        # Audit Finding
+        # --------------------------------------
+
+        AUDIT_FINDING: [
+            AUDIT_FINDING_CREATED,
+            AUDIT_FINDING_SUBMITTED_FOR_VERIFICATION,
+            AUDIT_FINDING_VERIFIED,
+            AUDIT_FINDING_OVERDUE,
         ],
     }
 

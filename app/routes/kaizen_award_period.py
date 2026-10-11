@@ -28,6 +28,9 @@ from app.services.kaizen_award_period_service import (
 from app.services.kaizen_award_score_service import (
     KaizenAwardScoreService
 )
+from app.services.kaizen_award_judge_service import (
+    KaizenAwardJudgeService,
+)
 
 
 # ==========================================================
@@ -98,6 +101,23 @@ def index():
         sort_order=sort_order,
     )
 
+    # ======================================================
+    # JUDGE ACCESS BY AWARD PERIOD
+    # ======================================================
+
+    judge_service = KaizenAwardJudgeService()
+
+    employee_id = current_user.employee_id
+
+    judge_award_period_ids = set()
+
+    for award_period in award_periods:
+        if judge_service.is_judge(
+            award_period_id=award_period.id,
+            employee_id=employee_id,
+        ):
+            judge_award_period_ids.add(award_period.id)
+
     return render_template(
         "kaizen_award_period/list.html",
         award_periods=award_periods,
@@ -105,6 +125,7 @@ def index():
         per_page=per_page,
         sort_by=sort_by,
         sort_order=sort_order,
+        judge_award_period_ids=judge_award_period_ids,
     )
 
 

@@ -18,10 +18,12 @@ Kaizen Award Period
         </div>
 
         <div>
+            {% if current_user.has_permission("KAIZEN_AWARD_PERIOD_CREATE") %}
             <a href="{{ url_for('kaizen_award_period.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i>
                 Add Award Period
             </a>
+            {% endif %}
         </div>
     </div>
 
@@ -128,7 +130,7 @@ Kaizen Award Period
                      ========================================== -->
 
                     <div class="col-md-auto">
-
+                        {% if current_user.has_permission("KAIZEN_AWARD_PERIOD_VIEW") %}
                         <a href="{{ url_for('kaizen_award_period.inactive') }}" class="btn btn-secondary">
 
                             <i class="fas fa-archive mr-1"></i>
@@ -136,7 +138,7 @@ Kaizen Award Period
                             Inactive
 
                         </a>
-
+                        {% endif %}
                     </div>
 
 
@@ -464,12 +466,13 @@ Kaizen Award Period
                             <td class="text-center">
 
                                 <div class="btn-group">
-
+                                    {% if award_period.status == "Open"
+                                        and award_period.id in judge_award_period_ids %}
                                     <!-- Scoring / View -->
                                     <a href="{{ url_for(
-                'kaizen_award_score.index',
-                award_period_id=award_period.id
-            ) }}" class="btn btn-sm btn-success"
+                                            'kaizen_award_score.index',
+                                            award_period_id=award_period.id
+                                        ) }}" class="btn btn-sm btn-success"
                                         title="{% if award_period.status == 'Open' %}Scoring{% else %}View Score{% endif %}">
 
                                         {% if award_period.status == "Open" %}
@@ -483,50 +486,54 @@ Kaizen Award Period
                                         {% endif %}
 
                                     </a>
+                                    {% endif %}
 
-
-                                    {% if award_period.status == "Open" %}
+                                    {% if award_period.status == "Open"
+                                        and current_user.has_permission("KAIZEN_AWARD_PERIOD_EDIT") %}
 
                                     <!-- Edit -->
                                     <a href="{{ url_for(
-                    'kaizen_award_period.edit',
-                    award_period_id=award_period.id
-                ) }}" class="btn btn-sm btn-warning" title="Edit">
+                                            'kaizen_award_period.edit',
+                                            award_period_id=award_period.id
+                                        ) }}" class="btn btn-sm btn-warning" title="Edit">
 
                                         <i class="fas fa-edit"></i>
 
                                     </a>
+                                     {% endif %}
 
+                                    {% if (current_user.role_code or '')|trim|upper in ['ADMIN', 'KZN']
+                                        and award_period.status == "Open" %}
+                                        <!-- Judges -->
+                                        <a href="{{ url_for(
+                                            'kaizen_award_judge.index',
+                                            award_period_id=award_period.id
+                                        ) }}"
+                                        class="btn btn-sm btn-info"
+                                        title="Manage Judges">
+                                            <i class="fas fa-user-tie"></i>
+                                        </a>
+                                    {% endif %}
 
-                                    <!-- Judges -->
-                                    <a href="{{ url_for(
-                    'kaizen_award_judge.index',
-                    award_period_id=award_period.id
-                ) }}" class="btn btn-sm btn-info" title="Manage Judges">
-
-                                        <i class="fas fa-user-tie"></i>
-
-                                    </a>
-
-
+                                    {% if award_period.status == "Open"
+                                        and current_user.has_permission("KAIZEN_AWARD_PERIOD_DELETE") %}
                                     <!-- Delete -->
                                     <form method="POST" action="{{ url_for(
-                    'kaizen_award_period.delete',
-                    award_period_id=award_period.id
-                ) }}" style="display:inline;">
+                                            'kaizen_award_period.delete',
+                                            award_period_id=award_period.id
+                                        ) }}" style="display:inline;">
 
                                         <button type="button" class="btn btn-danger btn-sm btn-delete"
                                             data-name="{{ award_period.award_name }}" data-url="{{ url_for(
-                        'kaizen_award_period.delete',
-                        award_period_id=award_period.id
-                    ) }}" title="Delete">
+                                                'kaizen_award_period.delete',
+                                                award_period_id=award_period.id
+                                            ) }}" title="Delete">
 
                                             <i class="fas fa-trash"></i>
 
                                         </button>
 
                                     </form>
-
                                     {% endif %}
 
                                 </div>

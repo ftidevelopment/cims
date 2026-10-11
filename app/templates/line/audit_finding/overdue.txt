@@ -1,0 +1,32 @@
+🚨 [CIMS] Audit Finding Overdue
+
+Finding No. : {{ finding.finding_no }}
+Status      : {{ finding.status }}
+Severity    : {{ finding.severity }}
+Target Date : {{ finding.target_date.strftime('%d %B %Y') if finding.target_date else '-' }}
+
+Finding:
+{{ finding.finding }}
+
+Corrective Action:
+{{ finding.corrective_action if finding.corrective_action else '-' }}
+
+AUDIT INFORMATION
+
+Audit No.   : {{ execution.audit_assignment.audit.audit_no if execution and execution.audit_assignment and execution.audit_assignment.audit else '-' }}
+Audit Title : {{ execution.audit_assignment.audit.title if execution and execution.audit_assignment and execution.audit_assignment.audit else '-' }}
+
+Department  : {% if assignment and assignment.department %}{{ assignment.department.department_code }} - {{ assignment.department.department_name }}{% else %}-{% endif %}
+Location    : {{ assignment.location if assignment else '-' }}
+Auditor     : {% if assignment and assignment.auditor %}{{ assignment.auditor.nik }} - {{ assignment.auditor.full_name }}{% else %}-{% endif %}
+
+⚠️ ACTION REQUIRED
+
+This finding has passed its target date and is still not CLOSED.
+
+Please take the necessary action and update the corrective action in CIMS.
+
+{{ cims_url if cims_url else '' }}
+
+CIMS Notification
+Continuous Improvement Management System

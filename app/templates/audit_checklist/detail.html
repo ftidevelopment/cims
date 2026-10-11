@@ -1,0 +1,492 @@
+{% from "components/sortable_header.html" import sortable_header %}
+{% extends "layouts/base.html" %}
+
+{% block title %}Audit Checklist Detail{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================================
+     CONTENT HEADER
+========================================================== -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    Audit Checklist Detail
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('audit_checklist.index') }}">
+                            Audit Checklist
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Detail
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================================
+     MAIN CONTENT
+========================================================== -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <!-- ==================================================
+             CHECKLIST INFORMATION
+        ================================================== -->
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h3 class="card-title mb-0">
+
+                        <i class="fas fa-clipboard-list mr-2"></i>
+
+                        Checklist Information
+
+                    </h3>
+
+
+                    <div>
+
+                        <a href="{{ url_for('audit_checklist.index') }}" class="btn btn-secondary btn-sm">
+
+                            <i class="fas fa-arrow-left mr-1"></i>
+
+                            Back
+
+                        </a>
+
+
+                        <a href="{{ url_for(
+                                'audit_checklist.edit',
+                                audit_checklist_id=audit_checklist.id
+                            ) }}" class="btn btn-warning btn-sm">
+
+                            <i class="fas fa-edit mr-1"></i>
+
+                            Edit
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+
+                    <!-- Checklist Code -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Checklist Code
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{ audit_checklist.audit_checklist_code }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Checklist Name -->
+
+                    <div class="col-md-8">
+
+                        <div class="form-group">
+
+                            <label>
+                                Checklist Name
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{ audit_checklist.audit_checklist_name }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Status
+                            </label>
+
+                            <div>
+
+                                {% if audit_checklist.is_active %}
+
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-danger">
+                                    Inactive
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="col-md-8">
+
+                        <div class="form-group">
+
+                            <label>
+                                Description
+                            </label>
+
+                            <div class="form-control bg-light" style="height:auto; min-height:38px;">
+
+                                {{ audit_checklist.description or "-" }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             CHECKLIST ITEMS
+        ================================================== -->
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- LEFT -->
+                    <div class="d-flex align-items-center">
+
+                        <h3 class="card-title mb-0 mr-4">
+                            <i class="fas fa-list-check mr-2"></i>
+                            Checklist Items
+                        </h3>
+
+
+                        <!-- ITEM STATUS FILTER -->
+                        <form method="GET" class="mb-0">
+
+                            <select name="item_status" class="form-control form-control-sm"
+                                onchange="this.form.submit()" style="width: 120px;">
+
+                                <option value="active" {% if item_status=="active" %} selected {% endif %}>
+                                    Active
+                                </option>
+
+                                <option value="inactive" {% if item_status=="inactive" %} selected {% endif %}>
+                                    Inactive
+                                </option>
+
+                                <option value="all" {% if item_status=="all" %} selected {% endif %}>
+                                    All
+                                </option>
+
+                            </select>
+
+                        </form>
+
+
+                        <!-- EXPORT -->
+                        <a href="{{ url_for(
+                            'audit_checklist.export_items',
+                            audit_checklist_id=audit_checklist.id,
+                            item_status=item_status
+                        ) }}" class="btn btn-warning btn-sm ml-2" title="Export Checklist Items">
+                            <i class="fas fa-file-excel mr-1"></i>
+                            Export Excel
+                        </a>
+
+                    </div>
+
+
+                    <!-- RIGHT -->
+                    <div>
+
+                        <!-- ADD ITEM -->
+                        <a href="{{ url_for(
+                            'audit_checklist.create_item',
+                            audit_checklist_id=audit_checklist.id
+                        ) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i>
+                            Add Item
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="text-center" style="width:80px;">
+                                    No
+                                </th>
+
+                                <th>
+                                    Question
+                                </th>
+
+                                <th class="text-center" style="width:120px;">
+                                    Required
+                                </th>
+
+                                <th class="text-center" style="width:120px;">
+                                    Sort Order
+                                </th>
+                                <th width="110" class="text-center">
+                                    Status
+                                </th>
+
+                                <th class="text-center" style="width:140px;">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% if audit_checklist.items %}
+
+                            {% for item in items %}
+
+                            <tr>
+
+                                <td class="text-center">
+
+                                    {{ item.item_no }}
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        {{ item.question }}
+                                    </strong>
+
+                                    {% if item.description %}
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        {{ item.description }}
+
+                                    </small>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    {% if item.is_required %}
+
+                                    <span class="badge badge-success">
+                                        Yes
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-secondary">
+                                        No
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    {{ item.sort_order }}
+
+                                </td>
+                                <td class="text-center">
+
+                                    {% if item.is_active %}
+
+                                    <span class="badge badge-success">
+                                        Active
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-danger">
+                                        Inactive
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    {% if item.is_active %}
+
+                                    <!-- Edit -->
+                                    <a href="{{ url_for(
+                'audit_checklist.edit_item',
+                audit_checklist_id=audit_checklist.id,
+                item_id=item.id
+            ) }}" class="btn btn-warning btn-sm" title="Edit Item">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+
+                                    <!-- Inactive -->
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                        data-name="{{ item.question }}" data-url="{{ url_for(
+                'audit_checklist.delete_item',
+                audit_checklist_id=audit_checklist.id,
+                item_id=item.id
+            ) }}" title="Set Inactive">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    {% else %}
+
+                                    <!-- Restore -->
+                                    <form method="POST" action="{{ url_for(
+                'audit_checklist.restore_item',
+                audit_checklist_id=audit_checklist.id,
+                item_id=item.id
+            ) }}" style="display:inline;">
+
+                                        <button type="submit" class="btn btn-success btn-sm" title="Restore Item">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+
+                                    </form>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                            {% else %}
+
+                            <tr>
+
+                                <td colspan="5" class="text-center text-muted py-4">
+
+                                    <i class="fas fa-info-circle mr-1"></i>
+
+                                    No checklist items found.
+
+                                </td>
+
+                            </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+{% include "components/delete_modal.html" %}
+{% endblock %}

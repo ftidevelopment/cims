@@ -1,0 +1,610 @@
+{% extends "layouts/base.html" %}
+{% block title %}Finding Monitoring{% endblock %}
+{% block content %}
+<section class="content">
+    <div class="container-fluid finding-monitoring-page">
+        <!-- ===================================================== -->
+        <!-- Page Header -->
+        <!-- ===================================================== -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">
+                            <i class="fas fa-tasks mr-2"></i>
+                            Finding Monitoring
+                        </h3>
+                        <small class="text-muted">
+                            Centralized monitoring and follow-up of audit findings
+                        </small>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('audit.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-1"></i>
+                            Back to Audit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ===================================================== -->
+        <!-- ===================================================== -->
+        <!-- KPI Cards -->
+        <!-- ===================================================== -->
+        <div class="row">
+            <!-- Total -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{ total_count }}</h3>
+                        <p>Total Findings</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- Open -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ open_count }}</h3>
+                        <p>Open</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- In Progress -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>{{ in_progress_count }}</h3>
+                        <p>In Progress</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- Verification -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{ verification_count }}</h3>
+                        <p>Verification</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                </div>
+            </div>
+
+<!-- Overdue -->
+<div class="col-lg-2 col-md-4 col-sm-6">
+    <a href="{{ url_for('audit_finding.overdue') }}"
+       class="small-box bg-danger text-white"
+       style="display: block; text-decoration: none;">
+
+        <div class="inner">
+            <h3>{{ overdue_count }}</h3>
+            <p>Overdue</p>
+        </div>
+
+        <div class="icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+
+    </a>
+</div>
+
+            <!-- Closed -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{ closed_count }}</h3>
+                        <p>Closed</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- Filter -->
+<div class="card card-outline card-secondary finding-filter-card">
+
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-filter mr-2"></i>
+            Filter
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('audit_finding.monitoring') }}">
+            <div class="row finding-filter-row">
+
+                <!-- Search -->
+                <div class="col-md-3">
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Finding No. / Finding description..."
+                        value="{{ search }}"
+                        aria-label="Search finding"
+                    >
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-2">
+                    <select
+                        name="status"
+                        class="form-control"
+                        aria-label="Filter by status"
+                    >
+                        <option value="" {% if not status_filter %}selected{% endif %}>
+                            All Status
+                        </option>
+                        <option value="OPEN" {% if status_filter == 'OPEN' %}selected{% endif %}>
+                            OPEN
+                        </option>
+                        <option value="IN_PROGRESS" {% if status_filter == 'IN_PROGRESS' %}selected{% endif %}>
+                            IN PROGRESS
+                        </option>
+                        <option value="ACTION_COMPLETED" {% if status_filter == 'ACTION_COMPLETED' %}selected{% endif %}>
+                            ACTION COMPLETED
+                        </option>
+                        <option value="AUDITOR_VERIFICATION" {% if status_filter == 'AUDITOR_VERIFICATION' %}selected{% endif %}>
+                            VERIFICATION
+                        </option>
+                        <option value="PASS" {% if status_filter == 'PASS' %}selected{% endif %}>
+                            PASS
+                        </option>
+                        <option value="CLOSED" {% if status_filter == 'CLOSED' %}selected{% endif %}>
+                            CLOSED
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Severity -->
+                <div class="col-md-2">
+                    <select
+                        name="severity"
+                        class="form-control"
+                        aria-label="Filter by severity"
+                    >
+                        <option value="" {% if not severity_filter %}selected{% endif %}>
+                            All Severity
+                        </option>
+                        <option value="CRITICAL" {% if severity_filter == 'CRITICAL' %}selected{% endif %}>
+                            CRITICAL
+                        </option>
+                        <option value="MAJOR" {% if severity_filter == 'MAJOR' %}selected{% endif %}>
+                            MAJOR
+                        </option>
+                        <option value="MINOR" {% if severity_filter == 'MINOR' %}selected{% endif %}>
+                            MINOR
+                        </option>
+                        <option value="OBSERVATION" {% if severity_filter == 'OBSERVATION' %}selected{% endif %}>
+                            OBSERVATION
+                        </option>
+                    </select>
+                </div>
+
+                <!-- PIC -->
+                <div class="col-md-3">
+                    <select
+                        name="pic"
+                        class="form-control"
+                        aria-label="Filter by PIC"
+                    >
+                        <option value="" {% if not pic_filter %}selected{% endif %}>
+                            All PIC
+                        </option>
+
+                        {% for employee in employees %}
+                        <option
+                            value="{{ employee.id }}"
+                            {% if pic_filter == employee.id|string %}selected{% endif %}
+                        >
+                            {{ employee.full_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Search and Reset -->
+                <div class="col-md-2">
+                    <div class="finding-filter-buttons">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search mr-1"></i>
+                            Search
+                        </button>
+
+                        <a
+                            href="{{ url_for('audit_finding.monitoring') }}"
+                            class="btn btn-secondary"
+                        >
+                            <i class="fas fa-sync-alt mr-1"></i>
+                            Reset
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+        <!-- ===================================================== -->
+        <!-- Finding Monitoring Table -->
+        <!-- ===================================================== -->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list mr-2"></i>
+                    Finding Follow-up
+                </h3>
+                <div class="card-tools">
+                    <span class="badge badge-primary">
+                        {{ total_count }} Finding(s)
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if findings %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-sm finding-monitoring-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 50px;">
+                                    No.
+                                </th>
+                                <th style="min-width: 130px;">
+                                    Finding No.
+                                </th>
+                                <th style="min-width: 120px;">
+                                    Audit No.
+                                </th>
+                                <th style="min-width: 150px;">
+                                    Location
+                                </th>
+                                <th style="min-width: 250px;">
+                                    Finding
+                                </th>
+                                <th class="text-center" style="width: 100px;">
+                                    Severity
+                                </th>
+                                <th style="min-width: 150px;">
+                                    PIC
+                                </th>
+                                <th class="text-center" style="min-width: 120px;">
+                                    Target Date
+                                </th>
+                                <th class="text-center" style="min-width: 140px;">
+                                    Status
+                                </th>
+                                <th class="text-center" style="min-width: 140px;">
+                                    Follow-up
+                                </th>
+                                <th class="text-center" style="width: 120px;">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for finding in findings %}
+                            {% set execution = finding.audit_execution %}
+                            {% set assignment = execution.audit_assignment if execution else None %}
+                            {% set target_date = finding.target_date %}
+                            {% set is_closed = finding.status == 'CLOSED' %}
+                            {% set is_overdue = (
+                            target_date
+                            and not is_closed
+                            and target_date < today ) %} <tr {% if is_overdue %} class="table-danger" {% elif
+                                finding.status=='CLOSED' %} class="table-success" {% endif %}>
+                                <!-- No -->
+                                <td class="text-center align-middle">
+                                    {{ loop.index }}
+                                </td>
+                                <!-- Finding No -->
+                                <td class="align-middle">
+                                    <strong>
+                                        {{ finding.finding_no }}
+                                    </strong>
+                                    {% if finding.finding_source == 'CHECKLIST' %}
+                                    <br>
+                                    <small class="text-muted">
+                                        <i class="fas fa-list-check mr-1"></i>
+                                        Checklist
+                                    </small>
+                                    {% else %}
+                                    <br>
+                                    <small class="text-muted">
+                                        <i class="fas fa-plus-circle mr-1"></i>
+                                        Outside Checklist
+                                    </small>
+                                    {% endif %}
+                                </td>
+                                <!-- Audit No -->
+                                <td class="align-middle">
+                                    {% if execution and execution.audit_assignment and execution.audit_assignment.audit
+                                    %}
+                                    {{ execution.audit_assignment.audit.audit_no }}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                                <!-- Location -->
+                                <td class="align-middle">
+                                    {% if assignment %}
+                                    {{ assignment.location }}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                                <!-- Finding -->
+                                <td class="align-middle">
+                                    <div style="white-space: normal;">
+                                        {{ finding.finding }}
+                                    </div>
+                                </td>
+                                <!-- Severity -->
+                                <td class="text-center align-middle">
+                                    {% if finding.severity == 'CRITICAL' %}
+                                    <span class="badge badge-danger">
+                                        CRITICAL
+                                    </span>
+                                    {% elif finding.severity == 'MAJOR' %}
+                                    <span class="badge badge-warning">
+                                        MAJOR
+                                    </span>
+                                    {% elif finding.severity == 'MINOR' %}
+                                    <span class="badge badge-info">
+                                        MINOR
+                                    </span>
+                                    {% elif finding.severity == 'OBSERVATION' %}
+                                    <span class="badge badge-secondary">
+                                        OBSERVATION
+                                    </span>
+                                    {% else %}
+                                    <span class="badge badge-light">
+                                        {{ finding.severity }}
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <!-- PIC -->
+                                <td class="align-middle">
+                                    {% if finding.pic_employee %}
+                                    {{ finding.pic_employee.full_name }}
+                                    {% if finding.pic_employee.employee_code %}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ finding.pic_employee.employee_code }}
+                                    </small>
+                                    {% endif %}
+                                    {% else %}
+                                    <span class="text-muted">
+                                        Not Assigned
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <!-- Target Date -->
+                                <td class="text-center align-middle">
+                                    {% if target_date %}
+                                    {{ target_date.strftime('%d-%b-%Y') }}
+                                    {% else %}
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <!-- Status -->
+                                <td class="text-center align-middle">
+                                    {% if finding.status == 'OPEN' %}
+                                    <span class="badge badge-warning">
+                                        OPEN
+                                    </span>
+                                    {% elif finding.status == 'IN_PROGRESS' %}
+                                    <span class="badge badge-primary">
+                                        IN PROGRESS
+                                    </span>
+                                    {% elif finding.status == 'ACTION_COMPLETED' %}
+                                    <span class="badge badge-info">
+                                        ACTION COMPLETED
+                                    </span>
+                                    {% elif finding.status == 'AUDITOR_VERIFICATION' %}
+                                    <span class="badge badge-warning">
+                                        VERIFICATION
+                                    </span>
+                                    {% elif finding.status == 'PASS' %}
+                                    <span class="badge badge-success">
+                                        PASS
+                                    </span>
+                                    {% elif finding.status == 'CLOSED' %}
+                                    <span class="badge badge-success">
+                                        CLOSED
+                                    </span>
+                                    {% else %}
+                                    <span class="badge badge-secondary">
+                                        {{ finding.status }}
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <!-- Follow-up -->
+                                <td class="text-center align-middle">
+                                    {% if is_closed %}
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-check mr-1"></i>
+                                        CLOSED
+                                    </span>
+                                    {% elif is_overdue %}
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                                        OVERDUE
+                                    </span>
+                                    {% elif finding.status == 'AUDITOR_VERIFICATION' %}
+                                    <span class="badge badge-warning">
+                                        <i class="fas fa-user-check mr-1"></i>
+                                        WAITING VERIFICATION
+                                    </span>
+                                    {% elif finding.status == 'ACTION_COMPLETED' %}
+                                    <span class="badge badge-info">
+                                        <i class="fas fa-check mr-1"></i>
+                                        ACTION COMPLETED
+                                    </span>
+                                    {% elif target_date %}
+                                    <span class="badge badge-primary">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        ON TRACK
+                                    </span>
+                                    {% else %}
+                                    <span class="badge badge-secondary">
+                                        <i class="fas fa-minus mr-1"></i>
+                                        NO TARGET
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <!-- Action -->
+                                <td class="text-center align-middle">
+                                    <a href="{{ url_for(
+                                            'audit_finding.detail',
+                                            audit_id=execution.audit_assignment.audit.id,
+                                            execution_id=execution.id,
+                                            finding_id=finding.id
+                                        ) }}" class="btn btn-info btn-sm" title="View Finding">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if can_edit_finding(finding) %}
+                                    <a href="{{ url_for(
+                                            'audit_finding.edit',
+                                            audit_id=execution.audit_assignment.audit.id,
+                                            execution_id=execution.id,
+                                            finding_id=finding.id
+                                        ) }}" class="btn btn-warning btn-sm" title="Edit Finding">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if finding.pic_employee_id == current_user.employee_id %}
+                                    <a href="{{ url_for(
+        'audit_finding.corrective_action',
+        audit_id=execution.audit_assignment.audit.id,
+        execution_id=execution.id,
+        finding_id=finding.id
+    ) }}" class="btn btn-success btn-sm" title="Corrective Action">
+                                        <i class="fas fa-tools"></i>
+
+                                    </a>
+                                    {% endif %}
+                                </td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-check fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">
+                        No audit findings found.
+                    </h5>
+                    <p class="text-muted mb-0">
+                        There are currently no active findings to monitor.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+            </div><!-- /.card-body -->
+
+            <!-- Pagination Footer -->
+            <div class="card-footer d-flex justify-content-between align-items-center flex-wrap">
+
+                <!-- Informasi jumlah data -->
+                <div class="text-muted small mb-2 mb-md-0">
+                    Showing
+                    <strong>{{ start_item }}</strong>
+                    to
+                    <strong>{{ end_item }}</strong>
+                    of
+                    <strong>{{ total_findings }}</strong>
+                    finding(s)
+                </div>
+
+                <!-- Navigasi halaman -->
+                <nav aria-label="Finding monitoring pagination">
+                    <ul class="pagination pagination-sm mb-0">
+
+                        <!-- Previous -->
+                        <li class="page-item {% if not has_prev %}disabled{% endif %}">
+                            {% if has_prev %}
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'audit_finding.monitoring',
+                                   page=prev_num,
+                                   search=search,
+                                   status=status_filter,
+                                   severity=severity_filter,
+                                   pic=pic_filter
+                               ) }}"
+                               aria-label="Previous page">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            {% else %}
+                            <span class="page-link" aria-disabled="true">
+                                <i class="fas fa-chevron-left"></i>
+                            </span>
+                            {% endif %}
+                        </li>
+
+                        <!-- Page numbers -->
+                        {% for page_num in range(1, total_pages + 1) %}
+                        <li class="page-item {% if page_num == page %}active{% endif %}">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'audit_finding.monitoring',
+                                   page=page_num,
+                                   search=search,
+                                   status=status_filter,
+                                   severity=severity_filter,
+                                   pic=pic_filter
+                               ) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                        {% endfor %}
+
+                        <!-- Next -->
+                        <li class="page-item {% if not has_next %}disabled{% endif %}">
+                            {% if has_next %}
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'audit_finding.monitoring',
+                                   page=next_num,
+                                   search=search,
+                                   status=status_filter,
+                                   severity=severity_filter,
+                                   pic=pic_filter
+                               ) }}"
+                               aria-label="Next page">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            {% else %}
+                            <span class="page-link" aria-disabled="true">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
+                            {% endif %}
+                        </li>
+
+                    </ul>
+                </nav>
+            </div><!-- /.card-footer -->
+
+        </div>
+    </div>
+</section>
+{% endblock %}

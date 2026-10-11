@@ -1,0 +1,707 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Assign Auditor
+{% endblock %}
+
+{% block content %}
+
+<!-- ====================================================== -->
+<!-- CONTENT HEADER -->
+<!-- ====================================================== -->
+
+<section class="content-header">
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Assign Auditor
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Home
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('audit.index') }}">
+                            Audit
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for(
+                            'audit_assignment.index',
+                            audit_id=audit.id
+                        ) }}">
+                            Assignment
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+                        Create
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ====================================================== -->
+<!-- MAIN CONTENT -->
+<!-- ====================================================== -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- ================================================== -->
+            <!-- ASSIGNMENT FORM -->
+            <!-- ================================================== -->
+
+            <div class="col-md-8">
+
+                <div class="card card-primary card-outline">
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i class="fas fa-user-check mr-2"></i>
+
+                            Auditor Assignment
+
+                        </h3>
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'audit_assignment.create',
+                            audit_id=audit.id
+                        ) }}"
+                    >
+
+                        <div class="card-body">
+
+                            <!-- ====================================== -->
+                            <!-- AUDIT INFORMATION -->
+                            <!-- ====================================== -->
+
+                            <div class="alert alert-info">
+
+                                <div class="row">
+
+                                    <div class="col-md-4">
+
+                                        <strong>
+                                            Audit No
+                                        </strong>
+
+                                        <br>
+
+                                        {{ audit.audit_no }}
+
+                                    </div>
+
+
+                                    <div class="col-md-8">
+
+                                        <strong>
+                                            Audit Title
+                                        </strong>
+
+                                        <br>
+
+                                        {{ audit.title }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ====================================== -->
+                            <!-- DEPARTMENT -->
+                            <!-- ====================================== -->
+
+                            <div class="form-group">
+
+                                <label for="department_id">
+
+                                    Department
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    class="form-control"
+                                    id="department_id"
+                                    name="department_id"
+                                    required
+                                >
+
+                                    <option value="">
+                                        -- Select Department --
+                                    </option>
+
+                                    {% for department in departments %}
+
+                                        <option
+                                            value="{{ department.id }}"
+                                            {% if department.id|string == request.form.get('department_id', '') %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{ department.department_code }}
+                                            -
+                                            {{ department.department_name }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+
+                                <small class="form-text text-muted">
+
+                                    Select the department being audited.
+
+                                </small>
+
+                            </div>
+
+
+                            <!-- ====================================== -->
+                            <!-- LOCATION -->
+                            <!-- ====================================== -->
+
+                            <div class="form-group">
+
+                                <label for="location">
+
+                                    Location
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="location"
+                                    name="location"
+                                    maxlength="200"
+                                    placeholder="Example: Production Line A"
+                                    value="{{ request.form.get('location', '') }}"
+                                    required
+                                >
+
+
+                                <small class="form-text text-muted">
+
+                                    Enter the location where the audit
+                                    will be performed.
+
+                                </small>
+
+                            </div>
+
+
+                            <!-- ====================================== -->
+                            <!-- AUDITOR -->
+                            <!-- ====================================== -->
+
+                            <div class="form-group">
+
+                                <label for="employee_search">
+
+                                    Auditor
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <!-- Employee Search -->
+
+                                <div class="input-group mb-2">
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="employee_search"
+                                        placeholder="Search by NIK or employee name..."
+                                        autocomplete="off"
+                                    >
+
+
+                                    <div class="input-group-append">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            id="clear_employee_search"
+                                            title="Clear Search"
+                                        >
+
+                                            <i class="fas fa-times"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Search Result Info -->
+
+                                <small
+                                    id="employee_search_result"
+                                    class="form-text text-muted mb-2"
+                                >
+
+                                    Showing all active employees.
+
+                                </small>
+
+
+                                <!-- Employee Selection -->
+
+                                <select
+                                    class="form-control"
+                                    id="auditor_employee_ids"
+                                    name="auditor_employee_ids"
+                                    multiple
+                                    size="12"
+                                    required
+                                >
+
+                                    {% for employee in employees %}
+
+                                        <option
+                                            value="{{ employee.id }}"
+                                            data-nik="{{ employee.nik|lower }}"
+                                            data-name="{{ employee.full_name|lower }}"
+                                            {% if employee.id|string in request.form.getlist('auditor_employee_ids') %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {{ employee.nik }}
+                                            -
+                                            {{ employee.full_name }}
+
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+
+                                <small class="form-text text-muted">
+
+                                    <strong>Search:</strong>
+                                    Enter NIK or employee name to find an auditor.
+
+                                    <br>
+
+                                    <strong>Select:</strong>
+                                    Hold
+                                    <strong>Ctrl</strong>
+                                    while clicking to select multiple auditors.
+
+                                </small>
+
+                            </div>
+
+
+                            <!-- ====================================== -->
+                            <!-- INFORMATION -->
+                            <!-- ====================================== -->
+
+                            <div class="alert alert-light border">
+
+                                <i class="fas fa-info-circle mr-1"></i>
+
+                                <strong>
+                                    Assignment Rule
+                                </strong>
+
+
+                                <ul class="mb-0 mt-2">
+
+                                    <li>
+                                        One department can have multiple
+                                        audit locations.
+                                    </li>
+
+                                    <li>
+                                        One location can have multiple
+                                        auditors.
+                                    </li>
+
+                                    <li>
+                                        One auditor can be assigned to
+                                        multiple locations.
+                                    </li>
+
+                                    <li>
+                                        The same auditor cannot be
+                                        assigned twice to the same
+                                        location in the same audit.
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ========================================== -->
+                        <!-- FOOTER -->
+                        <!-- ========================================== -->
+
+                        <div class="card-footer">
+                            {% if current_user.has_permission("AUDIT_ASSIGN") %}
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="fas fa-save mr-1"></i>
+
+                                Save Assignment
+
+                            </button>
+                            {% endif %}
+
+                            <a
+                                href="{{ url_for(
+                                    'audit_assignment.index',
+                                    audit_id=audit.id
+                                ) }}"
+                                class="btn btn-secondary"
+                            >
+
+                                <i class="fas fa-times mr-1"></i>
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================== -->
+            <!-- AUDIT SUMMARY -->
+            <!-- ================================================== -->
+
+            <div class="col-md-4">
+
+                <div class="card card-secondary card-outline">
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i class="fas fa-clipboard-check mr-2"></i>
+
+                            Audit Summary
+
+                        </h3>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <dl>
+
+                            <dt>
+                                Audit No
+                            </dt>
+
+                            <dd>
+                                {{ audit.audit_no }}
+                            </dd>
+
+
+                            <dt>
+                                Title
+                            </dt>
+
+                            <dd>
+                                {{ audit.title }}
+                            </dd>
+
+
+                            <dt>
+                                Audit Type
+                            </dt>
+
+                            <dd>
+
+                                {% if audit.audit_type %}
+
+                                    {{ audit.audit_type.audit_type_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </dd>
+
+
+                            <dt>
+                                Audit Category
+                            </dt>
+
+                            <dd>
+
+                                {% if audit.audit_category %}
+
+                                    {{ audit.audit_category.audit_category_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </dd>
+
+
+                            <dt>
+                                Audit Date
+                            </dt>
+
+                            <dd>
+
+                                {% if audit.audit_date %}
+
+                                    {{ audit.audit_date.strftime('%d-%m-%Y') }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </dd>
+
+
+                            <dt>
+                                Status
+                            </dt>
+
+                            <dd>
+
+                                {% if audit.status == "DRAFT" %}
+
+                                    <span class="badge badge-secondary">
+                                        DRAFT
+                                    </span>
+
+                                {% elif audit.status == "PLANNED" %}
+
+                                    <span class="badge badge-info">
+                                        PLANNED
+                                    </span>
+
+                                {% elif audit.status == "IN_PROGRESS" %}
+
+                                    <span class="badge badge-warning">
+                                        IN PROGRESS
+                                    </span>
+
+                                {% elif audit.status == "COMPLETED" %}
+
+                                    <span class="badge badge-success">
+                                        COMPLETED
+                                    </span>
+
+                                {% elif audit.status == "CANCELLED" %}
+
+                                    <span class="badge badge-danger">
+                                        CANCELLED
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge badge-secondary">
+                                        {{ audit.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </dd>
+
+                        </dl>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- EMPLOYEE SEARCH SCRIPT -->
+<!-- ====================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput =
+        document.getElementById("employee_search");
+
+    const clearButton =
+        document.getElementById("clear_employee_search");
+
+    const employeeSelect =
+        document.getElementById("auditor_employee_ids");
+
+    const resultInfo =
+        document.getElementById("employee_search_result");
+
+    const employeeOptions =
+        Array.from(employeeSelect.options);
+
+
+    function filterEmployees() {
+
+        const keyword =
+            searchInput.value
+                .trim()
+                .toLowerCase();
+
+
+        let visibleCount = 0;
+
+
+        employeeOptions.forEach(function (option) {
+
+            const nik =
+                option.dataset.nik || "";
+
+            const name =
+                option.dataset.name || "";
+
+
+            const matched =
+                keyword === "" ||
+                nik.includes(keyword) ||
+                name.includes(keyword);
+
+
+            option.hidden = !matched;
+
+
+            if (matched) {
+                visibleCount++;
+            }
+
+        });
+
+
+        if (keyword === "") {
+
+            resultInfo.textContent =
+                "Showing all active employees.";
+
+        } else {
+
+            resultInfo.textContent =
+                visibleCount +
+                " employee(s) found for \"" +
+                searchInput.value +
+                "\".";
+
+        }
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterEmployees
+    );
+
+
+    clearButton.addEventListener(
+        "click",
+        function () {
+
+            searchInput.value = "";
+
+            filterEmployees();
+
+            searchInput.focus();
+
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,2284 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+    Audit Dashboard
+{% endblock %}
+
+
+{% block public_content %}
+
+
+<style>
+
+/* =========================================================
+   MAIN AUDIT DASHBOARD
+   mengikuti pola Improvement Dashboard
+   ========================================================= */
+
+.audit-dashboard {
+    width: 100%;
+    padding: 24px 28px 45px 28px;
+    background: #f4f7fb;
+    min-height: calc(100vh - 60px);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.audit-dashboard .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 22px 24px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e7edf4;
+    box-shadow: 0 4px 16px rgba(15, 42, 67, 0.06);
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+
+.audit-dashboard .dashboard-title-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+
+.audit-dashboard .dashboard-title-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #0f4c81,
+        #1976b8
+    );
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 14px;
+
+    font-size: 21px;
+
+    box-shadow:
+        0 5px 12px rgba(25, 118, 184, 0.25);
+}
+
+
+.audit-dashboard .dashboard-title {
+    margin: 0;
+    font-size: 27px;
+    font-weight: 700;
+    color: #183247;
+    line-height: 1.2;
+}
+
+
+.audit-dashboard .dashboard-subtitle {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #7b8a99;
+}
+
+
+.audit-dashboard .dashboard-period {
+    display: inline-flex;
+    align-items: center;
+
+    margin-top: 7px;
+
+    padding: 5px 10px;
+
+    background: #eef6fc;
+    color: #1976b8;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.audit-dashboard .dashboard-period i {
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.audit-dashboard .dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+
+.audit-dashboard .dashboard-actions-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+
+.audit-dashboard .dashboard-actions-top .btn {
+    margin-left: 7px;
+    margin-bottom: 6px;
+
+    border-radius: 7px;
+
+    font-weight: 500;
+}
+
+
+.audit-dashboard .dashboard-actions-list {
+    margin-top: 2px;
+}
+
+
+.audit-dashboard .dashboard-actions-list .btn {
+    margin-left: 7px;
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   KPI SECTION
+   ========================================================= */
+
+.audit-dashboard .kpi-section {
+    margin-bottom: 4px;
+}
+
+
+.audit-dashboard .kpi-title {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 13px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: #40566a;
+}
+
+
+.audit-dashboard .kpi-title i {
+    color: #1976b8;
+    margin-right: 7px;
+}
+
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
+
+.audit-dashboard .summary-card {
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid #e7edf4;
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    height: 100%;
+    min-height: 126px;
+
+    box-shadow:
+        0 4px 14px rgba(15, 42, 67, 0.06);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.audit-dashboard .summary-card::after {
+    content: "";
+
+    position: absolute;
+
+    right: -28px;
+    bottom: -38px;
+
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    background: rgba(
+        25,
+        118,
+        184,
+        0.045
+    );
+}
+
+
+.audit-dashboard .summary-card .card-body {
+    position: relative;
+
+    z-index: 2;
+
+    padding: 17px 18px;
+}
+
+
+.audit-dashboard .summary-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 15px;
+
+    margin-bottom: 10px;
+}
+
+
+.audit-dashboard .summary-label {
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #718294;
+
+    margin-bottom: 5px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.25px;
+}
+
+
+.audit-dashboard .summary-value {
+    font-size: 25px;
+    font-weight: 700;
+
+    line-height: 1.15;
+
+    color: #243b53;
+
+    white-space: nowrap;
+}
+
+
+.audit-dashboard .summary-sub {
+    font-size: 11px;
+    color: #8a99a8;
+    margin-top: 6px;
+}
+
+
+/* =========================================================
+   KPI COLORS
+   ========================================================= */
+
+.audit-dashboard .kpi-total .summary-icon {
+    background: #eaf4fb;
+    color: #1976b8;
+}
+
+
+.audit-dashboard .kpi-completed .summary-icon {
+    background: #e9f7ef;
+    color: #28a745;
+}
+
+
+.audit-dashboard .kpi-findings .summary-icon {
+    background: #fff5df;
+    color: #e09b00;
+}
+
+
+.audit-dashboard .kpi-open .summary-icon {
+    background: #fdebed;
+    color: #dc3545;
+}
+
+
+.audit-dashboard .kpi-overdue .summary-icon {
+    background: #fdebed;
+    color: #dc3545;
+}
+
+
+.audit-dashboard .kpi-verification .summary-icon {
+    background: #fff5df;
+    color: #e09b00;
+}
+
+
+.audit-dashboard .kpi-closed .summary-icon {
+    background: #e9f7ef;
+    color: #28a745;
+}
+
+
+/* =========================================================
+   DASHBOARD SECTION
+   ========================================================= */
+
+.audit-dashboard .dashboard-section {
+    margin-top: 25px;
+}
+
+
+.audit-dashboard .section-title {
+    display: flex;
+    align-items: center;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    margin-bottom: 13px;
+
+    color: #30475b;
+}
+
+
+.audit-dashboard .section-title i {
+    color: #1976b8;
+    margin-right: 7px;
+}
+
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
+
+.audit-dashboard .chart-card {
+    border: 1px solid #e7edf4;
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 14px rgba(15, 42, 67, 0.06);
+
+    height: 100%;
+
+    overflow: hidden;
+}
+
+
+.audit-dashboard .chart-card .card-header {
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf1f5;
+
+    padding: 14px 17px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: #30475b;
+}
+
+
+.audit-dashboard .chart-card .card-header i {
+    color: #1976b8;
+}
+
+
+.audit-dashboard .chart-card .card-body {
+    padding: 12px 15px 15px 15px;
+}
+
+
+.audit-dashboard .chart-container {
+    position: relative;
+
+    height: 310px;
+    width: 100%;
+}
+
+
+/* =========================================================
+   DEPARTMENT CARD
+   ========================================================= */
+
+.audit-dashboard .department-card {
+    border: 1px solid #e7edf4;
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 4px 14px rgba(15, 42, 67, 0.06);
+
+    overflow: hidden;
+}
+
+
+.audit-dashboard .department-card .card-body {
+    padding: 0;
+}
+
+
+.audit-dashboard .department-card .table {
+    margin-bottom: 0;
+}
+
+
+.audit-dashboard .department-card thead th {
+    background: #f5f8fb;
+
+    color: #647789;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+
+    border-top: none;
+    border-bottom: 1px solid #e5ebf0;
+
+    padding: 12px 15px;
+}
+
+
+.audit-dashboard .department-card tbody td {
+    font-size: 13px;
+
+    color: #465a6d;
+
+    padding: 12px 15px;
+
+    vertical-align: middle;
+
+    border-top: 1px solid #f0f3f6;
+}
+
+
+.audit-dashboard .department-card tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+
+.audit-dashboard .department-card tbody tr:hover {
+    background: #f8fbfd;
+}
+
+
+.audit-dashboard .department-number {
+    width: 32px;
+    height: 32px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #eef6fc;
+    color: #1976b8;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.audit-dashboard .department-total {
+    display: inline-flex;
+
+    min-width: 36px;
+
+    justify-content: center;
+
+    padding: 4px 9px;
+
+    border-radius: 15px;
+
+    background: #eaf4fb;
+    color: #1976b8;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.audit-dashboard .dashboard-footer {
+    text-align: center;
+
+    color: #8a99a8;
+
+    font-size: 11px;
+
+    margin-top: 32px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e4eaf0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1199px) {
+
+    .audit-dashboard .summary-value {
+        font-size: 23px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .audit-dashboard {
+        padding: 15px 12px 30px 12px;
+    }
+
+
+    .audit-dashboard .dashboard-header {
+        padding: 18px;
+
+        align-items: flex-start;
+    }
+
+
+    .audit-dashboard .dashboard-title {
+        font-size: 22px;
+    }
+
+
+    .audit-dashboard .dashboard-title-icon {
+        width: 42px;
+        height: 42px;
+
+        font-size: 18px;
+    }
+
+
+    .audit-dashboard .dashboard-actions {
+        width: 100%;
+
+        align-items: flex-start;
+    }
+
+
+    .audit-dashboard .dashboard-actions-top {
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+
+
+    .audit-dashboard .dashboard-actions-top .btn {
+        margin-left: 0;
+        margin-right: 6px;
+    }
+
+
+    .audit-dashboard .dashboard-actions-list {
+        margin-top: 5px;
+    }
+
+
+    .audit-dashboard .dashboard-actions-list .btn {
+        margin-left: 0;
+    }
+
+
+    .audit-dashboard .chart-container {
+        height: 275px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .audit-dashboard .dashboard-title-wrapper {
+        align-items: flex-start;
+    }
+
+
+    .audit-dashboard .dashboard-title {
+        font-size: 20px;
+    }
+
+
+    .audit-dashboard .summary-value {
+        font-size: 22px;
+    }
+
+
+    .audit-dashboard .summary-card {
+        min-height: 118px;
+    }
+
+}
+
+</style>
+
+
+
+<!-- =========================================================
+     MAIN DASHBOARD
+     ========================================================== -->
+
+<div class="audit-dashboard">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="dashboard-header">
+
+
+        <!-- TITLE -->
+
+        <div class="dashboard-title-wrapper">
+
+            <div class="dashboard-title-icon">
+
+                <i class="fas fa-clipboard-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <h1 class="dashboard-title">
+
+                    Audit Dashboard
+
+                </h1>
+
+
+                <div class="dashboard-subtitle">
+
+                    Audit Performance & Finding Overview
+
+                </div>
+
+
+                <div class="dashboard-period">
+
+                    <i class="far fa-calendar-alt"></i>
+
+                    {{ dashboard.period.start_date.strftime('%d %b %Y') }}
+
+                    <span class="mx-1">-</span>
+
+                    {{ dashboard.period.end_date.strftime('%d %b %Y') }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================== -->
+
+        <div class="dashboard-actions">
+
+
+            <!-- =====================================================
+     NAVIGATION
+     ====================================================== -->
+
+<nav class="cims-top-nav">
+
+
+    <!-- PERFORMANCE -->
+
+    <a
+        href="{{ url_for('dashboard.index') }}"
+        class="btn btn-outline-primary btn-sm"
+    >
+
+        <i class="fas fa-chart-line mr-1"></i>
+
+        Performance
+
+    </a>
+
+
+    <!-- PROBLEM -->
+
+    <a
+        href="{{ url_for('problem_dashboard.index') }}"
+        class="btn btn-outline-danger btn-sm"
+    >
+
+        <i class="fas fa-exclamation-triangle mr-1"></i>
+
+        Problem
+
+    </a>
+
+
+    <!-- IMPROVEMENT -->
+
+    <a
+        href="{{ url_for('improvement_dashboard.index') }}"
+        class="btn btn-outline-success btn-sm"
+    >
+
+        <i class="fas fa-tools mr-1"></i>
+
+        Improvement
+
+    </a>
+
+
+    <!-- KAIZEN -->
+
+    <a
+        href="{{ url_for('kaizen_dashboard.index') }}"
+        class="btn btn-outline-warning btn-sm"
+    >
+
+        <i class="fas fa-lightbulb mr-1"></i>
+
+        Kaizen
+
+    </a>
+
+
+    <!-- AUDIT -->
+
+    <a
+        href="{{ url_for('public_audit.dashboard') }}"
+        class="btn btn-outline-info btn-sm"
+    >
+
+        <i class="fas fa-clipboard-check mr-1"></i>
+
+        Audit
+
+    </a>
+
+
+    <!-- LOGIN -->
+
+    <a
+        href="{{ url_for('auth.login') }}"
+        class="btn btn-primary btn-sm"
+    >
+
+        <i class="fas fa-sign-in-alt mr-1"></i>
+
+        Login
+
+    </a>
+
+
+</nav>
+
+
+
+            <!-- AUDIT LIST -->
+
+            <div class="dashboard-actions-list">
+
+                <a
+                    href="{{ url_for('public_audit.list') }}"
+                    class="btn btn-outline-primary btn-sm"
+                >
+
+                    <i class="fas fa-list mr-1"></i>
+
+                    Audit List
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+     KPI SECTION
+     ====================================================== -->
+
+<div class="kpi-section">
+
+    <!-- KPI TITLE -->
+    <div class="kpi-title">
+
+        <i class="fas fa-chart-pie"></i>
+
+        Audit Performance
+
+    </div>
+
+
+    <!-- =================================================
+         KPI CARDS
+         4 COLUMNS × 2 ROWS
+         ================================================= -->
+
+    <div class="row">
+
+
+        <!-- =================================================
+             ROW 1 - KPI 1
+             TOTAL AUDIT
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.list',
+                    period='6_months'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-total">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-clipboard-list"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Total Audit
+
+                        </div>
+
+
+                        <div class="summary-value">
+
+                            {{ dashboard.summary.total_audit }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            Selected period
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ROW 1 - KPI 2
+             COMPLETED AUDIT
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.list',
+                    completed_audit='1',
+                    period='6_months'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-completed">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-check-circle"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Completed Audit
+
+                        </div>
+
+
+                        <div class="summary-value text-success">
+
+                            {{ dashboard.summary.completed_audit }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            Selected period
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ROW 1 - KPI 3
+             NEXT AUDIT
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.list',
+                    next_audit='1'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-next">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-calendar-alt"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Next Audit
+
+                        </div>
+
+
+                        <div class="summary-value text-primary">
+
+                            {{ dashboard.summary.next_audit }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            Upcoming Audit
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ROW 1 - KPI 4
+             TOTAL FINDINGS
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.findings',
+                    period='6_months'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-findings">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-exclamation-triangle"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Total Findings
+
+                        </div>
+
+
+                        <div class="summary-value">
+
+                            {{ dashboard.summary.total_findings }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            Selected period
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ROW 2 - KPI 5
+             OPEN FINDINGS
+             ALL PERIODS
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.findings',
+                    open_only='1',
+                    period='all'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-open">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-folder-open"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Open Findings
+
+                        </div>
+
+
+                        <div class="summary-value text-danger">
+
+                            {{ dashboard.summary.open_findings }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            All periods
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ROW 2 - KPI 6
+             OVERDUE FINDINGS
+             ALL PERIODS
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.findings',
+                    overdue='1',
+                    period='all'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-overdue">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-clock"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Overdue Findings
+
+                        </div>
+
+
+                        <div class="summary-value text-danger">
+
+                            {{ dashboard.summary.overdue_findings }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            All periods · Past target date
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ROW 2 - KPI 7
+             VERIFICATION PENDING
+             ALL PERIODS
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.findings',
+                    status='AUDITOR_VERIFICATION',
+                    period='all'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-verification">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-user-check"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Verification Pending
+
+                        </div>
+
+
+                        <div class="summary-value">
+
+                            {{ dashboard.summary.verification_pending }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            All periods · Waiting for auditor
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ROW 2 - KPI 8
+             CLOSED FINDINGS
+             ALL PERIODS
+             ================================================= -->
+
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+            <a
+                href="{{ url_for(
+                    'public_audit.findings',
+                    status='CLOSED',
+                    period='all'
+                ) }}"
+                class="kpi-link"
+            >
+
+                <div class="summary-card kpi-closed">
+
+                    <div class="card-body">
+
+                        <div class="summary-icon">
+
+                            <i class="fas fa-tasks"></i>
+
+                        </div>
+
+
+                        <div class="summary-label">
+
+                            Closed Findings
+
+                        </div>
+
+
+                        <div class="summary-value text-success">
+
+                            {{ dashboard.summary.closed_findings }}
+
+                        </div>
+
+
+                        <div class="summary-sub">
+
+                            All periods · Successfully closed
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+    <!-- =====================================================
+         TREND
+         ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-title">
+
+            <i class="fas fa-chart-line"></i>
+
+            Audit & Finding Trend
+
+        </div>
+
+
+
+        <div class="row">
+
+
+            <!-- AUDIT & FINDING TREND -->
+
+            <div class="col-lg-8 mb-3">
+
+                <div class="card chart-card">
+
+
+                    <div class="card-header">
+
+                        <i class="fas fa-chart-line mr-1"></i>
+
+                        Audit & Finding Trend
+
+
+                        <span
+                            class="float-right text-muted"
+                            style="
+                                font-size: 11px;
+                                font-weight: 400;
+                            "
+                        >
+
+                            Last 6 Months
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="auditFindingTrendChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FINDING SEVERITY -->
+
+            <div class="col-lg-4 mb-3">
+
+                <div class="card chart-card">
+
+
+                    <div class="card-header">
+
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+
+                        Finding Severity
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="findingSeverityChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STATUS & DEPARTMENT
+         ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-title">
+
+            <i class="fas fa-chart-bar"></i>
+
+            Finding Analysis
+
+        </div>
+
+
+
+        <div class="row">
+
+
+            <!-- FINDING STATUS -->
+
+            <div class="col-lg-6 mb-3">
+
+                <div class="card chart-card">
+
+
+                    <div class="card-header">
+
+                        <i class="fas fa-tasks mr-1"></i>
+
+                        Finding Status
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="findingStatusChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FINDING BY DEPARTMENT -->
+
+            <div class="col-lg-6 mb-3">
+
+                <div class="card chart-card">
+
+
+                    <div class="card-header">
+
+                        <i class="fas fa-building mr-1"></i>
+
+                        Findings by Department
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="chart-container">
+
+                            <canvas
+                                id="findingDepartmentChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DEPARTMENT TABLE
+         ====================================================== -->
+
+    <div class="dashboard-section">
+
+
+        <div class="section-title">
+
+            <i class="fas fa-building"></i>
+
+            Finding by Department
+
+        </div>
+
+
+
+        <div class="card department-card">
+
+
+            <div class="card-body">
+
+
+                <div class="table-responsive">
+
+
+                    <table class="table table-hover">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th style="width: 70px;">
+
+                                    No
+
+                                </th>
+
+
+                                <th>
+
+                                    Department
+
+                                </th>
+
+
+                                <th
+                                    class="text-right"
+                                    style="width: 200px;"
+                                >
+
+                                    Total Findings
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                            {% for item in dashboard.by_department %}
+
+                            <tr>
+
+
+                                <td>
+
+                                    <span class="department-number">
+
+                                        {{ loop.index }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <i
+                                        class="fas fa-building mr-2 text-muted"
+                                    ></i>
+
+                                    {{ item.department }}
+
+                                </td>
+
+
+                                <td class="text-right">
+
+                                    <span class="department-total">
+
+                                        {{ item.total }}
+
+                                    </span>
+
+                                </td>
+
+
+                            </tr>
+
+
+                            {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="3"
+                                    class="text-center text-muted py-4"
+                                >
+
+                                    <i
+                                        class="fas fa-inbox d-block mb-2"
+                                        style="font-size: 24px;"
+                                    ></i>
+
+                                    No department data found.
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="dashboard-footer">
+
+        <i class="fas fa-clipboard-check mr-1"></i>
+
+        CIMS - Continuous Improvement Management System
+
+        &copy;
+
+        {{ dashboard.period.end_date.year }}
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     CHART.JS
+     ========================================================== -->
+
+<script src="{{ url_for(
+    'static',
+    filename='js/chart.js'
+) }}"></script>
+
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           CHECK CHART.JS
+           ===================================================== */
+
+        if (typeof Chart === "undefined") {
+
+            console.error(
+                "Chart.js is not loaded."
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "Audit Dashboard Chart.js loaded."
+        );
+
+
+
+        /* =====================================================
+           COMMON OPTIONS
+           ===================================================== */
+
+        const commonOptions = {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    display: true,
+
+                    position: "bottom"
+
+                },
+
+                tooltip: {
+
+                    mode: "index",
+
+                    intersect: false
+
+                }
+
+            },
+
+            interaction: {
+
+                mode: "index",
+
+                intersect: false
+
+            }
+
+        };
+
+
+
+        /* =====================================================
+           AUDIT & FINDING TREND
+           ===================================================== */
+
+        const trendLabels = [
+
+            {% for item in dashboard.trend %}
+
+                "{{ item.month }}"
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const auditTrendData = [
+
+            {% for item in dashboard.trend %}
+
+                {{ item.audits or 0 }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const findingTrendData = [
+
+            {% for item in dashboard.trend %}
+
+                {{ item.findings or 0 }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const closedTrendData = [
+
+            {% for item in dashboard.trend %}
+
+                {{ item.closed or 0 }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+
+        const auditFindingTrendCanvas =
+            document.getElementById(
+                "auditFindingTrendChart"
+            );
+
+
+        if (auditFindingTrendCanvas) {
+
+            new Chart(
+
+                auditFindingTrendCanvas,
+
+                {
+
+                    type: "line",
+
+
+                    data: {
+
+                        labels: trendLabels,
+
+
+                        datasets: [
+
+                            {
+
+                                label: "Audit",
+
+                                data: auditTrendData,
+
+                                borderWidth: 3,
+
+                                tension: 0.35,
+
+                                fill: false,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6
+
+                            },
+
+
+                            {
+
+                                label: "Findings",
+
+                                data: findingTrendData,
+
+                                borderWidth: 3,
+
+                                tension: 0.35,
+
+                                fill: false,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6
+
+                            },
+
+
+                            {
+
+                                label: "Closed Findings",
+
+                                data: closedTrendData,
+
+                                borderWidth: 3,
+
+                                tension: 0.35,
+
+                                fill: false,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        ...commonOptions,
+
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+
+        /* =====================================================
+           FINDING SEVERITY
+           ===================================================== */
+
+        const severityLabels = [
+
+            {% for item in dashboard.severity %}
+
+                "{{ item.severity }}"
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const severityValues = [
+
+            {% for item in dashboard.severity %}
+
+                {{ item.total or 0 }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const severityCanvas =
+            document.getElementById(
+                "findingSeverityChart"
+            );
+
+
+        if (severityCanvas) {
+
+            new Chart(
+
+                severityCanvas,
+
+                {
+
+                    type: "doughnut",
+
+
+                    data: {
+
+                        labels: severityLabels,
+
+
+                        datasets: [
+
+                            {
+
+                                label: "Findings",
+
+                                data: severityValues,
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+
+                        plugins: {
+
+                            legend: {
+
+                                display: true,
+
+                                position: "bottom"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+
+        /* =====================================================
+           FINDING STATUS
+           ===================================================== */
+
+        const statusLabels = [
+
+            {% for item in dashboard.status %}
+
+                "{{ item.status }}"
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const statusValues = [
+
+            {% for item in dashboard.status %}
+
+                {{ item.total or 0 }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const statusCanvas =
+            document.getElementById(
+                "findingStatusChart"
+            );
+
+
+        if (statusCanvas) {
+
+            new Chart(
+
+                statusCanvas,
+
+                {
+
+                    type: "bar",
+
+
+                    data: {
+
+                        labels: statusLabels,
+
+
+                        datasets: [
+
+                            {
+
+                                label: "Findings",
+
+                                data: statusValues,
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+
+                        plugins: {
+
+                            legend: {
+
+                                display: false
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+
+        /* =====================================================
+           FINDING BY DEPARTMENT
+           ===================================================== */
+
+        const departmentLabels = [
+
+            {% for item in dashboard.by_department %}
+
+                "{{ item.department }}"
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const departmentValues = [
+
+            {% for item in dashboard.by_department %}
+
+                {{ item.total or 0 }}
+
+                {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const departmentCanvas =
+            document.getElementById(
+                "findingDepartmentChart"
+            );
+
+
+        if (departmentCanvas) {
+
+            new Chart(
+
+                departmentCanvas,
+
+                {
+
+                    type: "bar",
+
+
+                    data: {
+
+                        labels: departmentLabels,
+
+
+                        datasets: [
+
+                            {
+
+                                label: "Findings",
+
+                                data: departmentValues,
+
+                                borderWidth: 1
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        indexAxis: "y",
+
+
+                        plugins: {
+
+                            legend: {
+
+                                display: false
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+    }
+
+);
+
+</script>
+
+
+{% endblock %}

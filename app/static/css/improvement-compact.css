@@ -1,0 +1,608 @@
+
+/* ==========================================================
+   CIMS - IMPROVEMENT LIST
+   Perubahan tampilan saja; tidak mengubah logika program.
+   ========================================================== */
+
+.improvement-list-page {
+    font-size: 13px;
+}
+
+.improvement-list-header h1 {
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 0;
+}
+
+.improvement-list-card {
+    margin-bottom: 12px;
+}
+
+/* ---------- Toolbar ---------- */
+
+.improvement-list-page .improvement-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+.improvement-list-page .improvement-toolbar-top,
+.improvement-list-page .improvement-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.improvement-list-page .improvement-toolbar-top {
+    flex-wrap: wrap;
+}
+
+.improvement-list-page .improvement-toolbar-title {
+    flex: 0 0 auto;
+    margin-right: 6px;
+}
+
+.improvement-list-page .improvement-toolbar-title .card-title {
+    float: none;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.improvement-list-page .improvement-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    min-width: 0;
+}
+
+.improvement-list-page .improvement-approval-select {
+    width: 145px;
+    min-width: 125px;
+}
+
+.improvement-list-page .improvement-date-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.improvement-list-page .improvement-date-controls input[type="date"] {
+    width: 145px;
+    min-width: 125px;
+    flex: 0 1 145px;
+}
+
+.improvement-list-page .improvement-date-separator {
+    color: #6c757d;
+    line-height: 1;
+}
+
+.improvement-list-page .improvement-toolbar-bottom {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    border-top: 1px solid #e2e7ed;
+}
+
+.improvement-list-page .improvement-toolbar-create {
+    flex: 0 0 auto;
+}
+
+.improvement-list-page .improvement-search-form {
+    width: min(100%, 430px);
+    margin: 0 0 0 auto;
+}
+
+.improvement-list-page .improvement-search-group {
+    width: 100%;
+}
+
+.improvement-list-page .improvement-search-group input {
+    min-width: 0;
+}
+
+.improvement-list-page .improvement-reset-button {
+    margin-left: 5px;
+}
+
+.improvement-list-page .improvement-toolbar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 34px;
+    padding: 5px 10px;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+/* ---------- Card body and information ---------- */
+
+.improvement-list-page .improvement-list-body {
+    padding: 12px 14px;
+}
+
+.improvement-list-page .improvement-info-alert,
+.improvement-list-page .improvement-filter-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.improvement-list-page .improvement-filter-info {
+    justify-content: flex-start;
+}
+
+.improvement-list-page .improvement-filter-chip {
+    display: inline-block;
+    margin: 2px 4px;
+    padding: 3px 7px;
+    border: 1px solid #cfe2f3;
+    border-radius: 4px;
+    background: #fff;
+}
+
+/* ---------- Table ---------- */
+
+.improvement-list-page .improvement-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.improvement-list-page .improvement-list-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12px;
+    border-color: #d9e1ea;
+}
+
+.improvement-list-page .improvement-list-table th,
+.improvement-list-page .improvement-list-table td {
+    padding: 7px 8px;
+    vertical-align: middle;
+    line-height: 1.4;
+    border-color: #d9e1ea;
+}
+
+.improvement-list-page .improvement-list-table thead th {
+    background: #eaf0f6;
+    color: #243447;
+    font-weight: 600;
+    text-align: center;
+    white-space: normal;
+}
+
+.improvement-list-page .improvement-list-table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.improvement-list-page .improvement-list-table.table-hover tbody tr:hover {
+    background-color: #edf6ff;
+}
+
+.improvement-list-page .improvement-list-table .col-number {
+    width: 42px;
+    min-width: 42px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.improvement-list-page .improvement-list-table .col-improvement-no {
+    min-width: 105px;
+    white-space: nowrap;
+}
+
+.improvement-list-page .improvement-list-table .col-date {
+    width: 100px;
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.improvement-list-page .improvement-list-table .col-problem-no {
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.improvement-list-page .improvement-list-table .col-title {
+    min-width: 180px;
+    overflow-wrap: anywhere;
+}
+
+.improvement-list-page .improvement-list-table .col-problem-title {
+    min-width: 165px;
+    overflow-wrap: anywhere;
+}
+
+.improvement-list-page .improvement-list-table .col-cost,
+.improvement-list-page .improvement-list-table .col-benefit {
+    min-width: 115px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.improvement-list-page .improvement-list-table .col-approval {
+    width: 110px;
+    min-width: 110px;
+    text-align: center;
+}
+
+.improvement-list-page .improvement-list-table .col-action {
+    width: 125px;
+    min-width: 125px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ---------- Approval badges ---------- */
+
+.improvement-list-page .improvement-status-badge {
+    display: inline-block;
+    padding: 5px 9px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* ---------- Action buttons ---------- */
+
+.improvement-list-page .improvement-action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+}
+
+.improvement-list-page .improvement-action-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 32px;
+    padding: 4px;
+    margin: 0;
+    border-radius: 5px;
+    line-height: 1;
+}
+
+.improvement-list-page .improvement-action-buttons .btn i {
+    font-size: 13px;
+}
+
+/* ---------- Footer and pagination ---------- */
+
+.improvement-list-page .improvement-list-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.improvement-list-page .improvement-showing-info {
+    font-size: 12px;
+}
+
+.improvement-list-page .pagination {
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+.improvement-list-page .pagination .page-link {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+/* ---------- Laptop screens ---------- */
+
+@media (max-width: 1366px) {
+    .improvement-list-page .improvement-toolbar {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .improvement-list-page .improvement-toolbar-top,
+    .improvement-list-page .improvement-toolbar-bottom {
+        gap: 8px;
+    }
+
+    .improvement-list-page .improvement-approval-select {
+        width: 135px;
+    }
+
+    .improvement-list-page .improvement-date-controls input[type="date"] {
+        width: 135px;
+        min-width: 120px;
+    }
+
+    .improvement-list-page .improvement-search-form {
+        width: min(100%, 380px);
+    }
+
+    .improvement-list-page .improvement-list-table th,
+    .improvement-list-page .improvement-list-table td {
+        padding: 6px 7px;
+    }
+}
+
+/* ---------- Tablet and mobile ---------- */
+
+@media (max-width: 767.98px) {
+    .improvement-list-header h1 {
+        font-size: 20px;
+    }
+
+    .improvement-list-page .improvement-toolbar-top,
+    .improvement-list-page .improvement-toolbar-bottom {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .improvement-list-page .improvement-toolbar-title {
+        margin-right: 0;
+    }
+
+    .improvement-list-page .improvement-filter-form,
+    .improvement-list-page .improvement-search-form,
+    .improvement-list-page .improvement-date-controls {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .improvement-list-page .improvement-approval-select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .improvement-list-page .improvement-date-controls {
+        flex-wrap: wrap;
+    }
+
+    .improvement-list-page .improvement-date-controls input[type="date"] {
+        flex: 1 1 130px;
+        width: auto;
+        min-width: 0;
+    }
+
+    .improvement-list-page .improvement-filter-button {
+        flex: 0 0 auto;
+    }
+
+    .improvement-list-page .improvement-search-form {
+        margin-left: 0;
+    }
+
+    .improvement-list-page .improvement-list-table {
+        min-width: 1050px;
+    }
+
+    .improvement-list-page .improvement-info-alert {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .improvement-list-page .improvement-list-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* =====================================================
+   IMPROVEMENT LIST - SINGLE ROW TOOLBAR
+   Filter, Create, Search, dan Reset satu baris
+   ===================================================== */
+
+.improvement-list-page .improvement-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+.improvement-list-page .improvement-toolbar-top {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.improvement-list-page .improvement-toolbar-title {
+    flex: 0 0 auto;
+    margin-right: 4px;
+}
+
+.improvement-list-page .improvement-toolbar-title .card-title {
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.improvement-list-page .improvement-filter-form {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.improvement-list-page .improvement-approval-select {
+    width: 135px;
+    min-width: 120px;
+}
+
+.improvement-list-page .improvement-date-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
+
+.improvement-list-page .improvement-date-controls input[type="date"] {
+    width: 125px;
+    min-width: 115px;
+    flex: 0 1 125px;
+}
+
+.improvement-list-page .improvement-filter-button {
+    flex: 0 0 auto;
+}
+
+.improvement-list-page .improvement-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 0;
+    border-top: 0;
+}
+
+.improvement-list-page .improvement-toolbar-create {
+    flex: 0 0 auto;
+}
+
+.improvement-list-page .improvement-search-form {
+    flex: 0 1 330px;
+    width: 330px;
+    min-width: 180px;
+    margin: 0;
+}
+
+.improvement-list-page .improvement-search-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.improvement-list-page .improvement-search-group .form-control {
+    min-width: 0;
+}
+
+.improvement-list-page .improvement-search-group .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+/* Laptop 14 inch: compress controls to fit */
+@media (min-width: 768px) and (max-width: 1400px) {
+    .improvement-list-page .improvement-toolbar {
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .improvement-list-page .improvement-toolbar-top {
+        gap: 6px;
+    }
+
+    .improvement-list-page .improvement-toolbar-title .card-title {
+        font-size: 14px;
+    }
+
+    .improvement-list-page .improvement-approval-select {
+        width: 120px;
+        min-width: 110px;
+    }
+
+    .improvement-list-page .improvement-date-controls input[type="date"] {
+        width: 112px;
+        min-width: 105px;
+        padding-left: 4px;
+        padding-right: 2px;
+        font-size: 11px;
+    }
+
+    .improvement-list-page .improvement-toolbar .btn {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    .improvement-list-page .improvement-search-form {
+        flex-basis: 250px;
+        width: 250px;
+        min-width: 170px;
+    }
+
+    .improvement-list-page .improvement-toolbar-create .btn {
+        font-size: 11px;
+    }
+}
+
+/* Small screens: stack controls for readability */
+@media (max-width: 767.98px) {
+    .improvement-list-page .improvement-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .improvement-list-page .improvement-toolbar-top {
+        flex-wrap: wrap;
+    }
+
+    .improvement-list-page .improvement-toolbar-bottom {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid #e2e7ed;
+    }
+
+    .improvement-list-page .improvement-search-form {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* Spacing between Improvement search controls */
+.improvement-list-page .improvement-search-group {
+    gap: 6px;
+}
+
+.improvement-list-page .improvement-search-group .input-group-append {
+    display: flex;
+    gap: 6px;
+    margin-left: 6px;
+}
+
+.improvement-list-page .improvement-search-group .btn {
+    margin: 0;
+    border-radius: 5px;
+}
+
+/* Samakan sudut input Search dan tombol Search */
+.improvement-list-page .improvement-search-group > .form-control {
+    border-radius: 5px !important;
+}
+
+.improvement-list-page .improvement-search-group .input-group-append {
+    margin-left: 6px !important;
+    gap: 6px;
+}
+
+.improvement-list-page .improvement-search-group .input-group-append .btn {
+    border-radius: 5px !important;
+    margin: 0;
+}
+
+/* Hindari sudut input berubah akibat aturan Bootstrap */
+.improvement-list-page .improvement-search-group > .form-control:focus {
+    border-radius: 5px !important;
+}

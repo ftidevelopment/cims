@@ -1,0 +1,298 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<div class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1 class="m-0">
+
+                    {% if audit_checklist %}
+                        Edit Audit Checklist
+                    {% else %}
+                        Create Audit Checklist
+                    {% endif %}
+
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Audit Checklist
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {% if audit_checklist %}
+                            Edit
+                        {% else %}
+                            Create
+                        {% endif %}
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<section class="content">
+
+<div class="container-fluid">
+
+    <div class="row">
+
+
+        <!-- ================================================== -->
+        <!-- FORM -->
+        <!-- ================================================== -->
+
+        <div class="col-md-8">
+
+            <div class="card card-primary card-outline">
+
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-clipboard-list mr-2"></i>
+
+                        Checklist Information
+
+                    </h3>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{% if audit_checklist %}
+                                {{ url_for(
+                                    'audit_checklist.edit',
+                                    audit_checklist_id=audit_checklist.id
+                                ) }}
+                            {% else %}
+                                {{ url_for(
+                                    'audit_checklist.create'
+                                ) }}
+                            {% endif %}"
+                >
+
+                    <div class="card-body">
+
+
+                        <!-- CODE -->
+
+                        <div class="form-group">
+
+                            <label for="audit_checklist_code">
+
+                                Checklist Code
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="audit_checklist_code"
+                                name="audit_checklist_code"
+                                class="form-control"
+                                value="{{ audit_checklist.audit_checklist_code if audit_checklist else '' }}"
+                                {% if audit_checklist %}
+                                    readonly
+                                {% endif %}
+                                maxlength="20"
+                                required
+                            >
+
+                            {% if audit_checklist %}
+
+                                <small class="form-text text-muted">
+
+                                    Checklist code cannot be changed
+                                    after creation.
+
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="audit_checklist_name">
+
+                                Checklist Name
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="audit_checklist_name"
+                                name="audit_checklist_name"
+                                class="form-control"
+                                value="{{ audit_checklist.audit_checklist_name if audit_checklist else '' }}"
+                                maxlength="150"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="form-group">
+
+                            <label for="description">
+
+                                Description
+
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                class="form-control"
+                                rows="5"
+                                maxlength="2000"
+                            >{{ audit_checklist.description if audit_checklist and audit_checklist.description else '' }}</textarea>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="card-footer">
+
+                        <a
+                            href="{{ url_for('audit_checklist.index') }}"
+                            class="btn btn-secondary"
+                        >
+
+                            <i class="fas fa-arrow-left"></i>
+
+                            Back
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary float-right"
+                        >
+
+                            <i class="fas fa-save"></i>
+
+                            {% if audit_checklist %}
+                                Update
+                            {% else %}
+                                Save
+                            {% endif %}
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================== -->
+        <!-- INFORMATION -->
+        <!-- ================================================== -->
+
+        <div class="col-md-4">
+
+            <div class="card card-info card-outline">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-info-circle mr-2"></i>
+
+                        Information
+
+                    </h3>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <p>
+                        Audit Checklist is master data used
+                        during Audit Execution.
+                    </p>
+
+                    <hr>
+
+                    <strong>
+                        Checklist Code
+                    </strong>
+
+                    <p class="text-muted">
+                        Unique code for the checklist.
+                    </p>
+
+
+                    <strong>
+                        Checklist Name
+                    </strong>
+
+                    <p class="text-muted">
+                        Name of the checklist.
+                    </p>
+
+
+                    <strong>
+                        Description
+                    </strong>
+
+                    <p class="text-muted">
+                        Additional information about the checklist.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

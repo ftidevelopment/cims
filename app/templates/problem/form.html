@@ -86,7 +86,7 @@ Content Header
 <!-- ==========================================
 Main Content
 ========================================== -->
-<section class="content">
+<section class="content problem-form-page">
 
     <div class="container-fluid">
 
@@ -121,166 +121,84 @@ Main Content
                     <!-- ==========================================
                     Row 1
                     ========================================== -->
-                    <div class="row">
+
+                    <!-- Row 1: Problem Date, Department, Category -->
+                    <div class="row problem-basic-info">
 
                         <!-- Problem Date -->
-                        <div class="col-md-6">
-
+                        <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-
-                                <label>
-
-                                    Problem Date
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
+                                <label>Problem Date <span class="text-danger">*</span></label>
                                 <input type="date" name="problem_date" class="form-control" required
                                     data-label="Problem Date"
                                     value="{{ problem.problem_date.strftime('%Y-%m-%d') if problem and problem.problem_date else '' }}">
-
                                 <div class="invalid-feedback"></div>
-
                             </div>
-
                         </div>
 
                         <!-- Department -->
-                        <div class="col-md-6">
-
+                        <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-
-                                <label>
-
-                                    Department
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
+                                <label>Department <span class="text-danger">*</span></label>
                                 <select name="department_id" class="form-control" required data-label="Department">
-
-                                    <option value="">
-
-                                        -- Select Department --
-
-                                    </option>
-
+                                    <option value="">-- Select Department --</option>
                                     {% for department in departments %}
-
                                     <option value="{{ department.id }}" {% if problem and
-                                        problem.department_id==department.id %} selected {% endif %}>
-
+                                        problem.department_id==department.id %}selected{% endif %}>
                                         {{ department.department_name }}
-
                                     </option>
-
                                     {% endfor %}
-
                                 </select>
-
                                 <div class="invalid-feedback"></div>
-
                             </div>
-
                         </div>
-
-                    </div>
-
-                    <!-- ==========================================
-                    Row 2
-                    ========================================== -->
-                    <div class="row">
 
                         <!-- Problem Category -->
-                        <div class="col-md-6">
-
+                        <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-
-                                <label>
-
-                                    Problem Category
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
+                                <label>Problem Category <span class="text-danger">*</span></label>
                                 <select name="problem_category_id" class="form-control" required
                                     data-label="Problem Category">
-
-                                    <option value="">
-
-                                        -- Select Category --
-
-                                    </option>
-
+                                    <option value="">-- Select Category --</option>
                                     {% for category in problem_categories %}
-
                                     <option value="{{ category.id }}" {% if problem and
-                                        problem.problem_category_id==category.id %} selected {% endif %}>
-
+                                        problem.problem_category_id==category.id %}selected{% endif %}>
                                         {{ category.problem_category_name }}
-
                                     </option>
-
                                     {% endfor %}
-
                                 </select>
-
                                 <div class="invalid-feedback"></div>
-
                             </div>
-
-                        </div>
-
-                        <!-- Problem Source -->
-                        <div class="col-md-6">
-
-                            <div class="form-group">
-
-                                <label>
-
-                                    Problem Source
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <input type="text" name="problem_source" class="form-control" maxlength="100" required
-                                    data-label="Problem Source" value="{{ problem.problem_source if problem else '' }}">
-
-                                <div class="invalid-feedback"></div>
-
-                            </div>
-
                         </div>
 
                     </div>
-                    <!-- ==========================================
-                    Row 3
-                    ========================================== -->
-                    <div class="row">
+
+                    <!-- Row 2: Problem Source and Location -->
+                    <div class="row problem-source-location">
+
+                        <!-- Problem Source -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <label>Problem Source <span class="text-danger">*</span></label>
+                                <input type="text" name="problem_source" class="form-control" maxlength="100" required
+                                    data-label="Problem Source" value="{{ problem.problem_source if problem else '' }}">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
 
                         <!-- Problem Location -->
-                        <div class="col-md-12">
-
+                        <div class="col-lg-6 col-md-6">
                             <div class="form-group">
-
-                                <label>
-
-                                    Problem Location
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
+                                <label>Problem Location <span class="text-danger">*</span></label>
                                 <input type="text" name="problem_location" class="form-control" maxlength="200" required
                                     data-label="Problem Location"
                                     value="{{ problem.problem_location if problem else '' }}">
-
                                 <div class="invalid-feedback"></div>
-
                             </div>
-
                         </div>
 
                     </div>
+
 
                     <!-- ==========================================
                     Row 4
@@ -354,14 +272,9 @@ Main Content
 
                                 </label>
 
-                                <textarea
-                                    name="problem_cause"
-                                    id="problem_cause"
-                                    class="form-control"
-                                    rows="4"
+                                <textarea name="problem_cause" id="problem_cause" class="form-control" rows="4"
                                     maxlength="2000"
-                                    data-jodit-plain-text="true"
-                                >{{ problem.problem_cause if problem else '' }}</textarea>
+                                    data-jodit-plain-text="true">{{ problem.problem_cause if problem else '' }}</textarea>
 
                             </div>
 
@@ -385,14 +298,9 @@ Main Content
 
                                 </label>
 
-                                <textarea
-                                    name="problem_impact"
-                                    id="problem_impact"
-                                    class="form-control"
-                                    rows="4"
+                                <textarea name="problem_impact" id="problem_impact" class="form-control" rows="4"
                                     maxlength="2000"
-                                    data-jodit-plain-text="true"
-                                >{{ problem.problem_impact if problem else '' }}</textarea>
+                                    data-jodit-plain-text="true">{{ problem.problem_impact if problem else '' }}</textarea>
 
                             </div>
 

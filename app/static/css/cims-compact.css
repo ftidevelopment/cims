@@ -1,0 +1,7769 @@
+/*
+=====================================================
+CIMS COMPACT UI
+Fokus: Problem List
+Perubahan hanya pada tampilan dan tata letak.
+=====================================================
+*/
+
+/* =====================================================
+   1. TYPOGRAPHY AND MAIN CONTENT
+   ===================================================== */
+
+.problem-list-page {
+    font-size: 13px;
+}
+
+.problem-list-header {
+    padding-top: 14px;
+    padding-bottom: 10px;
+}
+
+.problem-list-header h1 {
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 0;
+}
+
+.problem-list-page .card {
+    margin-bottom: 12px;
+}
+
+.problem-list-page .card-body {
+    padding: 10px 12px;
+}
+
+.problem-list-page .card-footer {
+    padding: 8px 12px;
+}
+
+/*
+   Toolbar lama yang memakai selector generik
+   .card-header > .d-flex dan form:has(...) sengaja
+   tidak digunakan lagi. Toolbar memakai class khusus.
+*/
+
+/* =====================================================
+   2. PROBLEM LIST TOOLBAR
+   Memerlukan class HTML:
+   problem-toolbar, problem-filter-row,
+   problem-toolbar-title, problem-filter-form,
+   problem-filter-select, problem-department-select,
+   problem-date-form, problem-date-controls,
+   problem-date-input, problem-date-separator,
+   problem-filter-button, problem-actions-row,
+   problem-create-button, problem-search-form,
+   problem-search-group, problem-search-input,
+   problem-search-button, problem-reset-button
+   ===================================================== */
+
+.problem-list-page .problem-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+}
+
+.problem-list-page .problem-filter-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 7px;
+    width: 100%;
+    min-width: 0;
+}
+
+.problem-list-page .problem-toolbar-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex: 0 0 auto;
+    margin: 0 4px 0 0;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.problem-list-page .problem-filter-form {
+    display: flex;
+    flex: 0 0 auto;
+    min-width: 0;
+    margin: 0;
+}
+
+.problem-list-page .problem-filter-select {
+    width: 118px;
+    min-width: 0;
+    height: 35px;
+    padding: 4px 22px 4px 8px;
+    border: 1px solid #ced6e0;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.problem-list-page .problem-department-select {
+    width: 132px;
+}
+
+
+/* =========================================================
+   DEPARTMENT TOOLBAR - SINGLE ROW
+   ========================================================= */
+
+.department-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 12px;
+    width: 100%;
+}
+
+.department-toolbar-left {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 12px;
+    min-width: 0;
+}
+
+.department-toolbar-left .card-title {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 17px;
+}
+
+.department-status-form {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.department-status-form select {
+    width: 140px;
+    min-height: 34px;
+}
+
+.department-toolbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.department-toolbar-right > .btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.department-search-form {
+    flex: 1 1 320px;
+    min-width: 200px;
+    max-width: 390px;
+    margin: 0;
+}
+
+.department-search-form .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.department-search-form .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.department-search-form .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.department-search-form .input-group-append .btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* Pada layar yang lebih kecil, toolbar boleh turun baris
+   agar tombol dan input tidak saling bertumpuk. */
+@media (max-width: 1199.98px) {
+    .department-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .department-toolbar-left {
+        width: 100%;
+    }
+
+    .department-toolbar-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .department-search-form {
+        flex: 1 1 260px;
+        max-width: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .department-toolbar-right {
+        flex-wrap: wrap;
+    }
+
+    .department-search-form {
+        flex: 1 1 100%;
+        min-width: 100%;
+        max-width: none;
+    }
+}
+
+
+
+/* =====================================================
+   FIX DATE INPUT: CALENDAR + INPUT ONE LINE
+   ===================================================== */
+
+.problem-list-page .problem-date-form {
+    display: flex !important;
+    align-items: center !important;
+    flex: 0 0 auto;
+    margin: 0;
+    min-width: 0;
+}
+
+.problem-list-page .problem-date-controls {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 6px;
+    min-width: 0;
+}
+
+.problem-list-page .problem-date-input.input-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: 155px !important;
+    min-width: 155px !important;
+    flex: 0 0 155px !important;
+    margin: 0;
+}
+
+.problem-list-page .problem-date-input .input-group-prepend {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.problem-list-page .problem-date-input .input-group-text {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 35px !important;
+    padding: 4px 8px !important;
+    white-space: nowrap;
+}
+
+.problem-list-page .problem-date-input input[type="date"] {
+    display: block !important;
+    flex: 1 1 auto !important;
+    width: 1% !important;
+    min-width: 0 !important;
+    height: 35px !important;
+    box-sizing: border-box;
+    padding: 3px 4px !important;
+    font-size: 11px;
+}
+
+.problem-list-page .problem-date-separator {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 auto;
+    height: 35px;
+    margin: 0;
+}
+
+.problem-list-page .problem-filter-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: center !important;
+    flex: 0 0 auto !important;
+    height: 35px !important;
+    min-height: 35px !important;
+    margin: 0 !important;
+    white-space: nowrap;
+}
+
+
+/* Consistent toolbar buttons */
+
+.problem-list-page .problem-toolbar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 35px;
+    min-height: 35px;
+    padding: 5px 10px;
+    margin: 0;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.problem-list-page .problem-filter-button,
+.problem-list-page .problem-create-button,
+.problem-list-page .problem-search-button,
+.problem-list-page .problem-reset-button {
+    flex: 0 0 auto;
+}
+
+/* Create Problem + Search */
+
+.problem-list-page .problem-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid #edf0f4;
+}
+
+.problem-list-page .problem-create-button {
+    margin-right: auto;
+}
+
+.problem-list-page .problem-search-form {
+    display: flex;
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0 0 0 auto;
+}
+
+.problem-list-page .problem-search-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: auto;
+    min-width: 0;
+}
+
+.problem-list-page .problem-search-input {
+    width: 260px;
+    min-width: 0;
+    height: 35px;
+    font-size: 12px;
+}
+
+.problem-list-page .problem-search-group .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 4px;
+}
+
+.problem-list-page .problem-search-button,
+.problem-list-page .problem-reset-button {
+    margin-left: 0;
+}
+
+/* Laptop sizes */
+
+@media (min-width: 1101px) and (max-width: 1366px) {
+    .problem-list-page .problem-toolbar {
+        padding: 11px 12px;
+        gap: 9px;
+    }
+
+    .problem-list-page .problem-filter-row {
+        gap: 6px;
+    }
+
+    .problem-list-page .problem-toolbar-title {
+        gap: 6px;
+        margin-right: 2px;
+        font-size: 14px;
+    }
+
+    .problem-list-page .problem-filter-select {
+        width: 108px;
+        font-size: 11.5px;
+    }
+
+    .problem-list-page .problem-department-select {
+        width: 120px;
+    }
+
+    .problem-list-page .problem-date-input {
+        flex-basis: 116px;
+        width: 116px;
+    }
+
+    .problem-list-page .problem-toolbar .btn {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+    .problem-list-page .problem-search-input {
+        width: 235px;
+    }
+}
+
+/* When the available content area is too narrow */
+
+@media (max-width: 1100px) {
+    .problem-list-page .problem-filter-row {
+        flex-wrap: wrap;
+    }
+
+    .problem-list-page .problem-actions-row {
+        justify-content: space-between;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+    .problem-list-page .problem-toolbar {
+        padding: 10px;
+    }
+
+    .problem-list-page .problem-filter-row {
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .problem-list-page .problem-filter-form {
+        flex: 1 1 135px;
+    }
+
+    .problem-list-page .problem-filter-select,
+    .problem-list-page .problem-department-select {
+        width: 100%;
+    }
+
+    .problem-list-page .problem-date-form,
+    .problem-list-page .problem-date-controls {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .problem-list-page .problem-date-input {
+        flex: 1 1 135px;
+        width: auto;
+    }
+
+    .problem-list-page .problem-actions-row {
+        align-items: stretch;
+    }
+
+    .problem-list-page .problem-search-form,
+    .problem-list-page .problem-search-group {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .problem-list-page .problem-search-input {
+        width: 100%;
+    }
+}
+
+/* =====================================================
+   3. PROBLEM TABLE
+   ===================================================== */
+
+.problem-list-page .problem-list-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12px;
+}
+
+.problem-list-page .problem-list-table th,
+.problem-list-page .problem-list-table td {
+    padding: 6px 7px;
+    vertical-align: middle;
+    line-height: 1.35;
+}
+
+.problem-list-page .problem-list-table th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Table header */
+
+.problem-list-page .problem-list-table thead th {
+    background-color: #eaf0f6;
+    color: #263b50;
+    font-size: 12px;
+    font-weight: 600;
+    border-color: #d6dee8;
+    border-bottom: 2px solid #cbd5e1;
+    padding: 10px 7px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.problem-list-page .problem-list-table thead th a {
+    white-space: nowrap;
+}
+
+.problem-list-page .problem-list-table thead th i,
+.problem-list-page .problem-list-table thead th .fas,
+.problem-list-page .problem-list-table thead th .fa {
+    opacity: 0.8;
+}
+
+/* Table rows and hover */
+
+.problem-list-page .problem-list-table tbody td {
+    color: #334155;
+    border-color: #e0e6ed;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.problem-list-page .problem-list-table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+/* Keep selected columns compact */
+
+.problem-list-page .problem-list-table td:nth-child(1),
+.problem-list-page .problem-list-table td:nth-child(3),
+.problem-list-page .problem-list-table td:nth-child(8),
+.problem-list-page .problem-list-table td:nth-child(9) {
+    white-space: nowrap;
+}
+
+/* Column widths: 10 columns */
+
+.problem-list-page .problem-list-table th:nth-child(1),
+.problem-list-page .problem-list-table td:nth-child(1) {
+    width: 42px;
+    text-align: center;
+}
+
+.problem-list-page .problem-list-table th:nth-child(2),
+.problem-list-page .problem-list-table td:nth-child(2) {
+    width: 105px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(3),
+.problem-list-page .problem-list-table td:nth-child(3) {
+    width: 88px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(4),
+.problem-list-page .problem-list-table td:nth-child(4) {
+    width: 110px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(5),
+.problem-list-page .problem-list-table td:nth-child(5) {
+    width: 100px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(6),
+.problem-list-page .problem-list-table td:nth-child(6) {
+    min-width: 130px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(7),
+.problem-list-page .problem-list-table td:nth-child(7) {
+    min-width: 95px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(8),
+.problem-list-page .problem-list-table td:nth-child(8) {
+    width: 72px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(9),
+.problem-list-page .problem-list-table td:nth-child(9) {
+    width: 85px;
+}
+
+.problem-list-page .problem-list-table th:nth-child(10),
+.problem-list-page .problem-list-table td:nth-child(10) {
+    width: 112px;
+    min-width: 112px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+
+.problem-list-page .problem-list-table td:last-child {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.problem-list-page .problem-list-table td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    padding: 0;
+    margin: 2px;
+    border-radius: 5px;
+    line-height: 1;
+    vertical-align: middle;
+    transition: filter 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.problem-list-page .problem-list-table td:last-child .btn i {
+    font-size: 13px;
+}
+
+.problem-list-page .problem-list-table td:last-child .btn:hover {
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+.problem-list-page .problem-list-table td:last-child .btn:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+/* Status badges */
+
+.problem-list-page .problem-list-table .badge {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.problem-list-page .problem-list-table .badge-info {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.problem-list-page .problem-list-table .badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.problem-list-page .problem-list-table .badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.problem-list-page .problem-list-table .badge-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+    border-color: #d1d5db;
+}
+
+/* Optional priority labels; applies only when these classes exist */
+
+.problem-list-page .problem-list-table .priority-high {
+    color: #b91c1c;
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 3px 8px;
+    font-weight: 600;
+}
+
+.problem-list-page .problem-list-table .priority-medium {
+    color: #92400e;
+    background-color: #fef3c7;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    padding: 3px 8px;
+    font-weight: 600;
+}
+
+.problem-list-page .problem-list-table .priority-low {
+    color: #166534;
+    background-color: #dcfce7;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 3px 8px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   4. PAGINATION
+   ===================================================== */
+
+.problem-list-page .pagination {
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+.problem-list-page .pagination .page-link {
+    padding: 4px 9px;
+    font-size: 12px;
+}
+
+/* Responsive table and action buttons */
+
+@media (max-width: 1366px) {
+    .problem-list-page .problem-list-table th,
+    .problem-list-page .problem-list-table td {
+        padding: 5px 6px;
+    }
+
+    .problem-list-page .problem-list-table thead th {
+        padding: 8px 6px;
+    }
+
+    .problem-list-page .problem-list-table td:last-child .btn {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .problem-list-header h1 {
+        font-size: 20px;
+    }
+
+    .problem-list-page .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .problem-list-page .problem-list-table {
+        min-width: 960px;
+    }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    .problem-list-page .problem-list-table tbody td,
+    .problem-list-page .problem-list-table td:last-child .btn {
+        transition: none;
+    }
+}
+
+
+/* Align date inputs and Filter button */
+.problem-list-page .problem-date-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+.problem-list-page .problem-date-input {
+    align-self: center;
+    margin: 0;
+}
+
+.problem-list-page .problem-date-input .input-group-prepend,
+.problem-list-page .problem-date-input .input-group-append {
+    display: flex;
+    align-items: stretch;
+}
+
+.problem-list-page .problem-date-input .input-group-text,
+.problem-list-page .problem-date-input .form-control {
+    height: 35px;
+    box-sizing: border-box;
+}
+
+.problem-list-page .problem-date-input .input-group-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.problem-list-page .problem-filter-button {
+    align-self: center;
+    height: 35px;
+    min-height: 35px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* Keep the date separator centered */
+.problem-list-page .problem-date-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    margin: 0;
+}
+
+
+/* =====================================================
+   KAIZEN LIST - CONSISTENT COMPACT TOOLBAR
+   Tampilan saja; logika program tidak diubah
+   ===================================================== */
+
+.kaizen-list-page .card-header {
+    padding: 12px 14px;
+}
+
+.kaizen-list-page .card-header > .d-flex {
+    gap: 8px;
+    min-width: 0;
+}
+
+.kaizen-list-page .card-header form {
+    margin-bottom: 0;
+}
+
+.kaizen-list-page .card-header .custom-select,
+.kaizen-list-page .card-header input.form-control {
+    height: 34px;
+    min-height: 34px;
+    font-size: 13px;
+    border-radius: 5px;
+}
+
+.kaizen-list-page .card-header .custom-select {
+    max-width: 100%;
+}
+
+.kaizen-list-page .card-header .btn {
+    min-height: 34px;
+    height: 34px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Search: input dan tombol tidak saling menempel */
+.kaizen-list-page .kaizen-search-form {
+    flex: 1 1 280px;
+    min-width: 240px;
+    max-width: 100%;
+    margin-left: auto;
+}
+
+.kaizen-list-page .kaizen-search-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kaizen-list-page .kaizen-search-group > .form-control {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    border-radius: 5px !important;
+}
+
+.kaizen-list-page .kaizen-search-group .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 6px;
+    margin-left: 0 !important;
+}
+
+.kaizen-list-page .kaizen-search-group .btn {
+    border-radius: 5px !important;
+    margin: 0 !important;
+}
+
+/* Tabel konsisten dengan Problem dan Improvement */
+.kaizen-list-page .table {
+    margin-bottom: 0;
+    font-size: 12px;
+}
+
+.kaizen-list-page .table thead th {
+    padding: 9px 8px;
+    vertical-align: middle;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .table tbody td {
+    padding: 8px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.kaizen-list-page .table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.kaizen-list-page .table tbody tr:hover {
+    background-color: #eef6ff;
+}
+
+.kaizen-list-page .table td .badge {
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .table td .btn {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 6px 8px;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+/* Laptop dan tablet */
+@media (max-width: 1200px) {
+    .kaizen-list-page .card-header > .d-flex {
+        flex-wrap: wrap;
+    }
+
+    .kaizen-list-page .kaizen-search-form {
+        flex-basis: 100%;
+        margin-left: 0;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 767.98px) {
+    .kaizen-list-page .card-header {
+        padding: 10px;
+    }
+
+    .kaizen-list-page .card-header > .d-flex {
+        align-items: stretch;
+    }
+
+    .kaizen-list-page .kaizen-search-form {
+        min-width: 0;
+    }
+
+    .kaizen-list-page .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+
+/* =====================================================
+   KAIZEN TOOLBAR - TITLE AND CREATE ON TOP ROW
+   ===================================================== */
+
+.kaizen-list-page .card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+/* Baris pertama: judul kiri, tombol Create kanan */
+.kaizen-list-page .card-header > .d-flex:first-child {
+    order: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Judul Kaizen List */
+.kaizen-list-page .card-header > .d-flex:first-child > div:first-child {
+    flex: 1 1 auto;
+    min-width: 120px;
+    margin: 0 !important;
+}
+
+/* Baris kedua: filter dan Search */
+.kaizen-list-page .card-header > .d-flex:last-child {
+    order: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Filter dan form */
+.kaizen-list-page .card-header > .d-flex:last-child form {
+    flex: 0 0 auto;
+    margin: 0 !important;
+}
+
+/* Search mengambil ruang yang tersisa */
+.kaizen-list-page .card-header .kaizen-search-form {
+    flex: 1 1 240px;
+    width: auto !important;
+    min-width: 160px;
+    max-width: none;
+    margin-left: auto !important;
+}
+
+/* Responsif */
+@media (max-width: 767.98px) {
+    .kaizen-list-page .card-header > .d-flex:first-child {
+        align-items: flex-start;
+    }
+
+    .kaizen-list-page .card-header > .d-flex:last-child {
+        flex-wrap: wrap;
+    }
+
+    .kaizen-list-page .card-header .kaizen-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+        margin-left: 0 !important;
+    }
+}
+
+
+/* =====================================================
+   KAIZEN TOOLBAR - FINAL HTML STRUCTURE
+   Row 1: Title left, Create buttons right
+   Row 2: Filters left, Search and Reset right
+   ===================================================== */
+
+.kaizen-list-page .kaizen-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+/* Row 1 */
+.kaizen-list-page .kaizen-toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.kaizen-list-page .kaizen-toolbar-title {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.kaizen-list-page .kaizen-toolbar-title .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .kaizen-create-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.kaizen-list-page .kaizen-create-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    min-height: 35px;
+    margin: 0;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Row 2 */
+.kaizen-list-page .kaizen-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    padding-top: 10px;
+    border-top: 1px solid #e2e7ed;
+}
+
+.kaizen-list-page .kaizen-filter-form,
+.kaizen-list-page .kaizen-date-form {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 0;
+    margin: 0;
+}
+
+.kaizen-list-page .kaizen-status-select {
+    width: 130px;
+}
+
+.kaizen-list-page .kaizen-department-select {
+    width: 150px;
+}
+
+.kaizen-list-page .kaizen-toolbar-bottom .custom-select,
+.kaizen-list-page .kaizen-toolbar-bottom input.form-control {
+    height: 35px;
+    min-height: 35px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.kaizen-list-page .kaizen-date-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
+
+.kaizen-list-page .kaizen-date-controls input[type="date"] {
+    width: 125px;
+    min-width: 110px;
+    padding: 4px 5px;
+}
+
+.kaizen-list-page .kaizen-date-separator {
+    flex: 0 0 auto;
+    color: #64748b;
+}
+
+.kaizen-list-page .kaizen-filter-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 35px;
+    min-height: 35px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Search takes remaining space */
+.kaizen-list-page .kaizen-search-form {
+    display: flex;
+    flex: 1 1 220px;
+    width: auto;
+    min-width: 170px;
+    margin: 0 0 0 auto;
+}
+
+.kaizen-list-page .kaizen-search-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+}
+
+.kaizen-list-page .kaizen-search-group > .form-control {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 35px;
+    border-radius: 5px !important;
+}
+
+.kaizen-list-page .kaizen-search-group .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 35px;
+    min-height: 35px;
+    padding: 5px;
+    margin: 0;
+    border-radius: 5px !important;
+}
+
+/* Laptop */
+@media (min-width: 768px) and (max-width: 1400px) {
+    .kaizen-list-page .kaizen-toolbar {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .kaizen-list-page .kaizen-toolbar-bottom {
+        gap: 6px;
+    }
+
+    .kaizen-list-page .kaizen-create-actions {
+        gap: 6px;
+    }
+
+    .kaizen-list-page .kaizen-create-actions .btn {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+
+    .kaizen-list-page .kaizen-status-select {
+        width: 115px;
+    }
+
+    .kaizen-list-page .kaizen-department-select {
+        width: 130px;
+    }
+
+    .kaizen-list-page .kaizen-date-controls input[type="date"] {
+        width: 112px;
+        min-width: 100px;
+        font-size: 11px;
+    }
+}
+
+/* Tablet and mobile */
+@media (max-width: 767.98px) {
+    .kaizen-list-page .kaizen-toolbar-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .kaizen-list-page .kaizen-create-actions {
+        justify-content: flex-start;
+        margin-left: 0;
+    }
+
+    .kaizen-list-page .kaizen-toolbar-bottom {
+        flex-wrap: wrap;
+    }
+
+    .kaizen-list-page .kaizen-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .kaizen-list-page .kaizen-date-controls {
+        flex-wrap: wrap;
+    }
+}
+
+/* =====================================================
+   KAIZEN LIST TABLE
+   Konsisten dengan Problem List dan Improvement List
+   ===================================================== */
+
+.kaizen-list-page .kaizen-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+}
+
+.kaizen-list-page .kaizen-list-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12px;
+    color: #334155;
+    border-color: #dbe3ec;
+    background-color: #fff;
+}
+
+.kaizen-list-page .kaizen-list-table th,
+.kaizen-list-page .kaizen-list-table td {
+    padding: 6px 8px;
+    vertical-align: middle;
+    line-height: 1.4;
+    border-color: #dbe3ec;
+}
+
+.kaizen-list-page .kaizen-list-table thead th {
+    padding: 9px 7px;
+    background-color: #eaf0f6;
+    color: #263b50;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.kaizen-list-page .kaizen-list-table thead th a {
+    white-space: nowrap;
+}
+
+.kaizen-list-page .kaizen-list-table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.kaizen-list-page .kaizen-list-table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+.kaizen-list-page .kaizen-list-table tbody td {
+    overflow-wrap: anywhere;
+}
+
+/* Nomor, tanggal, dan status tetap ringkas */
+.kaizen-list-page .kaizen-list-table th:first-child,
+.kaizen-list-page .kaizen-list-table td:first-child {
+    width: 42px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(2),
+.kaizen-list-page .kaizen-list-table td:nth-child(2) {
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(3),
+.kaizen-list-page .kaizen-list-table td:nth-child(3) {
+    min-width: 95px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(4),
+.kaizen-list-page .kaizen-list-table td:nth-child(4) {
+    min-width: 115px;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(5),
+.kaizen-list-page .kaizen-list-table td:nth-child(5) {
+    min-width: 180px;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(6),
+.kaizen-list-page .kaizen-list-table td:nth-child(6) {
+    min-width: 150px;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(7),
+.kaizen-list-page .kaizen-list-table td:nth-child(7),
+.kaizen-list-page .kaizen-list-table th:nth-child(8),
+.kaizen-list-page .kaizen-list-table td:nth-child(8) {
+    min-width: 90px;
+}
+
+.kaizen-list-page .kaizen-list-table th:nth-child(9),
+.kaizen-list-page .kaizen-list-table td:nth-child(9) {
+    min-width: 90px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Action buttons: ukuran dan jarak konsisten */
+.kaizen-list-page .kaizen-list-table th:last-child,
+.kaizen-list-page .kaizen-list-table td:last-child {
+    width: 100px;
+    min-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .kaizen-list-table td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    padding: 0;
+    margin: 2px;
+    border-radius: 5px;
+    vertical-align: middle;
+    line-height: 1;
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.kaizen-list-page .kaizen-list-table td:last-child .btn i {
+    font-size: 13px;
+}
+
+.kaizen-list-page .kaizen-list-table td:last-child .btn:hover {
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+/* Status badges */
+.kaizen-list-page .kaizen-list-table .badge {
+    display: inline-block;
+    padding: 4px 9px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+.kaizen-list-page .kaizen-list-table .badge-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+    border-color: #d1d5db;
+}
+
+.kaizen-list-page .kaizen-list-table .badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.kaizen-list-page .kaizen-list-table .badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.kaizen-list-page .kaizen-list-table .badge-danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.kaizen-list-page .kaizen-list-table .badge-primary {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.kaizen-list-page .kaizen-list-table .badge-light {
+    background-color: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+/* Laptop 14–15,6 inci */
+@media (max-width: 1366px) {
+    .kaizen-list-page .kaizen-list-table th,
+    .kaizen-list-page .kaizen-list-table td {
+        padding: 5px 6px;
+    }
+
+    .kaizen-list-page .kaizen-list-table thead th {
+        padding: 8px 6px;
+    }
+
+    .kaizen-list-page .kaizen-list-table td:last-child .btn {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .kaizen-list-page .kaizen-list-table {
+        min-width: 1000px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kaizen-list-page .kaizen-list-table tbody tr,
+    .kaizen-list-page .kaizen-list-table td:last-child .btn {
+        transition: none;
+    }
+}
+
+
+/* Problem toolbar: title/create row + filter/search row */
+
+.problem-list-page .problem-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+}
+
+.problem-list-page .problem-toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.problem-list-page .problem-toolbar-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.problem-list-page .problem-create-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    white-space: nowrap;
+    border-radius: 5px;
+}
+
+.problem-list-page .problem-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid #e2e7ed;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-filter-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-filter-form,
+.problem-list-page .problem-toolbar-bottom .problem-date-form {
+    margin: 0;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-form {
+    flex: 1 1 230px;
+    min-width: 190px;
+    margin: 0 0 0 auto;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    border-radius: 5px !important;
+}
+
+.problem-list-page .problem-toolbar-bottom .input-group-append {
+    display: flex;
+    gap: 6px;
+    margin: 0 !important;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-button,
+.problem-list-page .problem-toolbar-bottom .problem-reset-button {
+    border-radius: 5px !important;
+}
+
+@media (max-width: 767.98px) {
+    .problem-list-page .problem-toolbar-bottom {
+        align-items: stretch;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+}
+
+/* =====================================================
+   PROBLEM LIST - FILTER AND SEARCH ON SAME ROW
+   ===================================================== */
+
+.problem-list-page .problem-toolbar-bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+    width: 100%;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-filter-row {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-filter-form,
+.problem-list-page .problem-toolbar-bottom .problem-date-form {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-form {
+    display: flex;
+    flex: 1 1 250px;
+    min-width: 150px;
+    width: auto;
+    margin: 0 0 0 auto;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+}
+
+.problem-list-page .problem-toolbar-bottom .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 6px;
+    margin: 0;
+}
+
+/* Laptop: ringkas ukuran filter agar tersedia ruang untuk Search */
+@media (min-width: 768px) and (max-width: 1400px) {
+    .problem-list-page .problem-toolbar-bottom {
+        gap: 8px;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-filter-row {
+        gap: 6px;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-filter-select {
+        width: 112px;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-department-select {
+        width: 125px;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-date-input {
+        width: 145px;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-search-form {
+        flex-basis: 200px;
+    }
+}
+
+/* Mobile: izinkan filter dan Search turun baris */
+@media (max-width: 767.98px) {
+    .problem-list-page .problem-toolbar-bottom {
+        flex-wrap: wrap;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-filter-row {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .problem-list-page .problem-toolbar-bottom .problem-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+}
+
+/* Problem List - wider keyword search */
+
+.problem-list-page .problem-toolbar-bottom .problem-search-form {
+    flex: 1 1 420px !important;
+    min-width: 320px;
+    max-width: none;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-group {
+    width: 100%;
+}
+
+.problem-list-page .problem-toolbar-bottom .problem-search-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Laptop 14 inch */
+@media (min-width: 768px) and (max-width: 1400px) {
+    .problem-list-page .problem-toolbar-bottom .problem-search-form {
+        flex-basis: 350px !important;
+        min-width: 280px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .problem-list-page .problem-toolbar-bottom .problem-search-form {
+        flex: 1 1 100% !important;
+        min-width: 0;
+    }
+}
+
+
+/* =====================================================
+   AUDIT LIST - COMPACT TOOLBAR
+   Consistent with Problem and Improvement
+   ===================================================== */
+
+.audit-list-page {
+    margin-bottom: 12px;
+}
+
+.audit-list-page .audit-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+.audit-list-page .audit-toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e7ed;
+}
+
+.audit-list-page .audit-toolbar-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.audit-list-page .audit-toolbar-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.audit-list-page .audit-toolbar-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 12px;
+    margin: 0;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.audit-list-page .audit-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.audit-list-page .audit-status-form {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.audit-list-page .audit-status-select {
+    width: 160px;
+    height: 34px;
+    border-radius: 5px;
+}
+
+.audit-list-page .audit-search-form {
+    flex: 1 1 320px;
+    min-width: 180px;
+    margin: 0 0 0 auto;
+}
+
+.audit-list-page .audit-search-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+}
+
+.audit-list-page .audit-search-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    border-radius: 5px !important;
+}
+
+.audit-list-page .audit-search-group .input-group-append {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+}
+
+.audit-list-page .audit-search-button,
+.audit-list-page .audit-reset-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 34px;
+    border-radius: 5px !important;
+}
+
+/* Table */
+.audit-list-page .table-responsive {
+    width: 100%;
+}
+
+.audit-list-page table.table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+.audit-list-page table.table thead th {
+    padding: 9px 8px;
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: 600;
+    background-color: #eaf0f6;
+    border-bottom: 2px solid #d2dce7;
+}
+
+.audit-list-page table.table tbody td {
+    padding: 8px;
+    vertical-align: middle;
+    line-height: 1.4;
+    border-color: #dce4ed;
+}
+
+.audit-list-page table.table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.audit-list-page table.table tbody tr:hover {
+    background-color: #edf5ff;
+}
+
+.audit-list-page table.table tbody td .badge {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.audit-list-page table.table tbody td .btn {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 5px 7px;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+/* Pagination and footer */
+.audit-list-page .card-footer {
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+.audit-list-page .pagination {
+    margin-bottom: 0;
+}
+
+.audit-list-page .pagination .page-link {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Laptop and tablet */
+@media (max-width: 1200px) {
+    .audit-list-page .audit-toolbar-bottom {
+        gap: 8px;
+    }
+
+    .audit-list-page .audit-status-select {
+        width: 135px;
+    }
+
+    .audit-list-page .audit-search-form {
+        flex-basis: 240px;
+    }
+
+    .audit-list-page table.table thead th,
+    .audit-list-page table.table tbody td {
+        padding: 6px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .audit-list-page .audit-toolbar-bottom {
+        flex-wrap: wrap;
+    }
+
+    .audit-list-page .audit-status-form,
+    .audit-list-page .audit-status-select {
+        width: 100%;
+    }
+
+    .audit-list-page .audit-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .audit-list-page .audit-toolbar-actions {
+        margin-left: 0;
+    }
+
+    .audit-list-page .audit-toolbar-top {
+        align-items: flex-start;
+    }
+
+    .audit-list-page table.table {
+        min-width: 900px;
+    }
+}
+
+/* =====================================================
+   AUDIT LIST - SINGLE ROW TOOLBAR
+   ===================================================== */
+
+.audit-list-page .audit-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+.audit-list-page .audit-toolbar-top {
+    display: contents;
+}
+
+.audit-list-page .audit-toolbar-title {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    margin: 0;
+    font-size: 16px;
+}
+
+.audit-list-page .audit-toolbar-actions {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.audit-list-page .audit-toolbar-bottom {
+    display: contents;
+}
+
+.audit-list-page .audit-status-form {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.audit-list-page .audit-status-select {
+    width: 120px;
+    height: 34px;
+}
+
+.audit-list-page .audit-search-form {
+    flex: 1 1 280px;
+    min-width: 160px;
+    max-width: 360px;
+    margin: 0;
+}
+
+.audit-list-page .audit-search-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.audit-list-page .audit-search-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+}
+
+.audit-list-page .audit-search-group .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 6px;
+    margin: 0;
+}
+
+.audit-list-page .audit-search-button,
+.audit-list-page .audit-reset-button {
+    min-width: 36px;
+    height: 34px;
+    border-radius: 5px !important;
+}
+
+/* Ukuran laptop */
+@media (min-width: 768px) and (max-width: 1400px) {
+    .audit-list-page .audit-toolbar {
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .audit-list-page .audit-toolbar-actions {
+        gap: 5px;
+    }
+
+    .audit-list-page .audit-toolbar-actions .btn {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .audit-list-page .audit-status-select {
+        width: 100px;
+    }
+
+    .audit-list-page .audit-search-form {
+        flex-basis: 200px;
+        min-width: 130px;
+    }
+}
+
+/* Layar kecil: izinkan toolbar turun baris */
+@media (max-width: 767.98px) {
+    .audit-list-page .audit-toolbar {
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .audit-list-page .audit-toolbar-top,
+    .audit-list-page .audit-toolbar-bottom {
+        display: flex;
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .audit-list-page .audit-toolbar-actions {
+        margin-left: auto;
+    }
+
+    .audit-list-page .audit-search-form {
+        flex: 1 1 100%;
+        max-width: none;
+    }
+}
+
+
+/* =====================================================
+   AUDIT LIST - TABLE DESIGN
+   Consistent with Problem and Improvement
+   ===================================================== */
+
+.audit-list-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.audit-list-page table.table {
+    width: 100%;
+    margin-bottom: 0;
+    color: #334155;
+    background: #ffffff;
+    border-color: #dbe3ec;
+    font-size: 12px;
+}
+
+/* Table header */
+.audit-list-page table.table thead th {
+    padding: 9px 8px;
+    background-color: #eaf0f6;
+    color: #263b50;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-color: #d5dee8;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+/* Table cells */
+.audit-list-page table.table tbody td {
+    padding: 7px 8px;
+    vertical-align: middle;
+    line-height: 1.4;
+    border-color: #dbe3ec;
+}
+
+/* Row hover */
+.audit-list-page table.table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.audit-list-page table.table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+/* Audit number */
+.audit-list-page table.table th:nth-child(2),
+.audit-list-page table.table td:nth-child(2) {
+    min-width: 115px;
+    white-space: nowrap;
+}
+
+/* Title and category */
+.audit-list-page table.table th:nth-child(3),
+.audit-list-page table.table td:nth-child(3) {
+    min-width: 180px;
+}
+
+.audit-list-page table.table th:nth-child(4),
+.audit-list-page table.table td:nth-child(4) {
+    min-width: 110px;
+}
+
+.audit-list-page table.table th:nth-child(5),
+.audit-list-page table.table td:nth-child(5) {
+    min-width: 150px;
+}
+
+/* Audit date */
+.audit-list-page table.table th:nth-child(6),
+.audit-list-page table.table td:nth-child(6) {
+    min-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Status and Active */
+.audit-list-page table.table th:nth-child(7),
+.audit-list-page table.table td:nth-child(7),
+.audit-list-page table.table th:nth-child(8),
+.audit-list-page table.table td:nth-child(8) {
+    min-width: 85px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Status badge */
+.audit-list-page table.table tbody td .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+/* Action column */
+.audit-list-page table.table th:last-child,
+.audit-list-page table.table td:last-child {
+    width: 150px;
+    min-width: 150px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+.audit-list-page table.table tbody td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    margin: 2px;
+    border-radius: 5px;
+    vertical-align: middle;
+    line-height: 1;
+    transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.audit-list-page table.table tbody td:last-child .btn i {
+    font-size: 13px;
+}
+
+.audit-list-page table.table tbody td:last-child .btn:hover {
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+/* Footer and pagination */
+.audit-list-page .card-footer {
+    padding: 10px 14px;
+    font-size: 12px;
+}
+
+.audit-list-page .pagination {
+    margin-bottom: 0;
+}
+
+.audit-list-page .pagination .page-link {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+/* Laptop screens */
+@media (max-width: 1366px) {
+    .audit-list-page table.table thead th {
+        padding: 8px 6px;
+    }
+
+    .audit-list-page table.table tbody td {
+        padding: 6px;
+    }
+
+    .audit-list-page table.table th:last-child,
+    .audit-list-page table.table td:last-child {
+        width: 135px;
+        min-width: 135px;
+    }
+
+    .audit-list-page table.table tbody td:last-child .btn {
+        width: 29px;
+        height: 29px;
+        min-width: 29px;
+    }
+}
+
+/* Mobile screens */
+@media (max-width: 767.98px) {
+    .audit-list-page table.table {
+        min-width: 1000px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .audit-list-page table.table tbody tr,
+    .audit-list-page table.table tbody td:last-child .btn {
+        transition: none;
+    }
+}
+
+
+/* =====================================================
+   SELECT PROBLEM FOR IMPROVEMENT
+   Visual-only styling
+   ===================================================== */
+
+.select-problem-page {
+    margin-bottom: 12px;
+}
+
+/* Toolbar */
+.select-problem-page .select-problem-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 14px;
+}
+
+.select-problem-page .select-problem-toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e7ed;
+}
+
+.select-problem-page .select-problem-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.select-problem-page .select-problem-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+/* Filter and search row */
+.select-problem-page .select-problem-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+}
+
+.select-problem-page .select-problem-filter-form {
+    flex: 0 0 auto;
+    min-width: 0;
+    margin: 0;
+}
+
+.select-problem-page .select-problem-status {
+    width: 145px;
+}
+
+.select-problem-page .select-problem-department {
+    width: 175px;
+}
+
+.select-problem-page .select-problem-status,
+.select-problem-page .select-problem-department {
+    height: 36px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.select-problem-page .select-problem-search-form {
+    flex: 1 1 300px;
+    min-width: 160px;
+    margin: 0;
+}
+
+.select-problem-page .select-problem-search-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.select-problem-page .select-problem-search-input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+    border-radius: 5px !important;
+    font-size: 12px;
+}
+
+.select-problem-page .select-problem-search-group .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 6px;
+    margin: 0;
+}
+
+.select-problem-page .select-problem-search-button,
+.select-problem-page .select-problem-reset-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 36px;
+    padding: 0;
+    border-radius: 5px !important;
+}
+
+/* Table */
+.select-problem-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.select-problem-page table.table {
+    width: 100%;
+    margin-bottom: 0;
+    color: #334155;
+    background: #fff;
+    font-size: 12px;
+}
+
+.select-problem-page table.table thead th {
+    padding: 9px 8px;
+    background: #eaf0f6;
+    color: #263b50;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.4;
+    border-color: #d5dee8;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.select-problem-page table.table tbody td {
+    padding: 7px 8px;
+    vertical-align: middle;
+    line-height: 1.45;
+    border-color: #dbe3ec;
+}
+
+.select-problem-page table.table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.select-problem-page table.table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+/* No, date, status and action */
+.select-problem-page table.table th:first-child,
+.select-problem-page table.table td:first-child {
+    width: 48px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.select-problem-page table.table th:nth-child(2),
+.select-problem-page table.table td:nth-child(2) {
+    min-width: 105px;
+    white-space: nowrap;
+}
+
+.select-problem-page table.table th:nth-child(3),
+.select-problem-page table.table td:nth-child(3) {
+    min-width: 105px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.select-problem-page table.table th:nth-child(4),
+.select-problem-page table.table td:nth-child(4) {
+    min-width: 125px;
+}
+
+.select-problem-page table.table th:nth-child(5),
+.select-problem-page table.table td:nth-child(5) {
+    min-width: 95px;
+}
+
+.select-problem-page table.table th:nth-child(6),
+.select-problem-page table.table td:nth-child(6) {
+    min-width: 190px;
+}
+
+.select-problem-page table.table th:nth-child(7),
+.select-problem-page table.table td:nth-child(7) {
+    min-width: 135px;
+}
+
+.select-problem-page table.table th:nth-child(8),
+.select-problem-page table.table td:nth-child(8) {
+    min-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.select-problem-page table.table th:last-child,
+.select-problem-page table.table td:last-child {
+    min-width: 135px;
+    text-align: center;
+}
+
+/* Status badges */
+.select-problem-page table.table .badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Improvement action button */
+.select-problem-page table.table td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 6px 10px;
+    margin: 2px 0;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: normal;
+}
+
+/* Footer */
+.select-problem-page .card-footer {
+    padding: 10px 14px;
+    font-size: 12px;
+}
+
+.select-problem-page .pagination {
+    margin-bottom: 0;
+}
+
+.select-problem-page .pagination .page-link {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+/* Laptop */
+@media (max-width: 1200px) {
+    .select-problem-page .select-problem-toolbar-bottom {
+        gap: 6px;
+    }
+
+    .select-problem-page .select-problem-status {
+        width: 125px;
+    }
+
+    .select-problem-page .select-problem-department {
+        width: 150px;
+    }
+
+    .select-problem-page .select-problem-search-form {
+        flex-basis: 200px;
+    }
+
+    .select-problem-page table.table thead th,
+    .select-problem-page table.table tbody td {
+        padding: 6px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .select-problem-page .select-problem-toolbar-bottom {
+        flex-wrap: wrap;
+    }
+
+    .select-problem-page .select-problem-filter-form,
+    .select-problem-page .select-problem-status,
+    .select-problem-page .select-problem-department {
+        width: 100%;
+    }
+
+    .select-problem-page .select-problem-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .select-problem-page table.table {
+        min-width: 1000px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .select-problem-page table.table tbody tr {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
+   FINDING MONITORING - COMPACT RESPONSIVE LAYOUT
+   Tampilan saja; tidak mengubah logika program
+   ========================================================= */
+
+.finding-monitoring-page {
+    font-size: 13px;
+}
+
+/* ---------- Page heading ---------- */
+
+.finding-monitoring-page h3 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.finding-monitoring-page .row.mb-3 {
+    margin-bottom: 14px !important;
+}
+
+.finding-monitoring-page .row.mb-3 .btn {
+    min-height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+/* ---------- KPI cards: six compact boxes ---------- */
+
+.finding-monitoring-page .small-box {
+    min-height: 118px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.finding-monitoring-page .small-box .inner {
+    padding: 14px 12px;
+}
+
+.finding-monitoring-page .small-box h3 {
+    margin: 0 0 5px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.finding-monitoring-page .small-box p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.finding-monitoring-page .small-box .icon {
+    top: 12px;
+    right: 10px;
+}
+
+.finding-monitoring-page .small-box .icon > i {
+    top: 0;
+    font-size: 58px;
+    transition: none;
+}
+
+.finding-monitoring-page .small-box:hover .icon > i {
+    transform: none;
+}
+
+/* ---------- Card headers ---------- */
+
+.finding-monitoring-page .card {
+    margin-bottom: 14px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.finding-monitoring-page .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.finding-monitoring-page .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.finding-monitoring-page .card-tools {
+    margin: 0;
+}
+
+/* ---------- Filter: one row on laptop/desktop ---------- */
+
+.finding-monitoring-page .card-secondary .card-body {
+    padding: 12px 14px;
+}
+
+.finding-monitoring-page .card-secondary form {
+    width: 100%;
+}
+
+.finding-monitoring-page .card-secondary form > .row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 10px;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row > [class*="col-"] {
+    flex: 1 1 0;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row > .col-md-3 {
+    flex: 1.5 1 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row > .col-md-2:last-child {
+    flex: 0 0 auto;
+}
+
+.finding-monitoring-page .card-secondary .form-group {
+    margin-bottom: 0;
+}
+
+.finding-monitoring-page .card-secondary label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.finding-monitoring-page .card-secondary .form-control {
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.finding-monitoring-page .card-secondary form .btn {
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 5px;
+}
+
+/* ---------- Finding table ---------- */
+
+.finding-monitoring-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.finding-monitoring-page .card-primary .card-body {
+    padding: 12px 14px;
+}
+
+.finding-monitoring-page .card-primary table.table {
+    width: 100%;
+    margin-bottom: 0;
+    color: #334155;
+    font-size: 12px;
+    border-color: #d7e0e9;
+}
+
+.finding-monitoring-page .card-primary table.table thead th {
+    padding: 9px 8px;
+    color: #263b50;
+    background: #eaf0f6;
+    border-color: #d5dee8;
+    border-bottom: 2px solid #cbd5e1;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .card-primary table.table tbody td {
+    padding: 8px;
+    border-color: #dbe3ec;
+    line-height: 1.4;
+    vertical-align: middle;
+}
+
+.finding-monitoring-page .card-primary table.table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.finding-monitoring-page .card-primary table.table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+/* Avoid excessive wrapping in identifiers and short fields */
+.finding-monitoring-page .card-primary table.table th:first-child,
+.finding-monitoring-page .card-primary table.table td:first-child {
+    width: 44px;
+    min-width: 44px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(2),
+.finding-monitoring-page .card-primary table.table td:nth-child(2),
+.finding-monitoring-page .card-primary table.table th:nth-child(3),
+.finding-monitoring-page .card-primary table.table td:nth-child(3) {
+    min-width: 115px;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(4),
+.finding-monitoring-page .card-primary table.table td:nth-child(4) {
+    min-width: 140px;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(5),
+.finding-monitoring-page .card-primary table.table td:nth-child(5) {
+    min-width: 220px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(6),
+.finding-monitoring-page .card-primary table.table td:nth-child(6) {
+    min-width: 90px;
+    text-align: center;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(7),
+.finding-monitoring-page .card-primary table.table td:nth-child(7) {
+    min-width: 135px;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(8),
+.finding-monitoring-page .card-primary table.table td:nth-child(8) {
+    min-width: 115px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(9),
+.finding-monitoring-page .card-primary table.table td:nth-child(9) {
+    min-width: 140px;
+    text-align: center;
+}
+
+.finding-monitoring-page .card-primary table.table th:nth-child(10),
+.finding-monitoring-page .card-primary table.table td:nth-child(10) {
+    min-width: 145px;
+    text-align: center;
+}
+
+/* Compact, readable badges */
+.finding-monitoring-page .badge {
+    padding: 4px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+.finding-monitoring-page .card-primary table.table td:last-child {
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .card-primary table.table td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: 2px;
+    padding: 0;
+    border-radius: 5px;
+}
+
+/* ---------- Laptop: allow filters to wrap if necessary ---------- */
+
+@media (max-width: 1100px) {
+    .finding-monitoring-page .card-secondary form > .row {
+        flex-wrap: wrap;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > [class*="col-"] {
+        flex: 1 1 180px;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > .col-md-2:last-child {
+        flex: 0 0 auto;
+    }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 767.98px) {
+    .finding-monitoring-page h3 {
+        font-size: 20px;
+    }
+
+    .finding-monitoring-page .small-box {
+        min-height: 100px;
+    }
+
+    .finding-monitoring-page .small-box h3 {
+        font-size: 26px;
+    }
+
+    .finding-monitoring-page .small-box .icon > i {
+        font-size: 46px;
+    }
+
+    .finding-monitoring-page .row.mb-3 > .col-12 > .d-flex {
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > [class*="col-"] {
+        flex: 1 1 100%;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > .col-md-2:last-child {
+        flex: 1 1 100%;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > .col-md-2:last-child .form-group > div {
+        display: flex;
+        gap: 6px;
+    }
+
+    .finding-monitoring-page .card-primary table.table {
+        min-width: 1250px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .finding-monitoring-page .card-primary table.table tbody tr {
+        transition: none;
+    }
+}
+
+
+/* ---------- Finding Monitoring KPI: extra compact ---------- */
+
+.finding-monitoring-page .small-box {
+    min-height: 0;
+    height: 96px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.finding-monitoring-page .small-box .inner {
+    padding: 10px 12px;
+}
+
+.finding-monitoring-page .small-box h3 {
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.finding-monitoring-page .small-box p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.finding-monitoring-page .small-box .icon {
+    top: 8px;
+    right: 10px;
+}
+
+.finding-monitoring-page .small-box .icon > i {
+    top: 0;
+    font-size: 46px;
+}
+
+.finding-monitoring-page .small-box:hover .icon > i {
+    transform: none;
+}
+
+@media (max-width: 767.98px) {
+    .finding-monitoring-page .small-box {
+        height: 88px;
+    }
+
+    .finding-monitoring-page .small-box h3 {
+        font-size: 24px;
+    }
+
+    .finding-monitoring-page .small-box .icon > i {
+        font-size: 40px;
+    }
+}
+
+
+/* =====================================================
+   FINDING MONITORING - FILTER TOOLBAR
+   ===================================================== */
+
+.finding-monitoring-page .card-secondary .card-body {
+    padding: 14px 16px;
+}
+
+.finding-monitoring-page .card-secondary form {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 12px;
+    margin: 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row > [class*="col-"] {
+    flex: 1 1 0;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row > [class*="col-"]:first-child {
+    flex: 1.4 1 0;
+}
+
+.finding-monitoring-page .card-secondary form > .row > [class*="col-"]:last-child {
+    flex: 0 0 auto;
+}
+
+.finding-monitoring-page .card-secondary .form-group {
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.finding-monitoring-page .card-secondary label {
+    display: block;
+    margin-bottom: 6px;
+    color: #344054;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.finding-monitoring-page .card-secondary .form-control,
+.finding-monitoring-page .card-secondary select {
+    width: 100%;
+    min-width: 0;
+    height: 36px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
+.finding-monitoring-page .card-secondary .form-control:focus,
+.finding-monitoring-page .card-secondary select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.12);
+}
+
+.finding-monitoring-page .card-secondary form .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 6px 12px;
+    margin: 0;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .card-secondary form .btn i {
+    margin-right: 5px;
+}
+
+/* Tablet: filter boleh membungkus */
+@media (max-width: 1100px) {
+    .finding-monitoring-page .card-secondary form > .row {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > [class*="col-"] {
+        flex: 1 1 180px;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > [class*="col-"]:last-child {
+        flex: 0 0 auto;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .finding-monitoring-page .card-secondary form > .row > [class*="col-"] {
+        flex: 1 1 100%;
+    }
+
+    .finding-monitoring-page .card-secondary form > .row > [class*="col-"]:last-child {
+        flex: 1 1 100%;
+    }
+}
+
+
+/* =====================================================
+   FINDING MONITORING - FOLLOW-UP TABLE
+   ===================================================== */
+
+.finding-monitoring-page .card-primary .card-header {
+    padding: 11px 16px;
+}
+
+.finding-monitoring-page .card-primary .card-body {
+    padding: 12px 16px;
+}
+
+.finding-monitoring-page .card-primary .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.finding-monitoring-page .card-primary table.table {
+    width: 100%;
+    margin-bottom: 0;
+    background: #ffffff;
+    color: #344054;
+    font-size: 12px;
+    border-color: #d8e1eb;
+}
+
+.finding-monitoring-page .card-primary table.table thead th {
+    padding: 9px 8px;
+    background: #eaf0f6;
+    color: #263b50;
+    border-color: #d5dee8;
+    border-bottom: 2px solid #cbd5e1;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .card-primary table.table tbody td {
+    padding: 8px;
+    border-color: #dbe3ec;
+    line-height: 1.45;
+    vertical-align: middle;
+}
+
+.finding-monitoring-page .card-primary table.table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.finding-monitoring-page .card-primary table.table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+/* Finding number */
+.finding-monitoring-page .card-primary table.table th:nth-child(1),
+.finding-monitoring-page .card-primary table.table td:nth-child(1) {
+    min-width: 42px;
+    text-align: center;
+}
+
+/* Finding No and Audit No */
+.finding-monitoring-page .card-primary table.table th:nth-child(2),
+.finding-monitoring-page .card-primary table.table td:nth-child(2),
+.finding-monitoring-page .card-primary table.table th:nth-child(3),
+.finding-monitoring-page .card-primary table.table td:nth-child(3) {
+    min-width: 115px;
+}
+
+/* Location */
+.finding-monitoring-page .card-primary table.table th:nth-child(4),
+.finding-monitoring-page .card-primary table.table td:nth-child(4) {
+    min-width: 140px;
+}
+
+/* Finding description */
+.finding-monitoring-page .card-primary table.table th:nth-child(5),
+.finding-monitoring-page .card-primary table.table td:nth-child(5) {
+    min-width: 220px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Severity */
+.finding-monitoring-page .card-primary table.table th:nth-child(6),
+.finding-monitoring-page .card-primary table.table td:nth-child(6) {
+    min-width: 85px;
+    text-align: center;
+}
+
+/* PIC */
+.finding-monitoring-page .card-primary table.table th:nth-child(7),
+.finding-monitoring-page .card-primary table.table td:nth-child(7) {
+    min-width: 130px;
+}
+
+/* Target date */
+.finding-monitoring-page .card-primary table.table th:nth-child(8),
+.finding-monitoring-page .card-primary table.table td:nth-child(8) {
+    min-width: 115px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Status */
+.finding-monitoring-page .card-primary table.table th:nth-child(9),
+.finding-monitoring-page .card-primary table.table td:nth-child(9) {
+    min-width: 140px;
+    text-align: center;
+}
+
+/* Action columns */
+.finding-monitoring-page .card-primary table.table th:last-child,
+.finding-monitoring-page .card-primary table.table td:last-child {
+    min-width: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Badges */
+.finding-monitoring-page .card-primary table.table .badge {
+    display: inline-block;
+    max-width: 100%;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+.finding-monitoring-page .card-primary table.table td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    margin: 2px;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+/* Laptop */
+@media (max-width: 1366px) {
+    .finding-monitoring-page .card-primary .card-body {
+        padding: 10px;
+    }
+
+    .finding-monitoring-page .card-primary table.table thead th,
+    .finding-monitoring-page .card-primary table.table tbody td {
+        padding: 6px;
+    }
+}
+
+/* Mobile: retain readable table width */
+@media (max-width: 767.98px) {
+    .finding-monitoring-page .card-primary table.table {
+        min-width: 1250px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .finding-monitoring-page .card-primary table.table tbody tr {
+        transition: none;
+    }
+}
+
+
+/* =====================================================
+   FINDING MONITORING - LABELLESS FILTER
+   ===================================================== */
+
+.finding-monitoring-page .finding-filter-card > .card-body {
+    padding: 14px 16px;
+}
+
+.finding-monitoring-page .finding-filter-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.finding-monitoring-page .finding-filter-row > [class*="col-"] {
+    flex: 1 1 0;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 0;
+}
+
+.finding-monitoring-page .finding-filter-row > .col-md-3 {
+    flex: 1.5 1 0;
+}
+
+.finding-monitoring-page .finding-filter-row > .col-md-2:last-child {
+    flex: 0 0 auto;
+}
+
+.finding-monitoring-page .finding-filter-row .form-control {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 7px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.finding-monitoring-page .finding-filter-buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.finding-monitoring-page .finding-filter-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 6px 11px;
+    margin: 0;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+/* Laptop: compact controls */
+@media (min-width: 1101px) and (max-width: 1400px) {
+    .finding-monitoring-page .finding-filter-row {
+        gap: 8px;
+    }
+
+    .finding-monitoring-page .finding-filter-row > .col-md-3 {
+        flex: 1.3 1 0;
+    }
+
+    .finding-monitoring-page .finding-filter-row > .col-md-2:last-child {
+        flex: 0 0 auto;
+    }
+
+    .finding-monitoring-page .finding-filter-buttons .btn {
+        padding: 6px 8px;
+    }
+}
+
+/* Smaller screens: allow wrapping */
+@media (max-width: 1100px) {
+    .finding-monitoring-page .finding-filter-row {
+        flex-wrap: wrap;
+    }
+
+    .finding-monitoring-page .finding-filter-row > [class*="col-"] {
+        flex: 1 1 180px;
+    }
+
+    .finding-monitoring-page .finding-filter-row > .col-md-2:last-child {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .finding-monitoring-page .finding-filter-row > [class*="col-"] {
+        flex: 1 1 100%;
+    }
+
+    .finding-monitoring-page .finding-filter-buttons {
+        width: 100%;
+    }
+
+    .finding-monitoring-page .finding-filter-buttons .btn {
+        flex: 1;
+    }
+}
+
+
+/* =====================================================
+   FINDING MONITORING - TABLE POLISH
+   ===================================================== */
+
+.finding-monitoring-page .card-primary .card-body {
+    padding: 12px 14px;
+}
+
+.finding-monitoring-page .card-primary .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+}
+
+.finding-monitoring-page .card-primary table.table {
+    width: 100%;
+    min-width: 1180px;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12px;
+    color: #344054;
+}
+
+.finding-monitoring-page .card-primary table.table thead th {
+    padding: 9px 8px;
+    background: #eaf0f6;
+    color: #263b50;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-top: 1px solid #d5dee8;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.finding-monitoring-page .card-primary table.table tbody td {
+    padding: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    vertical-align: middle;
+    border-color: #dbe3ec;
+}
+
+.finding-monitoring-page .card-primary table.table tbody tr:hover > td {
+    background-color: #edf6ff;
+}
+
+/* No. */
+.finding-monitoring-page .card-primary table.table th:first-child,
+.finding-monitoring-page .card-primary table.table td:first-child {
+    width: 44px;
+    min-width: 44px;
+    text-align: center;
+}
+
+/* Finding number */
+.finding-monitoring-page .card-primary table.table th:nth-child(2),
+.finding-monitoring-page .card-primary table.table td:nth-child(2) {
+    min-width: 145px;
+}
+
+/* Audit number */
+.finding-monitoring-page .card-primary table.table th:nth-child(3),
+.finding-monitoring-page .card-primary table.table td:nth-child(3) {
+    min-width: 130px;
+}
+
+/* Location */
+.finding-monitoring-page .card-primary table.table th:nth-child(4),
+.finding-monitoring-page .card-primary table.table td:nth-child(4) {
+    min-width: 150px;
+}
+
+/* Finding description */
+.finding-monitoring-page .card-primary table.table th:nth-child(5),
+.finding-monitoring-page .card-primary table.table td:nth-child(5) {
+    min-width: 220px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Severity */
+.finding-monitoring-page .card-primary table.table th:nth-child(6),
+.finding-monitoring-page .card-primary table.table td:nth-child(6) {
+    min-width: 85px;
+    text-align: center;
+}
+
+/* PIC */
+.finding-monitoring-page .card-primary table.table th:nth-child(7),
+.finding-monitoring-page .card-primary table.table td:nth-child(7) {
+    min-width: 125px;
+}
+
+/* Target date */
+.finding-monitoring-page .card-primary table.table th:nth-child(8),
+.finding-monitoring-page .card-primary table.table td:nth-child(8) {
+    min-width: 115px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Status */
+.finding-monitoring-page .card-primary table.table th:nth-child(9),
+.finding-monitoring-page .card-primary table.table td:nth-child(9) {
+    min-width: 140px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* All action columns */
+.finding-monitoring-page .card-primary table.table th:last-child,
+.finding-monitoring-page .card-primary table.table td:last-child {
+    min-width: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Compact badges */
+.finding-monitoring-page .card-primary table.table .badge {
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+/* Compact action buttons */
+.finding-monitoring-page .card-primary table.table .btn {
+    min-width: 30px;
+    min-height: 30px;
+    margin: 2px;
+    padding: 5px 7px;
+    border-radius: 5px;
+}
+
+/* Laptop */
+@media (max-width: 1366px) {
+    .finding-monitoring-page .card-primary table.table thead th,
+    .finding-monitoring-page .card-primary table.table tbody td {
+        padding: 6px;
+    }
+
+    .finding-monitoring-page .card-primary table.table {
+        font-size: 11.5px;
+    }
+}
+
+
+/* =====================================================
+   FINDING MONITORING - PAGINATION
+   ===================================================== */
+
+.finding-monitoring-page .card-primary > .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #f7f7f7;
+    border-top: 1px solid #dee2e6;
+}
+
+.finding-monitoring-page .card-primary > .card-footer .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin: 0;
+}
+
+.finding-monitoring-page .card-primary > .card-footer .page-link {
+    min-width: 34px;
+    padding: 6px 10px;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.finding-monitoring-page .card-primary > .card-footer .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #ffffff;
+}
+
+.finding-monitoring-page .card-primary > .card-footer .page-item.disabled .page-link {
+    color: #a0a7af;
+    background: #f1f3f5;
+}
+
+@media (max-width: 575.98px) {
+    .finding-monitoring-page .card-primary > .card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+
+/* =====================================================
+   CIMS - FINDING MONITORING TABLE
+   ===================================================== */
+
+.finding-monitoring-page .finding-monitoring-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #24364b;
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+/* Table header */
+.finding-monitoring-page .finding-monitoring-table thead th {
+    background: #eaf0f6;
+    color: #164e73;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    vertical-align: middle;
+    padding: 10px 9px;
+    border-color: #d5dee8;
+    border-bottom: 2px solid #cbd6e2;
+    white-space: nowrap;
+}
+
+/* Table body */
+.finding-monitoring-page .finding-monitoring-table tbody td {
+    padding: 9px;
+    vertical-align: middle;
+    border-color: #dbe3ec;
+    background-clip: padding-box;
+}
+
+/* Subtle alternating rows */
+.finding-monitoring-page .finding-monitoring-table tbody tr:nth-child(even):not(.table-danger):not(.table-success) {
+    background-color: #f8fafc;
+}
+
+/* Hover */
+.finding-monitoring-page .finding-monitoring-table tbody tr:hover > td {
+    background-color: #edf5ff;
+}
+
+/* Preserve overdue and closed highlighting */
+.finding-monitoring-page .finding-monitoring-table tbody tr.table-danger > td {
+    background-color: #f8d7da;
+}
+
+.finding-monitoring-page .finding-monitoring-table tbody tr.table-danger:hover > td {
+    background-color: #f3c4c8;
+}
+
+.finding-monitoring-page .finding-monitoring-table tbody tr.table-success > td {
+    background-color: #e4f5e9;
+}
+
+.finding-monitoring-page .finding-monitoring-table tbody tr.table-success:hover > td {
+    background-color: #d5efdd;
+}
+
+/* Finding number and secondary information */
+.finding-monitoring-page .finding-monitoring-table td strong {
+    font-weight: 600;
+    color: #164e73;
+}
+
+.finding-monitoring-page .finding-monitoring-table td small {
+    display: inline-block;
+    margin-top: 3px;
+    font-size: 11px;
+}
+
+/* Description wraps naturally */
+.finding-monitoring-page .finding-monitoring-table td:nth-child(5) {
+    min-width: 220px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Badges */
+.finding-monitoring-page .finding-monitoring-table .badge {
+    display: inline-block;
+    padding: 5px 7px;
+    border-radius: 5px;
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Center status, severity, dates, and action */
+.finding-monitoring-page .finding-monitoring-table th:nth-child(1),
+.finding-monitoring-page .finding-monitoring-table td:nth-child(1),
+.finding-monitoring-page .finding-monitoring-table th:nth-child(6),
+.finding-monitoring-page .finding-monitoring-table td:nth-child(6),
+.finding-monitoring-page .finding-monitoring-table th:nth-child(8),
+.finding-monitoring-page .finding-monitoring-table td:nth-child(8),
+.finding-monitoring-page .finding-monitoring-table th:nth-child(9),
+.finding-monitoring-page .finding-monitoring-table td:nth-child(9),
+.finding-monitoring-page .finding-monitoring-table th:nth-child(10),
+.finding-monitoring-page .finding-monitoring-table td:nth-child(10),
+.finding-monitoring-page .finding-monitoring-table th:nth-child(11),
+.finding-monitoring-page .finding-monitoring-table td:nth-child(11) {
+    text-align: center;
+}
+
+/* Action buttons */
+.finding-monitoring-page .finding-monitoring-table td .btn {
+    min-width: 31px;
+    min-height: 30px;
+    margin: 2px;
+    padding: 5px 7px;
+    border-radius: 5px;
+    vertical-align: middle;
+}
+
+.finding-monitoring-page .finding-monitoring-table td .btn i {
+    font-size: 12px;
+}
+
+/* Responsive horizontal scroll */
+.finding-monitoring-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.finding-monitoring-page .finding-monitoring-table {
+    min-width: 1200px;
+}
+
+/* Laptop and smaller screens */
+@media (max-width: 1366px) {
+    .finding-monitoring-page .finding-monitoring-table thead th,
+    .finding-monitoring-page .finding-monitoring-table tbody td {
+        padding: 7px 8px;
+    }
+
+    .finding-monitoring-page .finding-monitoring-table {
+        font-size: 12px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .finding-monitoring-page .finding-monitoring-table {
+        min-width: 1150px;
+    }
+}
+
+
+/* =====================================================
+   CIMS - OVERDUE FINDINGS
+   Tampilan saja; tidak mengubah logika
+   ===================================================== */
+
+.overdue-findings-page {
+    font-size: 13px;
+}
+
+/* Page heading */
+.overdue-findings-page h3 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.overdue-findings-page .row.mb-3 {
+    margin-bottom: 14px !important;
+}
+
+/* Header action buttons */
+.overdue-findings-page .btn {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 11px;
+}
+
+.overdue-findings-page .btn i {
+    margin-right: 4px;
+}
+
+/* =====================================================
+   Compact KPI Cards
+   ===================================================== */
+
+.overdue-findings-page .small-box {
+    min-height: 112px;
+    height: 112px;
+    margin-bottom: 14px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(30, 50, 70, 0.12);
+}
+
+.overdue-findings-page .small-box .inner {
+    padding: 12px 14px;
+}
+
+.overdue-findings-page .small-box h3 {
+    font-size: 29px;
+    line-height: 1.1;
+    margin: 0 0 7px;
+    font-weight: 700;
+}
+
+.overdue-findings-page .small-box p {
+    font-size: 13px;
+    margin: 0;
+}
+
+.overdue-findings-page .small-box .icon {
+    top: 12px;
+    right: 12px;
+}
+
+.overdue-findings-page .small-box .icon > i {
+    font-size: 52px;
+    top: 0;
+    transition: transform 0.2s ease;
+}
+
+.overdue-findings-page .small-box:hover .icon > i {
+    transform: scale(1.05);
+}
+
+/* =====================================================
+   Overdue Table Card
+   ===================================================== */
+
+.overdue-findings-page .card {
+    border-radius: 7px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(30, 50, 70, 0.10);
+}
+
+.overdue-findings-page .card-header {
+    padding: 10px 15px;
+    background: #ffffff;
+    border-bottom: 1px solid #dbe3ec;
+}
+
+.overdue-findings-page .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.overdue-findings-page .card-body {
+    padding: 12px 14px;
+}
+
+
+/* =====================================================
+   OVERDUE FINDINGS - TABLE REFINEMENT
+   ===================================================== */
+
+.overdue-findings-page .overdue-findings-table {
+    width: 100%;
+    min-width: 1250px;
+    margin-bottom: 0;
+    border-collapse: collapse;
+    table-layout: auto;
+    font-size: 12.5px;
+    color: #24364b;
+}
+
+.overdue-findings-page .overdue-findings-table thead th {
+    background-color: #eaf0f6;
+    color: #164e73;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+    border: 1px solid #d5dee8;
+    border-bottom: 2px solid #cbd6e2;
+}
+
+.overdue-findings-page .overdue-findings-table tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    border: 1px solid #dbe3ec;
+    line-height: 1.4;
+}
+
+/* Row highlight: overdue, but less dominant */
+.overdue-findings-page .overdue-findings-table tbody tr.table-danger > td {
+    background-color: #fff0f1;
+    border-color: #edc7cb;
+}
+
+.overdue-findings-page .overdue-findings-table tbody tr.table-danger:hover > td {
+    background-color: #ffe3e6;
+}
+
+/* Number and finding number */
+.overdue-findings-page .overdue-findings-table th:first-child,
+.overdue-findings-page .overdue-findings-table td:first-child {
+    width: 42px;
+    min-width: 42px;
+    text-align: center;
+}
+
+.overdue-findings-page .overdue-findings-table td strong {
+    color: #164e73;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Set practical widths for common columns */
+.overdue-findings-page .overdue-findings-table th:nth-child(2),
+.overdue-findings-page .overdue-findings-table td:nth-child(2) {
+    min-width: 130px;
+}
+
+.overdue-findings-page .overdue-findings-table th:nth-child(3),
+.overdue-findings-page .overdue-findings-table td:nth-child(3) {
+    min-width: 125px;
+}
+
+.overdue-findings-page .overdue-findings-table th:nth-child(4),
+.overdue-findings-page .overdue-findings-table td:nth-child(4) {
+    min-width: 145px;
+}
+
+.overdue-findings-page .overdue-findings-table th:nth-child(5),
+.overdue-findings-page .overdue-findings-table td:nth-child(5) {
+    min-width: 210px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.overdue-findings-page .overdue-findings-table th:nth-child(7),
+.overdue-findings-page .overdue-findings-table td:nth-child(7) {
+    min-width: 145px;
+}
+
+/* Center date, severity, overdue, status and action */
+.overdue-findings-page .overdue-findings-table th:nth-child(6),
+.overdue-findings-page .overdue-findings-table td:nth-child(6),
+.overdue-findings-page .overdue-findings-table th:nth-child(8),
+.overdue-findings-page .overdue-findings-table td:nth-child(8),
+.overdue-findings-page .overdue-findings-table th:nth-child(9),
+.overdue-findings-page .overdue-findings-table td:nth-child(9),
+.overdue-findings-page .overdue-findings-table th:nth-child(10),
+.overdue-findings-page .overdue-findings-table td:nth-child(10),
+.overdue-findings-page .overdue-findings-table th:nth-child(11),
+.overdue-findings-page .overdue-findings-table td:nth-child(11) {
+    text-align: center;
+}
+
+/* Compact badges */
+.overdue-findings-page .overdue-findings-table .badge {
+    display: inline-block;
+    padding: 5px 7px;
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    border-radius: 5px;
+}
+
+/* Action buttons in one horizontal row */
+.overdue-findings-page .overdue-findings-table td:last-child {
+    min-width: 95px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.overdue-findings-page .overdue-findings-table td:last-child .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 0 2px;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+
+.overdue-findings-page .overdue-findings-table td:last-child .btn i {
+    margin: 0;
+    font-size: 12px;
+}
+
+/* Horizontal scrolling remains available */
+.overdue-findings-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Laptop screens */
+@media (max-width: 1366px) {
+    .overdue-findings-page .overdue-findings-table thead th,
+    .overdue-findings-page .overdue-findings-table tbody td {
+        padding: 7px 8px;
+    }
+}
+
+
+/* =====================================================
+   SELECT IMPROVEMENT FOR KAIZEN
+   Compact table styling
+   ===================================================== */
+
+.select-improvement-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.select-improvement-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12.5px;
+    color: #343a40;
+    border-color: #d9e1ea;
+}
+
+.select-improvement-table thead th {
+    background-color: #e9eff6;
+    color: #343a40;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 8px;
+    border-color: #d3dce7;
+    white-space: nowrap;
+}
+
+.select-improvement-table tbody td {
+    padding: 9px 10px;
+    vertical-align: middle;
+    line-height: 1.45;
+    border-color: #d9e1ea;
+}
+
+.select-improvement-table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.select-improvement-table tbody tr:hover {
+    background-color: #edf5ff;
+}
+
+.select-improvement-table .col-no {
+    width: 55px;
+}
+
+.select-improvement-table .col-improvement-no {
+    width: 155px;
+}
+
+.select-improvement-table .col-problem-no {
+    width: 150px;
+}
+
+.select-improvement-table .col-action {
+    width: 115px;
+}
+
+.select-improvement-table .title-cell,
+.select-improvement-table .problem-cell {
+    min-width: 200px;
+    overflow-wrap: anywhere;
+}
+
+.select-improvement-table .select-improvement-btn {
+    min-width: 76px;
+    padding: 5px 9px;
+    font-size: 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.select-improvement-table .select-improvement-btn:hover {
+    filter: brightness(0.94);
+}
+
+@media (max-width: 1366px) {
+    .select-improvement-table thead th {
+        padding: 8px 6px;
+    }
+
+    .select-improvement-table tbody td {
+        padding: 7px 8px;
+    }
+
+    .select-improvement-table .title-cell,
+    .select-improvement-table .problem-cell {
+        min-width: 170px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .select-improvement-table {
+        min-width: 850px;
+    }
+}
+
+
+/* =====================================================
+   SELECT PROBLEM FOR KAIZEN
+   ===================================================== */
+
+.select-problem-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.select-problem-table {
+    width: 100%;
+    margin-bottom: 0;
+    color: #343a40;
+    font-size: 12.5px;
+    border-color: #d9e1ea;
+}
+
+.select-problem-table thead th {
+    background: #e9eff6;
+    color: #343a40;
+    font-weight: 600;
+    font-size: 12.5px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 9px 8px;
+    white-space: nowrap;
+    border-color: #d3dce7;
+}
+
+.select-problem-table tbody td {
+    padding: 8px 9px;
+    vertical-align: middle;
+    line-height: 1.45;
+    border-color: #d9e1ea;
+}
+
+.select-problem-table tbody tr:hover {
+    background-color: #edf5ff;
+}
+
+.select-problem-table .col-no {
+    width: 50px;
+}
+
+.select-problem-table .col-problem-no {
+    width: 125px;
+}
+
+.select-problem-table .col-date {
+    width: 110px;
+}
+
+.select-problem-table .col-department {
+    width: 175px;
+}
+
+.select-problem-table .col-category {
+    width: 125px;
+}
+
+.select-problem-table .col-priority {
+    width: 90px;
+}
+
+.select-problem-table .col-status {
+    width: 105px;
+}
+
+.select-problem-table .col-action {
+    width: 95px;
+}
+
+.select-problem-table .department-cell {
+    min-width: 150px;
+    overflow-wrap: anywhere;
+}
+
+.select-problem-table .title-cell {
+    min-width: 220px;
+    overflow-wrap: anywhere;
+}
+
+.select-problem-table .location-cell {
+    min-width: 150px;
+    overflow-wrap: anywhere;
+}
+
+.select-problem-table .select-problem-btn {
+    min-width: 72px;
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+@media (max-width: 1366px) {
+    .select-problem-table thead th {
+        padding: 8px 6px;
+    }
+
+    .select-problem-table tbody td {
+        padding: 7px;
+    }
+
+    .select-problem-table .title-cell {
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .select-problem-table {
+        min-width: 1050px;
+    }
+}
+
+
+/* =========================================================
+   KAIZEN REPORTING PERIOD
+   Compact layout - consistent with CIMS list pages
+   ========================================================= */
+
+.kaizen-period-page {
+    padding: 14px;
+    font-size: 13px;
+}
+
+/* Page title */
+.kaizen-period-page .period-page-title {
+    font-size: 23px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+/* Cards */
+.kaizen-period-page .card {
+    border: 1px solid #dce3eb;
+    border-radius: 7px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    margin-bottom: 14px;
+}
+
+.kaizen-period-page .card-body {
+    padding: 12px 14px;
+}
+
+.kaizen-period-page .card-footer {
+    padding: 10px 14px;
+    background-color: #f8f9fa;
+}
+
+/* Search and filter controls */
+.kaizen-period-page .form-control {
+    height: 36px;
+    font-size: 13px;
+    border-radius: 5px;
+}
+
+.kaizen-period-page .btn {
+    font-size: 13px;
+    padding: 7px 12px;
+    border-radius: 5px;
+}
+
+/* Table */
+.kaizen-period-page .table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.kaizen-period-page .table thead th {
+    background-color: #e9eff6;
+    color: #343a40;
+    font-weight: 600;
+    padding: 9px 10px;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-color: #d5dee8;
+}
+
+.kaizen-period-page .table tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    line-height: 1.45;
+    border-color: #dce3eb;
+}
+
+.kaizen-period-page .table tbody tr:hover {
+    background-color: #f0f6ff;
+}
+
+/* No */
+.kaizen-period-page .table th:first-child,
+.kaizen-period-page .table td:first-child {
+    width: 55px;
+    text-align: center;
+}
+
+/* Period Code */
+.kaizen-period-page .table th:nth-child(2),
+.kaizen-period-page .table td:nth-child(2) {
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+/* Period Name */
+.kaizen-period-page .table th:nth-child(3),
+.kaizen-period-page .table td:nth-child(3) {
+    min-width: 150px;
+}
+
+/* Start Date and End Date */
+.kaizen-period-page .table th:nth-child(4),
+.kaizen-period-page .table th:nth-child(5),
+.kaizen-period-page .table td:nth-child(4),
+.kaizen-period-page .table td:nth-child(5) {
+    min-width: 125px;
+    white-space: nowrap;
+}
+
+/* Description */
+.kaizen-period-page .table th:nth-child(6),
+.kaizen-period-page .table td:nth-child(6) {
+    min-width: 260px;
+}
+
+/* Status */
+.kaizen-period-page .table th:nth-child(7),
+.kaizen-period-page .table td:nth-child(7) {
+    min-width: 90px;
+    text-align: center;
+}
+
+/* Action */
+.kaizen-period-page .table th:nth-child(8),
+.kaizen-period-page .table td:nth-child(8) {
+    min-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.kaizen-period-page .table td:last-child .btn {
+    width: 34px;
+    height: 32px;
+    padding: 5px;
+}
+
+/* Pagination */
+.kaizen-period-page .pagination {
+    margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+    .kaizen-period-page {
+        padding: 10px;
+    }
+
+    .kaizen-period-page .period-page-title {
+        font-size: 20px;
+    }
+
+    .kaizen-period-page .card-body {
+        padding: 10px;
+    }
+}
+
+
+/* =========================================================
+   KAIZEN DEPARTMENT TARGET
+   ========================================================= */
+
+.kaizen-department-target-page {
+    font-size: 13px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.kaizen-department-target-page > .card-header {
+    padding: 10px 14px;
+}
+
+.kaizen-department-target-page > .card-header .card-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.kaizen-department-target-page > .card-header .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.kaizen-department-target-page > .card-body {
+    padding: 12px 14px;
+}
+
+/* Filter: search, status, department, per-page */
+.kaizen-department-target-page .form-control {
+    height: 36px;
+    font-size: 13px;
+    border-radius: 5px;
+}
+
+.kaizen-department-target-page .input-group .btn {
+    height: 36px;
+    min-width: 38px;
+    padding: 6px 10px;
+}
+
+.kaizen-department-target-page .card-body form > .row {
+    align-items: center;
+    row-gap: 8px;
+}
+
+.kaizen-department-target-page .card-body form > .row > div {
+    margin-bottom: 0;
+}
+
+/* Table */
+.kaizen-department-target-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.kaizen-department-target-page .table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12.5px;
+    color: #25364a;
+}
+
+.kaizen-department-target-page .table thead th {
+    padding: 9px 10px;
+    background-color: #e9eff6;
+    color: #25364a;
+    font-weight: 600;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-color: #d5dee8;
+}
+
+.kaizen-department-target-page .table tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    line-height: 1.4;
+    border-color: #dce3eb;
+}
+
+.kaizen-department-target-page .table tbody tr:hover {
+    background-color: #f2f7fc;
+}
+
+/* No */
+.kaizen-department-target-page .table th:first-child,
+.kaizen-department-target-page .table td:first-child {
+    width: 50px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Reporting Period */
+.kaizen-department-target-page .table th:nth-child(2),
+.kaizen-department-target-page .table td:nth-child(2) {
+    min-width: 125px;
+}
+
+/* Department */
+.kaizen-department-target-page .table th:nth-child(3),
+.kaizen-department-target-page .table td:nth-child(3) {
+    min-width: 190px;
+}
+
+/* Target */
+.kaizen-department-target-page .table th:nth-child(4),
+.kaizen-department-target-page .table td:nth-child(4) {
+    width: 100px;
+    text-align: center;
+}
+
+/* Description */
+.kaizen-department-target-page .table th:nth-child(5),
+.kaizen-department-target-page .table td:nth-child(5) {
+    min-width: 200px;
+}
+
+/* Status */
+.kaizen-department-target-page .table th:nth-child(6),
+.kaizen-department-target-page .table td:nth-child(6) {
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Action */
+.kaizen-department-target-page .table th:nth-child(7),
+.kaizen-department-target-page .table td:nth-child(7) {
+    width: 110px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.kaizen-department-target-page .table td:nth-child(7) .btn {
+    width: 32px;
+    height: 31px;
+    padding: 5px;
+    margin: 1px;
+}
+
+/* Pagination and record information */
+.kaizen-department-target-page .pagination {
+    margin-bottom: 0;
+}
+
+.kaizen-department-target-page .pagination .page-link {
+    min-width: 32px;
+    text-align: center;
+    padding: 5px 9px;
+    font-size: 12px;
+}
+
+.kaizen-department-target-page .target-pagination-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+/* Smaller laptop / tablet */
+@media (max-width: 991.98px) {
+    .kaizen-department-target-page .card-body form > .row {
+        row-gap: 10px;
+    }
+
+    .kaizen-department-target-page .table {
+        min-width: 850px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .kaizen-department-target-page > .card-header {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .kaizen-department-target-page .target-pagination-footer {
+        align-items: flex-start;
+    }
+}
+
+
+/* =========================================================
+   AUDIT ASSIGNMENT TABLE
+   ========================================================= */
+
+.audit-assignment-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.audit-assignment-table {
+    width: 100%;
+    min-width: 850px;
+    margin-bottom: 0;
+    font-size: 13px;
+    color: #343a40;
+    border-color: #d9e0e7;
+}
+
+.audit-assignment-table thead th {
+    padding: 10px 12px;
+    vertical-align: middle;
+    background-color: #eaf0f6;
+    color: #343a40;
+    font-weight: 600;
+    white-space: nowrap;
+    border-color: #d9e0e7;
+}
+
+.audit-assignment-table tbody td {
+    padding: 9px 12px;
+    vertical-align: middle;
+    border-color: #d9e0e7;
+    line-height: 1.45;
+}
+
+.audit-assignment-table tbody tr:hover {
+    background-color: #f5f8fb;
+}
+
+.audit-assignment-table .audit-assignment-location {
+    min-width: 180px;
+    overflow-wrap: anywhere;
+}
+
+.audit-assignment-table td .text-muted {
+    font-size: 11px;
+}
+
+.audit-assignment-table td .badge {
+    font-size: 11px;
+    padding: 4px 6px;
+}
+
+.audit-assignment-table td .btn {
+    min-width: 34px;
+    margin: 1px;
+    padding: 5px 8px;
+}
+
+/* Compact layout for laptop screens */
+@media (max-width: 1366px) {
+    .audit-assignment-table {
+        font-size: 12px;
+    }
+
+    .audit-assignment-table thead th {
+        padding: 8px 9px;
+    }
+
+    .audit-assignment-table tbody td {
+        padding: 7px 9px;
+    }
+}
+
+
+/* =========================================================
+   DEPARTMENT LIST - COMPACT RESPONSIVE LAYOUT
+   ========================================================= */
+
+.department-card-header {
+    padding: 10px 14px;
+}
+
+.department-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.department-toolbar-left,
+.department-toolbar-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    min-width: 0;
+}
+
+.department-toolbar-left .card-title {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 17px;
+}
+
+.department-status-form,
+.department-search-form {
+    margin: 0;
+}
+
+.department-status-form select {
+    width: 140px;
+    min-height: 34px;
+}
+
+.department-toolbar-right .btn {
+    white-space: nowrap;
+}
+
+.department-search-form {
+    flex: 1 1 280px;
+    min-width: 220px;
+    max-width: 390px;
+}
+
+.department-search-form .input-group {
+    width: 100%;
+}
+
+.department-search-form .form-control {
+    min-width: 0;
+}
+
+.department-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.department-table {
+    width: 100%;
+    min-width: 720px;
+    font-size: 13px;
+    color: #343a40;
+    border-color: #d9e0e7;
+}
+
+.department-table thead th {
+    padding: 9px 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+    background: #eaf0f6;
+    border-color: #d9e0e7;
+    font-weight: 600;
+}
+
+.department-table tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    border-color: #d9e0e7;
+    line-height: 1.4;
+}
+
+.department-table tbody tr:hover {
+    background-color: #f5f8fb;
+}
+
+.department-table .department-code {
+    white-space: nowrap;
+}
+
+.department-table .department-name {
+    min-width: 220px;
+}
+
+.department-table .department-description {
+    min-width: 160px;
+    overflow-wrap: anywhere;
+}
+
+.department-table .badge {
+    font-size: 11px;
+    padding: 4px 6px;
+}
+
+.department-table .btn {
+    min-width: 32px;
+    margin: 1px;
+    padding: 5px 7px;
+}
+
+/* Pagination remains visible at the bottom of the card */
+.department-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+@media (max-width: 1366px) {
+    .department-toolbar {
+        align-items: flex-start;
+    }
+
+    .department-toolbar-right {
+        flex: 1 1 100%;
+    }
+
+    .department-search-form {
+        flex: 1 1 260px;
+        max-width: none;
+    }
+
+    .department-table {
+        font-size: 12px;
+    }
+
+    .department-table thead th,
+    .department-table tbody td {
+        padding: 7px 8px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .department-toolbar-left,
+    .department-toolbar-right {
+        width: 100%;
+    }
+
+    .department-search-form {
+        flex-basis: 100%;
+        max-width: none;
+    }
+}
+
+
+/* =========================================================
+   PROBLEM CATEGORY - COMPACT TABLE AND TOOLBAR
+   ========================================================= */
+
+.problem-category-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 12px;
+    width: 100%;
+}
+
+.problem-category-toolbar-left,
+.problem-category-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.problem-category-toolbar-left {
+    flex: 0 0 auto;
+}
+
+.problem-category-toolbar-right {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+}
+
+.problem-category-toolbar .card-title {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.problem-category-status {
+    width: 145px;
+    min-width: 120px;
+}
+
+.problem-category-search {
+    width: 320px;
+    max-width: 100%;
+    margin: 0;
+}
+
+.problem-category-search .input-group {
+    flex-wrap: nowrap;
+}
+
+.problem-category-search .form-control {
+    min-width: 0;
+}
+
+/* Table */
+.problem-category-table {
+    width: 100%;
+    margin-bottom: 0;
+    table-layout: fixed;
+    font-size: 12.5px;
+}
+
+.problem-category-table th,
+.problem-category-table td {
+    padding: 7px 9px;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+}
+
+.problem-category-table thead th {
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    background-color: #eaf0f6;
+}
+
+.problem-category-table th:nth-child(1),
+.problem-category-table td:nth-child(1) {
+    width: 55px;
+    text-align: center;
+}
+
+.problem-category-table th:nth-child(2),
+.problem-category-table td:nth-child(2) {
+    width: 100px;
+}
+
+.problem-category-table th:nth-child(3),
+.problem-category-table td:nth-child(3) {
+    width: 220px;
+}
+
+.problem-category-table th:nth-child(5),
+.problem-category-table td:nth-child(5) {
+    width: 100px;
+    text-align: center;
+}
+
+.problem-category-table th:nth-child(6),
+.problem-category-table td:nth-child(6) {
+    width: 110px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.problem-category-table .btn {
+    min-width: 32px;
+    padding: 5px 8px;
+    margin: 1px;
+}
+
+.problem-category-table .badge {
+    font-size: 11px;
+}
+
+/* Footer and pagination */
+.problem-category-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.problem-category-card-footer .pagination {
+    margin: 0;
+}
+
+@media (max-width: 1199.98px) {
+    .problem-category-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .problem-category-toolbar-left,
+    .problem-category-toolbar-right {
+        width: 100%;
+    }
+
+    .problem-category-toolbar-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .problem-category-search {
+        flex: 1 1 280px;
+        width: auto;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .problem-category-toolbar-right {
+        align-items: stretch;
+    }
+
+    .problem-category-search {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .problem-category-table {
+        min-width: 700px;
+    }
+}
+
+
+/* =========================================================
+   PROBLEM CATEGORY - PAGINATION SPACING
+   ========================================================= */
+
+.problem-category-card-footer {
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+.problem-category-card-footer .pagination {
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.problem-category-card-footer .page-link {
+    min-width: 34px;
+    text-align: center;
+}
+
+/* Jika pagination berada di luar card-footer wrapper */
+.card:has(.problem-category-table) > nav {
+    padding-right: 16px;
+    padding-bottom: 12px;
+}
+
+
+/* =====================================================
+   KAIZEN CATEGORY - COMPACT UI
+   ===================================================== */
+
+.kaizen-category-page {
+    font-size: 13px;
+}
+
+.kaizen-category-page .content-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.kaizen-category-page .content-header h1 {
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 0;
+}
+
+.kaizen-category-page .card {
+    margin-bottom: 12px;
+}
+
+.kaizen-category-page .card-header {
+    padding: 10px 14px;
+}
+
+.kaizen-category-page .card-body {
+    padding: 10px 12px;
+}
+
+.kaizen-category-page .kaizen-category-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.kaizen-category-page .kaizen-category-toolbar-left,
+.kaizen-category-page .kaizen-category-toolbar-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.kaizen-category-page .kaizen-category-toolbar .card-title {
+    float: none;
+    margin: 0 10px 0 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.kaizen-category-page .kaizen-category-status-form {
+    margin: 0;
+}
+
+.kaizen-category-page .kaizen-category-status-form select {
+    width: 130px;
+    height: 32px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 12px;
+}
+
+.kaizen-category-page .kaizen-category-toolbar-right .btn {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.kaizen-category-page .kaizen-category-search-form {
+    width: 340px;
+    max-width: 100%;
+    margin: 0;
+}
+
+.kaizen-category-page .kaizen-category-search-form .form-control,
+.kaizen-category-page .kaizen-category-search-form .btn {
+    height: 32px;
+    font-size: 12px;
+}
+
+.kaizen-category-page .kaizen-category-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.kaizen-category-page .kaizen-category-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.kaizen-category-page .kaizen-category-table th,
+.kaizen-category-page .kaizen-category-table td {
+    padding: 7px 9px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.kaizen-category-page .kaizen-category-table thead th {
+    background-color: #eaf0f6;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.kaizen-category-page .kaizen-category-table th:first-child,
+.kaizen-category-page .kaizen-category-table td:first-child {
+    width: 55px;
+    text-align: center;
+}
+
+.kaizen-category-page .kaizen-category-table th:nth-last-child(2),
+.kaizen-category-page .kaizen-category-table td:nth-last-child(2) {
+    width: 95px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.kaizen-category-page .kaizen-category-table th:last-child,
+.kaizen-category-page .kaizen-category-table td:last-child {
+    width: 105px;
+    min-width: 105px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.kaizen-category-page .kaizen-category-table td .btn {
+    margin: 1px;
+}
+
+.kaizen-category-page .kaizen-category-table .badge {
+    font-size: 11px;
+    padding: 4px 6px;
+}
+
+.kaizen-category-page .card-footer.kaizen-category-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.kaizen-category-page .kaizen-category-record-info {
+    font-size: 12px;
+}
+
+.kaizen-category-page .kaizen-category-footer nav {
+    margin-left: auto;
+}
+
+.kaizen-category-page .kaizen-category-footer .pagination {
+    margin: 0;
+    padding: 0 2px;
+}
+
+.kaizen-category-page .kaizen-category-footer .page-link {
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Laptop kecil dan tablet */
+@media (max-width: 1200px) {
+    .kaizen-category-page .kaizen-category-toolbar {
+        align-items: flex-start;
+    }
+
+    .kaizen-category-page .kaizen-category-toolbar-right {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .kaizen-category-page .kaizen-category-search-form {
+        flex: 1 1 260px;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 576px) {
+    .kaizen-category-page .kaizen-category-toolbar-left,
+    .kaizen-category-page .kaizen-category-toolbar-right {
+        width: 100%;
+    }
+
+    .kaizen-category-page .kaizen-category-toolbar .card-title {
+        white-space: normal;
+    }
+
+    .kaizen-category-page .kaizen-category-search-form {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .kaizen-category-page .card-footer.kaizen-category-footer {
+        align-items: flex-start;
+    }
+
+    .kaizen-category-page .kaizen-category-footer nav {
+        margin-left: 0;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}
+
+
+/* =====================================================
+   AUDIT TYPE - COMPACT UI
+   ===================================================== */
+
+.audit-type-page {
+    font-size: 13px;
+}
+
+.audit-type-page .content-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.audit-type-page .content-header h1 {
+    margin-bottom: 0;
+    font-size: 24px;
+    line-height: 1.3;
+}
+
+.audit-type-page .card {
+    margin-bottom: 12px;
+}
+
+.audit-type-page .card-header {
+    padding: 10px 14px;
+}
+
+.audit-type-page .card-body {
+    padding: 10px 12px;
+}
+
+.audit-type-page .audit-type-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.audit-type-page .audit-type-toolbar-left,
+.audit-type-page .audit-type-toolbar-right {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.audit-type-page .audit-type-toolbar .card-title {
+    float: none;
+    margin: 0 8px 0 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.audit-type-page .audit-type-status-form {
+    margin: 0;
+}
+
+.audit-type-page .audit-type-status-form select {
+    width: 130px;
+    height: 32px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 12px;
+}
+
+.audit-type-page .audit-type-toolbar-right > .btn {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.audit-type-page .audit-type-search-form {
+    width: 340px;
+    max-width: 100%;
+    margin: 0;
+}
+
+.audit-type-page .audit-type-search-form .form-control,
+.audit-type-page .audit-type-search-form .btn {
+    height: 32px;
+    font-size: 12px;
+}
+
+.audit-type-page .audit-type-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.audit-type-page .audit-type-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.audit-type-page .audit-type-table th,
+.audit-type-page .audit-type-table td {
+    padding: 7px 9px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.audit-type-page .audit-type-table thead th {
+    background: #eaf0f6;
+    font-weight: 600;
+}
+
+.audit-type-page .audit-type-table th:first-child,
+.audit-type-page .audit-type-table td:first-child {
+    width: 55px;
+    text-align: center;
+}
+
+.audit-type-page .audit-type-table th:nth-child(2),
+.audit-type-page .audit-type-table td:nth-child(2) {
+    width: 85px;
+    white-space: nowrap;
+}
+
+.audit-type-page .audit-type-table th:nth-child(3),
+.audit-type-page .audit-type-table td:nth-child(3) {
+    width: 190px;
+}
+
+.audit-type-page .audit-type-table th:nth-child(5),
+.audit-type-page .audit-type-table td:nth-child(5) {
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.audit-type-page .audit-type-table th:last-child,
+.audit-type-page .audit-type-table td:last-child {
+    width: 110px;
+    min-width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.audit-type-page .audit-type-table td .btn {
+    margin: 1px;
+}
+
+.audit-type-page .audit-type-table .badge {
+    font-size: 11px;
+    padding: 3px 5px;
+}
+
+.audit-type-page .card-footer.audit-type-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.audit-type-page .audit-type-record-info {
+    font-size: 12px;
+}
+
+.audit-type-page .audit-type-footer nav {
+    margin-left: auto;
+}
+
+.audit-type-page .audit-type-footer .pagination {
+    margin: 0;
+    padding: 0 2px;
+}
+
+.audit-type-page .audit-type-footer .page-link {
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Laptop kecil dan tablet */
+@media (max-width: 1200px) {
+    .audit-type-page .audit-type-toolbar {
+        align-items: flex-start;
+    }
+
+    .audit-type-page .audit-type-toolbar-right {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .audit-type-page .audit-type-search-form {
+        flex: 1 1 260px;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 576px) {
+    .audit-type-page .audit-type-toolbar-left,
+    .audit-type-page .audit-type-toolbar-right {
+        width: 100%;
+    }
+
+    .audit-type-page .audit-type-toolbar .card-title {
+        white-space: normal;
+    }
+
+    .audit-type-page .audit-type-search-form {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .audit-type-page .card-footer.audit-type-footer {
+        align-items: flex-start;
+    }
+
+    .audit-type-page .audit-type-footer nav {
+        margin-left: 0;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}
+
+
+/* =========================================================
+   AUDIT CHECKLIST - COMPACT & RESPONSIVE UI
+   ========================================================= */
+
+/* Page header */
+.audit-checklist-page-header {
+    padding: 12px 0 8px;
+}
+
+.audit-checklist-page-header h1 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+/* Main card */
+.audit-checklist-page .audit-checklist-card {
+    margin-bottom: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.audit-checklist-page .audit-checklist-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+}
+
+.audit-checklist-page .audit-checklist-card-header .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.audit-checklist-page .audit-checklist-card-header .card-tools {
+    float: none;
+    margin: 0;
+}
+
+.audit-checklist-page .audit-checklist-card-header .btn {
+    white-space: nowrap;
+}
+
+.audit-checklist-page .audit-checklist-card-body {
+    padding: 14px;
+}
+
+/* Filter toolbar */
+.audit-checklist-filter-form {
+    width: 100%;
+}
+
+.audit-checklist-page .audit-checklist-filter-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 180px auto auto;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.audit-checklist-page .audit-checklist-filter-row > div {
+    min-width: 0;
+    margin: 0;
+}
+
+.audit-checklist-page .audit-checklist-search {
+    min-width: 0;
+}
+
+.audit-checklist-page .audit-checklist-search .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.audit-checklist-page .audit-checklist-search .form-control {
+    min-width: 0;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.audit-checklist-page .audit-checklist-search .input-group-append .btn {
+    height: 34px;
+    min-width: 38px;
+}
+
+.audit-checklist-page .audit-checklist-status .form-control {
+    width: 100%;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.audit-checklist-page .audit-checklist-reset,
+.audit-checklist-page .audit-checklist-export {
+    white-space: nowrap;
+}
+
+.audit-checklist-page .audit-checklist-reset .btn,
+.audit-checklist-page .audit-checklist-export .btn {
+    height: 34px;
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.audit-checklist-page .audit-checklist-divider {
+    margin: 14px 0 12px;
+    border: 0;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Table wrapper */
+.audit-checklist-page .audit-checklist-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 3px;
+}
+
+/* Table */
+.audit-checklist-page .audit-checklist-table {
+    width: 100%;
+    min-width: 760px;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12.5px;
+    color: #343a40;
+}
+
+.audit-checklist-page .audit-checklist-table th,
+.audit-checklist-page .audit-checklist-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.audit-checklist-page .audit-checklist-table thead th {
+    background: #eaf0f6;
+    color: #343a40;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid #d5dde5;
+}
+
+.audit-checklist-page .audit-checklist-table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+.audit-checklist-page .audit-checklist-table tbody tr:hover {
+    background-color: #f5f8fb;
+}
+
+/* Column widths */
+.audit-checklist-page .audit-checklist-table .col-number {
+    width: 55px;
+    min-width: 55px;
+    text-align: center;
+}
+
+.audit-checklist-page .audit-checklist-table .col-code {
+    width: 150px;
+    min-width: 125px;
+}
+
+.audit-checklist-page .audit-checklist-table .col-name {
+    width: 230px;
+    min-width: 180px;
+}
+
+.audit-checklist-page .audit-checklist-table .col-description {
+    min-width: 220px;
+}
+
+.audit-checklist-page .audit-checklist-table .col-status {
+    width: 100px;
+    min-width: 90px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.audit-checklist-page .audit-checklist-table .col-action {
+    width: 145px;
+    min-width: 125px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+.audit-checklist-page .checklist-actions {
+    white-space: nowrap;
+}
+
+.audit-checklist-page .checklist-actions .btn,
+.audit-checklist-page .audit-checklist-restore-form .btn {
+    width: 31px;
+    height: 31px;
+    margin: 2px 1px;
+    padding: 5px 0;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.audit-checklist-page .audit-checklist-restore-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.audit-checklist-page .audit-checklist-table .badge {
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Footer: record info and pagination */
+.audit-checklist-page .audit-checklist-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.audit-checklist-page .audit-checklist-record-info {
+    min-width: 0;
+    font-size: 12.5px;
+    color: #495057;
+    line-height: 1.5;
+}
+
+.audit-checklist-page .audit-checklist-pagination {
+    max-width: 100%;
+    margin-left: auto;
+}
+
+.audit-checklist-page .audit-checklist-pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.audit-checklist-page .audit-checklist-pagination .page-item {
+    margin: 0;
+}
+
+.audit-checklist-page .audit-checklist-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 5px 9px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.audit-checklist-page .audit-checklist-pagination .page-item.active .page-link {
+    z-index: 1;
+    font-weight: 600;
+}
+
+.audit-checklist-page .audit-checklist-pagination .page-item.disabled .page-link {
+    color: #adb5bd;
+    background: #fff;
+}
+
+.audit-checklist-page .audit-checklist-pagination .pagination-label {
+    white-space: nowrap;
+}
+
+/* Laptop / tablet */
+@media (max-width: 992px) {
+    .audit-checklist-page .audit-checklist-filter-row {
+        grid-template-columns: minmax(180px, 1fr) 150px auto auto;
+        gap: 7px;
+    }
+
+    .audit-checklist-page .audit-checklist-card-body {
+        padding: 12px;
+    }
+
+    .audit-checklist-page .audit-checklist-table th,
+    .audit-checklist-page .audit-checklist-table td {
+        padding: 7px 8px;
+    }
+}
+
+/* Narrow tablet */
+@media (max-width: 768px) {
+    .audit-checklist-page .audit-checklist-filter-row {
+        grid-template-columns: minmax(0, 1fr) 150px;
+    }
+
+    .audit-checklist-page .audit-checklist-reset,
+    .audit-checklist-page .audit-checklist-export {
+        justify-self: start;
+    }
+
+    .audit-checklist-page .audit-checklist-footer {
+        align-items: flex-start;
+    }
+
+    .audit-checklist-page .audit-checklist-pagination {
+        margin-left: 0;
+    }
+
+    .audit-checklist-page .audit-checklist-pagination .pagination {
+        justify-content: flex-start;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .audit-checklist-page-header h1 {
+        font-size: 21px;
+    }
+
+    .audit-checklist-page .audit-checklist-filter-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .audit-checklist-page .audit-checklist-reset,
+    .audit-checklist-page .audit-checklist-export {
+        justify-self: stretch;
+    }
+
+    .audit-checklist-page .audit-checklist-reset .btn,
+    .audit-checklist-page .audit-checklist-export .btn {
+        width: 100%;
+    }
+
+    .audit-checklist-page .audit-checklist-footer {
+        gap: 10px;
+    }
+
+    .audit-checklist-page .audit-checklist-record-info {
+        width: 100%;
+    }
+
+    .audit-checklist-page .audit-checklist-pagination {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: auto;
+    }
+
+    .audit-checklist-page .audit-checklist-pagination .pagination {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+
+    .audit-checklist-page .audit-checklist-pagination .pagination-label {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   AUDIT CATEGORY - COMPACT RESPONSIVE UI
+   ========================================================= */
+
+.audit-category-page-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.audit-category-page-header h1 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.audit-category-page .audit-category-card {
+    margin-bottom: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.audit-category-page .audit-category-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px 14px;
+}
+
+.audit-category-page .audit-category-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-width: 0;
+}
+
+.audit-category-page .audit-category-heading .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.audit-category-page .audit-category-status-form {
+    margin: 0;
+}
+
+.audit-category-page .audit-category-status-form select {
+    width: 160px;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.audit-category-page .audit-category-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.audit-category-page .audit-category-toolbar > .btn {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    margin: 0;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.audit-category-page .audit-category-search-form {
+    flex: 0 1 350px;
+    min-width: 220px;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-search-form .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.audit-category-page .audit-category-search-form .form-control {
+    min-width: 0;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.audit-category-page .audit-category-search-form .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.audit-category-page .audit-category-search-form .btn {
+    height: 34px;
+    min-width: 38px;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-card-body {
+    padding: 14px;
+}
+
+.audit-category-page .audit-category-search-info {
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    font-size: 12.5px;
+}
+
+.audit-category-page .audit-category-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.audit-category-page .audit-category-table {
+    width: 100%;
+    min-width: 760px;
+    margin-bottom: 0;
+    font-size: 12.5px;
+    color: #343a40;
+}
+
+.audit-category-page .audit-category-table th,
+.audit-category-page .audit-category-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    line-height: 1.45;
+}
+
+.audit-category-page .audit-category-table thead th {
+    background-color: #eaf0f6;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid #d5dde5;
+}
+
+.audit-category-page .audit-category-table tbody tr:hover {
+    background-color: #f5f8fb;
+}
+
+.audit-category-page .audit-category-table th:first-child,
+.audit-category-page .audit-category-table td:first-child {
+    width: 55px;
+    min-width: 55px;
+    text-align: center;
+}
+
+.audit-category-page .audit-category-table th:nth-child(2),
+.audit-category-page .audit-category-table td:nth-child(2) {
+    width: 110px;
+    min-width: 100px;
+}
+
+.audit-category-page .audit-category-table th:nth-child(3),
+.audit-category-page .audit-category-table td:nth-child(3) {
+    width: 240px;
+    min-width: 190px;
+}
+
+.audit-category-page .audit-category-table .col-status {
+    width: 100px;
+    min-width: 90px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.audit-category-page .audit-category-table .col-action {
+    width: 125px;
+    min-width: 115px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.audit-category-page .audit-category-table .badge {
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.audit-category-page .audit-category-actions {
+    white-space: nowrap;
+}
+
+.audit-category-page .audit-category-actions .btn,
+.audit-category-page .audit-category-restore-form .btn {
+    width: 31px;
+    height: 31px;
+    padding: 5px 0;
+    margin: 1px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.audit-category-page .audit-category-restore-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-empty {
+    padding: 24px 10px;
+}
+
+.audit-category-page .audit-category-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px 14px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.audit-category-page .audit-category-record-info {
+    min-width: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #495057;
+}
+
+.audit-category-page .audit-category-pagination {
+    max-width: 100%;
+    margin-left: auto;
+}
+
+.audit-category-page .audit-category-pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.audit-category-page .audit-category-pagination .page-item {
+    margin: 0;
+}
+
+.audit-category-page .audit-category-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 5px 9px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.audit-category-page .audit-category-pagination .page-item.active .page-link {
+    font-weight: 600;
+}
+
+.audit-category-page .audit-category-pagination .pagination-label {
+    white-space: nowrap;
+}
+
+/* Laptop dan tablet */
+@media (max-width: 1200px) {
+    .audit-category-page .audit-category-card-header {
+        align-items: flex-start;
+    }
+
+    .audit-category-page .audit-category-toolbar {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .audit-category-page .audit-category-search-form {
+        flex: 1 1 260px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .audit-category-page .audit-category-heading {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .audit-category-page .audit-category-toolbar {
+        display: grid;
+        grid-template-columns: auto auto minmax(180px, 1fr);
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-search-form {
+        min-width: 0;
+    }
+
+    .audit-category-page .audit-category-card-body {
+        padding: 10px;
+    }
+
+    .audit-category-page .audit-category-footer {
+        align-items: flex-start;
+    }
+
+    .audit-category-page .audit-category-pagination {
+        margin-left: 0;
+    }
+
+    .audit-category-page .audit-category-pagination .pagination {
+        justify-content: flex-start;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 520px) {
+    .audit-category-page-header h1 {
+        font-size: 21px;
+    }
+
+    .audit-category-page .audit-category-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .audit-category-page .audit-category-status-form,
+    .audit-category-page .audit-category-status-form select {
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .audit-category-page .audit-category-toolbar > .btn {
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-search-form {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-footer {
+        align-items: flex-start;
+    }
+
+    .audit-category-page .audit-category-record-info {
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-pagination {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: auto;
+    }
+
+    .audit-category-page .audit-category-pagination .pagination {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+
+    .audit-category-page .audit-category-pagination .pagination-label {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   AUDIT CATEGORY - SINGLE ROW TOOLBAR
+   ========================================================= */
+
+.audit-category-page .audit-category-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 12px;
+}
+
+.audit-category-page .audit-category-heading {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 12px;
+    min-width: 0;
+}
+
+.audit-category-page .audit-category-heading .card-title {
+    white-space: nowrap;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-status-form {
+    flex: 0 0 160px;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-status-form select {
+    width: 100%;
+    height: 34px;
+}
+
+.audit-category-page .audit-category-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.audit-category-page .audit-category-toolbar > .btn {
+    flex: 0 0 auto;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-search-form {
+    flex: 1 1 280px;
+    min-width: 180px;
+    max-width: 350px;
+    margin: 0;
+}
+
+.audit-category-page .audit-category-search-form .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.audit-category-page .audit-category-search-form .form-control {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+}
+
+.audit-category-page .audit-category-search-form .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.audit-category-page .audit-category-search-form .btn {
+    height: 34px;
+    min-width: 36px;
+    margin: 0;
+}
+
+/* Laptop dengan area konten lebih sempit */
+@media (max-width: 1200px) {
+    .audit-category-page .audit-category-card-header {
+        gap: 8px;
+    }
+
+    .audit-category-page .audit-category-heading {
+        gap: 8px;
+    }
+
+    .audit-category-page .audit-category-heading .card-title {
+        font-size: 14px;
+    }
+
+    .audit-category-page .audit-category-status-form {
+        flex-basis: 120px;
+    }
+
+    .audit-category-page .audit-category-toolbar {
+        gap: 6px;
+    }
+
+    .audit-category-page .audit-category-toolbar > .btn {
+        padding-left: 7px;
+        padding-right: 7px;
+        font-size: 11px;
+    }
+
+    .audit-category-page .audit-category-search-form {
+        min-width: 130px;
+        max-width: none;
+    }
+}
+
+/* Tablet dan ponsel: toolbar boleh turun baris */
+@media (max-width: 900px) {
+    .audit-category-page .audit-category-card-header {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .audit-category-page .audit-category-heading {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-toolbar {
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .audit-category-page .audit-category-search-form {
+        flex: 1 1 220px;
+    }
+}
+
+
+/* =========================================================
+   EMPLOYEE - COMPACT RESPONSIVE UI
+   ========================================================= */
+
+.employee-page-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.employee-page-header h1 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.employee-page .employee-card {
+    margin-bottom: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.employee-page .employee-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 10px 14px;
+}
+
+.employee-page .employee-toolbar-heading {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 12px;
+    min-width: 0;
+}
+
+.employee-page .employee-toolbar-heading .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.employee-page .employee-status-form {
+    flex: 0 0 150px;
+    margin: 0;
+}
+
+.employee-page .employee-status-form select {
+    width: 100%;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.employee-page .employee-toolbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.employee-page .employee-toolbar-actions > .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 6px 10px;
+    margin: 0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.employee-page .employee-search-form {
+    flex: 1 1 300px;
+    min-width: 180px;
+    max-width: 360px;
+    margin: 0;
+}
+
+.employee-page .employee-search-form .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.employee-page .employee-search-form .form-control {
+    min-width: 0;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.employee-page .employee-search-form .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.employee-page .employee-search-form .btn {
+    height: 34px;
+    min-width: 36px;
+    margin: 0;
+}
+
+.employee-page .employee-card-body {
+    padding: 12px 14px;
+}
+
+.employee-page .employee-search-info {
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    font-size: 12.5px;
+}
+
+.employee-page .employee-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.employee-page .employee-table {
+    width: 100%;
+    min-width: 1050px;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.employee-page .employee-table th,
+.employee-page .employee-table td {
+    padding: 7px 9px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.employee-page .employee-table thead th {
+    background: #eaf0f6;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid #d5dde5;
+}
+
+.employee-page .employee-table tbody tr:hover {
+    background-color: #f5f8fb;
+}
+
+.employee-page .employee-table .employee-number {
+    width: 55px;
+    min-width: 55px;
+    text-align: center;
+}
+
+.employee-page .employee-table th:nth-child(2),
+.employee-page .employee-table .employee-nik {
+    min-width: 105px;
+    white-space: nowrap;
+}
+
+.employee-page .employee-table th:nth-child(3),
+.employee-page .employee-table .employee-name {
+    min-width: 155px;
+}
+
+.employee-page .employee-table th:nth-child(4),
+.employee-page .employee-table .employee-department {
+    min-width: 175px;
+}
+
+.employee-page .employee-table th:nth-child(5),
+.employee-page .employee-table .employee-email {
+    min-width: 190px;
+    overflow-wrap: anywhere;
+}
+
+.employee-page .employee-table th:nth-child(6),
+.employee-page .employee-table .employee-phone {
+    min-width: 125px;
+}
+
+.employee-page .employee-table .employee-line-column,
+.employee-page .employee-table .employee-line-id {
+    min-width: 105px;
+    overflow-wrap: anywhere;
+}
+
+.employee-page .employee-table .employee-status-column {
+    width: 90px;
+    min-width: 90px;
+    text-align: center;
+}
+
+.employee-page .employee-table .employee-action-column {
+    width: 125px;
+    min-width: 125px;
+    text-align: center;
+}
+
+.employee-page .employee-table .badge {
+    font-size: 11px;
+    padding: 3px 6px;
+    white-space: nowrap;
+}
+
+.employee-page .employee-actions {
+    white-space: nowrap;
+}
+
+.employee-page .employee-actions .btn,
+.employee-page .employee-restore-form .btn {
+    width: 30px;
+    height: 30px;
+    padding: 5px 0;
+    margin: 1px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.employee-page .employee-restore-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.employee-page .employee-empty {
+    padding: 24px 10px;
+}
+
+.employee-page .employee-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.employee-page .employee-record-info {
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.employee-page .employee-pagination {
+    max-width: 100%;
+    margin-left: auto;
+}
+
+.employee-page .employee-pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.employee-page .employee-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    min-height: 31px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Laptop / area konten yang lebih sempit */
+@media (max-width: 1250px) {
+    .employee-page .employee-card-header {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .employee-page .employee-toolbar-actions {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .employee-page .employee-search-form {
+        flex: 1 1 240px;
+        max-width: none;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .employee-page .employee-toolbar-heading {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .employee-page .employee-status-form {
+        flex-basis: 130px;
+    }
+
+    .employee-page .employee-toolbar-actions {
+        flex-wrap: wrap;
+    }
+
+    .employee-page .employee-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .employee-page .employee-card-footer {
+        align-items: flex-start;
+    }
+
+    .employee-page .employee-pagination {
+        margin-left: 0;
+    }
+
+    .employee-page .employee-pagination .pagination {
+        justify-content: flex-start;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 520px) {
+    .employee-page-header h1 {
+        font-size: 21px;
+    }
+
+    .employee-page .employee-toolbar-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .employee-page .employee-status-form,
+    .employee-page .employee-status-form select {
+        width: 100%;
+    }
+
+    .employee-page .employee-toolbar-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+
+    .employee-page .employee-toolbar-actions > .btn {
+        width: 100%;
+    }
+
+    .employee-page .employee-search-form {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .employee-page .employee-record-info {
+        width: 100%;
+    }
+
+    .employee-page .employee-pagination {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: auto;
+    }
+
+    .employee-page .employee-pagination .pagination {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+}
+
+
+/* =========================================================
+   USER MANAGEMENT - COMPACT RESPONSIVE UI
+   ========================================================= */
+
+.user-page-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.user-page-header h1 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.user-page .user-card {
+    margin-bottom: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.user-page .user-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 10px 14px;
+}
+
+.user-page .user-toolbar-title {
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+.user-page .user-toolbar-title .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.user-page .user-toolbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.user-page .user-toolbar-actions > .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 6px 10px;
+    margin: 0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.user-page .user-search-form {
+    flex: 1 1 300px;
+    min-width: 180px;
+    max-width: 360px;
+    margin: 0;
+}
+
+.user-page .user-search-form .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.user-page .user-search-form .form-control {
+    height: 34px;
+    min-width: 0;
+    font-size: 12.5px;
+}
+
+.user-page .user-search-form .input-group-append {
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.user-page .user-search-form .btn {
+    height: 34px;
+    min-width: 36px;
+    margin: 0;
+}
+
+.user-page .user-card-body {
+    padding: 12px 14px;
+}
+
+.user-page .user-search-info {
+    margin-bottom: 12px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+}
+
+.user-page .user-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.user-page .user-table {
+    width: 100%;
+    min-width: 1100px;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.user-page .user-table th,
+.user-page .user-table td {
+    padding: 7px 9px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.user-page .user-table thead th {
+    background: #eaf0f6;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid #d5dde5;
+}
+
+.user-page .user-table tbody tr:hover {
+    background-color: #f5f8fb;
+}
+
+.user-page .user-table .user-number {
+    width: 55px;
+    min-width: 55px;
+    text-align: center;
+}
+
+.user-page .user-table .user-username,
+.user-page .user-table .user-nik {
+    min-width: 110px;
+    white-space: nowrap;
+}
+
+.user-page .user-table .user-full-name {
+    min-width: 150px;
+}
+
+.user-page .user-table .user-department {
+    min-width: 175px;
+}
+
+.user-page .user-table .user-role {
+    min-width: 125px;
+}
+
+.user-page .user-table .user-role-name {
+    display: block;
+    margin-top: 4px;
+    color: #6c757d;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+.user-page .user-table .user-last-login {
+    min-width: 145px;
+    white-space: nowrap;
+}
+
+.user-page .user-table .user-locked-column {
+    width: 95px;
+    min-width: 95px;
+    text-align: center;
+}
+
+.user-page .user-table .user-action-column {
+    width: 150px;
+    min-width: 150px;
+    text-align: center;
+}
+
+.user-page .user-table .badge {
+    padding: 3px 6px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.user-page .user-actions {
+    white-space: nowrap;
+}
+
+.user-page .user-actions > .btn,
+.user-page .user-inline-form .btn {
+    width: 30px;
+    height: 30px;
+    padding: 5px 0;
+    margin: 1px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.user-page .user-inline-form {
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.user-page .user-empty {
+    padding: 24px 10px;
+}
+
+.user-page .user-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.user-page .user-record-info {
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.user-page .user-pagination {
+    max-width: 100%;
+    margin-left: auto;
+}
+
+.user-page .user-pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.user-page .user-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    min-height: 31px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Laptop / area konten lebih sempit */
+@media (max-width: 1250px) {
+    .user-page .user-card-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .user-page .user-toolbar-actions {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .user-page .user-search-form {
+        flex: 1 1 240px;
+        max-width: none;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .user-page .user-toolbar-actions {
+        flex-wrap: wrap;
+    }
+
+    .user-page .user-search-form {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .user-page .user-card-footer {
+        align-items: flex-start;
+    }
+
+    .user-page .user-pagination {
+        margin-left: 0;
+    }
+
+    .user-page .user-pagination .pagination {
+        justify-content: flex-start;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 520px) {
+    .user-page-header h1 {
+        font-size: 21px;
+    }
+
+    .user-page .user-toolbar-title {
+        width: 100%;
+    }
+
+    .user-page .user-toolbar-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+
+    .user-page .user-toolbar-actions > .btn {
+        width: 100%;
+    }
+
+    .user-page .user-search-form {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .user-page .user-record-info {
+        width: 100%;
+    }
+
+    .user-page .user-pagination {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: auto;
+    }
+
+    .user-page .user-pagination .pagination {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+}
+
+
+/* =========================================================
+   ROLE MANAGEMENT - COMPACT RESPONSIVE UI
+   ========================================================= */
+
+.role-content-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.role-content-header h1 {
+    margin-bottom: 0;
+    font-size: 24px;
+    line-height: 1.3;
+}
+
+.role-page-card {
+    margin-bottom: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.role-page-card .role-card-header {
+    padding: 10px 14px;
+}
+
+.role-page-card .role-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
+.role-page-card .role-toolbar-left,
+.role-page-card .role-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.role-page-card .role-toolbar-left {
+    flex: 0 0 auto;
+}
+
+.role-page-card .role-toolbar-left .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.role-page-card .role-status-form {
+    margin: 0;
+}
+
+.role-page-card .role-status-form select {
+    width: 135px;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.role-page-card .role-toolbar-right {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+}
+
+.role-page-card .role-toolbar-right > .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.role-page-card .role-search-form {
+    flex: 0 1 340px;
+    min-width: 190px;
+    margin: 0;
+}
+
+.role-page-card .role-search-form .input-group {
+    flex-wrap: nowrap;
+}
+
+.role-page-card .role-search-form .form-control {
+    min-width: 0;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.role-page-card .role-search-form .btn {
+    height: 34px;
+    min-width: 36px;
+}
+
+.role-page-card .role-card-body {
+    padding: 12px 14px;
+}
+
+.role-page-card .role-search-info {
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 12.5px;
+}
+
+.role-page-card .role-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.role-page-card .role-table {
+    width: 100%;
+    min-width: 760px;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.role-page-card .role-table th,
+.role-page-card .role-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.role-page-card .role-table thead th {
+    background: #eaf0f6;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid #d5dde5;
+}
+
+.role-page-card .role-table .role-col-no {
+    width: 55px;
+}
+
+.role-page-card .role-table .role-col-status {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.role-page-card .role-table .role-col-action {
+    width: 115px;
+    min-width: 115px;
+    white-space: nowrap;
+}
+
+.role-page-card .role-table .role-code-cell {
+    white-space: nowrap;
+}
+
+.role-page-card .role-table .role-description-cell {
+    min-width: 260px;
+    overflow-wrap: anywhere;
+}
+
+.role-page-card .role-table .role-action-cell {
+    white-space: nowrap;
+}
+
+.role-page-card .role-table .btn {
+    width: 30px;
+    height: 30px;
+    padding: 5px 0;
+    margin: 1px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.role-page-card .role-table .badge {
+    padding: 3px 6px;
+    font-size: 11px;
+}
+
+.role-page-card .role-empty-cell {
+    padding: 24px 12px !important;
+}
+
+.role-page-card .role-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.role-page-card .role-record-info {
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.role-page-card .role-pagination {
+    margin-left: auto;
+    max-width: 100%;
+}
+
+.role-page-card .role-pagination .pagination {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.role-page-card .role-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    min-height: 31px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Laptop dengan ruang toolbar terbatas */
+@media (max-width: 1250px) {
+    .role-page-card .role-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .role-page-card .role-toolbar-right {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .role-page-card .role-search-form {
+        flex: 1 1 240px;
+        max-width: 400px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .role-page-card .role-toolbar-left,
+    .role-page-card .role-toolbar-right {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .role-page-card .role-search-form {
+        flex: 1 1 100%;
+        max-width: none;
+    }
+
+    .role-page-card .role-card-footer {
+        align-items: flex-start;
+    }
+
+    .role-page-card .role-pagination {
+        margin-left: 0;
+    }
+
+    .role-page-card .role-pagination .pagination {
+        justify-content: flex-start;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 520px) {
+    .role-page-card .role-toolbar-left {
+        flex-wrap: wrap;
+    }
+
+    .role-page-card .role-toolbar-left .card-title {
+        width: 100%;
+    }
+
+    .role-page-card .role-status-form,
+    .role-page-card .role-status-form select {
+        width: 100%;
+    }
+
+    .role-page-card .role-toolbar-right > .btn {
+        flex: 1 1 auto;
+    }
+
+    .role-page-card .role-record-info {
+        width: 100%;
+    }
+
+    .role-page-card .role-pagination {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .role-page-card .role-pagination .pagination {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+}
+
+
+/* =========================================================
+   PERMISSION MANAGEMENT - COMPACT RESPONSIVE UI
+   ========================================================= */
+
+.permission-content-header {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.permission-content-header h1 {
+    margin-bottom: 0;
+    font-size: 24px;
+    line-height: 1.3;
+}
+
+.permission-page-card {
+    margin-bottom: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.permission-page-card .permission-card-header {
+    padding: 10px 14px;
+}
+
+.permission-page-card .permission-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
+.permission-page-card .permission-toolbar-left,
+.permission-page-card .permission-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.permission-page-card .permission-toolbar-left {
+    flex: 0 0 auto;
+}
+
+.permission-page-card .permission-toolbar-left .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-status-form {
+    margin: 0;
+}
+
+.permission-page-card .permission-status-form select {
+    width: 135px;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.permission-page-card .permission-toolbar-right {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+}
+
+.permission-page-card .permission-toolbar-right > .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-search-form {
+    flex: 0 1 350px;
+    min-width: 190px;
+    margin: 0;
+}
+
+.permission-page-card .permission-search-form .input-group {
+    flex-wrap: nowrap;
+}
+
+.permission-page-card .permission-search-form .form-control {
+    min-width: 0;
+    height: 34px;
+    font-size: 12.5px;
+}
+
+.permission-page-card .permission-search-form .btn {
+    height: 34px;
+    min-width: 36px;
+}
+
+.permission-page-card .permission-card-body {
+    padding: 12px 14px;
+}
+
+.permission-page-card .permission-search-info {
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 12.5px;
+}
+
+.permission-page-card .permission-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.permission-page-card .permission-table {
+    width: 100%;
+    min-width: 780px;
+    margin-bottom: 0;
+    font-size: 12.5px;
+}
+
+.permission-page-card .permission-table th,
+.permission-page-card .permission-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.permission-page-card .permission-table thead th {
+    background-color: #eaf0f6;
+    font-weight: 600;
+    border-bottom: 2px solid #d5dde5;
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-table .permission-col-no {
+    width: 55px;
+}
+
+.permission-page-card .permission-table .permission-col-status {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-table .permission-col-action {
+    width: 115px;
+    min-width: 115px;
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-table .permission-code-cell {
+    min-width: 190px;
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-table .permission-description-cell {
+    min-width: 240px;
+    overflow-wrap: anywhere;
+}
+
+.permission-page-card .permission-table .permission-action-cell {
+    white-space: nowrap;
+}
+
+.permission-page-card .permission-table .btn {
+    width: 30px;
+    height: 30px;
+    padding: 5px 0;
+    margin: 1px;
+    line-height: 20px;
+    border-radius: 5px;
+}
+
+.permission-page-card .permission-table .badge {
+    padding: 3px 6px;
+    font-size: 11px;
+}
+
+.permission-page-card .permission-restore-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.permission-page-card .permission-empty-cell {
+    padding: 24px 12px !important;
+}
+
+.permission-page-card .permission-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+.permission-page-card .permission-record-info {
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.permission-page-card .permission-pagination {
+    margin-left: auto;
+    max-width: 100%;
+}
+
+.permission-page-card .permission-pagination .pagination {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.permission-page-card .permission-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    min-height: 31px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Laptop dengan ruang toolbar terbatas */
+@media (max-width: 1250px) {
+    .permission-page-card .permission-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .permission-page-card .permission-toolbar-right {
+        flex: 1 1 100%;
+        justify-content: flex-start;
+    }
+
+    .permission-page-card .permission-search-form {
+        flex: 1 1 240px;
+        max-width: 400px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .permission-page-card .permission-toolbar-left,
+    .permission-page-card .permission-toolbar-right {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .permission-page-card .permission-search-form {
+        flex: 1 1 100%;
+        max-width: none;
+    }
+
+    .permission-page-card .permission-card-footer {
+        align-items: flex-start;
+    }
+
+    .permission-page-card .permission-pagination {
+        margin-left: 0;
+    }
+
+    .permission-page-card .permission-pagination .pagination {
+        justify-content: flex-start;
+    }
+}
+
+/* Ponsel */
+@media (max-width: 520px) {
+    .permission-page-card .permission-toolbar-left {
+        flex-wrap: wrap;
+    }
+
+    .permission-page-card .permission-toolbar-left .card-title {
+        width: 100%;
+    }
+
+    .permission-page-card .permission-status-form,
+    .permission-page-card .permission-status-form select {
+        width: 100%;
+    }
+
+    .permission-page-card .permission-toolbar-right > .btn {
+        flex: 1 1 auto;
+    }
+
+    .permission-page-card .permission-record-info {
+        width: 100%;
+    }
+
+    .permission-page-card .permission-pagination {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .permission-page-card .permission-pagination .pagination {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+}
+
+
+/* =========================================================
+   EMPLOYEE FORM - TWO COLUMN LAYOUT
+   ========================================================= */
+
+.employee-form-header {
+    padding-top: 10px;
+    padding-bottom: 8px;
+}
+
+.employee-form-header h1 {
+    margin-bottom: 0;
+    font-size: 24px;
+    line-height: 1.3;
+}
+
+.employee-form-card {
+    margin-bottom: 12px;
+    border-radius: 7px;
+}
+
+.employee-form-card .card-header {
+    padding: 10px 14px;
+}
+
+.employee-form-card .card-title {
+    float: none;
+    margin: 0;
+    font-size: 16px;
+}
+
+.employee-form-body {
+    padding: 14px 16px 6px;
+}
+
+.employee-form-body .form-group {
+    margin-bottom: 12px;
+}
+
+.employee-form-body label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.employee-form-body .form-control {
+    height: 35px;
+    padding: 6px 10px;
+    font-size: 12.5px;
+}
+
+.employee-form-body select.form-control {
+    padding-right: 25px;
+}
+
+.employee-form-body .form-text {
+    margin-top: 3px;
+    font-size: 11px;
+}
+
+.employee-form-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+}
+
+.employee-form-footer .btn {
+    min-width: 80px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Layar kecil: kembali menjadi satu kolom */
+@media (max-width: 767.98px) {
+    .employee-form-body {
+        padding: 12px;
+    }
+
+    .employee-form-body .form-group {
+        margin-bottom: 10px;
+    }
+
+    .employee-form-header h1 {
+        font-size: 21px;
+    }
+}
+
+
+/* =========================================================
+   SIDEBAR USER PROFILE
+   ========================================================= */
+
+.main-sidebar .cims-user-panel {
+    align-items: flex-start !important;
+    padding: 12px 0 14px;
+    margin-top: 8px !important;
+    margin-bottom: 10px !important;
+}
+
+.main-sidebar .cims-user-panel .image {
+    flex: 0 0 42px;
+    padding-left: 3px;
+}
+
+.main-sidebar .cims-user-avatar {
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.main-sidebar .cims-user-info {
+    min-width: 0;
+    width: calc(100% - 42px);
+    padding-left: 8px;
+}
+
+.main-sidebar .cims-user-fullname {
+    color: #f4f6f9;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    margin-bottom: 3px;
+}
+
+.main-sidebar .cims-user-username {
+    color: #c2c7d0;
+    font-size: 11px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    margin-bottom: 5px;
+}
+
+.main-sidebar .cims-user-role {
+    display: inline-block;
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+}

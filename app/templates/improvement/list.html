@@ -1,21 +1,21 @@
-{% from "components/sortable_header.html" import sortable_header %}
+
 {% extends "layouts/base.html" %}
+{% from "components/sortable_header.html" import sortable_header %}
 
 {% block title %}Improvement{% endblock %}
 
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/improvement-compact.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<!-- ==========================================
-Content Header
-========================================== -->
-<section class="content-header">
-
+<section class="content-header improvement-list-header">
     <div class="container-fluid">
-
-        <div class="row mb-2">
-
+        <div class="row mb-2 align-items-center">
             <div class="col-sm-6">
-
                 <h1>
                     {% if mine == "1" %}
                         My Improvement
@@ -23,428 +23,230 @@ Content Header
                         Improvement Management
                     {% endif %}
                 </h1>
-
             </div>
 
             <div class="col-sm-6">
-
                 <ol class="breadcrumb float-sm-right">
-
                     <li class="breadcrumb-item">
-                        <a href="#">Dashboard</a>
+                        <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
                     </li>
-
-                    <li class="breadcrumb-item">
-                        Continuous Improvement
-                    </li>
-
-                    <li class="breadcrumb-item active">
-                        Improvement
-                    </li>
-
+                    <li class="breadcrumb-item">Continuous Improvement</li>
+                    <li class="breadcrumb-item active">Improvement</li>
                 </ol>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
-
-<!-- ==========================================
-Main Content
-========================================== -->
-<section class="content">
-
+<section class="content improvement-list-page">
     <div class="container-fluid">
 
-        <div class="card card-primary card-outline">
+        <div class="card card-primary card-outline improvement-list-card">
 
+            <!-- Toolbar: title and filters -->
+            <div class="card-header improvement-toolbar">
 
-            <!-- ==========================================
-            Card Header
-            ========================================== -->
-            <div class="card-header">
+                <div class="improvement-toolbar-top">
 
-                <div class="d-flex justify-content-between align-items-center flex-nowrap">
-
-
-                    <!-- ==========================================
-                    Left
-                    ========================================== -->
-                    <div class="d-flex align-items-center flex-shrink-0">
-
-                        <h3 class="card-title mb-0 mr-3"
-                            style="white-space: nowrap;">
-
+                    <div class="improvement-toolbar-title">
+                        <h3 class="card-title">
                             <i class="fas fa-lightbulb mr-2"></i>
-
                             {% if mine == "1" %}
                                 My Improvement List
                             {% else %}
                                 Improvement List
                             {% endif %}
-
                         </h3>
-
                     </div>
 
+                    <!-- Approval filter -->
+                    <form method="GET" class="improvement-filter-form approval-filter-form">
 
-                    <!-- ==========================================
-                    Approval Filter
-                    ========================================== -->
-                    <form method="GET"
-                          class="mb-0 mr-3">
-
-                        <input type="hidden"
-                               name="keyword"
-                               value="{{ keyword }}">
-
-                        <input type="hidden"
-                               name="date_from"
-                               value="{{ date_from or '' }}">
-
-                        <input type="hidden"
-                               name="date_to"
-                               value="{{ date_to or '' }}">
-
-                        <input type="hidden"
-                               name="sort"
-                               value="{{ sort_by }}">
-
-                        <input type="hidden"
-                               name="order"
-                               value="{{ sort_order }}">
-
-                        <input type="hidden"
-                               name="mine"
-                               value="{{ mine }}">
+                        <input type="hidden" name="keyword" value="{{ keyword }}">
+                        <input type="hidden" name="date_from" value="{{ date_from or '' }}">
+                        <input type="hidden" name="date_to" value="{{ date_to or '' }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
+                        <input type="hidden" name="mine" value="{{ mine }}">
 
                         <select name="approval"
-                                class="custom-select custom-select-sm"
-                                style="width:130px;"
+                                class="custom-select custom-select-sm improvement-approval-select"
+                                aria-label="Filter approval"
                                 onchange="this.form.submit()">
 
-                            <option value="">
+                            <option value=""
+                                {% if not approval %}selected{% endif %}>
                                 All Approval
                             </option>
 
                             <option value="open"
-                                {% if approval == "open" %}
-                                    selected
-                                {% endif %}>
+                                {% if approval == "open" %}selected{% endif %}>
                                 Open
                             </option>
 
                             <option value="implemented"
-                                {% if approval == "implemented" %}
-                                    selected
-                                {% endif %}>
+                                {% if approval == "implemented" %}selected{% endif %}>
                                 Implemented
                             </option>
 
                             <option value="verified"
-                                {% if approval == "verified" %}
-                                    selected
-                                {% endif %}>
+                                {% if approval == "verified" %}selected{% endif %}>
                                 Verified
                             </option>
 
                             <option value="approved"
-                                {% if approval == "approved" %}
-                                    selected
-                                {% endif %}>
+                                {% if approval == "approved" %}selected{% endif %}>
                                 Approved
                             </option>
-
                         </select>
-
                     </form>
 
+                    <!-- Date filter -->
+                    <form method="GET" class="improvement-filter-form improvement-date-form">
 
-                    <!-- ==========================================
-                    Right
-                    ========================================== -->
-                    <div class="d-flex align-items-center">
+                        <input type="hidden" name="keyword" value="{{ keyword }}">
+                        <input type="hidden" name="approval" value="{{ approval }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
+                        <input type="hidden" name="mine" value="{{ mine }}">
 
+                        <div class="improvement-date-controls">
+                            <input type="date"
+                                   name="date_from"
+                                   class="form-control form-control-sm"
+                                   value="{{ date_from or '' }}"
+                                   title="From Date"
+                                   aria-label="From date">
 
-                        <!-- ==========================================
-                        Date Filter
-                        ========================================== -->
-                        <form method="GET"
-                              class="mb-0 mr-3">
+                            <span class="improvement-date-separator">–</span>
 
-                            <input type="hidden"
+                            <input type="date"
+                                   name="date_to"
+                                   class="form-control form-control-sm"
+                                   value="{{ date_to or '' }}"
+                                   title="To Date"
+                                   aria-label="To date">
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-sm improvement-filter-button"
+                                    title="Filter by Date"
+                                    aria-label="Filter by date">
+                                <i class="fas fa-filter"></i>
+                                <span>Filter</span>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <!-- Toolbar: create and search -->
+                <div class="improvement-toolbar-bottom">
+
+                    <div class="improvement-toolbar-create">
+                        <a href="{{ url_for('improvement.select_problem') }}"
+                           class="btn btn-success btn-sm">
+                            <i class="fas fa-plus mr-1"></i>
+                            Create Improvement
+                        </a>
+                    </div>
+
+                    <form method="GET" class="improvement-search-form">
+
+                        <input type="hidden" name="approval" value="{{ approval }}">
+                        <input type="hidden" name="date_from" value="{{ date_from or '' }}">
+                        <input type="hidden" name="date_to" value="{{ date_to or '' }}">
+                        <input type="hidden" name="sort" value="{{ sort_by }}">
+                        <input type="hidden" name="order" value="{{ sort_order }}">
+                        <input type="hidden" name="mine" value="{{ mine }}">
+
+                        <div class="input-group input-group-sm improvement-search-group">
+                            <input type="text"
                                    name="keyword"
-                                   value="{{ keyword }}">
+                                   class="form-control"
+                                   placeholder="Search improvement no, problem no, title..."
+                                   value="{{ keyword }}"
+                                   aria-label="Search improvements">
 
-                            <input type="hidden"
-                                   name="approval"
-                                   value="{{ approval }}">
-
-                            <input type="hidden"
-                                   name="sort"
-                                   value="{{ sort_by }}">
-
-                            <input type="hidden"
-                                   name="order"
-                                   value="{{ sort_order }}">
-
-                            <input type="hidden"
-                                   name="mine"
-                                   value="{{ mine }}">
-
-
-                            <div class="d-flex align-items-center">
-
-                                <!-- From Date -->
-                                <input type="date"
-                                       name="date_from"
-                                       class="form-control form-control-sm"
-                                       style="width:125px;"
-                                       value="{{ date_from or '' }}"
-                                       title="From Date">
-
-                                <span class="mx-2">
-                                    -
-                                </span>
-
-                                <!-- To Date -->
-                                <input type="date"
-                                       name="date_to"
-                                       class="form-control form-control-sm"
-                                       style="width:125px;"
-                                       value="{{ date_to or '' }}"
-                                       title="To Date">
-
-                                <!-- Filter -->
-                                <button type="submit"
-                                        class="btn btn-primary btn-sm ml-2"
-                                        title="Filter by Date">
-
-                                    <i class="fas fa-filter"></i>
-
+                            <div class="input-group-append">
+                                <button class="btn btn-primary"
+                                        type="submit"
+                                        title="Search"
+                                        aria-label="Search">
+                                    <i class="fas fa-search"></i>
                                 </button>
 
+                                <a href="{{ url_for('improvement.index', mine=mine) }}"
+                                   class="btn btn-secondary improvement-reset-button"
+                                   title="Reset"
+                                   aria-label="Reset filters">
+                                    <i class="fas fa-sync-alt"></i>
+                                </a>
                             </div>
-
-                        </form>
-
-
-                        <!-- ==========================================
-                        Create Improvement
-                        ========================================== -->
-                        <a href="{{ url_for(
-                            'improvement.select_problem'
-                        ) }}"
-                           class="btn btn-success mr-2">
-
-                            <i class="fas fa-plus mr-1"></i>
-
-                            Create
-
-                        </a>
-
-
-                        <!-- ==========================================
-                        Search
-                        ========================================== -->
-                        <form method="GET"
-                              class="mb-0">
-
-                            <input type="hidden"
-                                   name="approval"
-                                   value="{{ approval }}">
-
-                            <input type="hidden"
-                                   name="date_from"
-                                   value="{{ date_from or '' }}">
-
-                            <input type="hidden"
-                                   name="date_to"
-                                   value="{{ date_to or '' }}">
-
-                            <input type="hidden"
-                                   name="sort"
-                                   value="{{ sort_by }}">
-
-                            <input type="hidden"
-                                   name="order"
-                                   value="{{ sort_order }}">
-
-                            <input type="hidden"
-                                   name="mine"
-                                   value="{{ mine }}">
-
-
-                            <div class="input-group">
-
-                                <input type="text"
-                                       name="keyword"
-                                       class="form-control"
-                                       style="width:230px;"
-                                       placeholder="Search improvement no, problem no, title..."
-                                       value="{{ keyword }}">
-
-                                <div class="input-group-append">
-
-                                    <button class="btn btn-primary"
-                                            type="submit"
-                                            title="Search">
-
-                                        <i class="fas fa-search"></i>
-
-                                    </button>
-
-
-                                    <!-- Reset -->
-                                    <a href="{{ url_for(
-                                        'improvement.index',
-                                        mine=mine
-                                    ) }}"
-                                       class="btn btn-secondary ml-1"
-                                       title="Reset">
-
-                                        <i class="fas fa-sync-alt"></i>
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        </form>
-
-                    </div>
+                        </div>
+                    </form>
 
                 </div>
-
             </div>
 
+            <!-- Table content -->
+            <div class="card-body improvement-list-body">
 
-            <!-- ==========================================
-            Card Body
-            ========================================== -->
-            <div class="card-body">
-
-
-                <!-- ==========================================
-                My Improvement Information
-                ========================================== -->
                 {% if mine == "1" %}
-
-                <div class="alert alert-primary
-                            d-flex
-                            align-items-center
-                            justify-content-between">
-
+                <div class="alert alert-primary improvement-info-alert">
                     <div>
-
                         <i class="fas fa-user-circle mr-2"></i>
-
-                        <strong>
-                            My Improvement
-                        </strong>
-
-                        <span class="ml-2">
-                            Showing improvements created by you.
-                        </span>
-
+                        <strong>My Improvement</strong>
+                        <span class="ml-2">Showing improvements created by you.</span>
                     </div>
 
-
-                    <a href="{{ url_for(
-                        'improvement.index'
-                    ) }}"
+                    <a href="{{ url_for('improvement.index') }}"
                        class="btn btn-sm btn-outline-primary">
-
                         <i class="fas fa-list mr-1"></i>
-
                         View All Improvements
-
                     </a>
-
                 </div>
-
                 {% endif %}
 
-
-                <!-- ==========================================
-                Filter Information
-                ========================================== -->
                 {% if keyword or approval or date_from or date_to %}
-
-                <div class="alert alert-info">
-
+                <div class="alert alert-info improvement-filter-info">
                     <i class="fas fa-filter mr-1"></i>
-
-                    Filter :
+                    <strong>Active filters:</strong>
 
                     {% if keyword %}
-
-                    <strong>
-                        Search: {{ keyword }}
-                    </strong>
-
+                        <span class="improvement-filter-chip">
+                            Search: {{ keyword }}
+                        </span>
                     {% endif %}
-
 
                     {% if approval %}
-
-                    <strong class="ml-3">
-                        Approval:
-                        {{ approval|capitalize }}
-                    </strong>
-
+                        <span class="improvement-filter-chip">
+                            Approval: {{ approval|capitalize }}
+                        </span>
                     {% endif %}
-
 
                     {% if date_from %}
-
-                    <strong class="ml-3">
-                        From:
-                        {{ date_from }}
-                    </strong>
-
+                        <span class="improvement-filter-chip">
+                            From: {{ date_from }}
+                        </span>
                     {% endif %}
-
 
                     {% if date_to %}
-
-                    <strong class="ml-3">
-                        To:
-                        {{ date_to }}
-                    </strong>
-
+                        <span class="improvement-filter-chip">
+                            To: {{ date_to }}
+                        </span>
                     {% endif %}
-
                 </div>
-
                 {% endif %}
 
-
-                <!-- ==========================================
-                Improvement Table
-                ========================================== -->
-                <div class="table-responsive">
-
-                    <table class="table table-bordered table-hover">
+                <div class="table-responsive improvement-table-responsive">
+                    <table class="table table-bordered table-hover mb-0 improvement-list-table">
 
                         <thead>
+                            <tr>
+                                <th class="col-number">No</th>
 
-                            <tr class="text-center">
-
-
-                                <th width="60">
-                                    No
-                                </th>
-
-
-                                <!-- Improvement No -->
                                 {{ sortable_header(
-                                    "Improvement No",
+                                    "Improve No",
                                     "improvement_no",
                                     "improvement.index",
                                     keyword,
@@ -459,13 +261,8 @@ Main Content
                                     mine
                                 ) }}
 
+                                <th class="col-date">Create Date</th>
 
-                                <th width="120">
-                                    Create Date
-                                </th>
-
-
-                                <!-- Problem No -->
                                 {{ sortable_header(
                                     "Problem No",
                                     "problem_id",
@@ -482,8 +279,6 @@ Main Content
                                     mine
                                 ) }}
 
-
-                                <!-- Title -->
                                 {{ sortable_header(
                                     "Title",
                                     "title",
@@ -500,15 +295,10 @@ Main Content
                                     mine
                                 ) }}
 
+                                <th>Problem</th>
 
-                                <th>
-                                    Problem
-                                </th>
-
-
-                                <!-- Improvement Cost -->
                                 {{ sortable_header(
-                                    "Improvement Cost",
+                                    "Improve Cost",
                                     "improvement_cost",
                                     "improvement.index",
                                     keyword,
@@ -523,10 +313,8 @@ Main Content
                                     mine
                                 ) }}
 
-
-                                <!-- Estimated Benefit -->
                                 {{ sortable_header(
-                                    "Estimated Benefit",
+                                    "Est Benefit",
                                     "estimated_benefit",
                                     "improvement.index",
                                     keyword,
@@ -541,326 +329,186 @@ Main Content
                                     mine
                                 ) }}
 
-
-                                <th width="120">
-                                    Approval
-                                </th>
-
-
-                                <th width="110">
-                                    Action
-                                </th>
-
-
+                                <th class="col-approval">Approval</th>
+                                <th class="col-action">Action</th>
                             </tr>
-
                         </thead>
 
-
                         <tbody>
-
-
                             {% if improvements.items %}
 
-
                                 {% for improvement in improvements.items %}
-
                                 <tr>
-
-
-                                    <!-- No -->
-                                    <td class="text-center">
-
+                                    <td class="text-center col-number">
                                         {{ improvements.first + loop.index0 }}
-
                                     </td>
 
-
-                                    <!-- Improvement No -->
-                                    <td>
-
+                                    <td class="col-improvement-no">
                                         {{ improvement.improvement_no }}
-
                                     </td>
 
-
-                                    <!-- Create Date -->
-                                    <td class="text-center">
-
+                                    <td class="text-center col-date">
                                         {% if improvement.created_at %}
-
-                                            {{ improvement.created_at.strftime(
-                                                '%d-%m-%Y'
-                                            ) }}
-
+                                            {{ improvement.created_at.strftime('%d-%m-%Y') }}
                                         {% else %}
-
                                             -
-
                                         {% endif %}
-
                                     </td>
 
-
-                                    <!-- Problem No -->
-                                    <td>
-
+                                    <td class="col-problem-no">
                                         {% if improvement.problem %}
-
                                             <a href="{{ url_for(
                                                 'problem.show',
                                                 problem_id=improvement.problem.id
                                             ) }}">
-
                                                 {{ improvement.problem.problem_no }}
-
                                             </a>
-
                                         {% else %}
-
                                             -
-
                                         {% endif %}
-
                                     </td>
 
-
-                                    <!-- Title -->
-                                    <td>
-
+                                    <td class="col-title">
                                         {{ improvement.title }}
-
                                     </td>
 
-
-                                    <!-- Problem Title -->
-                                    <td>
-
+                                    <td class="col-problem-title">
                                         {% if improvement.problem %}
-
                                             {{ improvement.problem.title }}
-
                                         {% else %}
-
                                             -
-
                                         {% endif %}
-
                                     </td>
 
-
-                                    <!-- Improvement Cost -->
-                                    <td class="text-right">
-
-                                        {{ "{:,.2f}".format(
-                                            improvement.improvement_cost or 0
-                                        ) }}
-
+                                    <td class="text-right col-cost">
+                                        {{ "{:,.2f}".format(improvement.improvement_cost or 0) }}
                                     </td>
 
-
-                                    <!-- Estimated Benefit -->
-                                    <td class="text-right">
-
-                                        {{ "{:,.2f}".format(
-                                            improvement.estimated_benefit or 0
-                                        ) }}
-
+                                    <td class="text-right col-benefit">
+                                        {{ "{:,.2f}".format(improvement.estimated_benefit or 0) }}
                                     </td>
 
-
-                                    <!-- Approval -->
-                                    <td class="text-center">
-
+                                    <td class="text-center col-approval">
                                         {% if improvement.approved_date %}
-
-                                            <span class="badge badge-pill badge-success">
+                                            <span class="badge badge-pill badge-success improvement-status-badge">
                                                 Approved
                                             </span>
-
                                         {% elif improvement.verification_result %}
-
-                                            <span class="badge badge-pill badge-primary">
+                                            <span class="badge badge-pill badge-primary improvement-status-badge">
                                                 Verified
                                             </span>
-
                                         {% elif improvement.implementation_result %}
-
-                                            <span class="badge badge-pill badge-warning">
+                                            <span class="badge badge-pill badge-warning improvement-status-badge">
                                                 Implemented
                                             </span>
-
                                         {% else %}
-
-                                            <span class="badge badge-pill badge-secondary">
+                                            <span class="badge badge-pill badge-secondary improvement-status-badge">
                                                 Open
                                             </span>
-
                                         {% endif %}
-
                                     </td>
 
+                                    <td class="text-center col-action">
+                                        <div class="improvement-action-buttons">
 
-                                    <!-- Action -->
-                                    <td class="text-center">
+                                            <a href="{{ url_for(
+                                                'improvement.detail',
+                                                improvement_id=improvement.id
+                                            ) }}"
+                                               class="btn btn-info btn-sm"
+                                               title="View"
+                                               aria-label="View improvement">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
 
+                                            <a href="{{ url_for(
+                                                'improvement.export_pdf',
+                                                improvement_id=improvement.id
+                                            ) }}"
+                                               class="btn btn-danger btn-sm"
+                                               target="_blank"
+                                               title="Export PDF"
+                                               aria-label="Export PDF">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
 
-                                        <!-- View -->
-                                        <a href="{{ url_for(
-                                            'improvement.detail',
-                                            improvement_id=improvement.id
-                                        ) }}"
-                                           class="btn btn-info btn-sm"
-                                           title="View">
-
-                                            <i class="fas fa-eye"></i>
-
-                                        </a>
-                                        <!-- PDF -->
-
-<a
-    href="{{ url_for(
-        'improvement.export_pdf',
-        improvement_id=improvement.id
-    ) }}"
-    class="btn btn-danger btn-sm"
-    target="_blank"
-    title="Export PDF"
->
-
-    <i class="fas fa-file-pdf"></i>
-
-</a>
-
-
-                                        <!-- Edit -->
-                                        {% if not improvement.approved_date %}
-
+                                            {% if not improvement.approved_date %}
                                             <a href="{{ url_for(
                                                 'improvement.edit',
                                                 improvement_id=improvement.id
                                             ) }}"
                                                class="btn btn-warning btn-sm"
-                                               title="Edit">
-
+                                               title="Edit"
+                                               aria-label="Edit improvement">
                                                 <i class="fas fa-edit"></i>
-
                                             </a>
+                                            {% endif %}
 
-                                        {% endif %}
-
-
+                                        </div>
                                     </td>
-
-
                                 </tr>
-
                                 {% endfor %}
 
-
                             {% else %}
-
-
                                 <tr>
-
-                                    <td colspan="10"
-                                        class="text-center text-muted py-4">
-
+                                    <td colspan="10" class="text-center text-muted py-4">
                                         <i class="fas fa-folder-open fa-2x mb-2"></i>
-
                                         <br>
-
                                         {% if mine == "1" %}
-
                                             No improvement created by you.
-
                                         {% else %}
-
                                             No improvement data found.
-
                                         {% endif %}
-
                                     </td>
-
                                 </tr>
-
-
                             {% endif %}
-
-
                         </tbody>
 
                     </table>
-
                 </div>
-
-
             </div>
 
-
-            <!-- ==========================================
-            Card Footer
-            ========================================== -->
-            <div class="card-footer clearfix">
-
-
-                <!-- ==========================================
-                Showing Information
-                ========================================== -->
-                <div class="float-left">
-
+            <!-- Pagination -->
+            <div class="card-footer improvement-list-footer">
+                <div class="improvement-showing-info">
                     Showing
-
-                    <strong>
-
-                        {{ improvements.first
-                        if improvements.total > 0
-                        else 0 }}
-
-                    </strong>
-
+                    <strong>{{ improvements.first if improvements.total > 0 else 0 }}</strong>
                     to
-
-                    <strong>
-
-                        {{ improvements.last
-                        if improvements.total > 0
-                        else 0 }}
-
-                    </strong>
-
+                    <strong>{{ improvements.last if improvements.total > 0 else 0 }}</strong>
                     of
-
-                    <strong>
-
-                        {{ improvements.total }}
-
-                    </strong>
-
+                    <strong>{{ improvements.total }}</strong>
                     improvement(s)
-
                 </div>
 
+                <nav aria-label="Improvement pagination">
+                    <ul class="pagination pagination-sm mb-0">
 
-                <!-- ==========================================
-                Pagination
-                ========================================== -->
-                <div class="float-right">
+                        {% if improvements.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'improvement.index',
+                                   page=improvements.prev_num,
+                                   keyword=keyword,
+                                   approval=approval,
+                                   date_from=date_from,
+                                   date_to=date_to,
+                                   sort=sort_by,
+                                   order=sort_order,
+                                   mine=mine
+                               ) }}">
+                                Previous
+                            </a>
+                        </li>
+                        {% endif %}
 
-                    <nav>
-
-                        <ul class="pagination pagination-sm mb-0">
-
-
-                            <!-- Previous -->
-                            {% if improvements.has_prev %}
-
-                            <li class="page-item">
-
+                        {% for page_num in improvements.iter_pages() %}
+                            {% if page_num %}
+                            <li class="page-item {% if page_num == improvements.page %}active{% endif %}">
                                 <a class="page-link"
                                    href="{{ url_for(
                                        'improvement.index',
-                                       page=improvements.prev_num,
+                                       page=page_num,
                                        keyword=keyword,
                                        approval=approval,
                                        date_from=date_from,
@@ -869,101 +517,41 @@ Main Content
                                        order=sort_order,
                                        mine=mine
                                    ) }}">
-
-                                    Previous
-
+                                    {{ page_num }}
                                 </a>
-
                             </li>
-
-                            {% endif %}
-
-
-                            <!-- Page Numbers -->
-                            {% for page_num in improvements.iter_pages() %}
-
-                                {% if page_num %}
-
-                                <li class="page-item
-                                    {% if page_num == improvements.page %}
-                                        active
-                                    {% endif %}">
-
-                                    <a class="page-link"
-                                       href="{{ url_for(
-                                           'improvement.index',
-                                           page=page_num,
-                                           keyword=keyword,
-                                           approval=approval,
-                                           date_from=date_from,
-                                           date_to=date_to,
-                                           sort=sort_by,
-                                           order=sort_order,
-                                           mine=mine
-                                       ) }}">
-
-                                        {{ page_num }}
-
-                                    </a>
-
-                                </li>
-
-                                {% else %}
-
-                                <li class="page-item disabled">
-
-                                    <span class="page-link">
-                                        ...
-                                    </span>
-
-                                </li>
-
-                                {% endif %}
-
-                            {% endfor %}
-
-
-                            <!-- Next -->
-                            {% if improvements.has_next %}
-
-                            <li class="page-item">
-
-                                <a class="page-link"
-                                   href="{{ url_for(
-                                       'improvement.index',
-                                       page=improvements.next_num,
-                                       keyword=keyword,
-                                       approval=approval,
-                                       date_from=date_from,
-                                       date_to=date_to,
-                                       sort=sort_by,
-                                       order=sort_order,
-                                       mine=mine
-                                   ) }}">
-
-                                    Next
-
-                                </a>
-
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">…</span>
                             </li>
-
                             {% endif %}
+                        {% endfor %}
 
+                        {% if improvements.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ url_for(
+                                   'improvement.index',
+                                   page=improvements.next_num,
+                                   keyword=keyword,
+                                   approval=approval,
+                                   date_from=date_from,
+                                   date_to=date_to,
+                                   sort=sort_by,
+                                   order=sort_order,
+                                   mine=mine
+                               ) }}">
+                                Next
+                            </a>
+                        </li>
+                        {% endif %}
 
-                        </ul>
-
-                    </nav>
-
-                </div>
-
-
+                    </ul>
+                </nav>
             </div>
-
 
         </div>
-
     </div>
-
 </section>
 
 {% endblock %}

@@ -1,0 +1,2146 @@
+{% extends "layouts/base.html" %}
+
+
+{% block title %}
+    Audit List
+{% endblock %}
+
+
+{% block public_content %}
+
+
+<style>
+
+/* =========================================================
+   AUDIT LIST
+   ========================================================= */
+
+.audit-list-page {
+
+    width: 100%;
+
+    padding: 24px 28px 45px 28px;
+
+    background: #f4f7fb;
+
+    min-height: calc(100vh - 60px);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.audit-list-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+
+    padding: 22px 24px;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    border: 1px solid #e7edf4;
+
+    box-shadow:
+        0 4px 16px rgba(15, 42, 67, 0.06);
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+}
+
+
+.audit-list-title-wrapper {
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.audit-list-title-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #0f4c81,
+        #1976b8
+    );
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 14px;
+
+    font-size: 21px;
+
+    box-shadow:
+        0 5px 12px rgba(25, 118, 184, 0.25);
+}
+
+
+.audit-list-title {
+
+    margin: 0;
+
+    font-size: 27px;
+
+    font-weight: 700;
+
+    color: #183247;
+
+    line-height: 1.2;
+}
+
+
+.audit-list-subtitle {
+
+    margin-top: 5px;
+
+    font-size: 13px;
+
+    color: #7b8a99;
+}
+
+
+/* =========================================================
+   HEADER ACTION
+   ========================================================= */
+
+.audit-list-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+}
+
+
+.audit-list-actions .btn {
+
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   FILTER CARD
+   ========================================================= */
+
+.audit-filter-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e7edf4;
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 4px 14px rgba(15, 42, 67, 0.06);
+
+    margin-bottom: 20px;
+}
+
+
+.audit-filter-card .card-header {
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf1f5;
+
+    padding: 14px 18px;
+
+    color: #30475b;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.audit-filter-card .card-header i {
+
+    color: #1976b8;
+
+    margin-right: 7px;
+}
+
+
+.audit-filter-card .card-body {
+
+    padding: 18px;
+}
+
+
+.audit-filter-card label {
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #66798a;
+
+    margin-bottom: 5px;
+}
+
+
+.audit-filter-card .form-control,
+.audit-filter-card .custom-select {
+
+    border-radius: 7px;
+
+    border-color: #dce4eb;
+
+    font-size: 13px;
+
+    height: 38px;
+}
+
+
+.audit-filter-card .form-control:focus,
+.audit-filter-card .custom-select:focus {
+
+    border-color: #1976b8;
+
+    box-shadow:
+        0 0 0 0.15rem rgba(
+            25,
+            118,
+            184,
+            0.12
+        );
+}
+
+
+/* =========================================================
+   PERIOD INFO
+   ========================================================= */
+
+.audit-period-info {
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 9px 13px;
+
+    background: #eef6fc;
+
+    color: #1976b8;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin-top: 7px;
+
+    width: fit-content;
+}
+
+
+.audit-period-info i {
+
+    margin-right: 6px;
+}
+
+
+/* =========================================================
+   RESULT CARD
+   ========================================================= */
+
+.audit-result-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e7edf4;
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 4px 14px rgba(15, 42, 67, 0.06);
+
+    overflow: hidden;
+}
+
+
+.audit-result-card .card-header {
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf1f5;
+
+    padding: 15px 18px;
+}
+
+
+.audit-result-title {
+
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #30475b;
+}
+
+
+.audit-result-title i {
+
+    color: #1976b8;
+
+    margin-right: 7px;
+}
+
+
+.audit-result-count {
+
+    font-size: 12px;
+
+    color: #7b8a99;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.audit-table {
+
+    margin-bottom: 0;
+
+    width: 100%;
+}
+
+
+.audit-table thead th {
+
+    background: #f5f8fb;
+
+    color: #647789;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.25px;
+
+    border-top: none;
+
+    border-bottom: 1px solid #e5ebf0;
+
+    padding: 12px 13px;
+
+    white-space: nowrap;
+}
+
+
+.audit-table tbody td {
+
+    font-size: 13px;
+
+    color: #465a6d;
+
+    padding: 13px;
+
+    vertical-align: middle;
+
+    border-top: 1px solid #f0f3f6;
+}
+
+
+.audit-table tbody tr {
+
+    transition:
+        background-color 0.15s ease;
+}
+
+
+.audit-table tbody tr:hover {
+
+    background: #f8fbfd;
+}
+
+
+/* =========================================================
+   AUDIT NUMBER
+   ========================================================= */
+
+.audit-number {
+
+    font-weight: 700;
+
+    color: #1976b8;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.audit-title {
+
+    font-weight: 600;
+
+    color: #30475b;
+}
+
+
+.audit-description {
+
+    margin-top: 3px;
+
+    color: #8997a5;
+
+    font-size: 11px;
+
+    max-width: 320px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TYPE / CATEGORY
+   ========================================================= */
+
+.audit-type-text {
+
+    font-size: 12px;
+
+    color: #526779;
+
+    font-weight: 600;
+}
+
+
+.audit-category-text {
+
+    font-size: 12px;
+
+    color: #687b8c;
+}
+
+
+/* =========================================================
+   DEPARTMENT
+   ========================================================= */
+
+.audit-department {
+
+    display: inline-block;
+
+    font-size: 12px;
+
+    color: #526779;
+
+    margin-bottom: 3px;
+}
+
+
+.audit-department i {
+
+    color: #8ca0b0;
+
+    margin-right: 5px;
+}
+
+
+.audit-department-code {
+
+    display: inline-block;
+
+    background: #eef6fc;
+
+    color: #1976b8;
+
+    border-radius: 5px;
+
+    padding: 3px 6px;
+
+    margin-right: 3px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.audit-date {
+
+    white-space: nowrap;
+
+    font-size: 12px;
+
+    color: #617487;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.audit-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5px 9px;
+
+    border-radius: 15px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.audit-badge-draft {
+
+    background: #edf0f3;
+
+    color: #687785;
+}
+
+
+.audit-badge-planned {
+
+    background: #eaf4fb;
+
+    color: #1976b8;
+}
+
+
+.audit-badge-progress {
+
+    background: #fff5df;
+
+    color: #c48500;
+}
+
+
+.audit-badge-completed {
+
+    background: #e9f7ef;
+
+    color: #218838;
+}
+
+
+.audit-badge-cancelled {
+
+    background: #fdebed;
+
+    color: #dc3545;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.audit-empty {
+
+    padding: 55px 20px !important;
+
+    text-align: center;
+
+    color: #8a99a8;
+}
+
+
+.audit-empty i {
+
+    display: block;
+
+    font-size: 40px;
+
+    margin-bottom: 12px;
+
+    color: #c5d0d9;
+}
+
+
+.audit-empty-title {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #718294;
+
+    margin-bottom: 4px;
+}
+
+
+.audit-empty-text {
+
+    font-size: 12px;
+
+    color: #9aa7b3;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.audit-pagination {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 14px 18px;
+
+    border-top: 1px solid #edf1f5;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.audit-pagination-info {
+
+    font-size: 12px;
+
+    color: #7b8a99;
+}
+
+
+.audit-pagination .pagination {
+
+    margin: 0;
+}
+
+
+.audit-pagination .page-link {
+
+    font-size: 12px;
+
+    color: #1976b8;
+
+    border-color: #dce4eb;
+
+    padding: 6px 10px;
+}
+
+
+.audit-pagination .page-item.active .page-link {
+
+    background: #1976b8;
+
+    border-color: #1976b8;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.audit-list-footer {
+
+    text-align: center;
+
+    color: #8a99a8;
+
+    font-size: 11px;
+
+    margin-top: 30px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #e4eaf0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .audit-list-page {
+
+        padding:
+            18px
+            16px
+            35px
+            16px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .audit-list-header {
+
+        align-items: flex-start;
+
+        padding: 18px;
+    }
+
+
+    .audit-list-title {
+
+        font-size: 22px;
+    }
+
+
+    .audit-list-actions {
+
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+
+
+    .audit-pagination {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+
+
+<!-- =========================================================
+     MAIN PAGE
+     ========================================================== -->
+
+<div class="audit-list-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="audit-list-header">
+
+
+        <div class="audit-list-title-wrapper">
+
+
+            <div class="audit-list-title-icon">
+
+                <i class="fas fa-clipboard-check"></i>
+
+            </div>
+
+
+            <div>
+
+                <h1 class="audit-list-title">
+
+                    Audit List
+
+                </h1>
+
+
+                <div class="audit-list-subtitle">
+
+                    Public Audit Overview
+
+                </div>
+
+
+                {% if period and period.start_date and period.end_date %}
+
+                <div class="audit-period-info">
+
+                    <i class="far fa-calendar-alt"></i>
+
+                    {{ period.start_date.strftime('%d-%m-%Y') }}
+
+                    <span class="mx-1">
+                        -
+                    </span>
+
+                    {{ period.end_date.strftime('%d-%m-%Y') }}
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACTION
+             ================================================== -->
+
+        <div class="audit-list-actions">
+
+
+            <a
+                href="{{ url_for('public_audit.dashboard') }}"
+                class="btn btn-outline-primary btn-sm"
+            >
+
+                <i class="fas fa-chart-line mr-1"></i>
+
+                Dashboard
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FILTER CARD
+         ====================================================== -->
+
+    <div class="audit-filter-card">
+
+
+        <div class="card-header">
+
+            <i class="fas fa-filter"></i>
+
+            Search & Filter
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <form
+                method="GET"
+                action="{{ url_for('public_audit.list') }}"
+            >
+
+
+                <!-- =================================================
+                     FIRST ROW
+                     ================================================== -->
+
+                <div class="row">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+
+                        <label for="search">
+
+                            Search
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            class="form-control"
+                            value="{{ filters.search or '' }}"
+                            placeholder="Audit No / Title..."
+                        >
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-xl-2 col-lg-3 col-md-6 mb-3">
+
+                        <label for="status">
+
+                            Status
+
+                        </label>
+
+
+                        <select
+                            id="status"
+                            name="status"
+                            class="custom-select"
+                        >
+
+
+                            <option value="">
+
+                                All Status
+
+                            </option>
+
+
+                            <option
+                                value="DRAFT"
+                                {% if filters.status == "DRAFT" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Draft
+
+                            </option>
+
+
+                            <option
+                                value="PLANNED"
+                                {% if filters.status == "PLANNED" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Planned
+
+                            </option>
+
+
+                            <option
+                                value="IN_PROGRESS"
+                                {% if filters.status == "IN_PROGRESS" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                In Progress
+
+                            </option>
+
+
+                            <option
+                                value="COMPLETED"
+                                {% if filters.status == "COMPLETED" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Completed
+
+                            </option>
+
+
+                            <option
+                                value="CANCELLED"
+                                {% if filters.status == "CANCELLED" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Cancelled
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- AUDIT TYPE -->
+
+                    <div class="col-xl-2 col-lg-3 col-md-6 mb-3">
+
+                        <label for="audit_type_id">
+
+                            Audit Type
+
+                        </label>
+
+
+                        <select
+                            id="audit_type_id"
+                            name="audit_type_id"
+                            class="custom-select"
+                        >
+
+
+                            <option value="">
+
+                                All Audit Types
+
+                            </option>
+
+
+                            {% for item in audit_types %}
+
+
+                            <option
+                                value="{{ item.id }}"
+                                {% if filters.audit_type_id|string == item.id|string %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ item.audit_type_code }}
+
+                                -
+
+                                {{ item.audit_type_name }}
+
+                            </option>
+
+
+                            {% endfor %}
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- AUDIT CATEGORY -->
+
+                    <div class="col-xl-2 col-lg-3 col-md-6 mb-3">
+
+                        <label for="audit_category_id">
+
+                            Audit Category
+
+                        </label>
+
+
+                        <select
+                            id="audit_category_id"
+                            name="audit_category_id"
+                            class="custom-select"
+                        >
+
+
+                            <option value="">
+
+                                All Categories
+
+                            </option>
+
+
+                            {% for item in audit_categories %}
+
+
+                            <option
+                                value="{{ item.id }}"
+                                {% if filters.audit_category_id|string == item.id|string %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ item.audit_category_code }}
+
+                                -
+
+                                {{ item.audit_category_name }}
+
+                            </option>
+
+
+                            {% endfor %}
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- DEPARTMENT -->
+
+                    <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+
+                        <label for="department_id">
+
+                            Department
+
+                        </label>
+
+
+                        <select
+                            id="department_id"
+                            name="department_id"
+                            class="custom-select"
+                        >
+
+
+                            <option value="">
+
+                                All Departments
+
+                            </option>
+
+
+                            {% for item in departments %}
+
+
+                            <option
+                                value="{{ item.id }}"
+                                {% if filters.department_id|string == item.id|string %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ item.department_code }}
+
+                                -
+
+                                {{ item.department_name }}
+
+                            </option>
+
+
+                            {% endfor %}
+
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SECOND ROW
+                     ================================================== -->
+
+                <div class="row">
+
+
+                    <!-- PERIOD -->
+
+                    <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+
+                        <label for="period">
+
+                            Period
+
+                        </label>
+
+
+                        <select
+                            id="period"
+                            name="period"
+                            class="custom-select"
+                        >
+
+
+                            <option
+                                value="all"
+                                {% if filters.period == "all" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                All Period
+
+                            </option>
+
+
+                            <option
+                                value="6_months"
+                                {% if filters.period == "6_months" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Last 6 Months
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- PER PAGE -->
+
+                    <div class="col-xl-2 col-lg-2 col-md-6 mb-3">
+
+                        <label for="per_page">
+
+                            Show
+
+                        </label>
+
+
+                        <select
+                            id="per_page"
+                            name="per_page"
+                            class="custom-select"
+                        >
+
+
+                            <option
+                                value="10"
+                                {% if pagination.per_page|int == 10 %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                10
+
+                            </option>
+
+
+                            <option
+                                value="25"
+                                {% if pagination.per_page|int == 25 %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                25
+
+                            </option>
+
+
+                            <option
+                                value="50"
+                                {% if pagination.per_page|int == 50 %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                50
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="col-xl-4 col-lg-5 col-md-12 mb-3">
+
+                        <label>
+
+                            &nbsp;
+
+                        </label>
+
+
+                        <div>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-sm mr-1"
+                            >
+
+                                <i class="fas fa-search mr-1"></i>
+
+                                Search
+
+                            </button>
+
+
+                            <a
+                                href="{{ url_for('public_audit.list') }}"
+                                class="btn btn-outline-secondary btn-sm"
+                            >
+
+                                <i class="fas fa-redo mr-1"></i>
+
+                                Reset
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RESULT CARD
+         ====================================================== -->
+
+    <div class="audit-result-card">
+
+
+        <!-- =================================================
+             RESULT HEADER
+             ================================================== -->
+
+        <div class="card-header">
+
+
+            <div
+                class="d-flex justify-content-between align-items-center"
+            >
+
+
+                <div class="audit-result-title">
+
+                    <i class="fas fa-list"></i>
+
+                    Audit Records
+
+                </div>
+
+
+                {% if pagination %}
+
+                <div class="audit-result-count">
+
+                    Total:
+
+                    <strong>
+
+                        {{ pagination.total }}
+
+                    </strong>
+
+                    audit(s)
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLE
+             ================================================== -->
+
+        <div class="table-responsive">
+
+
+            <table class="table audit-table">
+
+
+                <thead>
+
+
+                    <tr>
+
+
+                        <th
+                            class="text-center"
+                            style="width: 55px;"
+                        >
+
+                            No
+
+                        </th>
+
+
+                        <th style="width: 130px;">
+
+                            Audit No
+
+                        </th>
+
+
+                        <th>
+
+                            Title
+
+                        </th>
+
+
+                        <th style="width: 155px;">
+
+                            Audit Type
+
+                        </th>
+
+
+                        <th style="width: 165px;">
+
+                            Audit Category
+
+                        </th>
+
+
+                        <th style="width: 150px;">
+
+                            Department
+
+                        </th>
+
+
+                        <th
+                            class="text-center"
+                            style="width: 115px;"
+                        >
+
+                            Audit Date
+
+                        </th>
+
+
+                        <th
+                            class="text-center"
+                            style="width: 110px;"
+                        >
+
+                            Status
+
+                        </th>
+
+
+                    </tr>
+
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% if audits %}
+
+
+                        {% for audit in audits %}
+
+
+                        <tr>
+
+
+                            <!-- =================================
+                                 NO
+                                 ================================= -->
+
+                            <td class="text-center">
+
+                                {{
+                                    ((pagination.page - 1)
+                                    * pagination.per_page)
+                                    + loop.index
+                                }}
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 AUDIT NO
+                                 ================================= -->
+
+                            <td>
+
+                                <span class="audit-number">
+
+                                    {{ audit.audit_no }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 TITLE
+                                 ================================= -->
+
+                            <td>
+
+                                <div class="audit-title">
+
+                                    {{ audit.title }}
+
+                                </div>
+
+
+                                {% if audit.description %}
+
+                                <div class="audit-description">
+
+                                    {{ audit.description }}
+
+                                </div>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 AUDIT TYPE
+                                 ================================= -->
+
+                            <td>
+
+
+                                {% if audit.audit_type %}
+
+                                <div class="audit-type-text">
+
+                                    {{ audit.audit_type.code }}
+
+                                    -
+
+                                    {{ audit.audit_type.name }}
+
+                                </div>
+
+                                {% else %}
+
+                                <span class="text-muted">
+
+                                    -
+
+                                </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 AUDIT CATEGORY
+                                 ================================= -->
+
+                            <td>
+
+
+                                {% if audit.audit_category %}
+
+                                <div class="audit-category-text">
+
+                                    {{ audit.audit_category.code }}
+
+                                    -
+
+                                    {{ audit.audit_category.name }}
+
+                                </div>
+
+                                {% else %}
+
+                                <span class="text-muted">
+
+                                    -
+
+                                </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 DEPARTMENT
+                                 ================================= -->
+
+                            <td>
+
+
+                                {% if audit.departments %}
+
+
+                                    {% for department in audit.departments %}
+
+
+                                    <div class="audit-department">
+
+
+                                        <i class="fas fa-building"></i>
+
+
+                                        <span
+                                            class="audit-department-code"
+                                        >
+
+                                            {{ department.code }}
+
+                                        </span>
+
+
+                                        {{ department.name }}
+
+
+                                    </div>
+
+
+                                    {% endfor %}
+
+
+                                {% else %}
+
+                                    <span class="text-muted">
+
+                                        -
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 AUDIT DATE
+                                 ================================= -->
+
+                            <td class="text-center">
+
+                                <span class="audit-date">
+
+
+                                    {% if audit.audit_date %}
+
+                                        {{ audit.audit_date.strftime(
+                                            '%d-%m-%Y'
+                                        ) }}
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- =================================
+                                 STATUS
+                                 ================================= -->
+
+                            <td class="text-center">
+
+
+                                {% if audit.status == "DRAFT" %}
+
+
+                                <span
+                                    class="
+                                        audit-badge
+                                        audit-badge-draft
+                                    "
+                                >
+
+                                    Draft
+
+                                </span>
+
+
+                                {% elif audit.status == "PLANNED" %}
+
+
+                                <span
+                                    class="
+                                        audit-badge
+                                        audit-badge-planned
+                                    "
+                                >
+
+                                    Planned
+
+                                </span>
+
+
+                                {% elif audit.status == "IN_PROGRESS" %}
+
+
+                                <span
+                                    class="
+                                        audit-badge
+                                        audit-badge-progress
+                                    "
+                                >
+
+                                    In Progress
+
+                                </span>
+
+
+                                {% elif audit.status == "COMPLETED" %}
+
+
+                                <span
+                                    class="
+                                        audit-badge
+                                        audit-badge-completed
+                                    "
+                                >
+
+                                    Completed
+
+                                </span>
+
+
+                                {% elif audit.status == "CANCELLED" %}
+
+
+                                <span
+                                    class="
+                                        audit-badge
+                                        audit-badge-cancelled
+                                    "
+                                >
+
+                                    Cancelled
+
+                                </span>
+
+
+                                {% else %}
+
+
+                                <span
+                                    class="
+                                        audit-badge
+                                        audit-badge-draft
+                                    "
+                                >
+
+                                    {{ audit.status or "-" }}
+
+                                </span>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <!-- =====================================
+                             EMPTY
+                             ====================================== -->
+
+                        <tr>
+
+
+                            <td
+                                colspan="8"
+                                class="audit-empty"
+                            >
+
+
+                                <i
+                                    class="fas fa-clipboard-list"
+                                ></i>
+
+
+                                <div class="audit-empty-title">
+
+                                    No Audit Found
+
+                                </div>
+
+
+                                <div class="audit-empty-text">
+
+                                    No audit records match the
+                                    selected search or filter.
+
+                                </div>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% endif %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAGINATION
+             ================================================== -->
+
+        {% if pagination and pagination.pages > 1 %}
+
+
+        <div class="audit-pagination">
+
+
+            <!-- ===============================================
+                 INFORMATION
+                 ================================================ -->
+
+            <div class="audit-pagination-info">
+
+
+                Showing
+
+
+                <strong>
+
+                    {{ pagination.first }}
+
+                </strong>
+
+
+                -
+
+
+                <strong>
+
+                    {{ pagination.last }}
+
+                </strong>
+
+
+                of
+
+
+                <strong>
+
+                    {{ pagination.total }}
+
+                </strong>
+
+
+                records
+
+
+            </div>
+
+
+
+            <!-- ===============================================
+                 PAGINATION NAV
+                 ================================================ -->
+
+            <nav>
+
+
+                <ul class="pagination pagination-sm">
+
+
+                    <!-- PREVIOUS -->
+
+                    {% if pagination.has_prev %}
+
+
+                    <li class="page-item">
+
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'public_audit.list',
+                                page=pagination.prev_num,
+                                per_page=pagination.per_page,
+                                search=filters.search,
+                                status=filters.status,
+                                audit_type_id=filters.audit_type_id,
+                                audit_category_id=filters.audit_category_id,
+                                department_id=filters.department_id,
+                                period=filters.period
+                            ) }}"
+                        >
+
+                            <i
+                                class="fas fa-chevron-left"
+                            ></i>
+
+                        </a>
+
+
+                    </li>
+
+
+                    {% else %}
+
+
+                    <li class="page-item disabled">
+
+
+                        <span class="page-link">
+
+                            <i
+                                class="fas fa-chevron-left"
+                            ></i>
+
+                        </span>
+
+
+                    </li>
+
+
+                    {% endif %}
+
+
+
+                    <!-- PAGE NUMBERS -->
+
+                    {% for page_num in pagination.iter_pages(
+                        left_edge=1,
+                        right_edge=1,
+                        left_current=2,
+                        right_current=2
+                    ) %}
+
+
+                        {% if page_num %}
+
+
+                            {% if page_num == pagination.page %}
+
+
+                            <li class="page-item active">
+
+
+                                <span class="page-link">
+
+                                    {{ page_num }}
+
+                                </span>
+
+
+                            </li>
+
+
+                            {% else %}
+
+
+                            <li class="page-item">
+
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'public_audit.list',
+                                        page=page_num,
+                                        per_page=pagination.per_page,
+                                        search=filters.search,
+                                        status=filters.status,
+                                        audit_type_id=filters.audit_type_id,
+                                        audit_category_id=filters.audit_category_id,
+                                        department_id=filters.department_id,
+                                        period=filters.period
+                                    ) }}"
+                                >
+
+                                    {{ page_num }}
+
+                                </a>
+
+
+                            </li>
+
+
+                            {% endif %}
+
+
+                        {% else %}
+
+
+                        <li class="page-item disabled">
+
+
+                            <span class="page-link">
+
+                                ...
+
+                            </span>
+
+
+                        </li>
+
+
+                        {% endif %}
+
+
+                    {% endfor %}
+
+
+
+                    <!-- NEXT -->
+
+                    {% if pagination.has_next %}
+
+
+                    <li class="page-item">
+
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'public_audit.list',
+                                page=pagination.next_num,
+                                per_page=pagination.per_page,
+                                search=filters.search,
+                                status=filters.status,
+                                audit_type_id=filters.audit_type_id,
+                                audit_category_id=filters.audit_category_id,
+                                department_id=filters.department_id,
+                                period=filters.period
+                            ) }}"
+                        >
+
+                            <i
+                                class="fas fa-chevron-right"
+                            ></i>
+
+                        </a>
+
+
+                    </li>
+
+
+                    {% else %}
+
+
+                    <li class="page-item disabled">
+
+
+                        <span class="page-link">
+
+                            <i
+                                class="fas fa-chevron-right"
+                            ></i>
+
+                        </span>
+
+
+                    </li>
+
+
+                    {% endif %}
+
+
+                </ul>
+
+
+            </nav>
+
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="audit-list-footer">
+
+        <i class="fas fa-clipboard-check mr-1"></i>
+
+        CIMS - Continuous Improvement Management System
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

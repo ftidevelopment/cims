@@ -1,4 +1,6 @@
 from celery import Celery
+from celery.schedules import crontab
+
 from app import create_app
 from app.config import Config
 
@@ -16,6 +18,13 @@ celery = Celery(
 celery.conf.update(
     timezone="Asia/Jakarta",
     enable_utc=False,
+
+    beat_schedule={
+        "audit-finding-overdue-daily": {
+            "task": "app.tasks.notification_tasks.send_audit_finding_overdue_notifications",
+            "schedule": crontab(hour=8, minute=0),
+        },
+    },
 )
 
 

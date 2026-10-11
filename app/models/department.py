@@ -72,6 +72,12 @@ class Department(BaseModel):
         cascade="all, delete-orphan",
     )
 
+    audit_assignments = db.relationship(
+        "AuditAssignment",
+        back_populates="department",
+        lazy="select",
+    )
+
     notification_rules = db.relationship(
         "NotificationRule",
         back_populates="department",

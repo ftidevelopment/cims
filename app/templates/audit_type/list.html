@@ -1,0 +1,463 @@
+{% from "components/sortable_header.html" import sortable_header %}
+{% extends "layouts/base.html" %}
+
+{% block title %}Audit Type{% endblock %}
+
+{% block content %}
+
+<!-- Content Header -->
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>Audit Type</h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        Master Data
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        Audit Type
+
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Main Content -->
+<section class="content audit-type-page">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline">
+
+            <!-- Card Header -->
+
+<div class="card-header audit-type-toolbar">
+    <div class="audit-type-toolbar-left">
+        <h3 class="card-title">
+            <i class="fas fa-clipboard-check mr-2"></i>
+            Audit Type List
+        </h3>
+
+        <form method="GET" class="audit-type-status-form">
+            <input type="hidden" name="keyword" value="{{ keyword }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <select
+                name="is_active"
+                class="custom-select"
+                aria-label="Filter status"
+                onchange="this.form.submit()"
+            >
+                <option value="true" {% if is_active == "true" %}selected{% endif %}>
+                    Active
+                </option>
+                <option value="false" {% if is_active == "false" %}selected{% endif %}>
+                    Inactive
+                </option>
+                <option value="all" {% if is_active == "all" %}selected{% endif %}>
+                    All
+                </option>
+            </select>
+        </form>
+    </div>
+
+    <div class="audit-type-toolbar-right">
+        <a
+            href="{{ url_for(
+                'audit_type.export',
+                keyword=keyword,
+                is_active=is_active,
+                sort=sort_by,
+                order=sort_order
+            ) }}"
+            class="btn btn-warning btn-sm"
+        >
+            <i class="fas fa-file-excel mr-1"></i>
+            Export Excel
+        </a>
+
+        <a
+            href="{{ url_for('audit_type.create') }}"
+            class="btn btn-success btn-sm"
+        >
+            <i class="fas fa-plus mr-1"></i>
+            Add Audit Type
+        </a>
+
+        <form method="GET" class="audit-type-search-form">
+            <input type="hidden" name="is_active" value="{{ is_active }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <div class="input-group input-group-sm">
+                <input
+                    type="text"
+                    name="keyword"
+                    class="form-control"
+                    placeholder="Search code, name or description..."
+                    value="{{ keyword }}"
+                    aria-label="Search Audit Type"
+                >
+
+                <div class="input-group-append">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        title="Search"
+                        aria-label="Search"
+                    >
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                    <a
+                        href="{{ url_for('audit_type.index') }}"
+                        class="btn btn-secondary"
+                        title="Reset"
+                        aria-label="Reset"
+                    >
+                        <i class="fas fa-sync-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+            <!-- Card Body -->
+            <div class="card-body">
+
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search"></i>
+
+                    Search keyword :
+
+                    <strong>{{ keyword }}</strong>
+
+                </div>
+
+                {% endif %}
+
+                <div class="table-responsive audit-type-table-wrapper"></div>
+                <table class="table table-bordered table-hover audit-type-table mb-0">
+
+                    <thead>
+
+                        <tr class="text-center">
+
+                            <th width="60">
+                                No
+                            </th>
+
+
+                            {{ sortable_header(
+                                "Code",
+                                "audit_type_code",
+                                "audit_type.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            {{ sortable_header(
+                                "Audit Type Name",
+                                "audit_type_name",
+                                "audit_type.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            {{ sortable_header(
+                                "Description",
+                                "description",
+                                "audit_type.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                            ) }}
+
+
+                            <th width="120">
+                                Status
+                            </th>
+
+
+                            <th width="150">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if audit_types %}
+
+                        {% for audit_type in audit_types.items %}
+
+                        <tr>
+
+                            <td class="text-center">
+
+                                {{ audit_types.first + loop.index0 }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ audit_type.audit_type_code }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ audit_type.audit_type_name }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ audit_type.description }}
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                {% if audit_type.is_active %}
+
+                                <span class="badge badge-success">
+
+                                    Active
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-danger">
+
+                                    Inactive
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                {% if audit_type.is_active %}
+
+                                <!-- Edit -->
+
+                                <a href="{{ url_for(
+                                    'audit_type.edit',
+                                    audit_type_id=audit_type.id
+                                ) }}"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="fas fa-edit"></i>
+
+                                </a>
+
+
+                                <!-- Delete -->
+
+                                <button type="button"
+                                        class="btn btn-danger btn-sm btn-delete"
+                                        data-name="{{ audit_type.audit_type_name }}"
+                                        data-url="{{ url_for(
+                                            'audit_type.delete',
+                                            audit_type_id=audit_type.id
+                                        ) }}">
+
+                                    <i class="fas fa-trash"></i>
+
+                                </button>
+
+                                {% else %}
+
+                                <!-- Restore -->
+
+                                <form method="POST"
+                                      action="{{ url_for(
+                                          'audit_type.restore',
+                                          audit_type_id=audit_type.id
+                                      ) }}"
+                                      style="display:inline;">
+
+                                    <button class="btn btn-success btn-sm">
+
+                                        <i class="fas fa-undo"></i>
+
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="6"
+                                class="text-center text-muted">
+
+                                No audit type found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+                </div>
+
+            </div>
+
+
+            {% include "components/delete_modal.html" %}
+
+
+
+<div class="card-footer audit-type-footer">
+    <div class="audit-type-record-info">
+        Showing
+        <strong>
+            {{ audit_types.first if audit_types.total > 0 else 0 }}
+        </strong>
+        to
+        <strong>
+            {{ audit_types.last if audit_types.total > 0 else 0 }}
+        </strong>
+        of
+        <strong>{{ audit_types.total }}</strong>
+        audit type{{ "" if audit_types.total == 1 else "s" }}
+    </div>
+
+    <nav aria-label="Audit Type pagination">
+        <ul class="pagination pagination-sm mb-0">
+            {% if audit_types.has_prev %}
+            <li class="page-item">
+                <a
+                    class="page-link"
+                    href="{{ url_for(
+                        'audit_type.index',
+                        page=audit_types.prev_num,
+                        keyword=keyword,
+                        is_active=is_active,
+                        sort=sort_by,
+                        order=sort_order
+                    ) }}"
+                >Previous</a>
+            </li>
+            {% endif %}
+
+            {% for page_num in audit_types.iter_pages() %}
+                {% if page_num %}
+                <li class="page-item {% if page_num == audit_types.page %}active{% endif %}">
+                    <a
+                        class="page-link"
+                        href="{{ url_for(
+                            'audit_type.index',
+                            page=page_num,
+                            keyword=keyword,
+                            is_active=is_active,
+                            sort=sort_by,
+                            order=sort_order
+                        ) }}"
+                    >{{ page_num }}</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">…</span>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if audit_types.has_next %}
+            <li class="page-item">
+                <a
+                    class="page-link"
+                    href="{{ url_for(
+                        'audit_type.index',
+                        page=audit_types.next_num,
+                        keyword=keyword,
+                        is_active=is_active,
+                        sort=sort_by,
+                        order=sort_order
+                    ) }}"
+                >Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

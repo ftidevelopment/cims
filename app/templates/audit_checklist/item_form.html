@@ -1,0 +1,390 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Add Checklist Item{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================================
+     CONTENT HEADER
+========================================================== -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    {{ "Edit Checklist Item" if item else "Add Checklist Item" }}
+                </h1>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Master Data
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('audit_checklist.index') }}">
+                            Audit Checklist
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for(
+                            'audit_checklist.detail',
+                            audit_checklist_id=audit_checklist.id
+                        ) }}">
+                            Detail
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Add Item
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================================
+     MAIN CONTENT
+========================================================== -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- ==================================================
+                 FORM
+            ================================================== -->
+
+            <div class="col-md-8">
+
+                <div class="card card-primary card-outline">
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i class="fas fa-plus mr-2"></i>
+
+                            Add Checklist Item
+
+                        </h3>
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        action="{{
+                            url_for(
+                                'audit_checklist.edit_item',
+                                audit_checklist_id=audit_checklist.id,
+                                item_id=item.id
+                            )
+                            if item
+                            else
+                            url_for(
+                                'audit_checklist.create_item',
+                                audit_checklist_id=audit_checklist.id
+                            )
+                        }}"
+                    >
+
+                        <div class="card-body">
+
+
+                            <!-- Question -->
+
+                            <div class="form-group">
+
+                                <label for="question">
+
+                                    Question
+
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <textarea
+                                    name="question"
+                                    id="question"
+                                    class="form-control"
+                                    rows="4"
+                                    required
+                                >{{ request.form.get("question", item.question if item else "") }}</textarea>
+
+                                <small class="form-text text-muted">
+
+                                    Maximum 500 characters.
+
+                                </small>
+
+                            </div>
+
+
+                            <!-- Description -->
+
+                            <div class="form-group">
+
+                                <label for="description">
+                                    Description
+                                </label>
+
+                                <textarea
+                                    name="description"
+                                    id="description"
+                                    class="form-control"
+                                    rows="3"
+                                >{{ request.form.get("description", item.description if item else "") }}</textarea>
+
+                            </div>
+
+
+                            <div class="row">
+
+
+                                <!-- Item No -->
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label for="item_no">
+                                            Item No
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="item_no"
+                                            id="item_no"
+                                            class="form-control"
+                                            min="1"
+                                            value="{{ request.form.get('item_no', item.item_no if item else '') }}"
+                                        >
+
+                                        <small class="form-text text-muted">
+
+                                            Leave blank to generate automatically.
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Sort Order -->
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label for="sort_order">
+                                            Sort Order
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            name="sort_order"
+                                            id="sort_order"
+                                            class="form-control"
+                                            min="1"
+                                            value="{{ request.form.get('sort_order', item.sort_order if item else '') }}"
+                                        >
+
+                                        <small class="form-text text-muted">
+
+                                            Leave blank to generate automatically.
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Required -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Required
+                                </label>
+
+                                <div class="custom-control custom-switch">
+
+                                    <input
+                                        type="checkbox"
+                                        class="custom-control-input"
+                                        id="is_required"
+                                        name="is_required"
+                                        value="1"
+                                        {% if request.method == "GET" %}
+                                            {% if item %}
+                                                {% if item.is_required %}
+                                                    checked
+                                                {% endif %}
+                                            {% else %}
+                                                checked
+                                            {% endif %}
+                                        {% elif request.form.get("is_required") == "1" %}
+                                            checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="custom-control-label"
+                                        for="is_required"
+                                    >
+                                        This checklist item is required
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Footer -->
+
+                        <div class="card-footer">
+
+                            <a
+                                href="{{ url_for(
+                                    'audit_checklist.detail',
+                                    audit_checklist_id=audit_checklist.id
+                                ) }}"
+                                class="btn btn-secondary"
+                            >
+
+                                <i class="fas fa-arrow-left mr-1"></i>
+
+                                Cancel
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-save"></i>
+                                {{ "Update Item" if item else "Save Item" }}
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 CHECKLIST INFORMATION
+            ================================================== -->
+
+            <div class="col-md-4">
+
+                <div class="card card-primary card-outline">
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+
+                            <i class="fas fa-clipboard-list mr-2"></i>
+
+                            Checklist Information
+
+                        </h3>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <label>
+                                Checklist Code
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{ audit_checklist.audit_checklist_code }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Checklist Name
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{ audit_checklist.audit_checklist_name }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Current Items
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{ audit_checklist.items|length }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

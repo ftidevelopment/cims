@@ -66,6 +66,23 @@
         href="{{ url_for('static', filename='css/dashboard.css') }}"
     >
 
+    <!-- Global UI: semua modul CIMS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/cims-global.css') }}"
+    >
+
+    <!-- CIMS Compact UI -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/cims-compact.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/cims-sidebar.css') }}"
+    >
+
 
     {% block styles %}
     {% endblock %}

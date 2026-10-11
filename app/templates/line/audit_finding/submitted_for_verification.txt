@@ -1,0 +1,36 @@
+🔔 [CIMS] Audit Finding - Verification Required
+
+Dear {{ auditor.full_name if auditor else "Auditor" }},
+
+Audit Finding berikut telah disubmit untuk Auditor Verification.
+
+Finding No. : {{ finding.finding_no }}
+Severity    : {{ finding.severity or "-" }}
+Status      : {{ finding.status }}
+
+Finding:
+{{ finding.finding }}
+
+PIC         : {% if finding.pic_employee %}{{ finding.pic_employee.nik }} - {{ finding.pic_employee.full_name }}{% else %}-{% endif %}
+Target Date : {{ finding.target_date or "-" }}
+
+AUDIT INFORMATION
+
+Audit No.   : {{ finding.audit_execution.audit_assignment.audit.audit_no if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.audit else "-" }}
+Audit Title : {{ finding.audit_execution.audit_assignment.audit.title if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.audit else "-" }}
+Department  : {% if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.department %}{{ finding.audit_execution.audit_assignment.department.department_code }} - {{ finding.audit_execution.audit_assignment.department.department_name }}{% else %}-{% endif %}
+Location    : {{ finding.audit_execution.audit_assignment.location if finding.audit_execution and finding.audit_execution.audit_assignment else "-" }}
+
+Corrective Action:
+{{ finding.corrective_action if finding.corrective_action else "-" }}
+
+📌 ACTION REQUIRED
+
+Please review the corrective action and perform verification for this Audit Finding.
+
+Status: AUDITOR_VERIFICATION
+
+Please open CIMS to perform the verification.
+
+CIMS Notification
+Continuous Improvement Management System

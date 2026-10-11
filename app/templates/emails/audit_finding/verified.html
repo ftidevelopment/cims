@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        Audit Finding Verification
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #1f4e78;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .greeting {
+            margin-bottom: 20px;
+        }
+
+        .result-box {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            border: 1px solid #dddddd;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .result-pass {
+            color: #198754;
+        }
+
+        .result-fail {
+            color: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #dddddd;
+            padding: 9px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        table th {
+            background-color: #f1f3f5;
+            width: 180px;
+        }
+
+        .section-title {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f4e78;
+        }
+
+        .text-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dddddd;
+            padding: 12px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        .action {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #1f4e78;
+        }
+
+        .footer {
+            padding: 15px 25px;
+            background-color: #f1f3f5;
+            color: #777777;
+            font-size: 12px;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            background-color: #1f4e78;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ========================================== -->
+    <!-- HEADER -->
+    <!-- ========================================== -->
+
+    <div class="header">
+
+        <h2>
+            CIMS - Audit Finding Verification
+        </h2>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- CONTENT -->
+    <!-- ========================================== -->
+
+    <div class="content">
+
+        <div class="greeting">
+
+            Dear
+            {{ pic.full_name if pic else "PIC" }},
+
+            <br><br>
+
+            The following Audit Finding has been
+            verified by the auditor.
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- VERIFICATION RESULT -->
+        <!-- ====================================== -->
+
+        <div class="result-box">
+
+            {% if finding.verification_status == "PASS" %}
+
+                <div class="result-title result-pass">
+                    ✓ VERIFICATION PASSED
+                </div>
+
+                <div>
+                    The corrective action has been
+                    verified and accepted by the auditor.
+                </div>
+
+            {% else %}
+
+                <div class="result-title result-fail">
+                    ✕ VERIFICATION FAILED
+                </div>
+
+                <div>
+                    The corrective action did not pass
+                    auditor verification and the finding
+                    has been returned to IN_PROGRESS.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- FINDING INFORMATION -->
+        <!-- ====================================== -->
+
+        <div class="section-title">
+            Audit Finding Information
+        </div>
+
+        <table>
+
+            <tr>
+                <th>Finding No.</th>
+                <td>
+                    {{ finding.finding_no }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Severity</th>
+                <td>
+                    {{ finding.severity or "-" }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>
+                    {{ finding.status or "-" }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Verification Status</th>
+                <td>
+                    {{ finding.verification_status or "-" }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Verified Date</th>
+                <td>
+                    {{ finding.verified_date or "-" }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Verified By</th>
+                <td>
+
+                    {% if finding.verified_by_employee %}
+
+                        {{ finding.verified_by_employee.nik }}
+                        -
+                        {{ finding.verified_by_employee.full_name }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+            </tr>
+
+        </table>
+
+
+        <!-- ====================================== -->
+        <!-- AUDIT INFORMATION -->
+        <!-- ====================================== -->
+
+        <div class="section-title">
+            Audit Information
+        </div>
+
+        <table>
+
+            {% if finding.audit_execution
+                  and finding.audit_execution.audit_assignment
+                  and finding.audit_execution.audit_assignment.audit %}
+
+                <tr>
+                    <th>Audit No.</th>
+                    <td>
+                        {{
+                            finding.audit_execution
+                            .audit_assignment
+                            .audit
+                            .audit_no
+                        }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Audit</th>
+                    <td>
+                        {{
+                            finding.audit_execution
+                            .audit_assignment
+                            .audit
+                            .title
+                        }}
+                    </td>
+                </tr>
+
+            {% endif %}
+
+
+            {% if finding.audit_execution
+                  and finding.audit_execution.audit_assignment
+                  and finding.audit_execution.audit_assignment.department %}
+
+                <tr>
+                    <th>Department</th>
+                    <td>
+                        {{
+                            finding.audit_execution
+                            .audit_assignment
+                            .department
+                            .department_code
+                        }}
+                        -
+                        {{
+                            finding.audit_execution
+                            .audit_assignment
+                            .department
+                            .department_name
+                        }}
+                    </td>
+                </tr>
+
+            {% endif %}
+
+
+            {% if finding.audit_execution
+                  and finding.audit_execution.audit_assignment %}
+
+                <tr>
+                    <th>Location</th>
+                    <td>
+                        {{
+                            finding.audit_execution
+                            .audit_assignment
+                            .location
+                        }}
+                    </td>
+                </tr>
+
+            {% endif %}
+
+        </table>
+
+
+        <!-- ====================================== -->
+        <!-- FINDING -->
+        <!-- ====================================== -->
+
+        <div class="section-title">
+            Finding
+        </div>
+
+        <div class="text-box">
+
+            {{ finding.finding }}
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- CORRECTIVE ACTION -->
+        <!-- ====================================== -->
+
+        <div class="section-title">
+            Corrective Action
+        </div>
+
+        <div class="text-box">
+
+            {% if finding.corrective_action %}
+
+                {{ finding.corrective_action }}
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- VERIFICATION RESULT -->
+        <!-- ====================================== -->
+
+        <div class="section-title">
+            Auditor Verification Result
+        </div>
+
+        <div class="text-box">
+
+            {% if finding.verification_result %}
+
+                {{ finding.verification_result }}
+
+            {% else %}
+
+                -
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- ACTION -->
+        <!-- ====================================== -->
+
+        {% if finding.verification_status == "PASS" %}
+
+            <div class="action">
+
+                <strong>
+                    Action:
+                </strong>
+
+                <br><br>
+
+                This Audit Finding has passed
+                auditor verification.
+
+                The finding can proceed to
+                the closing process in CIMS.
+
+            </div>
+
+        {% else %}
+
+            <div class="action">
+
+                <strong>
+                    Action Required:
+                </strong>
+
+                <br><br>
+
+                The Audit Finding failed
+                auditor verification.
+
+                Please review the auditor's
+                verification result and perform
+                the necessary corrective action.
+
+                The finding status has been returned
+                to <strong>IN_PROGRESS</strong>.
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ====================================== -->
+        <!-- CIMS LINK -->
+        <!-- ====================================== -->
+
+        {% if cims_url %}
+
+            <a
+                href="{{ cims_url }}"
+                class="button"
+            >
+                Open CIMS
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- FOOTER -->
+    <!-- ========================================== -->
+
+    <div class="footer">
+
+        This is an automated notification from
+        Continuous Improvement Management System
+        (CIMS).
+
+        <br><br>
+
+        Please do not reply directly to this email.
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -69,46 +69,32 @@ class PDFReportService:
                 continue
 
         # ==================================================
-        # Logo
+        # Logos
         # ==================================================
 
-        logo_path = (
-            Path(current_app.root_path)
-            / "static"
-            / "img"
-            / "cims_logo.png"
-        )
-
-        logo_uri = None
-
-        if logo_path.exists():
-
-            try:
-
-                logo_uri = logo_path.as_uri()
-
-            except ValueError:
-
-                logo_uri = None
+        (
+            cims_logo_uri,
+            foxconn_logo_uri,
+        ) = PDFReportService._get_logo_uris()
 
         # ==================================================
         # Render HTML
         # ==================================================
 
         html_content = render_template(
-
             "reports/problem_pdf.html",
 
             problem=problem,
 
             attachment_images=attachment_images,
 
-            logo_uri=logo_uri,
+            cims_logo_uri=cims_logo_uri,
+
+            foxconn_logo_uri=foxconn_logo_uri,
 
             printed_by=printed_by,
 
             print_datetime=datetime.now(),
-
         )
 
         # ==================================================
@@ -205,49 +191,36 @@ class PDFReportService:
 
                 continue
 
+
         # ==================================================
-        # Logo
+        # Logos
         # ==================================================
 
-        logo_path = (
-            Path(current_app.root_path)
-            / "static"
-            / "img"
-            / "cims_logo.png"
-        )
-
-        logo_uri = None
-
-        if logo_path.exists():
-
-            try:
-
-                logo_uri = logo_path.as_uri()
-
-            except ValueError:
-
-                logo_uri = None
+        (
+            cims_logo_uri,
+            foxconn_logo_uri,
+        ) = PDFReportService._get_logo_uris()
 
         # ==================================================
         # Render HTML
         # ==================================================
 
         html_content = render_template(
-
             "reports/improvement_pdf.html",
 
             improvement=improvement,
 
             attachment_images=attachment_images,
 
-            logo_uri=logo_uri,
+            cims_logo_uri=cims_logo_uri,
+
+            foxconn_logo_uri=foxconn_logo_uri,
 
             printed_by=printed_by,
 
             created_by_name=created_by_name,
 
             print_datetime=datetime.now(),
-
         )
 
         # ==================================================
@@ -370,46 +343,32 @@ class PDFReportService:
                 continue
 
         # ==================================================
-        # Logo
+        # Logos
         # ==================================================
 
-        logo_path = (
-            Path(current_app.root_path)
-            / "static"
-            / "img"
-            / "cims_logo.png"
-        )
-
-        logo_uri = None
-
-        if logo_path.exists():
-
-            try:
-
-                logo_uri = logo_path.as_uri()
-
-            except ValueError:
-
-                logo_uri = None
+        (
+            cims_logo_uri,
+            foxconn_logo_uri,
+        ) = PDFReportService._get_logo_uris()
 
         # ==================================================
         # Render HTML
         # ==================================================
 
         html_content = render_template(
-
             "reports/kaizen_pdf.html",
 
             kaizen=kaizen,
 
             attachment_images=attachment_images,
 
-            logo_uri=logo_uri,
+            cims_logo_uri=cims_logo_uri,
+
+            foxconn_logo_uri=foxconn_logo_uri,
 
             printed_by=printed_by,
 
             print_datetime=datetime.now(),
-
         )
 
         # ==================================================
@@ -434,28 +393,63 @@ class PDFReportService:
         return pdf_file
 
 
+
     # ==================================================
     # LOGO URI HELPER
     # ==================================================
 
     @staticmethod
-    def _get_logo_uri():
+    def _get_logo_uris():
 
-        logo_path = (
+        # ==================================================
+        # CIMS Logo
+        # ==================================================
+
+        cims_logo_path = (
             Path(current_app.root_path)
             / "static"
             / "img"
             / "cims_logo.png"
         )
 
-        if not logo_path.exists():
+        cims_logo_uri = None
 
-            return None
+        if cims_logo_path.exists():
 
-        try:
+            try:
 
-            return logo_path.as_uri()
+                cims_logo_uri = cims_logo_path.as_uri()
 
-        except ValueError:
+            except ValueError:
 
-            return None
+                cims_logo_uri = None
+
+
+        # ==================================================
+        # FOXCONN Logo
+        # ==================================================
+
+        foxconn_logo_path = (
+            Path(current_app.root_path)
+            / "static"
+            / "img"
+            / "foxconn_company.png"
+        )
+
+        foxconn_logo_uri = None
+
+        if foxconn_logo_path.exists():
+
+            try:
+
+                foxconn_logo_uri = foxconn_logo_path.as_uri()
+
+            except ValueError:
+
+                foxconn_logo_uri = None
+
+
+        return (
+            cims_logo_uri,
+            foxconn_logo_uri,
+        )

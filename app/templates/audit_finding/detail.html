@@ -1,0 +1,993 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Finding Detail{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="container-fluid">
+
+        <!-- ===================================================== -->
+        <!-- PAGE HEADER -->
+        <!-- ===================================================== -->
+        <div class="row mb-3">
+            <div class="col-12">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <h3 class="mb-0">
+                            <i class="fas fa-exclamation-triangle text-danger mr-2"></i>
+                            Finding Detail
+                        </h3>
+
+                        <small class="text-muted">
+                            Audit Finding Information
+                        </small>
+                    </div>
+
+                    <div>
+                    <a href="javascript:history.back()"
+                    class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                        Back
+                    </a>
+                </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- AUDIT INFORMATION -->
+        <!-- ===================================================== -->
+        <div class="card card-primary">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-clipboard-check mr-2"></i>
+                    Audit Information
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Audit No -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Audit No</label>
+                            <div class="form-control bg-light">
+                                {{ audit.audit_no }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Title -->
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Audit Title</label>
+                            <div class="form-control bg-light">
+                                {{ audit.title }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Date -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Audit Date</label>
+                            <div class="form-control bg-light">
+                                {{ audit.audit_date.strftime('%Y-%m-%d')
+                                   if audit.audit_date else '-' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Status -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Status</label>
+
+                            {% if audit.status == 'COMPLETED' %}
+                                <div class="form-control bg-success text-white">
+                                    COMPLETED
+                                </div>
+                            {% elif audit.status == 'IN_PROGRESS' %}
+                                <div class="form-control bg-warning">
+                                    IN PROGRESS
+                                </div>
+                            {% elif audit.status == 'CANCELLED' %}
+                                <div class="form-control bg-danger text-white">
+                                    CANCELLED
+                                </div>
+                            {% else %}
+                                <div class="form-control bg-secondary text-white">
+                                    {{ audit.status }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Audit Type -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Audit Type</label>
+                            <div class="form-control bg-light">
+                                {{ audit.audit_type.audit_type_name
+                                   if audit.audit_type else '-' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Category -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Audit Category</label>
+                            <div class="form-control bg-light">
+                                {{ audit.audit_category.audit_category_name
+                                   if audit.audit_category else '-' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <div class="form-control bg-light">
+                                {{
+                                    execution.audit_assignment.location
+                                    if execution.audit_assignment
+                                    else '-'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Auditor -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Auditor</label>
+                            <div class="form-control bg-light">
+                                {{
+                                    execution.audit_assignment.auditor.full_name
+                                    if execution.audit_assignment
+                                    and execution.audit_assignment.auditor
+                                    else '-'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <!-- Checklist -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Checklist</label>
+                            <div class="form-control bg-light">
+                                {{
+                                    execution.audit_checklist.audit_checklist_name
+                                    if execution.audit_checklist
+                                    else '-'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Execution Date -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Execution Date</label>
+                            <div class="form-control bg-light">
+                                {{
+                                    execution.execution_date.strftime('%Y-%m-%d')
+                                    if execution.execution_date
+                                    else '-'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Execution Status -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Execution Status</label>
+                            <div class="form-control bg-light">
+                                {{ execution.status }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- FINDING INFORMATION -->
+        <!-- ===================================================== -->
+        <div class="card card-danger">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    Finding Information
+                </h3>
+
+                <div class="card-tools">
+
+                    {% if finding.status == 'OPEN' %}
+                        <span class="badge badge-danger">
+                            OPEN
+                        </span>
+
+                    {% elif finding.status == 'IN_PROGRESS' %}
+                        <span class="badge badge-warning">
+                            IN PROGRESS
+                        </span>
+
+                    {% elif finding.status == 'ACTION_COMPLETED' %}
+                        <span class="badge badge-info">
+                            ACTION COMPLETED
+                        </span>
+
+                    {% elif finding.status == 'AUDITOR_VERIFICATION' %}
+                        <span class="badge badge-primary">
+                            AUDITOR VERIFICATION
+                        </span>
+
+                    {% elif finding.status == 'PASS' %}
+                        <span class="badge badge-success">
+                            PASS
+                        </span>
+
+                    {% elif finding.status == 'CLOSED' %}
+                        <span class="badge badge-success">
+                            CLOSED
+                        </span>
+
+                    {% else %}
+                        <span class="badge badge-secondary">
+                            {{ finding.status }}
+                        </span>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Finding No -->
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Finding No</label>
+                            <div class="form-control bg-light font-weight-bold">
+                                {{ finding.finding_no }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Finding Source</label>
+                            <div class="form-control bg-light">
+
+                                {% if finding.finding_source == 'CHECKLIST' %}
+                                    <span class="badge badge-primary">
+                                        CHECKLIST
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-secondary">
+                                        OUTSIDE CHECKLIST
+                                    </span>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Severity</label>
+
+                            {% if finding.severity == 'CRITICAL' %}
+                                <div class="form-control bg-danger text-white">
+                                    CRITICAL
+                                </div>
+
+                            {% elif finding.severity == 'MAJOR' %}
+                                <div class="form-control bg-warning">
+                                    MAJOR
+                                </div>
+
+                            {% elif finding.severity == 'MINOR' %}
+                                <div class="form-control bg-info text-white">
+                                    MINOR
+                                </div>
+
+                            {% else %}
+                                <div class="form-control bg-secondary text-white">
+                                    {{ finding.severity }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Checklist Item -->
+                {% if finding.audit_execution_item %}
+
+                <div class="form-group">
+
+                    <label>
+                        <i class="fas fa-list-ol mr-1"></i>
+                        Checklist Item
+                    </label>
+
+                    <div class="card card-outline card-primary mb-0">
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    <strong>Item No</strong>
+                                    <div>
+                                        {{ finding.audit_execution_item.item_no }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10">
+                                    <strong>Question</strong>
+                                    <div>
+                                        {{ finding.audit_execution_item.question }}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- Finding -->
+                <div class="form-group">
+
+                    <label>
+                        <i class="fas fa-search mr-1"></i>
+                        Finding
+                    </label>
+
+                    <div class="card card-outline card-danger mb-0">
+
+                        <div class="card-body">
+
+                            {% if finding.finding %}
+                                <div style="white-space: pre-wrap;">{{ finding.finding }}</div>
+                            {% else %}
+                                <span class="text-muted">No finding description.</span>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PIC / Target Date -->
+                <div class="row mt-3">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                <i class="fas fa-user mr-1"></i>
+                                PIC
+                            </label>
+
+                            <div class="form-control bg-light">
+                                {{
+                                    finding.pic_employee.full_name
+                                    if finding.pic_employee
+                                    else '-'
+                                }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                Target Date
+                            </label>
+
+                            <div class="form-control bg-light">
+                                {{
+                                    finding.target_date.strftime('%Y-%m-%d')
+                                    if finding.target_date
+                                    else '-'
+                                }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- CORRECTIVE ACTION -->
+        <!-- ===================================================== -->
+        <div class="card card-warning">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-tools mr-2"></i>
+                    Corrective Action
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-group">
+
+                    <label>Corrective Action</label>
+
+                    <div class="card card-outline card-warning mb-0">
+
+                        <div class="card-body">
+
+                            {% if finding.corrective_action %}
+                                <div style="white-space: pre-wrap;">
+                                    {{ finding.corrective_action }}
+                                </div>
+                            {% else %}
+                                <span class="text-muted">
+                                    No corrective action recorded.
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                Action Completed Date
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{
+                                    finding.action_completed_date.strftime('%Y-%m-%d')
+                                    if finding.action_completed_date
+                                    else '-'
+                                }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>
+                                Current Status
+                            </label>
+
+                            <div class="form-control bg-light">
+                                {{ finding.status }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- VERIFICATION -->
+        <!-- ===================================================== -->
+        <div class="card card-primary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    <i class="fas fa-user-check mr-2"></i>
+                    Auditor Verification
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Verification Result -->
+                    <div class="col-md-8">
+
+                        <div class="form-group">
+
+                            <label>
+                                Verification Result
+                            </label>
+
+                            <div class="card card-outline card-primary mb-0">
+
+                                <div class="card-body">
+
+                                    {% if finding.verification_result %}
+                                        <div style="white-space: pre-wrap;">
+                                            {{ finding.verification_result }}
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">
+                                            No verification result recorded.
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Verification Status -->
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Verification Status
+                            </label>
+
+                            {% if finding.verification_status == 'PASS' %}
+
+                                <div class="form-control bg-success text-white font-weight-bold">
+                                    PASS
+                                </div>
+
+                            {% elif finding.verification_status == 'FAIL' %}
+
+                                <div class="form-control bg-danger text-white font-weight-bold">
+                                    FAIL
+                                </div>
+
+                            {% else %}
+
+                                <div class="form-control bg-light">
+                                    -
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Verified By
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{
+                                    finding.verified_by_employee.full_name
+                                    if finding.verified_by_employee
+                                    else '-'
+                                }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Verified Date
+                            </label>
+
+                            <div class="form-control bg-light">
+
+                                {{
+                                    finding.verified_date.strftime('%Y-%m-%d')
+                                    if finding.verified_date
+                                    else '-'
+                                }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label>
+                                Final Status
+                            </label>
+
+                            {% if finding.status == 'CLOSED' %}
+
+                                <div class="form-control bg-success text-white font-weight-bold">
+                                    CLOSED
+                                </div>
+
+                            {% elif finding.status == 'PASS' %}
+
+                                <div class="form-control bg-success text-white font-weight-bold">
+                                    PASS
+                                </div>
+
+                            {% elif finding.status == 'IN_PROGRESS' %}
+
+                                <div class="form-control bg-warning font-weight-bold">
+                                    IN PROGRESS
+                                </div>
+
+                            {% else %}
+
+                                <div class="form-control bg-light">
+                                    {{ finding.status }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- ATTACHMENTS -->
+        <!-- ===================================================== -->
+        <div class="card card-secondary">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    <i class="fas fa-paperclip mr-2"></i>
+                    Attachments
+                </h3>
+
+                <div class="card-tools">
+
+                    <span class="badge badge-light">
+                        {{ attachments|length }}
+                        file(s)
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                {% if attachments %}
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover">
+
+                            <thead class="thead-light">
+
+                                <tr>
+                                    <th style="width: 50px;" class="text-center">
+                                        #
+                                    </th>
+
+                                    <th>
+                                        File Name
+                                    </th>
+
+                                    <th style="width: 180px;">
+                                        Type
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th style="width: 100px;">
+                                        Size
+                                    </th>
+
+                                    <th style="width: 130px;" class="text-center">
+                                        Action
+                                    </th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for attachment in attachments %}
+
+                                <tr>
+
+                                    <td class="text-center">
+                                        {{ loop.index }}
+                                    </td>
+
+                                    <td>
+
+                                        <i class="fas fa-file mr-1 text-muted"></i>
+
+                                        {{ attachment.original_filename }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {% if attachment.attachment_type == 'FINDING_EVIDENCE' %}
+
+                                            <span class="badge badge-danger">
+                                                FINDING EVIDENCE
+                                            </span>
+
+                                        {% elif attachment.attachment_type == 'CORRECTIVE_ACTION' %}
+
+                                            <span class="badge badge-warning">
+                                                CORRECTIVE ACTION
+                                            </span>
+
+                                        {% elif attachment.attachment_type == 'VERIFICATION' %}
+
+                                            <span class="badge badge-primary">
+                                                VERIFICATION
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge badge-secondary">
+                                                {{ attachment.attachment_type }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+
+                                        {% if attachment.description %}
+
+                                            {{ attachment.description }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+
+                                        {% if attachment.file_size %}
+
+                                            {{ "%.1f"|format(
+                                                attachment.file_size / 1024
+                                            ) }} KB
+
+                                        {% else %}
+
+                                            -
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        {% set ext = attachment.file_extension|lower %}
+
+                                        {% if ext in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
+
+                                            <a href="{{ url_for(
+                                                'audit_finding.view_attachment',
+                                                audit_id=audit.id,
+                                                execution_id=execution.id,
+                                                finding_id=finding.id,
+                                                attachment_id=attachment.id
+                                            ) }}"
+                                               target="_blank"
+                                               class="btn btn-info btn-sm"
+                                               title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                        {% elif ext == 'pdf' %}
+
+                                            <a href="{{ url_for(
+                                                'audit_finding.view_attachment',
+                                                audit_id=audit.id,
+                                                execution_id=execution.id,
+                                                finding_id=finding.id,
+                                                attachment_id=attachment.id
+                                            ) }}"
+                                               target="_blank"
+                                               class="btn btn-info btn-sm"
+                                               title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                            <a href="{{ url_for(
+                                                'audit_finding.download_attachment',
+                                                audit_id=audit.id,
+                                                execution_id=execution.id,
+                                                finding_id=finding.id,
+                                                attachment_id=attachment.id
+                                            ) }}"
+                                               class="btn btn-success btn-sm"
+                                               title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+
+                                        {% else %}
+
+                                            <a href="{{ url_for(
+                                                'audit_finding.download_attachment',
+                                                audit_id=audit.id,
+                                                execution_id=execution.id,
+                                                finding_id=finding.id,
+                                                attachment_id=attachment.id
+                                            ) }}"
+                                               class="btn btn-success btn-sm"
+                                               title="Download">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="text-center text-muted py-4">
+
+                        <i class="fas fa-paperclip fa-2x mb-2"></i>
+
+                        <p class="mb-0">
+                            No attachments available.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- ACTION BUTTONS -->
+        <!-- ===================================================== -->
+        <div class="card">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+                        <a href="javascript:history.back()"
+                        class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-1"></i>
+                            Back
+                        </a>
+                    </div>
+
+
+                    <div>
+                        {% if can_edit_finding(finding) %}
+                        <a href="{{ url_for(
+                            'audit_finding.edit',
+                            audit_id=audit.id,
+                            execution_id=execution.id,
+                            finding_id=finding.id
+                        ) }}"
+                           class="btn btn-warning">
+
+                            <i class="fas fa-edit mr-1"></i>
+                            Edit Finding
+
+                        </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

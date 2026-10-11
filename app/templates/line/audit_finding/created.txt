@@ -1,0 +1,19 @@
+[CIMS] New Audit Finding
+
+Dear {{ pic.full_name if pic else "PIC" }},
+
+A new Audit Finding has been assigned to you.
+
+Finding No. : {{ finding.finding_no }}
+Audit No.   : {{ finding.audit_execution.audit_assignment.audit.audit_no if finding.audit_execution and finding.audit_execution.audit_assignment and finding.audit_execution.audit_assignment.audit else "-" }}
+Location    : {{ finding.audit_execution.audit_assignment.location if finding.audit_execution and finding.audit_execution.audit_assignment else "-" }}
+Severity    : {{ finding.severity }}
+Target Date : {{ finding.target_date if finding.target_date else "-" }}
+Status      : {{ finding.status }}
+
+Finding:
+{{ finding.finding }}
+
+Please review the finding and take the necessary corrective action.
+
+CIMS

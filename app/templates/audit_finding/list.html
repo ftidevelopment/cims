@@ -1,0 +1,891 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Audit Findings{% endblock %}
+
+{% block content %}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Audit Findings
+                </h1>
+            </div>
+
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('audit.index') }}">
+                            Audit
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for(
+                            'audit_execution.index',
+                            audit_id=audit.id
+                        ) }}">
+                            Audit Execution
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Findings
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="content">
+    <div class="container-fluid">
+
+        <!-- ================================================== -->
+        <!-- Audit Execution Information -->
+        <!-- ================================================== -->
+
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-clipboard-check mr-1"></i>
+                    Audit Execution Information
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <strong>Audit No.</strong>
+                        <div>
+                            {{ audit.audit_no }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Audit Title</strong>
+                        <div>
+                            {{ audit.title }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Location</strong>
+                        <div>
+                            {{ execution.audit_assignment.location
+                            if execution.audit_assignment
+                            else '-' }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Auditor</strong>
+                        <div>
+                            {% if execution.audit_assignment
+                            and execution.audit_assignment.auditor %}
+                            {{ execution.audit_assignment.auditor.full_name }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mt-3">
+
+                    <div class="col-md-3">
+                        <strong>Checklist</strong>
+                        <div>
+                            {% if execution.audit_checklist %}
+                            {{ execution.audit_checklist.audit_checklist_name }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Execution Date</strong>
+                        <div>
+                            {{ execution.execution_date.strftime('%Y-%m-%d')
+                            if execution.execution_date
+                            else '-' }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Execution Status</strong>
+                        <div>
+                            {% if execution.status == 'NOT_STARTED' %}
+                            <span class="badge badge-secondary">
+                                NOT STARTED
+                            </span>
+                            {% elif execution.status == 'IN_PROGRESS' %}
+                            <span class="badge badge-warning">
+                                IN PROGRESS
+                            </span>
+                            {% elif execution.status == 'COMPLETED' %}
+                            <span class="badge badge-success">
+                                COMPLETED
+                            </span>
+                            {% else %}
+                            <span class="badge badge-secondary">
+                                {{ execution.status }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Total Findings</strong>
+                        <div>
+                            <span class="badge badge-danger">
+                                {{ findings|length }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ================================================== -->
+        <!-- Action Buttons -->
+        <!-- ================================================== -->
+
+        <div class="mb-3">
+
+            <a href="{{ url_for(
+                'audit_execution.detail',
+                audit_id=audit.id,
+                execution_id=execution.id
+            ) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Back to Audit Execution
+            </a>
+
+            {% if execution.status == 'IN_PROGRESS' %}
+
+            <a href="{{ url_for(
+                    'audit_finding.create',
+                    audit_id=audit.id,
+                    execution_id=execution.id
+                ) }}" class="btn btn-danger">
+                <i class="fas fa-plus mr-1"></i>
+                Add Finding
+            </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================================================== -->
+        <!-- Findings Table -->
+        <!-- ================================================== -->
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list mr-1"></i>
+                    Finding List
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                {% if findings %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead>
+                            <tr>
+                                <th style="width: 120px;">
+                                    Finding No.
+                                </th>
+
+                                <th style="width: 130px;">
+                                    Source
+                                </th>
+
+                                <th style="width: 90px;">
+                                    Item
+                                </th>
+
+                                <th>
+                                    Finding
+                                </th>
+
+                                <th style="width: 110px;">
+                                    Severity
+                                </th>
+
+                                <th style="width: 160px;">
+                                    PIC
+                                </th>
+
+                                <th style="width: 130px;">
+                                    Target Date
+                                </th>
+
+                                <th style="width: 150px;">
+                                    Status
+                                </th>
+
+                                <th style="width: 150px;">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for finding in findings %}
+
+                            <tr>
+
+                                <!-- Finding No -->
+                                <td>
+                                    <strong>
+                                        {{ finding.finding_no }}
+                                    </strong>
+                                </td>
+
+
+                                <!-- Source -->
+                                <td>
+                                    {% if finding.finding_source == 'CHECKLIST' %}
+
+                                    <span class="badge badge-info">
+                                        CHECKLIST
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-warning">
+                                        OUTSIDE CHECKLIST
+                                    </span>
+
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- Checklist Item -->
+                                <td class="text-center">
+
+                                    {% if finding.audit_execution_item %}
+
+                                    <span class="badge badge-secondary">
+                                        Item
+                                        {{ finding.audit_execution_item.item_no }}
+                                    </span>
+
+                                    {% else %}
+
+                                    -
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Finding -->
+                                <td>
+
+                                    <div style="white-space: pre-wrap;">
+                                        {{ finding.finding }}
+                                    </div>
+
+                                    {% if finding.audit_execution_item %}
+
+                                    <small class="text-muted">
+                                        {{ finding.audit_execution_item.question }}
+                                    </small>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Severity -->
+                                <td>
+
+                                    {% if finding.severity == 'CRITICAL' %}
+
+                                    <span class="badge badge-danger">
+                                        CRITICAL
+                                    </span>
+
+                                    {% elif finding.severity == 'MAJOR' %}
+
+                                    <span class="badge badge-danger">
+                                        MAJOR
+                                    </span>
+
+                                    {% elif finding.severity == 'MINOR' %}
+
+                                    <span class="badge badge-warning">
+                                        MINOR
+                                    </span>
+
+                                    {% elif finding.severity == 'OBSERVATION' %}
+
+                                    <span class="badge badge-info">
+                                        OBSERVATION
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-secondary">
+                                        {{ finding.severity }}
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- PIC -->
+                                <td>
+
+                                    {% if finding.pic_employee %}
+
+                                    {{ finding.pic_employee.full_name }}
+
+                                    {% if finding.pic_employee.employee_code %}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ finding.pic_employee.employee_code }}
+                                    </small>
+                                    {% endif %}
+
+                                    {% else %}
+
+                                    <span class="text-muted">
+                                        Not Assigned
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Target Date -->
+                                <td>
+
+                                    {% if finding.target_date %}
+
+                                    {{ finding.target_date.strftime('%Y-%m-%d') }}
+
+                                    {% else %}
+
+                                    -
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Status -->
+                                <td>
+
+                                    {% if finding.status == 'OPEN' %}
+
+                                    <span class="badge badge-danger">
+                                        OPEN
+                                    </span>
+
+                                    {% elif finding.status == 'IN_PROGRESS' %}
+
+                                    <span class="badge badge-warning">
+                                        IN PROGRESS
+                                    </span>
+
+                                    {% elif finding.status == 'ACTION_COMPLETED' %}
+
+                                    <span class="badge badge-info">
+                                        ACTION COMPLETED
+                                    </span>
+
+                                    {% elif finding.status == 'AUDITOR_VERIFICATION' %}
+
+                                    <span class="badge badge-primary">
+                                        AUDITOR VERIFICATION
+                                    </span>
+
+                                    {% elif finding.status == 'PASS' %}
+
+                                    <span class="badge badge-success">
+                                        PASS
+                                    </span>
+
+                                    {% elif finding.status == 'CLOSED' %}
+
+                                    <span class="badge badge-success">
+                                        CLOSED
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-secondary">
+                                        {{ finding.status }}
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Action -->
+                                <td class="text-center">
+
+                                    <!-- Edit -->
+                                    {% if finding.status not in [
+                                    'CLOSED',
+                                    'PASS',
+                                    'AUDITOR_VERIFICATION'
+                                    ] %}
+
+                                    <!-- View -->
+                                    <a
+                                        href="{{ url_for(
+                                            'audit_finding.detail',
+                                            audit_id=audit.id,
+                                            execution_id=execution.id,
+                                            finding_id=finding.id
+                                        ) }}"
+                                        class="btn btn-info btn-sm"
+                                        title="View Finding"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                    <a href="{{ url_for(
+                                                    'audit_finding.edit',
+                                                    audit_id=audit.id,
+                                                    execution_id=execution.id,
+                                                    finding_id=finding.id
+                                                ) }}" class="btn btn-warning btn-sm" title="Edit Finding">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    {% endif %}
+
+
+                                    <!-- Start Action -->
+                                    {% if finding.status == 'OPEN' %}
+
+                                    <form method="POST" action="{{ url_for(
+                                                          'audit_finding.start_action',
+                                                          audit_id=audit.id,
+                                                          execution_id=execution.id,
+                                                          finding_id=finding.id
+                                                      ) }}" style="display:inline;">
+
+                                        <button type="submit" class="btn btn-primary btn-sm" title="Start Action">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+
+                                    </form>
+
+                                    {% endif %}
+
+
+                                    <!-- Complete Action -->
+                                    {% if finding.status == 'IN_PROGRESS' %}
+
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                        data-target="#completeActionModal{{ finding.id }}" title="Complete Action">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+
+                                    {% endif %}
+
+
+                                    <!-- Submit Verification -->
+                                    {% if finding.status == 'ACTION_COMPLETED' %}
+
+                                    <form method="POST" action="{{ url_for(
+                                                          'audit_finding.submit_verification',
+                                                          audit_id=audit.id,
+                                                          execution_id=execution.id,
+                                                          finding_id=finding.id
+                                                      ) }}" style="display:inline;">
+
+                                        <button type="submit" class="btn btn-primary btn-sm"
+                                            title="Submit for Verification">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+
+                                    </form>
+
+                                    {% endif %}
+
+
+                                    <!-- Verify -->
+                                    {% if finding.status == 'AUDITOR_VERIFICATION' %}
+
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                        data-target="#verifyFindingModal{{ finding.id }}" title="Verify Finding">
+                                        <i class="fas fa-user-check"></i>
+                                    </button>
+
+                                    {% endif %}
+
+
+                                    <!-- Close -->
+                                    {% if finding.status == 'PASS' %}
+
+                                    <form method="POST" action="{{ url_for(
+                                                          'audit_finding.close',
+                                                          audit_id=audit.id,
+                                                          execution_id=execution.id,
+                                                          finding_id=finding.id
+                                                      ) }}" style="display:inline;">
+
+                                        <button type="submit" class="btn btn-success btn-sm" title="Close Finding">
+                                            <i class="fas fa-lock"></i>
+                                        </button>
+
+                                    </form>
+
+                                    {% endif %}
+
+
+                                    <!-- Delete -->
+                                    {% if finding.status in [
+                                    'OPEN',
+                                    'IN_PROGRESS'
+                                    ] %}
+
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                        data-name="{{ finding.finding_no }}" data-url="{{ url_for(
+                                                            'audit_finding.delete',
+                                                            audit_id=audit.id,
+                                                            execution_id=execution.id,
+                                                            finding_id=finding.id
+                                                        ) }}" title="Delete Finding">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- ================================================== -->
+                            <!-- Complete Action Modal -->
+                            <!-- ================================================== -->
+
+                            <div class="modal fade" id="completeActionModal{{ finding.id }}" tabindex="-1"
+                                role="dialog">
+
+                                <div class="modal-dialog modal-lg" role="document">
+
+                                    <div class="modal-content">
+
+                                        <form method="POST" action="{{ url_for(
+                                                          'audit_finding.complete_action',
+                                                          audit_id=audit.id,
+                                                          execution_id=execution.id,
+                                                          finding_id=finding.id
+                                                      ) }}">
+
+                                            <div class="modal-header">
+
+                                                <h5 class="modal-title">
+                                                    Complete Corrective Action
+                                                </h5>
+
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span>&times;</span>
+                                                </button>
+
+                                            </div>
+
+                                            <div class="modal-body">
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Finding
+                                                    </label>
+
+                                                    <textarea class="form-control" rows="3"
+                                                        readonly>{{ finding.finding }}</textarea>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Corrective Action
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <textarea name="corrective_action" class="form-control" rows="5"
+                                                        required>{{ finding.corrective_action or '' }}</textarea>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Action Completed Date
+                                                    </label>
+
+                                                    <input type="date" name="action_completed_date" class="form-control"
+                                                        value="{% if finding.action_completed_date %}{{ finding.action_completed_date.strftime('%Y-%m-%d') }}{% endif %}">
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="modal-footer">
+
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Cancel
+                                                </button>
+
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fas fa-check mr-1"></i>
+                                                    Complete Action
+                                                </button>
+
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ================================================== -->
+                            <!-- Verification Modal -->
+                            <!-- ================================================== -->
+
+                            <div class="modal fade" id="verifyFindingModal{{ finding.id }}" tabindex="-1" role="dialog">
+
+                                <div class="modal-dialog modal-lg" role="document">
+
+                                    <div class="modal-content">
+
+                                        <form method="POST" action="{{ url_for(
+                                                          'audit_finding.verify',
+                                                          audit_id=audit.id,
+                                                          execution_id=execution.id,
+                                                          finding_id=finding.id
+                                                      ) }}">
+
+                                            <div class="modal-header">
+
+                                                <h5 class="modal-title">
+                                                    Verify Audit Finding
+                                                </h5>
+
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span>&times;</span>
+                                                </button>
+
+                                            </div>
+
+                                            <div class="modal-body">
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Finding
+                                                    </label>
+
+                                                    <textarea class="form-control" rows="3"
+                                                        readonly>{{ finding.finding }}</textarea>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Verification Result
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <textarea name="verification_result" class="form-control" rows="5"
+                                                        required></textarea>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Verification Status
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <select name="verification_status" class="form-control" required>
+
+                                                        <option value="">
+                                                            -- Select Result --
+                                                        </option>
+
+                                                        <option value="PASS">
+                                                            PASS
+                                                        </option>
+
+                                                        <option value="FAIL">
+                                                            FAIL
+                                                        </option>
+
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <div class="form-group">
+
+                                                        <label>
+                                                            Verified By
+                                                            <span class="text-danger">*</span>
+                                                        </label>
+
+                                                        <select name="verified_by_employee_id" class="form-control"
+                                                            required>
+
+                                                            {% if execution.audit_assignment
+                                                            and execution.audit_assignment.auditor %}
+
+                                                            <option value="{{ execution.audit_assignment.auditor.id }}"
+                                                                selected>
+
+                                                                {{ execution.audit_assignment.auditor.employee_code }}
+                                                                -
+                                                                {{ execution.audit_assignment.auditor.full_name }}
+
+                                                            </option>
+
+                                                            {% else %}
+
+                                                            <option value="">
+                                                                Auditor not found
+                                                            </option>
+
+                                                            {% endif %}
+
+                                                        </select>
+
+                                                        <small class="form-text text-muted">
+                                                            Auditor assigned to this audit execution.
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label>
+                                                        Verification Date
+                                                    </label>
+
+                                                    <input type="date" name="verified_date" class="form-control">
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="modal-footer">
+
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Cancel
+                                                </button>
+
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fas fa-check-circle mr-1"></i>
+                                                    Save Verification
+                                                </button>
+
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="text-center py-5">
+
+                    <i class="fas fa-check-circle fa-3x text-muted mb-3"></i>
+
+                    <h5>
+                        No Findings
+                    </h5>
+
+                    <p class="text-muted">
+                        No findings have been recorded for this audit execution.
+                    </p>
+
+                    {% if execution.status == 'IN_PROGRESS' %}
+
+                    <a href="{{ url_for(
+                                'audit_finding.create',
+                                audit_id=audit.id,
+                                execution_id=execution.id
+                            ) }}" class="btn btn-danger">
+
+                        <i class="fas fa-plus mr-1"></i>
+                        Add Finding
+
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ======================================================== -->
+<!-- Delete Modal -->
+<!-- ======================================================== -->
+
+{% include "components/delete_modal.html" %}
+
+
+{% endblock %}

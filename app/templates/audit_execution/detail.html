@@ -1,0 +1,660 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Run Audit Checklist
+{% endblock %}
+
+{% block content %}
+
+    <!-- ====================================================== -->
+    <!-- HEADER -->
+    <!-- ====================================================== -->
+
+    <section class="content-header">
+
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+
+                <div class="col-sm-6">
+
+                    <h1>
+                        <i class="fas fa-clipboard-check mr-2"></i>
+                        Audit Checklist Execution
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <ol class="breadcrumb float-sm-right">
+
+                        <li class="breadcrumb-item">
+
+                            <a href="{{ url_for('dashboard.index') }}">
+                                Dashboard
+                            </a>
+
+                        </li>
+
+                        <li class="breadcrumb-item">
+
+                            <a href="{{ url_for('audit.index') }}">
+                                Audit
+                            </a>
+
+                        </li>
+
+                        <li class="breadcrumb-item">
+
+                            <a href="{{ url_for(
+                                'audit_execution.index',
+                                audit_id=audit.id
+                            ) }}">
+                                Execution
+                            </a>
+
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            Checklist
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- CONTENT -->
+    <!-- ====================================================== -->
+
+    <section class="content">
+
+        <div class="container-fluid">
+
+
+            <!-- ================================================== -->
+            <!-- EXECUTION INFORMATION -->
+            <!-- ================================================== -->
+
+            <div class="card card-primary card-outline">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Execution Information
+                    </h3>
+
+
+                    <div class="card-tools">
+
+                        {% if execution.status == "NOT_STARTED" %}
+                            {% if current_user.has_permission("AUDIT_EXECUTE") %}
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'audit_execution.start',
+                                    audit_id=audit.id,
+                                    execution_id=execution.id
+                                ) }}"
+                                style="display:inline;"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success btn-sm"
+                                >
+
+                                    <i class="fas fa-play mr-1"></i>
+
+                                    Start Audit
+
+                                </button>
+
+                            </form>
+                            {% endif %}
+
+                        {% elif execution.status == "IN_PROGRESS" %}
+
+                            <span class="badge badge-warning p-2">
+
+                                <i class="fas fa-spinner mr-1"></i>
+
+                                IN PROGRESS
+
+                            </span>
+
+                        {% elif execution.status == "COMPLETED" %}
+
+                            <span class="badge badge-success p-2">
+
+                                <i class="fas fa-check mr-1"></i>
+
+                                COMPLETED
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <!-- ================================================== -->
+                    <!-- ROW 1 -->
+                    <!-- ================================================== -->
+
+                    <div class="row">
+
+                        <!-- Audit No -->
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Audit No
+                            </strong>
+
+                            <div class="text-muted">
+                                {{ audit.audit_no }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Department -->
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Department
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {% if execution.audit_assignment
+                                      and execution.audit_assignment.department %}
+
+                                    {{ execution.audit_assignment.department.department_code }}
+                                    -
+                                    {{ execution.audit_assignment.department.department_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Location -->
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Location
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {% if execution.audit_assignment %}
+
+                                    {{ execution.audit_assignment.location }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Auditor -->
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Auditor
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {% if execution.audit_assignment
+                                      and execution.audit_assignment.auditor %}
+
+                                    {{ execution.audit_assignment.auditor.full_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- ================================================== -->
+                    <!-- ROW 2 -->
+                    <!-- ================================================== -->
+
+                    <div class="row">
+
+                        <!-- Execution Date -->
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Execution Date
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {% if execution.execution_date %}
+
+                                    {{ execution.execution_date.strftime('%d-%m-%Y') }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Checklist -->
+
+                        <div class="col-md-6">
+
+                            <strong>
+                                Checklist
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {% if execution.audit_checklist %}
+
+                                    <strong>
+                                        {{ execution.audit_checklist.audit_checklist_code }}
+                                    </strong>
+
+                                    -
+                                    {{ execution.audit_checklist.audit_checklist_name }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Status -->
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Status
+                            </strong>
+
+                            <div>
+
+                                {% if execution.status == "NOT_STARTED" %}
+
+                                    <span class="badge badge-secondary">
+                                        NOT STARTED
+                                    </span>
+
+                                {% elif execution.status == "IN_PROGRESS" %}
+
+                                    <span class="badge badge-warning">
+                                        IN PROGRESS
+                                    </span>
+
+                                {% elif execution.status == "COMPLETED" %}
+
+                                    <span class="badge badge-success">
+                                        COMPLETED
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================== -->
+            <!-- CHECKLIST -->
+            <!-- ================================================== -->
+
+            <div class="card card-primary">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-list-check mr-2"></i>
+
+                        Checklist
+
+                    </h3>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'audit_execution.save',
+                        audit_id=audit.id,
+                        execution_id=execution.id
+                    ) }}"
+                >
+
+                    <div class="card-body p-0">
+
+                        {% if items %}
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-hover mb-0">
+
+                                    <thead>
+
+                                        <tr class="text-center">
+
+                                            <th style="width: 60px;">
+                                                No.
+                                            </th>
+
+                                            <th>
+                                                Checklist Question
+                                            </th>
+
+                                            <th style="width: 180px;">
+                                                Result
+                                            </th>
+
+                                            <th style="width: 300px;">
+                                                Remark
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+                                        {% for item in items %}
+
+                                            <tr>
+
+                                                <td class="text-center align-middle">
+
+                                                    <strong>
+                                                        {{ item.item_no }}
+                                                    </strong>
+
+                                                </td>
+
+
+                                                <td class="align-middle">
+
+                                                    {{ item.question }}
+
+                                                </td>
+
+
+                                                <td class="text-center align-middle">
+
+                                                    <div class="btn-group btn-group-sm">
+
+                                                        <!-- OK -->
+
+                                                        <label class="btn btn-outline-success">
+
+                                                            <input
+                                                                type="radio"
+                                                                name="result_{{ item.id }}"
+                                                                value="OK"
+                                                                autocomplete="off"
+
+                                                                {% if item.result == "OK" %}
+                                                                    checked
+                                                                {% endif %}
+
+                                                                {% if execution.status != "IN_PROGRESS" %}
+                                                                    disabled
+                                                                {% endif %}
+                                                            >
+
+                                                            OK
+
+                                                        </label>
+
+
+                                                        <!-- NG -->
+
+                                                        <label class="btn btn-outline-danger">
+
+                                                            <input
+                                                                type="radio"
+                                                                name="result_{{ item.id }}"
+                                                                value="NG"
+                                                                autocomplete="off"
+
+                                                                {% if item.result == "NG" %}
+                                                                    checked
+                                                                {% endif %}
+
+                                                                {% if execution.status != "IN_PROGRESS" %}
+                                                                    disabled
+                                                                {% endif %}
+                                                            >
+
+                                                            NG
+
+                                                        </label>
+
+
+                                                        <!-- NA -->
+
+                                                        <label class="btn btn-outline-secondary">
+
+                                                            <input
+                                                                type="radio"
+                                                                name="result_{{ item.id }}"
+                                                                value="NA"
+                                                                autocomplete="off"
+
+                                                                {% if item.result == "NA" %}
+                                                                    checked
+                                                                {% endif %}
+
+                                                                {% if execution.status != "IN_PROGRESS" %}
+                                                                    disabled
+                                                                {% endif %}
+                                                            >
+
+                                                            NA
+
+                                                        </label>
+
+                                                    </div>
+
+                                                </td>
+
+
+                                                <td class="align-middle">
+
+                                                    <textarea
+                                                        name="remark_{{ item.id }}"
+                                                        class="form-control form-control-sm"
+                                                        rows="2"
+                                                        placeholder="Remark..."
+
+                                                        {% if execution.status != "IN_PROGRESS" %}
+                                                            disabled
+                                                        {% endif %}
+                                                    >{{ item.remark or '' }}</textarea>
+
+                                                </td>
+
+                                            </tr>
+
+                                        {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="text-center p-5">
+
+                                <i class="fas fa-list fa-3x text-muted mb-3"></i>
+
+                                <h5 class="text-muted">
+                                    No Checklist Items
+                                </h5>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ================================================== -->
+                    <!-- FOOTER -->
+                    <!-- ================================================== -->
+
+                    <div class="card-footer">
+
+                        {% if execution.status == "IN_PROGRESS" %}
+                            {% if current_user.has_permission("AUDIT_EXECUTE") %}
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="fas fa-save mr-1"></i>
+
+                                Save Checklist
+
+                            </button>
+                            {% endif %}
+
+                        {% endif %}
+
+
+                        {% if execution.status == "IN_PROGRESS" %}
+                            {% if current_user.has_permission("AUDIT_EXECUTE") %}
+                            <button
+                                type="submit"
+                                formaction="{{ url_for(
+                                    'audit_execution.complete',
+                                    audit_id=audit.id,
+                                    execution_id=execution.id
+                                ) }}"
+                                class="btn btn-success"
+                            >
+
+                                <i class="fas fa-check mr-1"></i>
+
+                                Complete Audit
+
+                            </button>
+                            {% endif %}
+
+                        {% endif %}
+
+
+                        <!-- ================================================== -->
+                        <!-- Findings -->
+                        <!-- ================================================== -->
+                        {% if current_user.has_permission("AUDIT_FINDING_VIEW") %}
+                        <a
+                            href="{{ url_for(
+                                'audit_finding.index',
+                                audit_id=audit.id,
+                                execution_id=execution.id
+                            ) }}"
+                            class="btn btn-danger"
+                        >
+
+                            <i class="fas fa-exclamation-triangle mr-1"></i>
+
+                            Findings
+
+                        </a>
+                        {% endif %}
+
+
+                        <!-- ================================================== -->
+                        <!-- Back -->
+                        <!-- ================================================== -->
+
+                        <a
+                            href="{{ url_for(
+                                'audit_execution.index',
+                                audit_id=audit.id
+                            ) }}"
+                            class="btn btn-secondary"
+                        >
+
+                            <i class="fas fa-arrow-left mr-1"></i>
+
+                            Back
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}

@@ -1,0 +1,486 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Audit Assignment
+{% endblock %}
+
+{% block content %}
+
+<!-- ====================================================== -->
+<!-- CONTENT HEADER -->
+<!-- ====================================================== -->
+
+<section class="content-header">
+
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+
+                <h1>
+                    <i class="fas fa-user-check mr-2"></i>
+                    Audit Assignment
+                </h1>
+
+            </div>
+
+
+            <div class="col-sm-6">
+
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('dashboard.index') }}">
+                            Dashboard
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{{ url_for('audit.index') }}">
+                            Audit
+                        </a>
+
+                    </li>
+
+
+                    <li class="breadcrumb-item active">
+                        Assignment
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ====================================================== -->
+<!-- MAIN CONTENT -->
+<!-- ====================================================== -->
+
+<section class="content">
+
+    <div class="container-fluid">
+
+
+        <!-- ================================================== -->
+        <!-- AUDIT INFORMATION -->
+        <!-- ================================================== -->
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header bg-primary">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-clipboard-check mr-2"></i>
+
+                    Audit Information
+
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <!-- Row 1 -->
+
+                <div class="row">
+
+                    <!-- Audit No -->
+
+                    <div class="col-md-3">
+
+                        <strong>
+                            Audit No
+                        </strong>
+
+                        <div class="text-muted mt-1">
+                            {{ audit.audit_no }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- Title -->
+
+                    <div class="col-md-4">
+
+                        <strong>
+                            Title
+                        </strong>
+
+                        <div class="text-muted mt-1">
+                            {{ audit.title }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- Audit Type -->
+
+                    <div class="col-md-2">
+
+                        <strong>
+                            Audit Type
+                        </strong>
+
+                        <div class="text-muted mt-1">
+
+                            {% if audit.audit_type %}
+
+                                {{ audit.audit_type.audit_type_name }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Audit Category -->
+
+                    <div class="col-md-3">
+
+                        <strong>
+                            Audit Category
+                        </strong>
+
+                        <div class="text-muted mt-1">
+
+                            {% if audit.audit_category %}
+
+                                {{ audit.audit_category.audit_category_name }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+
+                <!-- Row 2 -->
+
+                <div class="row">
+
+                    <!-- Audit Date -->
+
+                    <div class="col-md-3">
+
+                        <strong>
+                            Audit Date
+                        </strong>
+
+                        <div class="text-muted mt-1">
+
+                            {% if audit.audit_date %}
+
+                                {{ audit.audit_date.strftime('%d-%m-%Y') }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-md-3">
+
+                        <strong>
+                            Status
+                        </strong>
+
+                        <div class="mt-1">
+
+                            {% if audit.status == "DRAFT" %}
+
+                                <span class="badge badge-secondary">
+                                    DRAFT
+                                </span>
+
+                            {% elif audit.status == "PLANNED" %}
+
+                                <span class="badge badge-info">
+                                    PLANNED
+                                </span>
+
+                            {% elif audit.status == "IN_PROGRESS" %}
+
+                                <span class="badge badge-warning">
+                                    IN PROGRESS
+                                </span>
+
+                            {% elif audit.status == "COMPLETED" %}
+
+                                <span class="badge badge-success">
+                                    COMPLETED
+                                </span>
+
+                            {% elif audit.status == "CANCELLED" %}
+
+                                <span class="badge badge-danger">
+                                    CANCELLED
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge badge-secondary">
+                                    {{ audit.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================== -->
+        <!-- ASSIGNMENT CARD -->
+        <!-- ================================================== -->
+
+        <div class="card card-primary card-outline">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+
+                    <i class="fas fa-users mr-2"></i>
+
+                    Auditor & Location Assignment
+
+                </h3>
+
+
+                <div class="card-tools">
+                    {% if current_user.has_permission("AUDIT_ASSIGN") %}
+                    <a
+                        href="{{ url_for(
+                            'audit_assignment.create',
+                            audit_id=audit.id
+                        ) }}"
+                        class="btn btn-primary btn-sm"
+                    >
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Add Assignment
+
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                {% if assignments %}
+
+
+<div class="table-responsive audit-assignment-table-wrapper">
+    <table class="table table-bordered table-hover table-sm audit-assignment-table mb-0">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 50px;">No.</th>
+                <th style="width: 165px;">Department</th>
+                <th>Location</th>
+                <th style="width: 145px;">Auditor NIK</th>
+                <th style="width: 230px;">Auditor Name</th>
+                <th class="text-center" style="width: 100px;">Status</th>
+                <th class="text-center" style="width: 100px;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for assignment in assignments %}
+            <tr>
+                <td class="text-center">{{ loop.index }}</td>
+
+                <td>
+                    {% if assignment.department %}
+                        <strong>{{ assignment.department.department_code }}</strong>
+                        <small class="d-block text-muted">
+                            {{ assignment.department.department_name }}
+                        </small>
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+
+                <td class="audit-assignment-location">
+                    <strong>{{ assignment.location }}</strong>
+                </td>
+
+                <td>
+                    {% if assignment.auditor %}
+                        {{ assignment.auditor.nik }}
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if assignment.auditor %}
+                        {{ assignment.auditor.full_name }}
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    {% if assignment.auditor
+                        and assignment.auditor.status == "ACTIVE" %}
+                        <span class="badge badge-success">ACTIVE</span>
+                    {% else %}
+                        <span class="badge badge-secondary">INACTIVE</span>
+                    {% endif %}
+                </td>
+
+                <td class="text-center text-nowrap">
+                    {% if current_user.has_permission("AUDIT_ASSIGN") %}
+                        <a
+                            href="{{ url_for(
+                                'audit_assignment.edit',
+                                audit_id=audit.id,
+                                assignment_id=assignment.id
+                            ) }}"
+                            class="btn btn-warning btn-sm"
+                            title="Edit Assignment"
+                            aria-label="Edit Assignment"
+                        >
+                            <i class="fas fa-edit"></i>
+                        </a>
+
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-sm btn-delete"
+                            data-name="{{ assignment.auditor.full_name if assignment.auditor else 'this assignment' }}"
+                            data-url="{{ url_for(
+                                'audit_assignment.delete',
+                                audit_id=audit.id,
+                                assignment_id=assignment.id
+                            ) }}"
+                            title="Delete Assignment"
+                            aria-label="Delete Assignment"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+                {% else %}
+
+
+                <!-- Empty State -->
+
+                <div class="text-center p-5">
+
+                    <i class="fas fa-user-slash fa-3x text-muted mb-3"></i>
+
+                    <h5 class="text-muted">
+                        No Auditor Assignment
+                    </h5>
+
+                    <p class="text-muted mb-3">
+
+                        No auditor has been assigned to this audit yet.
+
+                    </p>
+
+                    {% if current_user.has_permission("AUDIT_ASSIGN") %}
+                    <a
+                        href="{{ url_for(
+                            'audit_assignment.create',
+                            audit_id=audit.id
+                        ) }}"
+                        class="btn btn-primary"
+                    >
+
+                        <i class="fas fa-plus mr-1"></i>
+
+                        Add Assignment
+
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ================================================== -->
+            <!-- DELETE MODAL -->
+            <!-- ================================================== -->
+
+            {% include "components/delete_modal.html" %}
+
+
+            <!-- ================================================== -->
+            <!-- CARD FOOTER -->
+            <!-- ================================================== -->
+
+            <div class="card-footer">
+
+                <a
+                    href="{{ url_for('audit.index') }}"
+                    class="btn btn-secondary"
+                >
+
+                    <i class="fas fa-arrow-left mr-1"></i>
+
+                    Back to Audit
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -199,366 +199,125 @@
              PROBLEM TABLE
         ================================================== -->
 
-        <div class="card-body p-0">
 
+<div class="card-body p-0">
+    <div class="table-responsive select-problem-table-wrapper">
+        <table class="table table-bordered table-hover mb-0 select-problem-table">
+            <thead>
+                <tr>
+                    <th class="col-no text-center">No</th>
+                    <th class="col-problem-no">Problem No</th>
+                    <th class="col-date">Date</th>
+                    <th class="col-department">Department</th>
+                    <th class="col-category">Category</th>
+                    <th class="col-title">Title</th>
+                    <th class="col-location">Location</th>
+                    <th class="col-priority text-center">Priority</th>
+                    <th class="col-status text-center">Status</th>
+                    <th class="col-action text-center">Action</th>
+                </tr>
+            </thead>
 
-            <div class="table-responsive">
+            <tbody>
+                {% if problems and problems.items %}
+                    {% for problem in problems.items %}
+                    <tr>
+                        <td class="text-center">
+                            {{ problems.first + loop.index0 }}
+                        </td>
 
-                <table class="table table-bordered table-hover mb-0">
+                        <td class="text-nowrap">
+                            <strong>{{ problem.problem_no }}</strong>
+                        </td>
 
+                        <td class="text-nowrap">
+                            {% if problem.problem_date %}
+                                {{ problem.problem_date.strftime("%d/%m/%Y") }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
 
-                    <!-- ==================================================
-                         TABLE HEADER
-                    ================================================== -->
+                        <td class="department-cell">
+                            {% if problem.department %}
+                                {{ problem.department.department_name }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
 
-                    <thead class="thead-light">
+                        <td>
+                            {% if problem.problem_category %}
+                                {{ problem.problem_category.problem_category_name }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
 
-                        <tr>
+                        <td class="title-cell">
+                            {{ problem.title }}
+                        </td>
 
+                        <td class="location-cell">
+                            {{ problem.problem_location or "-" }}
+                        </td>
 
-                            <th
-                                width="60"
-                                class="text-center"
+                        <td class="text-center">
+                            {% if problem.priority == "High" %}
+                                <span class="badge badge-danger">High</span>
+                            {% elif problem.priority == "Medium" %}
+                                <span class="badge badge-warning">Medium</span>
+                            {% elif problem.priority == "Low" %}
+                                <span class="badge badge-success">Low</span>
+                            {% else %}
+                                <span class="badge badge-secondary">
+                                    {{ problem.priority or "-" }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if problem.status == "Open" %}
+                                <span class="badge badge-success">Open</span>
+                            {% elif problem.status == "In Progress" %}
+                                <span class="badge badge-warning">In Progress</span>
+                            {% elif problem.status == "Closed" %}
+                                <span class="badge badge-secondary">Closed</span>
+                            {% else %}
+                                <span class="badge badge-info">
+                                    {{ problem.status or "-" }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center text-nowrap">
+                            <a
+                                href="{{ url_for(
+                                    'kaizen.create_from_problem',
+                                    problem_id=problem.id
+                                ) }}"
+                                class="btn btn-primary btn-sm select-problem-btn"
+                                title="Create Kaizen from this Problem"
                             >
-                                No
-                            </th>
+                                <i class="fas fa-check mr-1"></i>
+                                Select
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="10" class="text-center text-muted py-4">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            No problem found.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-
-                            <th>
-                                Problem No
-                            </th>
-
-
-                            <th>
-                                Date
-                            </th>
-
-
-                            <th>
-                                Department
-                            </th>
-
-
-                            <th>
-                                Category
-                            </th>
-
-
-                            <th>
-                                Title
-                            </th>
-
-
-                            <th>
-                                Location
-                            </th>
-
-
-                            <th
-                                class="text-center"
-                                width="100"
-                            >
-                                Priority
-                            </th>
-
-
-                            <th
-                                class="text-center"
-                                width="100"
-                            >
-                                Status
-                            </th>
-
-
-                            <th
-                                class="text-center"
-                                width="100"
-                            >
-                                Action
-                            </th>
-
-
-                        </tr>
-
-                    </thead>
-
-
-
-                    <!-- ==================================================
-                         TABLE BODY
-                    ================================================== -->
-
-                    <tbody>
-
-
-                    {% if problems and problems.items %}
-
-
-                        {% for problem in problems.items %}
-
-
-                        <tr>
-
-
-                            <!-- No -->
-
-                            <td class="text-center">
-
-                                {{ problems.first + loop.index0 }}
-
-                            </td>
-
-
-
-                            <!-- Problem No -->
-
-                            <td>
-
-                                <strong>
-
-                                    {{ problem.problem_no }}
-
-                                </strong>
-
-                            </td>
-
-
-
-                            <!-- Problem Date -->
-
-                            <td>
-
-                                {% if problem.problem_date %}
-
-                                    {{ problem.problem_date.strftime(
-                                        "%d/%m/%Y"
-                                    ) }}
-
-                                {% else %}
-
-                                    -
-
-                                {% endif %}
-
-                            </td>
-
-
-
-                            <!-- Department -->
-
-                            <td>
-
-                                {% if problem.department %}
-
-                                    {{ problem.department.department_name }}
-
-                                {% else %}
-
-                                    -
-
-                                {% endif %}
-
-                            </td>
-
-
-
-                            <!-- Category -->
-
-                            <td>
-
-                                {% if problem.problem_category %}
-
-                                    {{ problem.problem_category.problem_category_name }}
-
-                                {% else %}
-
-                                    -
-
-                                {% endif %}
-
-                            </td>
-
-
-
-                            <!-- Title -->
-
-                            <td>
-
-                                {{ problem.title }}
-
-                            </td>
-
-
-
-                            <!-- Location -->
-
-                            <td>
-
-                                {{ problem.problem_location or "-" }}
-
-                            </td>
-
-
-
-                            <!-- Priority -->
-
-                            <td class="text-center">
-
-
-                                {% if problem.priority == "High" %}
-
-                                    <span class="badge badge-danger">
-
-                                        High
-
-                                    </span>
-
-
-                                {% elif problem.priority == "Medium" %}
-
-                                    <span class="badge badge-warning">
-
-                                        Medium
-
-                                    </span>
-
-
-                                {% elif problem.priority == "Low" %}
-
-                                    <span class="badge badge-success">
-
-                                        Low
-
-                                    </span>
-
-
-                                {% else %}
-
-                                    <span class="badge badge-secondary">
-
-                                        {{ problem.priority or "-" }}
-
-                                    </span>
-
-                                {% endif %}
-
-
-                            </td>
-
-
-
-                            <!-- Status -->
-
-                            <td class="text-center">
-
-
-                                {% if problem.status == "Open" %}
-
-                                    <span class="badge badge-success">
-
-                                        Open
-
-                                    </span>
-
-
-                                {% elif problem.status == "In Progress" %}
-
-                                    <span class="badge badge-warning">
-
-                                        In Progress
-
-                                    </span>
-
-
-                                {% elif problem.status == "Closed" %}
-
-                                    <span class="badge badge-secondary">
-
-                                        Closed
-
-                                    </span>
-
-
-                                {% else %}
-
-                                    <span class="badge badge-info">
-
-                                        {{ problem.status or "-" }}
-
-                                    </span>
-
-                                {% endif %}
-
-
-                            </td>
-
-
-
-                            <!-- Action -->
-
-                            <td class="text-center">
-
-
-                                <a
-                                    href="{{ url_for(
-                                        'kaizen.create_from_problem',
-                                        problem_id=problem.id
-                                    ) }}"
-                                    class="btn btn-primary btn-sm"
-                                    title="Select Problem"
-                                >
-
-                                    <i class="fas fa-check mr-1"></i>
-
-                                    Select
-
-                                </a>
-
-
-                            </td>
-
-
-                        </tr>
-
-
-                        {% endfor %}
-
-
-                    {% else %}
-
-
-                        <tr>
-
-                            <td
-                                colspan="10"
-                                class="text-center py-4"
-                            >
-
-                                <div class="text-muted">
-
-                                    <i class="fas fa-info-circle mr-1"></i>
-
-                                    No problem found.
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-
-                    {% endif %}
-
-
-                    </tbody>
-
-
-                </table>
-
-            </div>
-
-
-        </div>
 
 
 

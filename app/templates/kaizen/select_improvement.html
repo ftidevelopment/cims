@@ -82,33 +82,21 @@ Main Content
 
                         <div class="input-group">
 
-                            <input
-                                type="text"
-                                name="keyword"
-                                class="form-control"
-                                style="width:320px;"
-                                placeholder="Search improvement no, title..."
-                                value="{{ keyword }}"
-                            >
+                            <input type="text" name="keyword" class="form-control" style="width:320px;"
+                                placeholder="Search improvement no, title..." value="{{ keyword }}">
 
                             <div class="input-group-append">
 
-                                <button
-                                    class="btn btn-primary"
-                                    type="submit"
-                                >
+                                <button class="btn btn-primary" type="submit">
 
                                     <i class="fas fa-search"></i>
 
                                 </button>
 
 
-                                <a
-                                    href="{{ url_for(
+                                <a href="{{ url_for(
                                         'kaizen.select_improvement'
-                                    ) }}"
-                                    class="btn btn-secondary ml-1"
-                                >
+                                    ) }}" class="btn btn-secondary ml-1">
 
                                     <i class="fas fa-sync-alt"></i>
 
@@ -154,170 +142,75 @@ Main Content
 
                 </div>
 
+                <div class="table-responsive select-improvement-table-wrapper">
+                    <table class="table table-bordered table-hover select-improvement-table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="col-no">No</th>
+                                <th class="col-improvement-no">Improvement No</th>
+                                <th class="col-title">Title</th>
+                                <th class="col-problem-no">Problem No</th>
+                                <th class="col-problem">Problem</th>
+                                <th class="col-action">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% if improvements.items %}
+                            {% for improvement in improvements.items %}
+                            <tr>
+                                <td class="text-center">
+                                    {{ improvements.first + loop.index0 }}
+                                </td>
+
+                                <td class="text-nowrap">
+                                    <strong>{{ improvement.improvement_no }}</strong>
+                                </td>
+
+                                <td class="title-cell">
+                                    {{ improvement.title }}
+                                </td>
+
+                                <td class="text-nowrap">
+                                    {% if improvement.problem %}
+                                    {{ improvement.problem.problem_no }}
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="problem-cell">
+                                    {% if improvement.problem %}
+                                    {{ improvement.problem.title }}
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="text-center text-nowrap">
+                                    <a href="{{ url_for(
+                                'kaizen.create',
+                                improvement_id=improvement.id
+                            ) }}" class="btn btn-success btn-sm select-improvement-btn"
+                                        title="Create Kaizen from this Improvement">
+                                        <i class="fas fa-lightbulb mr-1"></i>
+                                        Select
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fas fa-folder-open mr-1"></i>
+                                    No improvement data found.
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
 
-                <table class="table table-bordered table-hover">
-
-                    <thead>
-
-                        <tr class="text-center">
-
-                            <th width="60">
-                                No
-                            </th>
-
-                            <th width="150">
-                                Improvement No
-                            </th>
-
-                            <th>
-                                Title
-                            </th>
-
-                            <th width="150">
-                                Problem No
-                            </th>
-
-                            <th>
-                                Problem
-                            </th>
-
-                            <th width="130">
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-
-                        {% if improvements.items %}
-
-
-                        {% for improvement in improvements.items %}
-
-                        <tr>
-
-
-                            <!-- No -->
-
-                            <td class="text-center">
-
-                                {{ improvements.first + loop.index0 }}
-
-                            </td>
-
-
-                            <!-- Improvement No -->
-
-                            <td>
-
-                                <strong>
-                                    {{ improvement.improvement_no }}
-                                </strong>
-
-                            </td>
-
-
-                            <!-- Title -->
-
-                            <td>
-
-                                {{ improvement.title }}
-
-                            </td>
-
-
-                            <!-- Problem No -->
-
-                            <td>
-
-                                {% if improvement.problem %}
-
-                                {{ improvement.problem.problem_no }}
-
-                                {% else %}
-
-                                -
-
-                                {% endif %}
-
-                            </td>
-
-
-                            <!-- Problem -->
-
-                            <td>
-
-                                {% if improvement.problem %}
-
-                                {{ improvement.problem.title }}
-
-                                {% else %}
-
-                                -
-
-                                {% endif %}
-
-                            </td>
-
-
-                            <!-- Action -->
-
-                            <td class="text-center">
-
-                                <a
-                                    href="{{ url_for(
-                                        'kaizen.create',
-                                        improvement_id=improvement.id
-                                    ) }}"
-                                    class="btn btn-success btn-sm"
-                                    title="Create Kaizen"
-                                >
-
-                                    <i class="fas fa-lightbulb mr-1"></i>
-
-                                    Select
-
-                                </a>
-
-                            </td>
-
-
-                        </tr>
-
-                        {% endfor %}
-
-
-                        {% else %}
-
-
-                        <tr>
-
-                            <td
-                                colspan="6"
-                                class="text-center text-muted py-4"
-                            >
-
-                                <i class="fas fa-folder-open fa-2x mb-2"></i>
-
-                                <br>
-
-                                No improvement data found.
-
-                            </td>
-
-                        </tr>
-
-
-                        {% endif %}
-
-
-                    </tbody>
-
-                </table>
 
 
             </div>
@@ -379,14 +272,11 @@ Main Content
 
                             <li class="page-item">
 
-                                <a
-                                    class="page-link"
-                                    href="{{ url_for(
+                                <a class="page-link" href="{{ url_for(
                                         'kaizen.select_improvement',
                                         page=improvements.prev_num,
                                         keyword=keyword
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     Previous
 
@@ -402,21 +292,16 @@ Main Content
 
                             {% if page_num %}
 
-                            <li
-                                class="page-item
+                            <li class="page-item
                                 {% if page_num == improvements.page %}
                                     active
-                                {% endif %}"
-                            >
+                                {% endif %}">
 
-                                <a
-                                    class="page-link"
-                                    href="{{ url_for(
+                                <a class="page-link" href="{{ url_for(
                                         'kaizen.select_improvement',
                                         page=page_num,
                                         keyword=keyword
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     {{ page_num }}
 
@@ -447,14 +332,11 @@ Main Content
 
                             <li class="page-item">
 
-                                <a
-                                    class="page-link"
-                                    href="{{ url_for(
+                                <a class="page-link" href="{{ url_for(
                                         'kaizen.select_improvement',
                                         page=improvements.next_num,
                                         keyword=keyword
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     Next
 

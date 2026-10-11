@@ -1,0 +1,616 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Corrective Action{% endblock %}
+
+{% block content %}
+
+<section class="content">
+    <div class="container-fluid">
+
+        <!-- PAGE HEADER -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <h3 class="mb-1">
+                            <i class="fas fa-tools text-primary mr-2"></i>
+                            Corrective Action
+                        </h3>
+                        <small class="text-muted">
+                            Audit Finding Corrective Action and Evidence
+                        </small>
+                    </div>
+
+                    <a href="{{ url_for(
+                        'audit_finding.index',
+                        audit_id=audit.id,
+                        execution_id=execution.id
+                    ) }}" class="btn btn-secondary mt-2">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                        Back to Findings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- FINDING INFORMATION -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-clipboard-list mr-2"></i>
+                    Finding Information
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Finding No.</label>
+                            <div class="form-control bg-light">
+                                {{ finding.finding_no }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Severity</label>
+                            <div>
+                                {% if finding.severity == "CRITICAL" %}
+                                <span class="badge badge-danger p-2">
+                                    CRITICAL
+                                </span>
+                                {% elif finding.severity == "MAJOR" %}
+                                <span class="badge badge-warning p-2">
+                                    MAJOR
+                                </span>
+                                {% elif finding.severity == "MINOR" %}
+                                <span class="badge badge-info p-2">
+                                    MINOR
+                                </span>
+                                {% else %}
+                                <span class="badge badge-secondary p-2">
+                                    {{ finding.severity }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <div>
+                                {% if finding.status == "OPEN" %}
+                                <span class="badge badge-danger p-2">
+                                    OPEN
+                                </span>
+                                {% elif finding.status == "IN_PROGRESS" %}
+                                <span class="badge badge-primary p-2">
+                                    IN PROGRESS
+                                </span>
+                                {% elif finding.status == "ACTION_COMPLETED" %}
+                                <span class="badge badge-info p-2">
+                                    ACTION COMPLETED
+                                </span>
+                                {% elif finding.status == "AUDITOR_VERIFICATION" %}
+                                <span class="badge badge-warning p-2">
+                                    AUDITOR VERIFICATION
+                                </span>
+                                {% elif finding.status == "PASS" %}
+                                <span class="badge badge-success p-2">
+                                    PASS
+                                </span>
+                                {% elif finding.status == "CLOSED" %}
+                                <span class="badge badge-dark p-2">
+                                    CLOSED
+                                </span>
+                                {% else %}
+                                <span class="badge badge-secondary p-2">
+                                    {{ finding.status }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Finding Description</label>
+                            <div class="form-control bg-light"
+                                style="height:auto; min-height:100px; white-space:pre-wrap;">{{ finding.finding }}</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Person in Charge (PIC)</label>
+                            <div class="form-control bg-light">
+                                {% if finding.pic_employee %}
+                                {{ finding.pic_employee.full_name }}
+                                {% else %}
+                                Not assigned
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Target Date</label>
+                            <div class="form-control bg-light">
+                                {% if finding.target_date %}
+                                {{ finding.target_date.strftime("%d-%b-%Y") }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- CORRECTIVE ACTION -->
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-wrench mr-2"></i>
+                    Corrective Action
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                {% if finding.status == "OPEN" %}
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    This finding has not been started yet.
+                    Start the corrective action before entering the
+                    completion details.
+                </div>
+
+                {% if is_finding_pic or can_edit_finding(finding) %}
+
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#startCorrectiveActionModal">
+                    <i class="fas fa-play mr-1"></i>
+                    Start Corrective Action
+                </button>
+
+                {% endif %}
+
+                {% elif finding.status == "IN_PROGRESS" %}
+
+                <form id="completeCorrectiveActionForm" method="POST" enctype="multipart/form-data" action="{{ url_for(
+          'audit_finding.corrective_action',
+          audit_id=audit.id,
+          execution_id=execution.id,
+          finding_id=finding.id
+      ) }}">
+
+                    <input type="hidden" name="action" value="complete">
+
+                    <div class="form-group">
+                        <label for="corrective_action">
+                            Corrective Action Description
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <textarea id="corrective_action" name="corrective_action" class="form-control" rows="5" required
+                            placeholder="Describe the corrective action taken...">{{ finding.corrective_action or "" }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="action_completed_date">
+                            Action Completed Date
+                        </label>
+
+                        <input type="date" id="action_completed_date" name="action_completed_date" class="form-control"
+                            value="{% if finding.action_completed_date %}{{ finding.action_completed_date.strftime('%Y-%m-%d') }}{% endif %}">
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mb-3">
+                        <i class="fas fa-paperclip mr-1"></i>
+                        Corrective Action Evidence
+                    </h5>
+
+                    <div class="form-group">
+                        <label for="attachments">
+                            Upload Evidence
+                        </label>
+
+                        <div class="custom-file">
+                            <input type="file" id="attachments" name="attachments" class="custom-file-input"
+                                accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple>
+
+                            <label class="custom-file-label" for="attachments">
+                                Choose evidence files
+                            </label>
+                        </div>
+
+                        <small class="form-text text-muted">
+                            Maximum 10 MB per file.
+                            Supported formats: images, PDF, Word,
+                            Excel and PowerPoint.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="attachment_descriptions">
+                            Evidence Description
+                        </label>
+
+                        <input type="text" id="attachment_descriptions" name="attachment_descriptions"
+                            class="form-control" maxlength="500"
+                            placeholder="Describe the attached evidence (optional)">
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        Completing the action changes the status to
+                        <strong>ACTION_COMPLETED</strong>.
+                        Upload evidence before submitting whenever
+                        evidence is required by your audit process.
+                    </div>
+
+
+                    <button type="button" class="btn btn-success" data-toggle="modal"
+                        data-target="#completeCorrectiveActionModal">
+                        <i class="fas fa-check mr-1"></i>
+                        Complete Corrective Action
+                    </button>
+
+
+                    {% elif finding.status == "ACTION_COMPLETED" %}
+
+                    <div class="form-group">
+                        <label>Corrective Action Description</label>
+                        <div class="form-control bg-light" style="height:auto; min-height:100px; white-space:pre-wrap;">
+                            {{ finding.corrective_action or "-" }}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Action Completed Date</label>
+                        <div class="form-control bg-light">
+                            {% if finding.action_completed_date %}
+                            {{ finding.action_completed_date.strftime("%d-%b-%Y") }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if is_finding_pic or can_edit_finding(finding) %}
+                    <form method="POST" action="{{ url_for(
+                                  'audit_finding.corrective_action',
+                                  audit_id=audit.id,
+                                  execution_id=execution.id,
+                                  finding_id=finding.id
+                              ) }}">
+
+                        <input type="hidden" name="action" value="submit_verification">
+
+                        <button type="submit" class="btn btn-primary"
+                            onclick="return confirm('Submit this finding for auditor verification?');">
+                            <i class="fas fa-paper-plane mr-1"></i>
+                            Submit for Verification
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    {% else %}
+
+                    <div class="form-group">
+                        <label>Corrective Action Description</label>
+                        <div class="form-control bg-light" style="height:auto; min-height:100px; white-space:pre-wrap;">
+                            {{ finding.corrective_action or "-" }}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Action Completed Date</label>
+                        <div class="form-control bg-light">
+                            {% if finding.action_completed_date %}
+                            {{ finding.action_completed_date.strftime("%d-%b-%Y") }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="alert alert-secondary mb-0">
+                        <i class="fas fa-lock mr-1"></i>
+                        Corrective Action editing is unavailable for the
+                        current status:
+                        <strong>{{ finding.status }}</strong>.
+                        {% if finding.status == "AUDITOR_VERIFICATION" %}
+                        The finding is awaiting auditor verification.
+                        {% elif finding.status == "PASS" %}
+                        Verification has passed. The finding can be closed
+                        by an authorized auditor.
+                        {% elif finding.status == "CLOSED" %}
+                        This finding has been closed.
+                        {% endif %}
+                    </div>
+
+                    {% endif %}
+
+            </div>
+        </div>
+
+        <!-- CORRECTIVE ACTION EVIDENCE LIST -->
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-paperclip mr-2"></i>
+                    Uploaded Corrective Action Evidence
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                {% if attachments %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">No.</th>
+                                <th>File Name</th>
+                                <th>Description</th>
+                                <th style="width:180px;">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for attachment in attachments %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+
+                                <td>
+                                    <i class="fas fa-file mr-1 text-secondary"></i>
+                                    {{ attachment.original_filename }}
+                                </td>
+
+                                <td>
+                                    {{ attachment.description or "-" }}
+                                </td>
+
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+
+                                        <a href="{{ url_for(
+                                                    'audit_finding.view_attachment',
+                                                    audit_id=audit.id,
+                                                    execution_id=execution.id,
+                                                    finding_id=finding.id,
+                                                    attachment_id=attachment.id
+                                                ) }}" class="btn btn-info" target="_blank" rel="noopener"
+                                            title="View attachment">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <a href="{{ url_for(
+                                                    'audit_finding.download_attachment',
+                                                    audit_id=audit.id,
+                                                    execution_id=execution.id,
+                                                    finding_id=finding.id,
+                                                    attachment_id=attachment.id
+                                                ) }}" class="btn btn-primary" title="Download attachment">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-folder-open fa-2x mb-2"></i>
+                    <p class="mb-0">
+                        No corrective action evidence uploaded yet.
+                    </p>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- START CORRECTIVE ACTION MODAL -->
+<!-- ===================================================== -->
+
+{% if is_finding_pic or can_edit_finding(finding) %}
+
+<div class="modal fade" id="startCorrectiveActionModal" tabindex="-1" role="dialog"
+    aria-labelledby="startCorrectiveActionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+
+                <h5 class="modal-title text-white" id="startCorrectiveActionModalLabel">
+                    <i class="fas fa-play-circle mr-2"></i>
+                    Start Corrective Action
+                </h5>
+
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <p>
+                    Are you sure you want to start the corrective
+                    action for this finding?
+                </p>
+
+                <div class="alert alert-info mb-0">
+
+                    <strong>Finding No.:</strong>
+                    {{ finding.finding_no }}
+
+                    <br>
+
+                    <strong>Target Date:</strong>
+
+                    {% if finding.target_date %}
+                    {{ finding.target_date.strftime('%d-%b-%Y') }}
+                    {% else %}
+                    -
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times mr-1"></i>
+                    Cancel
+                </button>
+
+
+                <button type="submit" form="completeCorrectiveActionForm" class="btn btn-success">
+                    <i class="fas fa-check mr-1"></i>
+                    Yes, Complete
+                </button>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+<!-- COMPLETE CORRECTIVE ACTION MODAL -->
+
+<div class="modal fade" id="completeCorrectiveActionModal" tabindex="-1" role="dialog"
+    aria-labelledby="completeCorrectiveActionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-success">
+
+                <h5 class="modal-title text-white" id="completeCorrectiveActionModalLabel">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Complete Corrective Action
+                </h5>
+
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    Are you sure you want to complete this corrective action?
+                </p>
+
+                <div class="alert alert-info mb-0">
+                    <strong>Finding No.:</strong>
+                    {{ finding.finding_no }}
+
+                    <br>
+
+                    <strong>Current Status:</strong>
+                    {{ finding.status }}
+                </div>
+
+                <div class="alert alert-warning mt-3 mb-0">
+                    Completing this action will change the status to
+                    <strong>ACTION_COMPLETED</strong>.
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times mr-1"></i>
+                    Cancel
+                </button>
+
+                <form method="POST" action="{{ url_for(
+                        'audit_finding.corrective_action',
+                        audit_id=audit.id,
+                        execution_id=execution.id,
+                        finding_id=finding.id
+                    ) }}">
+                    <input type="hidden" name="action" value="complete">
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check mr-1"></i>
+                        Yes, Complete
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fileInput = document.getElementById("attachments");
+
+        if (fileInput) {
+            fileInput.addEventListener("change", function () {
+                const label = this.nextElementSibling;
+
+                if (!label) {
+                    return;
+                }
+
+                if (this.files && this.files.length > 0) {
+                    label.textContent = Array.from(this.files)
+                        .map(file => file.name)
+                        .join(", ");
+                } else {
+                    label.textContent = "Choose evidence files";
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}

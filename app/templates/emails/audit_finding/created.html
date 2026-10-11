@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>New Audit Finding</title>
+
+    <style>
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 700px;
+            max-width: 95%;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #dc3545;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .info-table th,
+        .info-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .info-table th {
+            width: 180px;
+            background-color: #f8f9fa;
+        }
+
+        .severity {
+            font-weight: bold;
+        }
+
+        .finding-text {
+            white-space: pre-line;
+        }
+
+        .button-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 22px;
+            background-color: #007bff;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .footer {
+            padding: 15px 25px;
+            background-color: #f8f9fa;
+            color: #777;
+            font-size: 12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h2>
+            New Audit Finding
+        </h2>
+
+    </div>
+
+
+    <!-- Content -->
+
+    <div class="content">
+
+        <p>
+            Dear
+            <strong>
+                {{ pic.full_name if pic else "PIC" }}
+            </strong>,
+        </p>
+
+        <p>
+            A new Audit Finding has been assigned to you
+            as PIC in CIMS.
+        </p>
+
+
+        <!-- Finding Information -->
+
+        <table class="info-table">
+
+            <tr>
+
+                <th>
+                    Finding No.
+                </th>
+
+                <td>
+                    {{ finding.finding_no }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Audit No.
+                </th>
+
+                <td>
+                    {{ finding.audit_execution.audit_assignment.audit.audit_no
+                       if finding.audit_execution
+                       and finding.audit_execution.audit_assignment
+                       and finding.audit_execution.audit_assignment.audit
+                       else "-" }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Location
+                </th>
+
+                <td>
+                    {{ finding.audit_execution.audit_assignment.location
+                       if finding.audit_execution
+                       and finding.audit_execution.audit_assignment
+                       else "-" }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Finding Source
+                </th>
+
+                <td>
+                    {{ finding.finding_source }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Severity
+                </th>
+
+                <td class="severity">
+
+                    {{ finding.severity }}
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Finding
+                </th>
+
+                <td class="finding-text">
+
+                    {{ finding.finding }}
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Target Date
+                </th>
+
+                <td>
+
+                    {{ finding.target_date
+                       if finding.target_date
+                       else "-" }}
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <th>
+                    Status
+                </th>
+
+                <td>
+
+                    {{ finding.status }}
+
+                </td>
+
+            </tr>
+
+
+            {% if finding.corrective_action %}
+
+            <tr>
+
+                <th>
+                    Corrective Action
+                </th>
+
+                <td class="finding-text">
+
+                    {{ finding.corrective_action }}
+
+                </td>
+
+            </tr>
+
+            {% endif %}
+
+        </table>
+
+
+        <!-- Button -->
+
+        <div class="button-container">
+
+            <a
+                href="{{ cims_url }}"
+                class="button"
+            >
+                Open CIMS
+            </a>
+
+        </div>
+
+
+        <p style="margin-top: 25px;">
+
+            Please review the finding and take the necessary
+            corrective action according to the target date.
+
+        </p>
+
+        <p>
+
+            Thank you.
+
+        </p>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <div class="footer">
+
+        This is an automatic notification from
+        Continuous Improvement Management System (CIMS).
+
+        <br>
+
+        Please do not reply to this email.
+
+    </div>
+
+</div>
+
+</body>
+</html>

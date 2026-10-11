@@ -1,0 +1,444 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+    Audit Execution
+{% endblock %}
+
+{% block content %}
+
+
+
+    <!-- ====================================================== -->
+    <!-- HEADER -->
+    <!-- ====================================================== -->
+
+    <section class="content-header">
+
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+
+                <div class="col-sm-6">
+
+                    <h1>
+                        <i class="fas fa-play-circle mr-2"></i>
+                        Audit Execution
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6">
+
+                    <ol class="breadcrumb float-sm-right">
+
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('dashboard.index') }}">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('audit.index') }}">
+                                Audit
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item active">
+                            Execution
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- CONTENT -->
+    <!-- ====================================================== -->
+
+    <section class="content">
+
+        <div class="container-fluid">
+
+
+            <!-- ================================================== -->
+            <!-- AUDIT INFORMATION -->
+            <!-- ================================================== -->
+
+            <div class="card card-primary card-outline">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-clipboard-check mr-2"></i>
+
+                        Audit Information
+
+                    </h3>
+
+                    <div class="card-tools">
+                        {% if current_user.has_permission("AUDIT_EXECUTE") %}
+                        <a
+                            href="{{ url_for(
+                                'audit_execution.create',
+                                audit_id=audit.id
+                            ) }}"
+                            class="btn btn-primary btn-sm"
+                        >
+
+                            <i class="fas fa-plus mr-1"></i>
+
+                            New Execution
+
+                        </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Audit No
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {{ audit.audit_no }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4">
+
+                            <strong>
+                                Title
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {{ audit.title }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+
+                            <strong>
+                                Audit Type
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {{ audit.audit_type_name }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <strong>
+                                Audit Date
+                            </strong>
+
+                            <div class="text-muted">
+
+                                {% if audit.audit_date %}
+
+                                    {{ audit.audit_date.strftime('%d-%m-%Y') }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================== -->
+            <!-- EXECUTION LIST -->
+            <!-- ================================================== -->
+
+            <div class="card card-primary card-outline">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        <i class="fas fa-list-check mr-2"></i>
+
+                        Execution List
+
+                    </h3>
+
+                </div>
+
+
+                <div class="card-body p-0">
+
+                    {% if executions %}
+
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered table-hover mb-0">
+
+                                <thead>
+
+                                    <tr class="text-center">
+
+                                        <th style="width: 50px;">
+                                            #
+                                        </th>
+
+                                        <th>
+                                            Location
+                                        </th>
+
+                                        <th>
+                                            Auditor
+                                        </th>
+
+                                        <th>
+                                            Checklist
+                                        </th>
+
+                                        <th style="width: 120px;">
+                                            Execution Date
+                                        </th>
+
+                                        <th style="width: 120px;">
+                                            Status
+                                        </th>
+
+                                        <th style="width: 90px;">
+                                            Action
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    {% for execution in executions %}
+
+                                        <tr>
+
+                                            <td class="text-center">
+                                                {{ loop.index }}
+                                            </td>
+
+
+                                            <td>
+
+                                                {% if execution.audit_assignment %}
+
+                                                    {{ execution.audit_assignment.location }}
+
+                                                {% else %}
+
+                                                    -
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <td>
+
+                                                {% if execution.audit_assignment
+                                                      and execution.audit_assignment.auditor %}
+
+                                                    {{ execution.audit_assignment.auditor.full_name }}
+
+                                                {% else %}
+
+                                                    -
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <td>
+
+                                                {% if execution.audit_checklist %}
+
+                                                    <strong>
+                                                        {{ execution.audit_checklist.audit_checklist_code }}
+                                                    </strong>
+
+                                                    -
+                                                    {{ execution.audit_checklist.audit_checklist_name }}
+
+                                                {% else %}
+
+                                                    -
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <td class="text-center">
+
+                                                {% if execution.execution_date %}
+
+                                                    {{ execution.execution_date.strftime('%d-%m-%Y') }}
+
+                                                {% else %}
+
+                                                    -
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <td class="text-center">
+
+                                                {% if execution.status == "NOT_STARTED" %}
+
+                                                    <span class="badge badge-secondary">
+                                                        NOT STARTED
+                                                    </span>
+
+                                                {% elif execution.status == "IN_PROGRESS" %}
+
+                                                    <span class="badge badge-warning">
+                                                        IN PROGRESS
+                                                    </span>
+
+                                                {% elif execution.status == "COMPLETED" %}
+
+                                                    <span class="badge badge-success">
+                                                        COMPLETED
+                                                    </span>
+
+                                                {% else %}
+
+                                                    <span class="badge badge-secondary">
+                                                        {{ execution.status }}
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <td class="text-center">
+                                                {% if current_user.has_permission("AUDIT_EXECUTE") %}
+                                                <a
+                                                    href="{{ url_for(
+                                                        'audit_execution.detail',
+                                                        audit_id=audit.id,
+                                                        execution_id=execution.id
+                                                    ) }}"
+                                                    class="btn btn-primary btn-sm"
+                                                    title="Open Execution"
+                                                >
+
+                                                    <i class="fas fa-play"></i>
+
+                                                </a>
+                                                {% endif %}
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="text-center p-5">
+
+                            <i class="fas fa-clipboard-check fa-3x text-muted mb-3"></i>
+
+                            <h5 class="text-muted">
+                                No Audit Execution
+                            </h5>
+
+                            <p class="text-muted mb-3">
+                                No audit execution has been created yet.
+                            </p>
+                            {% if current_user.has_permission("AUDIT_EXECUTE") %}
+                            <a
+                                href="{{ url_for(
+                                    'audit_execution.create',
+                                    audit_id=audit.id
+                                ) }}"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="fas fa-plus mr-1"></i>
+
+                                Create Execution
+
+                            </a>
+                            {% endif %}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+<div class="card-footer">
+
+    <a
+        href="{{ url_for(
+            'audit.index'
+        ) }}"
+        class="btn btn-secondary"
+    >
+
+        <i class="fas fa-arrow-left mr-1"></i>
+
+        Back to Audit
+
+    </a>
+
+</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+{% endblock %}

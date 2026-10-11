@@ -29,3 +29,13 @@ from app.models.notification_rule import NotificationRule
 from app.models.issue import Issue
 from app.models.issue_attachment import IssueAttachment
 from app.models.issue_clarification import IssueClarification
+from app.models.audit_type import AuditType
+from app.models.audit_category import AuditCategory
+from app.models.audit import Audit
+from app.models.audit_assignment import AuditAssignment
+from app.models.audit_checklist import AuditChecklist
+from app.models.audit_checklist_item import AuditChecklistItem
+from app.models.audit_execution import AuditExecution
+from app.models.audit_execution_item import AuditExecutionItem
+from app.models.audit_finding import AuditFinding
+from app.models.audit_finding_attachment import AuditFindingAttachment

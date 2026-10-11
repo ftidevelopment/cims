@@ -1,0 +1,1833 @@
+{% extends "layouts/base.html" %}
+
+{% block public_content %}
+
+<style>
+
+    /* =====================================================
+       PAGE
+       ===================================================== */
+
+    .audit-finding-list-page {
+
+        width: 100%;
+
+        padding:
+            24px
+            28px
+            45px
+            28px;
+
+        background: #f4f7fb;
+
+        min-height:
+            calc(100vh - 60px);
+
+    }
+
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .audit-finding-header {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        margin-bottom: 22px;
+
+    }
+
+
+    .audit-finding-title {
+
+        font-size: 24px;
+
+        font-weight: 700;
+
+        color: #1f2937;
+
+        margin: 0;
+
+    }
+
+
+    .audit-finding-subtitle {
+
+        font-size: 13px;
+
+        color: #6b7280;
+
+        margin-top: 5px;
+
+    }
+
+
+    .audit-finding-back {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        text-decoration: none;
+
+        color: #374151;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+    }
+
+
+    .audit-finding-back:hover {
+
+        color: #111827;
+
+        text-decoration: none;
+
+    }
+
+
+    /* =====================================================
+       FILTER CARD
+       ===================================================== */
+
+    .audit-finding-filter-card {
+
+        background: #ffffff;
+
+        border-radius: 10px;
+
+        padding: 20px;
+
+        margin-bottom: 20px;
+
+        box-shadow:
+            0 2px 8px rgba(15, 23, 42, 0.06);
+
+    }
+
+
+    .audit-finding-filter-title {
+
+        font-size: 15px;
+
+        font-weight: 700;
+
+        color: #374151;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .audit-finding-filter-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            2fr
+            1fr
+            1fr
+            1fr;
+
+        gap: 12px;
+
+    }
+
+
+    .audit-finding-filter-grid-2 {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr
+            1fr
+            1fr
+            1fr;
+
+        gap: 12px;
+
+        margin-top: 12px;
+
+    }
+
+
+    .audit-finding-filter-card label {
+
+        display: block;
+
+        font-size: 12px;
+
+        font-weight: 600;
+
+        color: #4b5563;
+
+        margin-bottom: 5px;
+
+    }
+
+
+    .audit-finding-filter-card .form-control,
+
+    .audit-finding-filter-card .form-select {
+
+        height: 38px;
+
+        font-size: 13px;
+
+        border-radius: 6px;
+
+    }
+
+
+    /* =====================================================
+       FILTER BUTTONS
+       ===================================================== */
+
+    .audit-finding-filter-actions {
+
+        display: flex;
+
+        justify-content: flex-end;
+
+        gap: 8px;
+
+        margin-top: 16px;
+
+    }
+
+
+    .audit-finding-filter-actions .btn {
+
+        min-width: 100px;
+
+        font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       PERIOD INFO
+       ===================================================== */
+
+    .audit-finding-period {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        font-size: 12px;
+
+        color: #6b7280;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .audit-finding-period i {
+
+        color: #64748b;
+
+    }
+
+
+    /* =====================================================
+       TABLE CARD
+       ===================================================== */
+
+    .audit-finding-table-card {
+
+        background: #ffffff;
+
+        border-radius: 10px;
+
+        box-shadow:
+            0 2px 8px rgba(15, 23, 42, 0.06);
+
+        overflow: hidden;
+
+    }
+
+
+    .audit-finding-table-wrapper {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+    }
+
+
+    .audit-finding-table {
+
+        width: 100%;
+
+        border-collapse: collapse;
+
+        min-width: 1250px;
+
+    }
+
+
+    .audit-finding-table thead th {
+
+        background: #f8fafc;
+
+        color: #475569;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-align: left;
+
+        padding: 13px 12px;
+
+        border-bottom:
+            1px solid #e5e7eb;
+
+        white-space: nowrap;
+
+    }
+
+
+    .audit-finding-table tbody td {
+
+        padding: 13px 12px;
+
+        font-size: 13px;
+
+        color: #374151;
+
+        border-bottom:
+            1px solid #f1f5f9;
+
+        vertical-align: middle;
+
+    }
+
+
+    .audit-finding-table tbody tr:hover {
+
+        background: #f8fafc;
+
+    }
+
+
+    /* =====================================================
+       FINDING NO
+       ===================================================== */
+
+    .finding-no {
+
+        font-weight: 700;
+
+        color: #2563eb;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       AUDIT
+       ===================================================== */
+
+    .audit-no {
+
+        font-weight: 600;
+
+        color: #374151;
+
+        white-space: nowrap;
+
+    }
+
+
+    .audit-title-small {
+
+        font-size: 11px;
+
+        color: #6b7280;
+
+        margin-top: 2px;
+
+        max-width: 180px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       FINDING TEXT
+       ===================================================== */
+
+    .finding-text {
+
+        max-width: 320px;
+
+        line-height: 1.45;
+
+    }
+
+
+    /* =====================================================
+       BADGES
+       ===================================================== */
+
+    .finding-badge {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding:
+            4px
+            9px;
+
+        border-radius: 999px;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+    }
+
+
+    /* STATUS */
+
+    .status-open {
+
+        background: #fee2e2;
+
+        color: #b91c1c;
+
+    }
+
+
+    .status-in-progress {
+
+        background: #fef3c7;
+
+        color: #92400e;
+
+    }
+
+
+    .status-action-completed {
+
+        background: #dbeafe;
+
+        color: #1d4ed8;
+
+    }
+
+
+    .status-verification {
+
+        background: #ede9fe;
+
+        color: #6d28d9;
+
+    }
+
+
+    .status-pass {
+
+        background: #dcfce7;
+
+        color: #15803d;
+
+    }
+
+
+    .status-closed {
+
+        background: #e5e7eb;
+
+        color: #374151;
+
+    }
+
+
+    /* SEVERITY */
+
+    .severity-critical {
+
+        background: #fee2e2;
+
+        color: #991b1b;
+
+    }
+
+
+    .severity-major {
+
+        background: #ffedd5;
+
+        color: #c2410c;
+
+    }
+
+
+    .severity-minor {
+
+        background: #fef3c7;
+
+        color: #a16207;
+
+    }
+
+
+    .severity-observation {
+
+        background: #e0f2fe;
+
+        color: #0369a1;
+
+    }
+
+
+    /* SOURCE */
+
+    .source-badge {
+
+        background: #f1f5f9;
+
+        color: #475569;
+
+    }
+
+
+    /* =====================================================
+       OVERDUE
+       ===================================================== */
+
+    .target-overdue {
+
+        color: #dc2626;
+
+        font-weight: 700;
+
+    }
+
+
+    .target-normal {
+
+        color: #374151;
+
+    }
+
+
+    .overdue-label {
+
+        display: block;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        color: #dc2626;
+
+        margin-top: 3px;
+
+    }
+
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
+
+    .audit-finding-empty {
+
+        text-align: center;
+
+        padding: 60px 20px;
+
+        color: #64748b;
+
+    }
+
+
+    .audit-finding-empty i {
+
+        font-size: 38px;
+
+        margin-bottom: 12px;
+
+        opacity: 0.5;
+
+    }
+
+
+    .audit-finding-empty-title {
+
+        font-size: 16px;
+
+        font-weight: 700;
+
+        color: #475569;
+
+        margin-bottom: 5px;
+
+    }
+
+
+    .audit-finding-empty-text {
+
+        font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       PAGINATION
+       ===================================================== */
+
+    .audit-finding-pagination {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 16px 20px;
+
+        border-top:
+            1px solid #f1f5f9;
+
+    }
+
+
+    .audit-finding-pagination-info {
+
+        font-size: 12px;
+
+        color: #64748b;
+
+    }
+
+
+    .audit-finding-pagination .page-link {
+
+        font-size: 12px;
+
+        min-width: 32px;
+
+        text-align: center;
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .audit-finding-footer {
+
+        margin-top: 25px;
+
+        text-align: center;
+
+        font-size: 11px;
+
+        color: #94a3b8;
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @media (
+        max-width: 1000px
+    ) {
+
+        .audit-finding-filter-grid,
+
+        .audit-finding-filter-grid-2 {
+
+            grid-template-columns:
+                1fr 1fr;
+
+        }
+
+    }
+
+
+    @media (
+        max-width: 600px
+    ) {
+
+        .audit-finding-list-page {
+
+            padding:
+                18px 15px 35px 15px;
+
+        }
+
+        .audit-finding-header {
+
+            align-items: flex-start;
+
+        }
+
+        .audit-finding-filter-grid,
+
+        .audit-finding-filter-grid-2 {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+        .audit-finding-pagination {
+
+            flex-direction: column;
+
+            gap: 12px;
+
+            align-items: flex-start;
+
+        }
+
+    }
+
+</style>
+
+
+<div class="audit-finding-list-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="audit-finding-header">
+
+        <div>
+
+            <h1 class="audit-finding-title">
+
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+
+                Audit Findings
+
+            </h1>
+
+            <div class="audit-finding-subtitle">
+
+                Audit finding monitoring and follow-up
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{{ url_for('public_audit.dashboard') }}"
+                class="audit-finding-back"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Audit Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTER
+         ====================================================== -->
+
+    <div class="audit-finding-filter-card">
+
+        <div class="audit-finding-filter-title">
+
+            <i class="fas fa-filter mr-1"></i>
+
+            Filter Findings
+
+        </div>
+
+
+        <form
+            method="GET"
+            action="{{ url_for('public_audit.findings') }}"
+        >
+
+
+            <!-- =================================================
+                 ROW 1
+                 ================================================== -->
+
+            <div class="audit-finding-filter-grid">
+
+
+                <!-- SEARCH -->
+
+                <div>
+
+                    <label>
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Finding No, Finding, Audit No..."
+                        value="{{ filters.search }}"
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div>
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select
+                        name="status"
+                        class="form-control"
+                    >
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        {% for item in statuses %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if filters.status == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {% if item == "OPEN" %}
+                                Open
+
+                            {% elif item == "IN_PROGRESS" %}
+                                In Progress
+
+                            {% elif item == "ACTION_COMPLETED" %}
+                                Action Completed
+
+                            {% elif item == "AUDITOR_VERIFICATION" %}
+                                Auditor Verification
+
+                            {% elif item == "PASS" %}
+                                Pass
+
+                            {% elif item == "CLOSED" %}
+                                Closed
+
+                            {% else %}
+                                {{ item }}
+
+                            {% endif %}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEVERITY -->
+
+                <div>
+
+                    <label>
+                        Severity
+                    </label>
+
+                    <select
+                        name="severity"
+                        class="form-control"
+                    >
+
+                        <option value="">
+                            All Severity
+                        </option>
+
+                        {% for item in severities %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if filters.severity == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item.replace("_", " ").title() }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- SOURCE -->
+
+                <div>
+
+                    <label>
+                        Source
+                    </label>
+
+                    <select
+                        name="finding_source"
+                        class="form-control"
+                    >
+
+                        <option value="">
+                            All Source
+                        </option>
+
+                        {% for item in finding_sources %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if filters.finding_source == item %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ item.replace("_", " ").title() }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 ROW 2
+                 ================================================== -->
+
+            <div class="audit-finding-filter-grid-2">
+
+
+                <!-- DEPARTMENT -->
+
+                <div>
+
+                    <label>
+                        Department
+                    </label>
+
+                    <select
+                        name="department_id"
+                        class="form-control"
+                    >
+
+                        <option value="">
+                            All Department
+                        </option>
+
+                        {% for department in departments %}
+
+                        <option
+                            value="{{ department.id }}"
+                            {% if filters.department_id|string == department.id|string %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ department.department_code }}
+                            -
+                            {{ department.department_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- PIC -->
+
+                <div>
+
+                    <label>
+                        PIC
+                    </label>
+
+                    <select
+                        name="pic_employee_id"
+                        class="form-control"
+                    >
+
+                        <option value="">
+                            All PIC
+                        </option>
+
+                        {% for employee in employees %}
+
+                        <option
+                            value="{{ employee.id }}"
+                            {% if filters.pic_employee_id|string == employee.id|string %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ employee.employee_code }}
+                            -
+                            {{ employee.full_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- OVERDUE -->
+
+                <div>
+
+                    <label>
+                        Finding Condition
+                    </label>
+
+                    <select
+                        name="overdue"
+                        class="form-control"
+                    >
+
+                        <option value="">
+                            All Findings
+                        </option>
+
+                        <option
+                            value="1"
+                            {% if filters.overdue == "1" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            Overdue Only
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- PERIOD -->
+
+                <div>
+
+                    <label>
+                        Period
+                    </label>
+
+                    <select
+                        name="period"
+                        class="form-control"
+                    >
+
+                        <option
+                            value=""
+                            {% if not filters.period %}
+                                selected
+                            {% endif %}
+                        >
+
+                            Last 6 Months
+
+                        </option>
+
+                        <option
+                            value="all"
+                            {% if filters.period == "all" %}
+                                selected
+                            {% endif %}
+                        >
+
+                            All Period
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTION
+                 ================================================== -->
+
+            <div class="audit-finding-filter-actions">
+
+                <a
+                    href="{{ url_for('public_audit.findings') }}"
+                    class="btn btn-light border"
+                >
+
+                    <i class="fas fa-undo mr-1"></i>
+
+                    Reset
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    <i class="fas fa-search mr-1"></i>
+
+                    Search
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         PERIOD INFORMATION
+         ====================================================== -->
+
+    <div class="audit-finding-period">
+
+        <i class="fas fa-calendar-alt"></i>
+
+        {% if period.start_date and period.end_date %}
+
+            Showing findings from
+
+            <strong>
+                {{ period.start_date_display }}
+            </strong>
+
+            to
+
+            <strong>
+                {{ period.end_date_display }}
+            </strong>
+
+        {% else %}
+
+            Showing findings from all periods
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE
+         ====================================================== -->
+
+    <div class="audit-finding-table-card">
+
+        <div class="audit-finding-table-wrapper">
+
+            <table class="audit-finding-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Finding No
+                        </th>
+
+                        <th>
+                            Audit
+                        </th>
+
+                        <th>
+                            Finding
+                        </th>
+
+                        <th>
+                            Source
+                        </th>
+
+                        <th>
+                            Severity
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            PIC
+                        </th>
+
+                        <th>
+                            Target Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% if findings %}
+
+
+                        {% for finding in findings %}
+
+                        <tr>
+
+
+                            <!-- =================================
+                                 FINDING NO
+                                 ================================== -->
+
+                            <td>
+
+                                <div class="finding-no">
+
+                                    {{ finding.finding_no }}
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 AUDIT
+                                 ================================== -->
+
+                            <td>
+
+                                <div class="audit-no">
+
+                                    {{ finding.audit.audit_no }}
+
+                                </div>
+
+                                <div class="audit-title-small">
+
+                                    {{ finding.audit.title }}
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 FINDING
+                                 ================================== -->
+
+                            <td>
+
+                                <div class="finding-text">
+
+                                    {{ finding.finding }}
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 SOURCE
+                                 ================================== -->
+
+                            <td>
+
+                                <span class="finding-badge source-badge">
+
+                                    {{ finding.finding_source
+                                        .replace("_", " ")
+                                        .title()
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- =================================
+                                 SEVERITY
+                                 ================================== -->
+
+                            <td>
+
+                                {% if finding.severity == "CRITICAL" %}
+
+                                    <span class="
+                                        finding-badge
+                                        severity-critical
+                                    ">
+
+                                        Critical
+
+                                    </span>
+
+                                {% elif finding.severity == "MAJOR" %}
+
+                                    <span class="
+                                        finding-badge
+                                        severity-major
+                                    ">
+
+                                        Major
+
+                                    </span>
+
+                                {% elif finding.severity == "MINOR" %}
+
+                                    <span class="
+                                        finding-badge
+                                        severity-minor
+                                    ">
+
+                                        Minor
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="
+                                        finding-badge
+                                        severity-observation
+                                    ">
+
+                                        Observation
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 DEPARTMENT
+                                 ================================== -->
+
+                            <td>
+
+                                {% if finding.department.id %}
+
+                                    {{ finding.department.code }}
+
+                                    <div class="audit-title-small">
+
+                                        {{ finding.department.name }}
+
+                                    </div>
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 PIC
+                                 ================================== -->
+
+                            <td>
+
+                                {% if finding.pic.id %}
+
+                                    {{ finding.pic.name }}
+
+                                    {% if finding.pic.employee_code != "-" %}
+
+                                        <div class="audit-title-small">
+
+                                            {{ finding.pic.employee_code }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 TARGET DATE
+                                 ================================== -->
+
+                            <td>
+
+                                {% if finding.is_overdue %}
+
+                                    <div class="target-overdue">
+
+                                        {{ finding.target_date_display }}
+
+                                    </div>
+
+                                    <span class="overdue-label">
+
+                                        OVERDUE
+
+                                    </span>
+
+                                {% else %}
+
+                                    <div class="target-normal">
+
+                                        {{ finding.target_date_display }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- =================================
+                                 STATUS
+                                 ================================== -->
+
+                            <td>
+
+                                {% if finding.status == "OPEN" %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-open
+                                    ">
+
+                                        Open
+
+                                    </span>
+
+                                {% elif finding.status == "IN_PROGRESS" %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-in-progress
+                                    ">
+
+                                        In Progress
+
+                                    </span>
+
+                                {% elif finding.status == "ACTION_COMPLETED" %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-action-completed
+                                    ">
+
+                                        Action Completed
+
+                                    </span>
+
+                                {% elif finding.status == "AUDITOR_VERIFICATION" %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-verification
+                                    ">
+
+                                        Verification
+
+                                    </span>
+
+                                {% elif finding.status == "PASS" %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-pass
+                                    ">
+
+                                        Pass
+
+                                    </span>
+
+                                {% elif finding.status == "CLOSED" %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-closed
+                                    ">
+
+                                        Closed
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="
+                                        finding-badge
+                                        status-closed
+                                    ">
+
+                                        {{ finding.status }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <!-- =================================
+                             EMPTY
+                             ================================== -->
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                class="audit-finding-empty"
+                            >
+
+                                <i class="fas fa-search"></i>
+
+                                <div class="
+                                    audit-finding-empty-title
+                                ">
+
+                                    No Finding Found
+
+                                </div>
+
+                                <div class="
+                                    audit-finding-empty-text
+                                ">
+
+                                    No audit findings match
+                                    the selected search or filter.
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                    {% endif %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGINATION
+             ================================================== -->
+
+        {% if pagination and pagination.pages > 1 %}
+
+
+        <div class="audit-finding-pagination">
+
+
+            <!-- INFO -->
+
+            <div class="
+                audit-finding-pagination-info
+            ">
+
+                Showing
+
+                <strong>
+                    {{ pagination.first }}
+                </strong>
+
+                -
+
+                <strong>
+                    {{ pagination.last }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ pagination.total }}
+                </strong>
+
+                findings
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <nav>
+
+                <ul class="pagination pagination-sm mb-0">
+
+
+                    <!-- PREVIOUS -->
+
+                    {% if pagination.has_prev %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'public_audit.findings',
+                                page=pagination.prev_num,
+                                per_page=per_page,
+                                search=filters.search,
+                                status=filters.status,
+                                severity=filters.severity,
+                                finding_source=filters.finding_source,
+                                department_id=filters.department_id,
+                                pic_employee_id=filters.pic_employee_id,
+                                overdue=filters.overdue,
+                                period=filters.period
+                            ) }}"
+                        >
+
+                            <i class="fas fa-chevron-left"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% else %}
+
+                    <li class="page-item disabled">
+
+                        <span class="page-link">
+
+                            <i class="fas fa-chevron-left"></i>
+
+                        </span>
+
+                    </li>
+
+                    {% endif %}
+
+
+                    <!-- PAGE NUMBERS -->
+
+                    {% for page_num in pagination.iter_pages(
+                        left_edge=1,
+                        right_edge=1,
+                        left_current=2,
+                        right_current=2
+                    ) %}
+
+
+                        {% if page_num %}
+
+
+                            {% if page_num == pagination.page %}
+
+                                <li class="page-item active">
+
+                                    <span class="page-link">
+
+                                        {{ page_num }}
+
+                                    </span>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item">
+
+                                    <a
+                                        class="page-link"
+                                        href="{{ url_for(
+                                            'public_audit.findings',
+                                            page=page_num,
+                                            per_page=per_page,
+                                            search=filters.search,
+                                            status=filters.status,
+                                            severity=filters.severity,
+                                            finding_source=filters.finding_source,
+                                            department_id=filters.department_id,
+                                            pic_employee_id=filters.pic_employee_id,
+                                            overdue=filters.overdue,
+                                            period=filters.period
+                                        ) }}"
+                                    >
+
+                                        {{ page_num }}
+
+                                    </a>
+
+                                </li>
+
+                            {% endif %}
+
+
+                        {% else %}
+
+
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+
+                                    ...
+
+                                </span>
+
+                            </li>
+
+
+                        {% endif %}
+
+
+                    {% endfor %}
+
+
+                    <!-- NEXT -->
+
+                    {% if pagination.has_next %}
+
+                    <li class="page-item">
+
+                        <a
+                            class="page-link"
+                            href="{{ url_for(
+                                'public_audit.findings',
+                                page=pagination.next_num,
+                                per_page=per_page,
+                                search=filters.search,
+                                status=filters.status,
+                                severity=filters.severity,
+                                finding_source=filters.finding_source,
+                                department_id=filters.department_id,
+                                pic_employee_id=filters.pic_employee_id,
+                                overdue=filters.overdue,
+                                period=filters.period
+                            ) }}"
+                        >
+
+                            <i class="fas fa-chevron-right"></i>
+
+                        </a>
+
+                    </li>
+
+                    {% else %}
+
+                    <li class="page-item disabled">
+
+                        <span class="page-link">
+
+                            <i class="fas fa-chevron-right"></i>
+
+                        </span>
+
+                    </li>
+
+                    {% endif %}
+
+
+                </ul>
+
+            </nav>
+
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ====================================================== -->
+
+    <div class="audit-finding-footer">
+
+        <i class="fas fa-clipboard-check mr-1"></i>
+
+        CIMS - Continuous Improvement Management System
+
+    </div>
+
+
+</div>
+
+{% endblock %}

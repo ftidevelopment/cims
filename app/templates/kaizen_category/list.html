@@ -65,7 +65,7 @@ Kaizen Category
      Main Content
 ========================================================= -->
 
-<section class="content">
+<section class="content kaizen-category-page">
 
     <div class="container-fluid">
 
@@ -76,152 +76,100 @@ Kaizen Category
                  Card Header
             ================================================== -->
 
-            <div class="card-header">
 
-                <div class="d-flex justify-content-between align-items-center">
-
-
-                    <!-- =========================================
-                         Left
-                    ========================================== -->
-
-                    <div class="d-flex align-items-center">
-
-                        <h3 class="card-title mb-0 mr-4">
-
-                            <i class="fas fa-lightbulb mr-2"></i>
-
-                            Kaizen Category List
-
-                        </h3>
-
-
-                        <!-- =====================================
-                             Status
-                        ====================================== -->
-
-                        <form method="GET" class="mb-0">
-
-                            <input type="hidden" name="keyword" value="{{ keyword }}">
-
-                            <input type="hidden" name="sort" value="{{ sort_by }}">
-
-                            <input type="hidden" name="order" value="{{ sort_order }}">
-
-
-                            <select name="is_active" class="custom-select" style="width:160px;"
-                                onchange="this.form.submit()">
-
-                                <option value="true" {% if is_active=="true" %} selected {% endif %}>
-                                    Active
-                                </option>
-
-
-                                <option value="false" {% if is_active=="false" %} selected {% endif %}>
-                                    Inactive
-                                </option>
-
-
-                                <option value="all" {% if is_active=="all" %} selected {% endif %}>
-                                    All
-                                </option>
-
-                            </select>
-
-                        </form>
-
-                    </div>
-
-
-                    <!-- =========================================
-                         Right
-                    ========================================== -->
-
-                    <div class="d-flex align-items-center">
-
-
-                        <!-- =====================================
-                             Add Kaizen Category
-                        ====================================== -->
-
-                        <a href="{{ url_for('kaizen_category.create') }}" class="btn btn-success mr-3">
-
-                            <i class="fas fa-plus"></i>
-
-                            Add Kaizen Category
-
-                        </a>
-                        <!-- =====================================
-     Add Kaizen Category
-====================================== -->
-
-
-
-
-                        <!-- =====================================
-     Export
-====================================== -->
-
-                        <a href="{{ url_for(
-        'kaizen_category.export',
-        keyword=keyword,
-        is_active=is_active,
-        sort=sort_by,
-        order=sort_order
-    ) }}" class="btn btn-success mr-3">
-
-                            <i class="fas fa-file-excel mr-1"></i>
-
-                            Export
-
-                        </a>
-
-
-                        <!-- =====================================
-                             Search
-                        ====================================== -->
-
-                        <form method="GET" class="mb-0">
-
-                            <input type="hidden" name="is_active" value="{{ is_active }}">
-
-                            <input type="hidden" name="sort" value="{{ sort_by }}">
-
-                            <input type="hidden" name="order" value="{{ sort_order }}">
-
-
-                            <div class="input-group">
-
-                                <input type="text" name="keyword" class="form-control" style="width:280px;"
-                                    placeholder="Search code, name or description..." value="{{ keyword }}">
-
-
-                                <div class="input-group-append">
-
-                                    <button class="btn btn-primary" type="submit">
-
-                                        <i class="fas fa-search"></i>
-
-                                    </button>
-
-
-                                    <a href="{{ url_for('kaizen_category.index') }}" class="btn btn-secondary ml-1">
-
-                                        <i class="fas fa-sync-alt"></i>
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-
+<div class="card-header kaizen-category-toolbar">
+    <div class="kaizen-category-toolbar-left">
+        <h3 class="card-title">
+            <i class="fas fa-lightbulb mr-2"></i>
+            Kaizen Category List
+        </h3>
+
+        <form method="GET" class="kaizen-category-status-form">
+            <input type="hidden" name="keyword" value="{{ keyword }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <select
+                name="is_active"
+                class="custom-select"
+                aria-label="Filter status"
+                onchange="this.form.submit()"
+            >
+                <option value="true" {% if is_active == "true" %}selected{% endif %}>
+                    Active
+                </option>
+                <option value="false" {% if is_active == "false" %}selected{% endif %}>
+                    Inactive
+                </option>
+                <option value="all" {% if is_active == "all" %}selected{% endif %}>
+                    All
+                </option>
+            </select>
+        </form>
+    </div>
+
+    <div class="kaizen-category-toolbar-right">
+        <a
+            href="{{ url_for('kaizen_category.create') }}"
+            class="btn btn-success btn-sm"
+        >
+            <i class="fas fa-plus mr-1"></i>
+            Add Kaizen Category
+        </a>
+
+        <a
+            href="{{ url_for(
+                'kaizen_category.export',
+                keyword=keyword,
+                is_active=is_active,
+                sort=sort_by,
+                order=sort_order
+            ) }}"
+            class="btn btn-warning btn-sm"
+        >
+            <i class="fas fa-file-excel mr-1"></i>
+            Export
+        </a>
+
+        <form method="GET" class="kaizen-category-search-form">
+            <input type="hidden" name="is_active" value="{{ is_active }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <div class="input-group input-group-sm">
+                <input
+                    type="text"
+                    name="keyword"
+                    class="form-control"
+                    placeholder="Search code, name or description..."
+                    value="{{ keyword }}"
+                    aria-label="Search Kaizen Category"
+                >
+
+                <div class="input-group-append">
+                    <button
+                        class="btn btn-primary"
+                        type="submit"
+                        title="Search"
+                        aria-label="Search"
+                    >
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                    <a
+                        href="{{ url_for('kaizen_category.index') }}"
+                        class="btn btn-secondary"
+                        title="Reset"
+                        aria-label="Reset"
+                    >
+                        <i class="fas fa-sync-alt"></i>
+                    </a>
                 </div>
-
             </div>
+        </form>
+    </div>
+</div>
+
 
 
             <!-- =================================================
@@ -255,8 +203,8 @@ Kaizen Category
                 <!-- =============================================
                      Table
                 ============================================== -->
-
-                <table class="table table-bordered table-hover">
+                <div class="table-responsive kaizen-category-table-wrapper"></div>
+                <table class="table table-bordered table-hover kaizen-category-table mb-0">
 
                     <thead>
 
@@ -500,6 +448,7 @@ Kaizen Category
                     </tbody>
 
                 </table>
+                </div>
 
             </div>
 
@@ -515,146 +464,77 @@ Kaizen Category
                  Card Footer
             ================================================== -->
 
-            <div class="card-footer clearfix">
+<div class="card-footer kaizen-category-footer">
+    <div class="kaizen-category-record-info">
+        Showing
+        <strong>
+            {{ kaizen_categories.first if kaizen_categories.total > 0 else 0 }}
+        </strong>
+        to
+        <strong>
+            {{ kaizen_categories.last if kaizen_categories.total > 0 else 0 }}
+        </strong>
+        of
+        <strong>{{ kaizen_categories.total }}</strong>
+        kaizen categor(y/ies)
+    </div>
 
+    <nav aria-label="Kaizen Category pagination">
+        <ul class="pagination pagination-sm mb-0">
+            {% if kaizen_categories.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for(
+                    'kaizen_category.index',
+                    page=kaizen_categories.prev_num,
+                    keyword=keyword,
+                    is_active=is_active,
+                    sort=sort_by,
+                    order=sort_order
+                ) }}">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
 
-                <div class="float-left">
+            {% for page_num in kaizen_categories.iter_pages() %}
+                {% if page_num %}
+                <li class="page-item {% if page_num == kaizen_categories.page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for(
+                        'kaizen_category.index',
+                        page=page_num,
+                        keyword=keyword,
+                        is_active=is_active,
+                        sort=sort_by,
+                        order=sort_order
+                    ) }}">
+                        {{ page_num }}
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">…</span>
+                </li>
+                {% endif %}
+            {% endfor %}
 
-                    Showing
+            {% if kaizen_categories.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for(
+                    'kaizen_category.index',
+                    page=kaizen_categories.next_num,
+                    keyword=keyword,
+                    is_active=is_active,
+                    sort=sort_by,
+                    order=sort_order
+                ) }}">
+                    Next
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 
-                    <strong>
-
-                        {{
-                        kaizen_categories.first
-                        if kaizen_categories.total > 0
-                        else 0
-                        }}
-
-                    </strong>
-
-                    to
-
-                    <strong>
-
-                        {{
-                        kaizen_categories.last
-                        if kaizen_categories.total > 0
-                        else 0
-                        }}
-
-                    </strong>
-
-                    of
-
-                    <strong>
-
-                        {{ kaizen_categories.total }}
-
-                    </strong>
-
-                    kaizen categor(y/ies)
-
-                </div>
-
-
-            </div>
-
-
-            <!-- =================================================
-                 Pagination
-            ================================================== -->
-
-            <nav>
-
-                <ul class="pagination pagination-sm float-right">
-
-
-                    <!-- Previous -->
-
-                    {% if kaizen_categories.has_prev %}
-
-                    <li class="page-item">
-
-                        <a class="page-link" href="{{ url_for(
-                                'kaizen_category.index',
-                                page=kaizen_categories.prev_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}">
-
-                            Previous
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-
-                    <!-- Page Numbers -->
-
-                    {% for page_num in kaizen_categories.iter_pages() %}
-
-
-                    {% if page_num %}
-
-
-                    <li class="page-item
-                        {% if page_num == kaizen_categories.page %}
-                        active
-                        {% endif %}">
-
-                        <a class="page-link" href="{{ url_for(
-                                'kaizen_category.index',
-                                page=page_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}">
-
-                            {{ page_num }}
-
-                        </a>
-
-                    </li>
-
-
-                    {% endif %}
-
-
-                    {% endfor %}
-
-
-                    <!-- Next -->
-
-                    {% if kaizen_categories.has_next %}
-
-                    <li class="page-item">
-
-                        <a class="page-link" href="{{ url_for(
-                                'kaizen_category.index',
-                                page=kaizen_categories.next_num,
-                                keyword=keyword,
-                                is_active=is_active,
-                                sort=sort_by,
-                                order=sort_order
-                            ) }}">
-
-                            Next
-
-                        </a>
-
-                    </li>
-
-                    {% endif %}
-
-
-                </ul>
-
-            </nav>
 
 
         </div>

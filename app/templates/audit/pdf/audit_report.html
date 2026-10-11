@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Audit Report - {{ audit.audit_no }}
+    </title>
+
+    <style>
+
+        /* =========================================================
+           PAGE
+           ========================================================= */
+
+        @page {
+            size: A4;
+            margin: 15mm 12mm 15mm 12mm;
+
+            @bottom-center {
+                content: "CIMS - Audit Report";
+                font-size: 8px;
+                color: #666;
+            }
+
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 8px;
+                color: #666;
+            }
+        }
+
+
+        /* =========================================================
+           GENERAL
+           ========================================================= */
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9.5px;
+            line-height: 1.4;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        h2 {
+            margin: 18px 0 8px 0;
+            padding: 6px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-bottom: 2px solid #333;
+        }
+
+        h3 {
+            margin: 12px 0 6px 0;
+            padding: 5px 7px;
+            font-size: 10.5px;
+            font-weight: bold;
+            background: #f2f2f2;
+            border-left: 4px solid #555;
+        }
+
+        p {
+            margin: 3px 0;
+        }
+
+        /* =========================================================
+        HEADER
+        ========================================================= */
+
+        .document-header {
+            width: 100%;
+            border-bottom: 2px solid #1f4e78;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: none;
+        }
+
+        .header-table td {
+            border: none;
+            vertical-align: middle;
+            padding: 0;
+        }
+
+
+        /* ==========================================
+        CIMS LOGO
+        ========================================== */
+
+        .header-logo {
+            width: 38px;
+            padding-right: 0 !important;
+        }
+
+        .cims-logo {
+            width: 52px;
+            height: auto;
+            display: block;
+        }
+
+
+        /* ==========================================
+        FOXCONN COMPANY LOGO
+        ========================================== */
+
+        .company-logo-cell {
+            vertical-align: middle;
+            padding-left: 2px !important;
+            padding-right: 0 !important;
+        }
+
+        .foxconn-logo {
+            width: 250px;
+            height: auto;
+            display: block;
+        }
+
+
+        /* ==========================================
+        DOCUMENT NUMBER
+        ========================================== */
+
+        .header-right {
+            width: 145px;
+            text-align: right;
+            vertical-align: top !important;
+        }
+
+        .document-label {
+            font-size: 8pt;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .document-number {
+            font-size: 10pt;
+            font-weight: 700;
+            color: #1f4e78;
+            margin-top: 2px;
+        }
+
+
+        /* ==========================================
+        REPORT TITLE
+        ========================================== */
+
+        .report-title {
+            background: #1f4e78;
+            color: #ffffff;
+            padding: 9px 12px;
+            font-size: 15pt;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.4px;
+            margin-bottom: 12px;
+        }
+
+        .report-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 8pt;
+            margin-top: -6px;
+            margin-bottom: 14px;
+        }
+
+/* =========================================================
+   REPORT TITLE
+   ========================================================= */
+
+.report-title {
+
+    background: #1f4e78;
+
+    color: #ffffff;
+
+    padding:
+        9px
+        12px;
+
+    font-size: 15pt;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    letter-spacing: 0.4px;
+
+    margin-bottom: 12px;
+}
+
+
+.report-subtitle {
+
+    text-align: center;
+
+    color: #666;
+
+    font-size: 8pt;
+
+    margin-top: -6px;
+
+    margin-bottom: 14px;
+}
+
+
+        /* =========================================================
+           TABLE
+           ========================================================= */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #999;
+            padding: 5px 6px;
+            vertical-align: top;
+        }
+
+        th {
+            font-weight: bold;
+            text-align: center;
+            background: #e9e9e9;
+        }
+
+        td.label {
+            width: 18%;
+            font-weight: bold;
+            background: #f5f5f5;
+        }
+
+        td.value {
+            width: 32%;
+        }
+
+
+        /* =========================================================
+           AUDIT INFORMATION
+           ========================================================= */
+
+        .audit-info td {
+            padding: 5px 6px;
+        }
+
+        .audit-title {
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+           STATUS
+           ========================================================= */
+
+        .status {
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+           ASSIGNMENT
+           ========================================================= */
+
+        .assignment-table th:nth-child(1) {
+            width: 6%;
+        }
+
+        .assignment-table th:nth-child(2) {
+            width: 23%;
+        }
+
+        .assignment-table th:nth-child(3) {
+            width: 28%;
+        }
+
+        .assignment-table th:nth-child(4) {
+            width: 43%;
+        }
+
+
+        /* =========================================================
+           EXECUTION
+           ========================================================= */
+
+        .execution {
+            page-break-inside: avoid;
+            margin-bottom: 16px;
+        }
+
+        .execution-header {
+            margin-top: 8px;
+            padding: 6px 8px;
+            background: #e9e9e9;
+            border: 1px solid #999;
+            font-weight: bold;
+        }
+
+        .execution-info td.label {
+            width: 18%;
+        }
+
+        .execution-info td.value {
+            width: 32%;
+        }
+
+
+        /* =========================================================
+           CHECKLIST
+           ========================================================= */
+
+        .checklist-table {
+            page-break-inside: auto;
+        }
+
+        .checklist-table thead {
+            display: table-header-group;
+        }
+
+        .checklist-table tr {
+            page-break-inside: avoid;
+        }
+
+        .checklist-table th:nth-child(1) {
+            width: 7%;
+        }
+
+        .checklist-table th:nth-child(2) {
+            width: 48%;
+        }
+
+        .checklist-table th:nth-child(3) {
+            width: 12%;
+        }
+
+        .checklist-table th:nth-child(4) {
+            width: 33%;
+        }
+
+
+        /* =========================================================
+           FINDING
+           ========================================================= */
+
+        .finding {
+            page-break-inside: avoid;
+            margin-bottom: 12px;
+        }
+
+        .finding-header {
+            padding: 6px 8px;
+            background: #e9e9e9;
+            border: 1px solid #999;
+            font-weight: bold;
+        }
+
+        .finding-table td.label {
+            width: 18%;
+        }
+
+        .finding-table td.value {
+            width: 32%;
+        }
+
+
+        /* =========================================================
+           TEXT
+           ========================================================= */
+
+        .text-wrap {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .muted {
+            color: #666;
+        }
+
+
+        /* =========================================================
+           EMPTY DATA
+           ========================================================= */
+
+        .empty {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+            padding: 8px;
+        }
+
+
+        /* =========================================================
+           SUMMARY
+           ========================================================= */
+
+        .summary-table {
+            margin-top: 8px;
+        }
+
+        .summary-table td {
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+
+        /* =========================================================
+           PAGE BREAK
+           ========================================================= */
+
+        .page-break {
+            page-break-before: always;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="document-header">
+
+    <table class="header-table">
+
+        <tr>
+
+            <!-- ============================= -->
+            <!-- CIMS LOGO -->
+            <!-- ============================= -->
+
+            <td class="header-logo">
+
+                {% if cims_logo_uri %}
+
+                <img
+                    src="{{ cims_logo_uri }}"
+                    alt="CIMS Logo"
+                    class="cims-logo"
+                >
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- ============================= -->
+            <!-- FOXCONN COMPANY LOGO -->
+            <!-- ============================= -->
+
+            <td class="company-logo-cell">
+
+                {% if foxconn_logo_uri %}
+
+                <img
+                    src="{{ foxconn_logo_uri }}"
+                    alt="FOXCONN"
+                    class="foxconn-logo"
+                >
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- ============================= -->
+            <!-- DOCUMENT NUMBER -->
+            <!-- ============================= -->
+
+            <td class="header-right">
+
+                <div class="document-label">
+                    Document No.
+                </div>
+
+                <div class="document-number">
+                    {{ audit.audit_no }}
+                </div>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =========================================================
+     REPORT TITLE
+========================================================= -->
+
+<div class="report-title">
+    AUDIT REPORT
+</div>
+
+<div class="report-subtitle">
+    Continuous Improvement Management System
+</div>
+
+
+<!-- ============================================================
+     1. AUDIT INFORMATION
+============================================================ -->
+
+
+
+    <!-- ============================================================
+         1. AUDIT INFORMATION
+         ============================================================ -->
+
+    <h2>
+        1. AUDIT INFORMATION
+    </h2>
+
+    <table class="audit-info">
+
+        <tr>
+
+            <td class="label">
+                Audit No
+            </td>
+
+            <td class="value">
+                {{ audit.audit_no }}
+            </td>
+
+            <td class="label">
+                Audit Date
+            </td>
+
+            <td class="value">
+                {{ audit.audit_date or "-" }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="label">
+                Title
+            </td>
+
+            <td colspan="3" class="audit-title">
+                {{ audit.title }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="label">
+                Audit Type
+            </td>
+
+            <td class="value">
+                {{ audit.audit_type_name }}
+            </td>
+
+            <td class="label">
+                Audit Category
+            </td>
+
+            <td class="value">
+                {{ audit.audit_category_name }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="label">
+                Status
+            </td>
+
+            <td colspan="3" class="status">
+                {{ audit.status or "-" }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="label">
+                Description
+            </td>
+
+            <td colspan="3" class="text-wrap">
+                {{ audit.description or "-" }}
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ============================================================
+         2. AUDIT SUMMARY
+         ============================================================ -->
+
+    <h2>
+        2. AUDIT SUMMARY
+    </h2>
+
+    <table class="summary-table">
+
+        <tr>
+
+            <th>
+                Total Assignment
+            </th>
+
+            <td>
+                {{ total_assignments }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <th>
+                Total Execution
+            </th>
+
+            <td>
+                {{ total_executions }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <th>
+                Total Checklist Items
+            </th>
+
+            <td>
+                {{ total_checklist_items }}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <th>
+                Total Findings
+            </th>
+
+            <td>
+                {{ total_findings }}
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ============================================================
+         3. AUDIT ASSIGNMENT
+         ============================================================ -->
+
+    <h2>
+        3. AUDIT ASSIGNMENT
+    </h2>
+
+    <table class="assignment-table">
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    No
+                </th>
+
+                <th>
+                    Department
+                </th>
+
+                <th>
+                    Auditor
+                </th>
+
+                <th>
+                    Location
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% if assignments %}
+
+            {% for assignment in assignments %}
+
+            <tr>
+
+                <td class="center">
+                    {{ loop.index }}
+                </td>
+
+
+                <td>
+
+                    {% if assignment.department %}
+
+                    {{ assignment.department.department_code }}
+                    -
+                    {{ assignment.department.department_name }}
+
+                    {% else %}
+
+                    -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+
+                    {% if assignment.auditor %}
+
+                    {{ assignment.auditor.nik }}
+                    -
+                    {{ assignment.auditor.full_name }}
+
+                    {% else %}
+
+                    -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td>
+                    {{ assignment.location or "-" }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            {% else %}
+
+            <tr>
+
+                <td colspan="4" class="empty">
+                    No audit assignment.
+                </td>
+
+            </tr>
+
+            {% endif %}
+
+        </tbody>
+
+    </table>
+
+
+    <!-- ============================================================
+         4. AUDIT EXECUTION
+         ============================================================ -->
+
+    <h2>
+        4. AUDIT EXECUTION
+    </h2>
+
+
+    {% if executions %}
+
+
+    {% for row in executions %}
+
+    {% set assignment = row["assignment"] %}
+    {% set execution = row["execution"] %}
+
+
+    <div class="execution">
+
+
+        <!-- =================================================
+             EXECUTION HEADER
+             ================================================= -->
+
+        <div class="execution-header">
+
+            Execution {{ loop.index }}
+
+            {% if assignment.location %}
+            - {{ assignment.location }}
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             EXECUTION INFORMATION
+             ================================================= -->
+
+        <table class="execution-info">
+
+            <tr>
+
+                <td class="label">
+                    Department
+                </td>
+
+                <td class="value">
+
+                    {% if assignment.department %}
+
+                    {{ assignment.department.department_code }}
+                    -
+                    {{ assignment.department.department_name }}
+
+                    {% else %}
+
+                    -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td class="label">
+                    Auditor
+                </td>
+
+                <td class="value">
+
+                    {% if assignment.auditor %}
+
+                    {{ assignment.auditor.nik }}
+                    -
+                    {{ assignment.auditor.full_name }}
+
+                    {% else %}
+
+                    -
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td class="label">
+                    Location
+                </td>
+
+                <td class="value">
+                    {{ assignment.location or "-" }}
+                </td>
+
+
+                <td class="label">
+                    Execution Date
+                </td>
+
+                <td class="value">
+                    {{ execution.execution_date or "-" }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td class="label">
+                    Checklist
+                </td>
+
+                <td class="value">
+
+                    {% if execution.audit_checklist %}
+
+                    {{ execution.audit_checklist.audit_checklist_code }}
+                    -
+                    {{ execution.audit_checklist.audit_checklist_name }}
+
+                    {% else %}
+
+                    -
+
+                    {% endif %}
+
+                </td>
+
+
+                <td class="label">
+                    Status
+                </td>
+
+                <td class="value status">
+                    {{ execution.status or "-" }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td class="label">
+                    Started At
+                </td>
+
+                <td class="value">
+                    {{ execution.started_at or "-" }}
+                </td>
+
+
+                <td class="label">
+                    Completed At
+                </td>
+
+                <td class="value">
+                    {{ execution.completed_at or "-" }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td class="label">
+                    Remark
+                </td>
+
+                <td colspan="3" class="text-wrap">
+                    {{ execution.remark or "-" }}
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <!-- =================================================
+             CHECKLIST RESULT
+             ================================================= -->
+
+        <h3>
+            Checklist Result
+        </h3>
+
+
+        <table class="checklist-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        No
+                    </th>
+
+                    <th>
+                        Question
+                    </th>
+
+                    <th>
+                        Result
+                    </th>
+
+                    <th>
+                        Remark
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% if row["items"] %}
+
+                {% for item in row["items"] %}
+
+                <tr>
+
+                    <td class="center">
+                        {{ item.item_no }}
+                    </td>
+
+
+                    <td class="text-wrap">
+                        {{ item.question }}
+                    </td>
+
+
+                    <td class="center">
+                        {{ item.result or "-" }}
+                    </td>
+
+
+                    <td class="text-wrap">
+                        {{ item.remark or "-" }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="4" class="empty">
+                        No checklist result.
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- =================================================
+             FINDINGS
+             ================================================= -->
+
+        <h3>
+            Audit Findings
+        </h3>
+
+
+        {% if row["findings"] %}
+
+
+        {% for finding in row["findings"] %}
+
+
+        <div class="finding">
+
+
+            <div class="finding-header">
+
+                Finding {{ loop.index }}
+
+                -
+                {{ finding.finding_no }}
+
+            </div>
+
+
+            <table class="finding-table">
+
+
+                <tr>
+
+                    <td class="label">
+                        Finding No
+                    </td>
+
+                    <td class="value">
+                        {{ finding.finding_no }}
+                    </td>
+
+
+                    <td class="label">
+                        Source
+                    </td>
+
+                    <td class="value">
+                        {{ finding.finding_source }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        Severity
+                    </td>
+
+                    <td class="value">
+                        {{ finding.severity }}
+                    </td>
+
+
+                    <td class="label">
+                        Status
+                    </td>
+
+                    <td class="value status">
+                        {{ finding.status }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        Finding
+                    </td>
+
+                    <td colspan="3" class="text-wrap">
+                        {{ finding.finding }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        PIC
+                    </td>
+
+                    <td class="value">
+
+                        {% if finding.pic_employee %}
+
+                        {{ finding.pic_employee.nik }}
+                        -
+                        {{ finding.pic_employee.full_name }}
+
+                        {% else %}
+
+                        -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="label">
+                        Target Date
+                    </td>
+
+                    <td class="value">
+                        {{ finding.target_date or "-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        Corrective Action
+                    </td>
+
+                    <td colspan="3" class="text-wrap">
+                        {{ finding.corrective_action or "-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        Action Completed Date
+                    </td>
+
+                    <td class="value">
+                        {{ finding.action_completed_date or "-" }}
+                    </td>
+
+
+                    <td class="label">
+                        Verification Status
+                    </td>
+
+                    <td class="value">
+                        {{ finding.verification_status or "-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        Verification Result
+                    </td>
+
+                    <td colspan="3" class="text-wrap">
+                        {{ finding.verification_result or "-" }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td class="label">
+                        Verified By
+                    </td>
+
+                    <td class="value">
+
+                        {% if finding.verified_by_employee %}
+
+                        {{ finding.verified_by_employee.nik }}
+                        -
+                        {{ finding.verified_by_employee.full_name }}
+
+                        {% else %}
+
+                        -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="label">
+                        Verified Date
+                    </td>
+
+                    <td class="value">
+                        {{ finding.verified_date or "-" }}
+                    </td>
+
+                </tr>
+
+
+            </table>
+
+        </div>
+
+
+        {% endfor %}
+
+
+        {% else %}
+
+        <table>
+
+            <tr>
+
+                <td class="empty">
+                    No findings for this execution.
+                </td>
+
+            </tr>
+
+        </table>
+
+        {% endif %}
+
+
+    </div>
+
+
+    {% endfor %}
+
+
+    {% else %}
+
+
+    <table>
+
+        <tr>
+
+            <td class="empty">
+                No audit execution.
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    {% endif %}
+
+
+    <!-- ============================================================
+         END OF REPORT
+         ============================================================ -->
+
+    <div style="margin-top: 20px;">
+
+        <table>
+
+            <tr>
+
+                <td class="label">
+                    Report Reference
+                </td>
+
+                <td>
+                    {{ audit.audit_no }}
+                </td>
+
+                <td class="label">
+                    Audit Status
+                </td>
+
+                <td>
+                    {{ audit.status }}
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+</body>
+
+</html>

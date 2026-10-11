@@ -63,7 +63,7 @@ class Problem(BaseModel):
     )
 
     problem_source = db.Column(
-        db.String(30),
+        db.String(255),
         nullable=True
     )
 

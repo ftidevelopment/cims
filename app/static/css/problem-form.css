@@ -1,0 +1,221 @@
+
+/* =====================================================
+   CIMS - Problem Create / Edit Form
+   Perubahan tampilan saja; tidak mengubah logika.
+   ===================================================== */
+
+.problem-form-page {
+    font-size: 13px;
+}
+
+/* Jarak halaman dan card */
+.problem-form-page > .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.problem-form-page .card {
+    margin-bottom: 12px;
+}
+
+.problem-form-page .card-header {
+    padding: 10px 14px;
+}
+
+.problem-form-page .card-header .card-title {
+    margin-bottom: 0;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.problem-form-page .card-body {
+    padding: 14px 16px;
+}
+
+.problem-form-page .card-footer {
+    padding: 10px 16px;
+}
+
+/* Label */
+.problem-form-page .form-group > label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+/* Input dan dropdown */
+.problem-form-page .form-control {
+    min-height: 36px;
+    height: 36px;
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+}
+
+.problem-form-page select.form-control {
+    padding-right: 28px;
+}
+
+/* Jarak antar-field */
+.problem-form-page .form-group {
+    margin-bottom: 12px;
+}
+
+.problem-form-page .row {
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.problem-form-page .row > [class*="col-"] {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Area deskripsi biasa */
+.problem-form-page textarea[name="description"] {
+    height: auto;
+    min-height: 110px;
+    resize: vertical;
+}
+
+/* Editor Jodit */
+.problem-form-page .jodit-container {
+    margin-bottom: 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.problem-form-page .jodit-container .jodit-workplace {
+    min-height: 150px;
+}
+.problem-form-page .jodit-container .jodit-wysiwyg {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Input numerik */
+.problem-form-page input[type="number"] {
+    text-align: right;
+}
+
+/* Tombol */
+.problem-form-page .card-footer .btn {
+    min-height: 36px;
+    padding: 7px 13px;
+    font-size: 13px;
+    border-radius: 5px;
+}
+
+/* Tampilan laptop */
+@media (max-width: 1366px) {
+    .problem-form-page .card-body {
+        padding: 12px;
+    }
+
+    .problem-form-page .form-group {
+        margin-bottom: 10px;
+    }
+
+    .problem-form-page .row {
+        margin-left: -6px;
+        margin-right: -6px;
+    }
+
+    .problem-form-page .row > [class*="col-"] {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+/* Tablet dan ponsel */
+@media (max-width: 767.98px) {
+    .problem-form-page > .container-fluid {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .problem-form-page .card-body {
+        padding: 10px;
+    }
+
+    .problem-form-page .card-header .card-title {
+        font-size: 16px;
+    }
+}
+
+
+/* =====================================================
+   Compact Basic Information Row
+   ===================================================== */
+
+.problem-form-page .problem-basic-info {
+    align-items: flex-start;
+}
+
+.problem-form-page .problem-basic-info .form-group {
+    min-width: 0;
+}
+
+.problem-form-page .problem-basic-info label {
+    min-height: 19px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.problem-form-page .problem-basic-info .form-control {
+    width: 100%;
+    min-width: 0;
+    font-size: 12px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+/* Beri ruang pada dropdown dengan nama panjang */
+.problem-form-page .problem-basic-info select.form-control {
+    text-overflow: ellipsis;
+}
+
+/* Pada layar yang lebih kecil, field turun secara responsif */
+@media (max-width: 991.98px) {
+    .problem-form-page .problem-basic-info label {
+        white-space: normal;
+    }
+}
+
+
+/* Compact layout: Problem basic information */
+
+.problem-form-page .problem-basic-info,
+.problem-form-page .problem-source-location {
+    align-items: flex-start;
+}
+
+.problem-form-page .problem-basic-info .form-group,
+.problem-form-page .problem-source-location .form-group {
+    min-width: 0;
+    margin-bottom: 12px;
+}
+
+.problem-form-page .problem-basic-info label,
+.problem-form-page .problem-source-location label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.problem-form-page .problem-basic-info .form-control,
+.problem-form-page .problem-source-location .form-control {
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    font-size: 13px;
+}
+
+@media (max-width: 767.98px) {
+    .problem-form-page .problem-basic-info label,
+    .problem-form-page .problem-source-location label {
+        white-space: normal;
+    }
+}

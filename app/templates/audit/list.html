@@ -1,0 +1,652 @@
+{% from "components/sortable_header.html" import sortable_header %}
+{% extends "layouts/base.html" %}
+
+{% block title %}Audit{% endblock %}
+
+{% block content %}
+
+<!-- Content Header -->
+<section class="content-header">
+    <div class="container-fluid">
+
+        <div class="row mb-2">
+
+            <div class="col-sm-6">
+                <h1>Audit Management</h1>
+            </div>
+
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        Audit
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Audit List
+                    </li>
+
+                </ol>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Main Content -->
+<section class="content">
+
+    <div class="container-fluid">
+
+        <div class="card card-primary card-outline audit-list-page">
+
+
+<!-- Card Header -->
+<div class="card-header audit-toolbar">
+
+    <!-- BARIS 1: JUDUL + TOMBOL AKSI -->
+    <div class="audit-toolbar-top">
+
+        <h3 class="card-title audit-toolbar-title">
+            <i class="fas fa-clipboard-check mr-2"></i>
+            Audit List
+        </h3>
+
+        <div class="audit-toolbar-actions">
+
+            {% if current_user.has_permission("AUDIT_REPORT") %}
+            <a
+                href="{{ url_for(
+                    'audit.export',
+                    keyword=keyword,
+                    is_active=is_active,
+                    sort=sort_by,
+                    order=sort_order
+                ) }}"
+                class="btn btn-warning btn-sm"
+            >
+                <i class="fas fa-file-excel mr-1"></i>
+                Export Excel
+            </a>
+            {% endif %}
+
+            {% if (current_user.role_code or '')|trim|upper in ['ADMIN', 'AUDIT_ADMIN'] %}
+            <a
+                href="{{ url_for('audit.create') }}"
+                class="btn btn-success btn-sm"
+            >
+                <i class="fas fa-plus mr-1"></i>
+                Add Audit
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- BARIS 2: FILTER + SEARCH -->
+    <div class="audit-toolbar-bottom">
+
+        <!-- Filter Active -->
+        <form method="GET" class="audit-status-form">
+
+            <input type="hidden" name="keyword" value="{{ keyword }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <select
+                name="is_active"
+                class="custom-select custom-select-sm audit-status-select"
+                onchange="this.form.submit()"
+                aria-label="Filter audit by active status"
+            >
+                <option value="true" {% if is_active == "true" %}selected{% endif %}>
+                    Active
+                </option>
+
+                <option value="false" {% if is_active == "false" %}selected{% endif %}>
+                    Inactive
+                </option>
+
+                <option value="all" {% if is_active == "all" %}selected{% endif %}>
+                    All
+                </option>
+            </select>
+
+        </form>
+
+        <!-- Search -->
+        <form method="GET" class="audit-search-form">
+
+            <input type="hidden" name="is_active" value="{{ is_active }}">
+            <input type="hidden" name="sort" value="{{ sort_by }}">
+            <input type="hidden" name="order" value="{{ sort_order }}">
+
+            <div class="input-group input-group-sm audit-search-group">
+
+                <input
+                    type="text"
+                    name="keyword"
+                    class="form-control audit-search-input"
+                    placeholder="Search audit no, title or description..."
+                    value="{{ keyword }}"
+                    aria-label="Search audits"
+                >
+
+                <div class="input-group-append">
+
+                    <button
+                        class="btn btn-primary audit-search-button"
+                        type="submit"
+                        title="Search"
+                        aria-label="Search"
+                    >
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                    <a
+                        href="{{ url_for('audit.index') }}"
+                        class="btn btn-secondary audit-reset-button"
+                        title="Reset filter"
+                        aria-label="Reset filter"
+                    >
+                        <i class="fas fa-sync-alt"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+            <!-- Card Body -->
+            <div class="card-body">
+
+                {% if keyword %}
+
+                <div class="alert alert-info">
+
+                    <i class="fas fa-search"></i>
+
+                    Search keyword :
+
+                    <strong>{{ keyword }}</strong>
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead>
+
+                            <tr class="text-center">
+
+                                <th width="60">
+                                    No
+                                </th>
+
+
+                                {{ sortable_header(
+                                "Audit No",
+                                "audit_no",
+                                "audit.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                                ) }}
+
+
+                                {{ sortable_header(
+                                "Title",
+                                "title",
+                                "audit.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                                ) }}
+
+
+                                <th>
+                                    Audit Type
+                                </th>
+
+
+                                <th>
+                                    Audit Category
+                                </th>
+
+
+                                {{ sortable_header(
+                                "Audit Date",
+                                "audit_date",
+                                "audit.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                                ) }}
+
+
+                                {{ sortable_header(
+                                "Status",
+                                "status",
+                                "audit.index",
+                                keyword,
+                                is_active,
+                                sort_by,
+                                sort_order
+                                ) }}
+
+
+                                <th width="120">
+                                    Active
+                                </th>
+
+
+                                <th width="150">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% if audits %}
+
+                            {% for audit in audits.items %}
+
+                            <tr>
+
+                                <!-- No -->
+                                <td class="text-center">
+
+                                    {{ audits.first + loop.index0 }}
+
+                                </td>
+
+
+                                <!-- Audit No -->
+                                <td>
+
+                                    <strong>
+                                        {{ audit.audit_no }}
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- Title -->
+                                <td>
+
+                                    {{ audit.title }}
+
+                                </td>
+
+
+                                <!-- Audit Type -->
+                                <td>
+
+                                    {% if audit.audit_type %}
+
+                                    {{ audit.audit_type.audit_type_name }}
+
+                                    {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Audit Category -->
+                                <td>
+
+                                    {% if audit.audit_category %}
+
+                                    {{ audit.audit_category.audit_category_name }}
+
+                                    {% else %}
+
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Audit Date -->
+                                <td class="text-center">
+
+                                    {{ audit.audit_date.strftime('%d-%m-%Y') if audit.audit_date else '-' }}
+
+                                </td>
+
+
+                                <!-- Status -->
+                                <td class="text-center">
+
+                                    {% if audit.status == "DRAFT" %}
+
+                                    <span class="badge badge-secondary">
+                                        Draft
+                                    </span>
+
+                                    {% elif audit.status == "PLANNED" %}
+
+                                    <span class="badge badge-info">
+                                        Planned
+                                    </span>
+
+                                    {% elif audit.status == "IN_PROGRESS" %}
+
+                                    <span class="badge badge-warning">
+                                        In Progress
+                                    </span>
+
+                                    {% elif audit.status == "COMPLETED" %}
+
+                                    <span class="badge badge-success">
+                                        Completed
+                                    </span>
+
+                                    {% elif audit.status == "CANCELLED" %}
+
+                                    <span class="badge badge-danger">
+                                        Cancelled
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-secondary">
+                                        {{ audit.status }}
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Active -->
+                                <td class="text-center">
+
+                                    {% if audit.is_active %}
+
+                                    <span class="badge badge-success">
+                                        Active
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-danger">
+                                        Inactive
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Action -->
+
+                                <!-- Action -->
+                                <td class="text-center">
+
+                                    {% if audit.is_active %}
+                                    {% if current_user.has_permission("AUDIT_VIEW") %}
+                                    <!-- Assignment -->
+                                    <a href="{{ url_for(
+                                            'audit_assignment.index',
+                                            audit_id=audit.id
+                                        ) }}" class="btn btn-primary btn-sm" title="Audit Assignment">
+                                        <i class="fas fa-user-check"></i>
+                                    </a>
+                                    {% endif %}
+
+                                    <!-- Execute -->
+                                     {% if current_user.has_permission("AUDIT_VIEW") %}
+                                    <a href="{{ url_for(
+                                            'audit_execution.index',
+                                            audit_id=audit.id
+                                        ) }}" class="btn btn-success btn-sm" title="Audit Execution">
+                                        <i class="fas fa-play"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if current_user.has_permission("AUDIT_REPORT") %}
+                                    <!-- PDF -->
+                                    <a href="{{ url_for(
+                                            'audit.export_pdf',
+                                            audit_id=audit.id
+                                        ) }}" class="btn btn-danger btn-sm" target="_blank" title="Export Audit PDF">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if current_user.has_permission("AUDIT_EDIT") %}
+                                    <!-- Edit -->
+                                    <a href="{{ url_for(
+                                                'audit.edit',
+                                                audit_id=audit.id
+                                            ) }}" class="btn btn-warning btn-sm" title="Edit Audit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% endif %}
+
+                                    {% if current_user.has_permission("AUDIT_DELETE") %}
+                                    <!-- Delete -->
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete"
+                                        data-name="{{ audit.audit_no }}" data-url="{{ url_for(
+                                            'audit.delete',
+                                            audit_id=audit.id
+                                        ) }}" title="Delete Audit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    {% endif %}
+
+                                    {% else %}
+                                    {% if current_user.has_permission("AUDIT_EDIT") %}
+
+                                    <!-- Restore -->
+                                    <form method="POST" action="{{ url_for(
+                                            'audit.restore',
+                                            audit_id=audit.id
+                                        ) }}" style="display:inline;">
+
+                                        <button class="btn btn-success btn-sm" type="submit" title="Restore Audit">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+
+                                    </form>
+                                    {% endif %}
+
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+
+                            {% else %}
+
+                            <tr>
+
+                                <td colspan="9" class="text-center text-muted">
+
+                                    No audit found.
+
+                                </td>
+
+                            </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- Delete Modal -->
+            {% include "components/delete_modal.html" %}
+
+
+            <!-- Card Footer -->
+            <div class="card-footer clearfix">
+
+                <div class="float-left">
+
+                    Showing
+
+                    <strong>
+
+                        {{
+                        audits.first
+                        if audits.total > 0
+                        else 0
+                        }}
+
+                    </strong>
+
+                    to
+
+                    <strong>
+
+                        {{
+                        audits.last
+                        if audits.total > 0
+                        else 0
+                        }}
+
+                    </strong>
+
+                    of
+
+                    <strong>
+
+                        {{ audits.total }}
+
+                    </strong>
+
+                    audit{{ "" if audits.total == 1 else "s" }}
+
+                </div>
+
+            </div>
+
+
+            <!-- Pagination -->
+            <nav>
+
+                <ul class="pagination pagination-sm float-right">
+
+                    {% if audits.has_prev %}
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="{{ url_for(
+                                'audit.index',
+                                page=audits.prev_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}">
+
+                            Previous
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+
+                    {% for page_num in audits.iter_pages() %}
+
+                    {% if page_num %}
+
+                    <li class="page-item
+                            {% if page_num == audits.page %}
+                            active
+                            {% endif %}">
+
+                        <a class="page-link" href="{{ url_for(
+                                    'audit.index',
+                                    page=page_num,
+                                    keyword=keyword,
+                                    is_active=is_active,
+                                    sort=sort_by,
+                                    order=sort_order
+                                ) }}">
+
+                            {{ page_num }}
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                    {% endfor %}
+
+
+                    {% if audits.has_next %}
+
+                    <li class="page-item">
+
+                        <a class="page-link" href="{{ url_for(
+                                'audit.index',
+                                page=audits.next_num,
+                                keyword=keyword,
+                                is_active=is_active,
+                                sort=sort_by,
+                                order=sort_order
+                            ) }}">
+
+                            Next
+
+                        </a>
+
+                    </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

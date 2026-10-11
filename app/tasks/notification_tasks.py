@@ -1,5 +1,5 @@
 from celery_app import celery
-
+from datetime import date
 from app.repositories.problem_repository import ProblemRepository
 from app.services.notification_service import NotificationService
 from app.core.notification_events import NotificationEvent
@@ -16,6 +16,10 @@ from app.repositories.kaizen_award_score_repository import (
 )
 from app.repositories.issue_clarification_repository import (
     IssueClarificationRepository,
+)
+
+from app.repositories.audit_finding_repository import (
+    AuditFindingRepository
 )
 
 @celery.task
@@ -2174,6 +2178,675 @@ def send_issue_clarification_responded_notification(
             "ISSUE CLARIFICATION RESPONDED "
             "CELERY NOTIFICATION ERROR:",
             str(ex),
+        )
+
+        raise
+
+# ==========================================
+# Audit Finding Created Notification
+# ==========================================
+
+@celery.task
+def send_audit_finding_created_notification(
+    finding_id,
+):
+    """
+    Send Audit Finding Created notification
+    through Celery Worker.
+    """
+
+    try:
+
+        # ==========================================
+        # Repository
+        # ==========================================
+
+        finding_repository = (
+            AuditFindingRepository()
+        )
+
+        # ==========================================
+        # Reload Finding
+        # ==========================================
+
+        finding = (
+            finding_repository
+            .get_by_id(
+                finding_id
+            )
+        )
+
+        if not finding:
+
+            print(
+                "AUDIT FINDING CREATED CELERY "
+                "NOTIFICATION: Finding not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Check PIC
+        # ==========================================
+
+        if not finding.pic_employee:
+
+            print(
+                "AUDIT FINDING CREATED CELERY "
+                "NOTIFICATION: PIC not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Notification Service
+        # ==========================================
+
+        notification_service = (
+            NotificationService()
+        )
+
+        # ==========================================
+        # Send Notification
+        # ==========================================
+
+        result = (
+            notification_service
+            .audit_finding_created(
+                finding=finding,
+            )
+        )
+
+        # ==========================================
+        # Log
+        # ==========================================
+
+        print(
+            "=========================================="
+        )
+
+        print(
+            "AUDIT FINDING CREATED "
+            "CELERY NOTIFICATION"
+        )
+
+        print(
+            "Finding ID:",
+            finding.id
+        )
+
+        print(
+            "Finding No:",
+            finding.finding_no
+        )
+
+        print(
+            "PIC:",
+            finding.pic_employee_id
+        )
+
+        print(
+            "Notification Result:",
+            result
+        )
+
+        print(
+            "=========================================="
+        )
+
+        return result
+
+    except Exception as ex:
+
+        print(
+            "AUDIT FINDING CREATED CELERY "
+            "NOTIFICATION ERROR:",
+            str(ex),
+        )
+
+        raise
+
+# ==========================================
+# Audit Finding Submitted for Verification
+# Notification
+# ==========================================
+
+@celery.task
+def send_audit_finding_submitted_for_verification_notification(
+    finding_id,
+):
+    """
+    Send Audit Finding Submitted for Verification
+    notification through Celery Worker.
+    """
+
+    try:
+
+        # ==========================================
+        # Repository
+        # ==========================================
+
+        finding_repository = (
+            AuditFindingRepository()
+        )
+
+        # ==========================================
+        # Reload Finding
+        # ==========================================
+
+        finding = (
+            finding_repository
+            .get_by_id(
+                finding_id
+            )
+        )
+
+        if not finding:
+
+            print(
+                "AUDIT FINDING SUBMITTED FOR "
+                "VERIFICATION CELERY NOTIFICATION: "
+                "Finding not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Check Audit Execution
+        # ==========================================
+
+        if not finding.audit_execution:
+
+            print(
+                "AUDIT FINDING SUBMITTED FOR "
+                "VERIFICATION CELERY NOTIFICATION: "
+                "Audit execution not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Check Audit Assignment
+        # ==========================================
+
+        if not finding.audit_execution.audit_assignment:
+
+            print(
+                "AUDIT FINDING SUBMITTED FOR "
+                "VERIFICATION CELERY NOTIFICATION: "
+                "Audit assignment not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Check Auditor
+        # ==========================================
+
+        if not finding.audit_execution.audit_assignment.auditor:
+
+            print(
+                "AUDIT FINDING SUBMITTED FOR "
+                "VERIFICATION CELERY NOTIFICATION: "
+                "Auditor not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Notification Service
+        # ==========================================
+
+        notification_service = (
+            NotificationService()
+        )
+
+        # ==========================================
+        # Send Notification
+        # ==========================================
+
+        result = (
+            notification_service
+            .audit_finding_submitted_for_verification(
+                finding=finding,
+            )
+        )
+
+        # ==========================================
+        # Log
+        # ==========================================
+
+        print(
+            "=========================================="
+        )
+
+        print(
+            "AUDIT FINDING SUBMITTED FOR "
+            "VERIFICATION CELERY NOTIFICATION"
+        )
+
+        print(
+            "Finding ID:",
+            finding.id
+        )
+
+        print(
+            "Finding No:",
+            finding.finding_no
+        )
+
+        print(
+            "Auditor:",
+            finding.audit_execution
+            .audit_assignment
+            .auditor_employee_id
+        )
+
+        print(
+            "Notification Result:",
+            result
+        )
+
+        print(
+            "=========================================="
+        )
+
+        return result
+
+    except Exception as ex:
+
+        print(
+            "AUDIT FINDING SUBMITTED FOR "
+            "VERIFICATION CELERY NOTIFICATION ERROR:",
+            str(ex),
+        )
+
+        raise
+
+# ==========================================
+# Audit Finding Verified Notification
+# ==========================================
+
+@celery.task
+def send_audit_finding_verified_notification(
+    finding_id,
+):
+    """
+    Send Audit Finding Verified notification
+    through Celery Worker.
+    """
+
+    try:
+
+        # ==========================================
+        # Repository
+        # ==========================================
+
+        finding_repository = (
+            AuditFindingRepository()
+        )
+
+        # ==========================================
+        # Reload Finding
+        # ==========================================
+
+        finding = (
+            finding_repository
+            .get_by_id(
+                finding_id
+            )
+        )
+
+        if not finding:
+
+            print(
+                "AUDIT FINDING VERIFIED CELERY "
+                "NOTIFICATION: Finding not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Check PIC
+        # ==========================================
+
+        if not finding.pic_employee:
+
+            print(
+                "AUDIT FINDING VERIFIED CELERY "
+                "NOTIFICATION: PIC not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Check Verification Status
+        # ==========================================
+
+        if not finding.verification_status:
+
+            print(
+                "AUDIT FINDING VERIFIED CELERY "
+                "NOTIFICATION: Verification status "
+                "not found:",
+                finding_id,
+            )
+
+            return False
+
+        # ==========================================
+        # Notification Service
+        # ==========================================
+
+        notification_service = (
+            NotificationService()
+        )
+
+        # ==========================================
+        # Send Notification
+        # ==========================================
+
+        result = (
+            notification_service
+            .audit_finding_verified(
+                finding=finding,
+            )
+        )
+
+        # ==========================================
+        # Log
+        # ==========================================
+
+        print(
+            "=========================================="
+        )
+
+        print(
+            "AUDIT FINDING VERIFIED "
+            "CELERY NOTIFICATION"
+        )
+
+        print(
+            "Finding ID:",
+            finding.id
+        )
+
+        print(
+            "Finding No:",
+            finding.finding_no
+        )
+
+        print(
+            "PIC:",
+            finding.pic_employee_id
+        )
+
+        print(
+            "Verification Status:",
+            finding.verification_status
+        )
+
+        print(
+            "Finding Status:",
+            finding.status
+        )
+
+        print(
+            "Notification Result:",
+            result
+        )
+
+        print(
+            "=========================================="
+        )
+
+        return result
+
+    except Exception as ex:
+
+        print(
+            "AUDIT FINDING VERIFIED CELERY "
+            "NOTIFICATION ERROR:",
+            str(ex),
+        )
+
+        raise
+
+
+# ==========================================
+# Audit Finding Overdue Notification
+# ==========================================
+
+@celery.task
+def send_audit_finding_overdue_notifications():
+    """
+    Find all overdue Audit Findings and send
+    overdue notifications.
+
+    Overdue condition:
+        target_date < today
+        AND
+        status != CLOSED
+    """
+
+    try:
+
+        # ==========================================
+        # Repository
+        # ==========================================
+
+        finding_repository = (
+            AuditFindingRepository()
+        )
+
+        # ==========================================
+        # Get Overdue Findings
+        # ==========================================
+
+        findings = (
+            finding_repository
+            .get_overdue_findings(
+                date.today()
+            )
+        )
+
+        # ==========================================
+        # Log Summary
+        # ==========================================
+
+        print(
+            "=========================================="
+        )
+
+        print(
+            "AUDIT FINDING OVERDUE "
+            "CELERY NOTIFICATION"
+        )
+
+        print(
+            "Today:",
+            date.today()
+        )
+
+        print(
+            "Overdue Findings:",
+            len(findings)
+        )
+
+        print(
+            "=========================================="
+        )
+
+        # ==========================================
+        # No Overdue Finding
+        # ==========================================
+
+        if not findings:
+
+            print(
+                "No overdue audit findings found."
+            )
+
+            return {
+                "success": True,
+                "total": 0,
+                "sent": 0,
+            }
+
+        # ==========================================
+        # Notification Service
+        # ==========================================
+
+        notification_service = (
+            NotificationService()
+        )
+
+        sent_count = 0
+
+        # ==========================================
+        # Process Each Finding
+        # ==========================================
+
+        for finding in findings:
+
+            try:
+
+                print(
+                    "------------------------------------------"
+                )
+
+                print(
+                    "Processing Finding:",
+                    finding.finding_no
+                )
+
+                print(
+                    "Target Date:",
+                    finding.target_date
+                )
+
+                print(
+                    "Status:",
+                    finding.status
+                )
+
+                # ----------------------------------
+                # Send Notification
+                # ----------------------------------
+
+                result = (
+                    notification_service
+                    .audit_finding_overdue(
+                        finding=finding
+                    )
+                )
+
+                # ----------------------------------
+                # Result
+                # ----------------------------------
+
+                if result:
+
+                    sent_count += 1
+
+                    print(
+                        "Notification:",
+                        "SENT"
+                    )
+
+                else:
+
+                    print(
+                        "Notification:",
+                        "SKIPPED"
+                    )
+
+            except Exception as ex:
+
+                print(
+                    "AUDIT FINDING OVERDUE "
+                    "NOTIFICATION ERROR"
+                )
+
+                print(
+                    "Finding ID:",
+                    finding.id
+                )
+
+                print(
+                    "Finding No:",
+                    finding.finding_no
+                )
+
+                print(
+                    "Error:",
+                    str(ex)
+                )
+
+                # ----------------------------------
+                # Continue processing other findings
+                # ----------------------------------
+
+                continue
+
+        # ==========================================
+        # Final Summary
+        # ==========================================
+
+        print(
+            "=========================================="
+        )
+
+        print(
+            "AUDIT FINDING OVERDUE "
+            "CELERY NOTIFICATION COMPLETED"
+        )
+
+        print(
+            "Total Overdue:",
+            len(findings)
+        )
+
+        print(
+            "Notification Sent:",
+            sent_count
+        )
+
+        print(
+            "=========================================="
+        )
+
+        return {
+            "success": True,
+            "total": len(findings),
+            "sent": sent_count,
+        }
+
+    except Exception as ex:
+
+        print(
+            "=========================================="
+        )
+
+        print(
+            "AUDIT FINDING OVERDUE "
+            "CELERY NOTIFICATION ERROR"
+        )
+
+        print(
+            str(ex)
+        )
+
+        print(
+            "=========================================="
         )
 
         raise
