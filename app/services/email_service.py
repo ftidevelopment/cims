@@ -92,11 +92,11 @@ class EmailService:
             # ======================================
             # Login
             # ======================================
-
-            server.login(
-                mail_username,
-                mail_password,
-            )
+            if mail_username and mail_password:
+                server.login(
+                    mail_username,
+                    mail_password,
+                )
 
             # ======================================
             # Send email
@@ -240,11 +240,11 @@ class EmailService:
             # ======================================
             # Login ONCE
             # ======================================
-
-            server.login(
-                mail_username,
-                mail_password,
-            )
+            if mail_username and mail_password:
+                server.login(
+                    mail_username,
+                    mail_password,
+                )
 
             # ======================================
             # Send to all recipients
