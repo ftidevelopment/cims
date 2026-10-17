@@ -97,6 +97,38 @@ Main Content
                     <!-- Create buttons: top right -->
                     <div class="kaizen-create-actions">
 
+                        <a href="{{ url_for(
+                            'kaizen.export_list_pdf',
+                            keyword=keyword or None,
+                            status=status or None,
+                            department_id=department_id or None,
+                            date_from=date_from or None,
+                            date_to=date_to or None,
+                            mine='1' if mine == '1' else None,
+                            sort=sort_by,
+                            order=sort_order
+                        ) }}"
+                        class="btn btn-danger">
+                            <i class="fas fa-file-pdf"></i>
+                            Export PDF
+                        </a>
+
+                    <a href="{{ url_for(
+                        'kaizen.export_excel',
+                        keyword=keyword or None,
+                        status=status or None,
+                        department_id=department_id or None,
+                        date_from=date_from or None,
+                        date_to=date_to or None,
+                        mine='1' if is_mine else None,
+                        sort=sort_by,
+                        order=sort_order
+                    ) }}"
+                    class="btn btn-success">
+                        <i class="fas fa-file-excel"></i>
+                        Export Excel
+                    </a>
+
                         <a href="{{ url_for('kaizen.select_improvement') }}" class="btn btn-success"
                             title="Create Kaizen from Improvement">
                             <i class="fas fa-plus mr-1"></i>

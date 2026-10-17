@@ -21,11 +21,35 @@ from app.core.notification_events import (
 from app.services.notification_service import (
     NotificationService,
 )
+from app.services.base_export_service import BaseExportService
 
-class KaizenService(BaseService):
+class KaizenService(BaseService, BaseExportService):
     """
     Service untuk business logic Kaizen.
     """
+    
+    EXPORT_CONFIG = [
+        {"header": "Kaizen No", "field": "kaizen_no", "width": 20},
+        {"header": "Title", "field": "title", "width": 35},
+        {"header": "Description", "field": "description", "width": 45},
+        {"header": "Category", "field": "kaizen_category_name", "width": 25},
+        {"header": "Department", "field": "department_name", "width": 30},
+        {"header": "PIC Employee", "field": "full_name", "width": 30},
+        {"header": "Problem No", "field": "problem_no", "width": 20},
+        {"header": "Improvement No", "field": "improvement_no", "width": 20},
+        {"header": "Before Condition", "field": "before_condition", "width": 35},
+        {"header": "Before Value", "field": "before_value", "width": 15},
+        {"header": "Before Unit", "field": "before_unit", "width": 15},
+        {"header": "Loss Before", "field": "loss_before", "width": 35},
+        {"header": "After Condition", "field": "after_condition", "width": 35},
+        {"header": "After Value", "field": "after_value", "width": 15},
+        {"header": "After Unit", "field": "after_unit", "width": 15},
+        {"header": "Benefit", "field": "benefit", "width": 35},
+        {"header": "Cost Saving", "field": "cost_saving", "width": 18},
+        {"header": "Implementation Date", "field": "implementation_date", "width": 20},
+        {"header": "Status", "field": "status", "width": 18},
+        {"header": "Create Date", "field": "created_at", "width": 22},
+    ]
 
     def __init__(self):
 
@@ -1724,3 +1748,158 @@ class KaizenService(BaseService):
             return self.handle_exception(
                 exception
             )
+         
+    def export_excel(
+        self,
+        keyword=None,
+        status=None,
+        department_id=None,
+        date_from=None,
+        date_to=None,
+        employee_id=None,
+        is_active=True,
+        sort_by=None,
+        sort_order="desc",
+    ):
+        from datetime import date, datetime
+
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment
+        from openpyxl.utils import get_column_letter
+
+        rows = self.repository.get_query(
+            keyword=keyword,
+            status=status,
+            department_id=department_id,
+            date_from=date_from,
+            date_to=date_to,
+            employee_id=employee_id,
+            is_active=is_active,
+            sort_by=sort_by,
+            sort_order=sort_order,
+        ).all()
+
+        workbook = Workbook()
+        worksheet = workbook.active
+        worksheet.title = "Kaizen"
+
+        header_font = Font(bold=True)
+        header_fill = PatternFill(
+            fill_type="solid",
+            start_color="D9EAD3",
+            end_color="D9EAD3",
+        )
+        header_alignment = Alignment(
+            horizontal="center",
+            vertical="center",
+            wrap_text=True,
+        )
+
+        # Header Excel
+        for column_index, column in enumerate(
+            self.EXPORT_CONFIG, start=1
+        ):
+            cell = worksheet.cell(
+                row=1,
+                column=column_index,
+                value=column["header"],
+            )
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = header_alignment
+
+        def related_value(obj, *field_names):
+            """Mengambil nilai dari relasi tanpa menampilkan ID database."""
+            if obj is None:
+                return ""
+
+            for field_name in field_names:
+                value = getattr(obj, field_name, None)
+
+                if value is not None and value != "":
+                    return value
+
+            return ""
+
+        def get_export_value(kaizen, field):
+            """Mengambil nilai Kaizen atau nilai dari relasi model."""
+
+            if field == "kaizen_category_name":
+                return related_value(
+                    getattr(kaizen, "kaizen_category", None),
+                    "kaizen_category_name",
+                    "name",
+                    "title",
+                )
+
+            if field == "department_name":
+                return related_value(
+                    getattr(kaizen, "department", None),
+                    "department_name",
+                    "name",
+                )
+
+            if field == "full_name":
+                return related_value(
+                    getattr(kaizen, "employee", None),
+                    "full_name",
+                    "full_name",
+                    "name",
+                )
+
+            if field == "problem_no":
+                return related_value(
+                    getattr(kaizen, "problem", None),
+                    "problem_no",
+                    "problem_number",
+                )
+
+            if field == "improvement_no":
+                return related_value(
+                    getattr(kaizen, "improvement", None),
+                    "improvement_no",
+                    "improvement_number",
+                )
+
+            return getattr(kaizen, field, None)
+
+        # Isi data Excel
+        for row_index, kaizen in enumerate(rows, start=2):
+            for column_index, column in enumerate(
+                self.EXPORT_CONFIG, start=1
+            ):
+                value = get_export_value(
+                    kaizen,
+                    column["field"],
+                )
+
+                # Format tanggal dan waktu
+                if isinstance(value, datetime):
+                    value = value.isoformat(sep=" ")
+                elif isinstance(value, date):
+                    value = value.isoformat()
+
+                cell = worksheet.cell(
+                    row=row_index,
+                    column=column_index,
+                    value=value,
+                )
+
+                cell.alignment = Alignment(
+                    vertical="top",
+                    wrap_text=True,
+                )
+
+        # Lebar setiap kolom
+        for index, column in enumerate(
+            self.EXPORT_CONFIG, start=1
+        ):
+            worksheet.column_dimensions[
+                get_column_letter(index)
+            ].width = column.get("width", 20)
+
+        worksheet.freeze_panes = "A2"
+        worksheet.auto_filter.ref = worksheet.dimensions
+        worksheet.row_dimensions[1].height = 30
+
+        return workbook

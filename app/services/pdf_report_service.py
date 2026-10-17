@@ -393,6 +393,45 @@ class PDFReportService:
         return pdf_file
 
 
+    
+    @staticmethod
+    def generate_kaizen_list_report(
+        kaizens,
+        printed_by=None,
+        filters=None,
+    ):
+        """
+        Generate PDF untuk daftar Kaizen.
+        """
+
+        # Ambil logo perusahaan yang sudah digunakan
+        cims_logo_uri, foxconn_logo_uri = (
+            PDFReportService._get_logo_uris()
+        )
+
+        # Render template daftar Kaizen
+        html_content = render_template(
+            "reports/kaizen_list_pdf.html",
+            kaizens=kaizens,
+            filters=filters or {},
+            cims_logo_uri=cims_logo_uri,
+            foxconn_logo_uri=foxconn_logo_uri,
+            printed_by=printed_by,
+            print_datetime=datetime.now(),
+        )
+
+        # Generate PDF
+        pdf_file = BytesIO()
+
+        HTML(
+            string=html_content,
+            base_url=current_app.root_path,
+        ).write_pdf(pdf_file)
+
+        pdf_file.seek(0)
+
+        return pdf_file
+
 
     # ==================================================
     # LOGO URI HELPER

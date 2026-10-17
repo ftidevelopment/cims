@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kaizen List Report</title>
+
+    <style>
+        /* =====================================================
+           PAGE SETTINGS
+        ===================================================== */
+
+        @page {
+            size: A4 landscape;
+            margin: 12mm 10mm 12mm 10mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* =====================================================
+           DOCUMENT HEADER
+        ===================================================== */
+
+        .document-header {
+            width: 100%;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #14558a;
+        }
+
+        
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        
+        
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-table td {
+            border: none;
+            padding: 0 !important;
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        /* Logo CIMS */
+        .header-logo {
+            width: 45px;
+            padding: 0 !important;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        /* Logo FOXCONN */
+        .company-logo-cell {
+            width: auto;
+            padding: 0 !important;
+            padding-left: 0 !important;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        /* Ukuran logo CIMS */
+        .cims-logo {
+            display: block;
+            width: 45px;
+            height: auto;
+            max-height: 60px;
+        }
+
+        /* Ukuran logo FOXCONN */
+        .foxconn-logo {
+            display: block;
+            width: 280px;
+            height: auto;
+            max-height: 65px;
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+
+        .document-label {
+            font-size: 12px;
+            color: #777777;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .document-number {
+            font-size: 15px;
+            font-weight: bold;
+            color: #064b87;
+        }
+
+        /* =====================================================
+           REPORT TITLE
+        ===================================================== */
+
+        .report-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #14558a;
+            text-align: center;
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+        }
+
+        /* =====================================================
+           REPORT INFORMATION
+        ===================================================== */
+
+        .report-info {
+            width: 100%;
+            margin-bottom: 10px;
+            border-collapse: collapse;
+        }
+
+        .report-info td {
+            border: none;
+            padding: 3px 0;
+            font-size: 9px;
+        }
+
+        .report-info .right {
+            text-align: right;
+        }
+
+        /* =====================================================
+           DATA TABLE
+        ===================================================== */
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 8px;
+        }
+
+        .data-table thead {
+            display: table-header-group;
+        }
+
+        .data-table tr {
+            page-break-inside: avoid;
+        }
+
+        .data-table th {
+            background-color: #14558a;
+            color: #ffffff;
+            border: 1px solid #14558a;
+            padding: 6px 4px;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: bold;
+            overflow-wrap: break-word;
+        }
+
+        .data-table td {
+            border: 1px solid #cccccc;
+            padding: 5px 4px;
+            vertical-align: top;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background-color: #f3f6f9;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 15px !important;
+            color: #777777;
+        }
+
+        /* =====================================================
+           COLUMN WIDTHS
+        ===================================================== */
+
+        .col-no {
+            width: 4%;
+        }
+
+        .col-kaizen-no {
+            width: 10%;
+        }
+
+        .col-create-date {
+            width: 9%;
+        }
+
+        .col-title {
+            width: 12%;
+        }
+
+        .col-description {
+            width: 16%;
+        }
+
+        .col-before {
+            width: 13%;
+        }
+
+        .col-after {
+            width: 13%;
+        }
+
+        .col-cost {
+            width: 8%;
+        }
+
+        .col-implementation-date {
+            width: 9%;
+        }
+
+        .col-status {
+            width: 6%;
+        }
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .report-footer {
+            margin-top: 12px;
+            padding-top: 6px;
+            border-top: 1px solid #cccccc;
+            font-size: 8px;
+            color: #777777;
+        }
+
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .footer-table td {
+            border: none;
+            padding: 0;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    
+<div class="document-header">
+
+    <table class="header-table">
+        <tr>
+
+            <!-- CIMS LOGO -->
+            <td class="header-logo">
+                {% if cims_logo_uri %}
+                <img
+                    src="{{ cims_logo_uri }}"
+                    alt="CIMS Logo"
+                    class="cims-logo"
+                >
+                {% endif %}
+            </td>
+
+            <!-- FOXCONN COMPANY LOGO -->
+            <td class="company-logo-cell">
+                {% if foxconn_logo_uri %}
+                <img
+                    src="{{ foxconn_logo_uri }}"
+                    alt="FOXCONN"
+                    class="foxconn-logo"
+                >
+                {% endif %}
+            </td>
+
+        </tr>
+    </table>
+
+</div>
+
+
+    </div>
+
+    <!-- =====================================================
+         REPORT TITLE
+    ===================================================== -->
+
+    <h1 class="report-title">
+        Kaizen List Report
+    </h1>
+
+    <!-- =====================================================
+         REPORT INFORMATION
+    ===================================================== -->
+
+    <table class="report-info">
+        <tr>
+            <td>
+                <strong>Printed By:</strong>
+                {{ printed_by or '-' }}
+            </td>
+
+            <td class="right">
+                <strong>Print Date:</strong>
+                {% if print_datetime %}
+                    {{ print_datetime.strftime('%d-%m-%Y %H:%M') }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <!-- =====================================================
+         KAIZEN DATA TABLE
+    ===================================================== -->
+
+    <table class="data-table">
+
+        <thead>
+            <tr>
+                <th class="col-no">No.</th>
+                <th class="col-kaizen-no">Kaizen No</th>
+                <th class="col-create-date">Create Date</th>
+                <th class="col-title">Title</th>
+                <th class="col-description">Description</th>
+                <th class="col-before">Before Condition</th>
+                <th class="col-after">After Condition</th>
+                <th class="col-cost">Cost Saving</th>
+                <th class="col-implementation-date">
+                    Implementation Date
+                </th>
+                <th class="col-status">Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for kaizen in kaizens %}
+            <tr>
+                <!-- NO -->
+                <td class="text-center">
+                    {{ loop.index }}
+                </td>
+
+                <!-- KAIZEN NO -->
+                <td>
+                    {{ kaizen.kaizen_no or '-' }}
+                </td>
+
+                <!-- CREATE DATE -->
+                <td class="text-center">
+                    {% if kaizen.created_at %}
+                        {{ kaizen.created_at.strftime('%d-%m-%Y') }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+
+                <!-- TITLE -->
+                <td>
+                    {{ kaizen.title or '-' }}
+                </td>
+
+                <!-- DESCRIPTION -->
+                <td>
+                    {{ kaizen.description or '-' }}
+                </td>
+
+                <!-- BEFORE CONDITION -->
+                <td>
+                    {{ kaizen.before_condition or '-' }}
+                </td>
+
+                <!-- AFTER CONDITION -->
+                <td>
+                    {{ kaizen.after_condition or '-' }}
+                </td>
+
+                <!-- COST SAVING -->
+                <td class="text-right">
+                    {% if kaizen.cost_saving is not none
+                          and kaizen.cost_saving != '' %}
+                        {{ "{:,.2f}".format(kaizen.cost_saving|float) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+
+                <!-- IMPLEMENTATION DATE -->
+                <td class="text-center">
+                    {% if kaizen.implementation_date %}
+                        {{ kaizen.implementation_date.strftime('%d-%m-%Y') }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+
+                <!-- STATUS -->
+                <td class="status">
+                    {{ kaizen.status or '-' }}
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="10" class="no-data">
+                    No Kaizen data available.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+    <div class="report-footer">
+        <table class="footer-table">
+            <tr>
+                <td>
+                    Continuous Improvement Management System (CIMS)
+                </td>
+
+                <td class="footer-right">
+                    PT. FOXCONN TECHNOLOGIES INDONESIA
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

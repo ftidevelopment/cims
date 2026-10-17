@@ -13,7 +13,7 @@ from flask import (
 
 import os
 import uuid
-
+from io import BytesIO
 from werkzeug.utils import secure_filename
 
 from flask_login import (
@@ -2642,4 +2642,110 @@ def export_pdf(kaizen_id):
             f"Kaizen_Report_"
             f"{kaizen.kaizen_no}.pdf"
         )
+    )
+
+
+@kaizen_bp.route("/export-excel", methods=["GET"])
+@login_required
+def export_excel():
+    keyword = request.args.get("keyword", "").strip()
+    status = request.args.get("status", "").strip()
+    department_id = request.args.get("department_id", type=int)
+    date_from = request.args.get("date_from", "").strip()
+    date_to = request.args.get("date_to", "").strip()
+    mine = request.args.get("mine", "").strip()
+
+    sort_by = request.args.get("sort", "created_at")
+    sort_order = request.args.get("order", "desc")
+
+    employee_id = None
+    if mine == "1":
+        employee_id = current_user.employee_id
+
+    workbook = kaizen_service.export_excel(
+        keyword=keyword or None,
+        status=status or None,
+        department_id=department_id,
+        date_from=date_from or None,
+        date_to=date_to or None,
+        employee_id=employee_id,
+        sort_by=sort_by,
+        sort_order=sort_order,
+    )
+
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="kaizen_list.xlsx",
+        mimetype=(
+            "application/vnd.openxmlformats-officedocument."
+            "spreadsheetml.sheet"
+        ),
+    )
+
+
+@kaizen_bp.route("/export-pdf", methods=["GET"])
+@login_required
+def export_list_pdf():
+    keyword = request.args.get("keyword", "").strip()
+    status = request.args.get("status", "").strip()
+    department_id = request.args.get("department_id", type=int)
+    date_from = request.args.get("date_from", "").strip()
+    date_to = request.args.get("date_to", "").strip()
+    mine = request.args.get("mine", "").strip()
+
+    sort_by = request.args.get("sort", "created_at")
+    sort_order = request.args.get("order", "desc")
+
+    employee_id = None
+    if mine == "1":
+        employee_id = current_user.employee_id
+
+    # Ambil semua data sesuai filter tanpa pagination
+    kaizens = kaizen_service.repository.get_query(
+        keyword=keyword or None,
+        status=status or None,
+        department_id=department_id,
+        date_from=date_from or None,
+        date_to=date_to or None,
+        employee_id=employee_id,
+        is_active=True,
+        sort_by=sort_by,
+        sort_order=sort_order,
+    ).all()
+
+    current_employee = Employee.query.filter_by(
+        id=current_user.employee_id
+    ).first()
+
+    printed_by = (
+        current_employee.full_name
+        if current_employee
+        else getattr(current_user, "username", "-")
+    )
+
+    filters = {
+        "keyword": keyword,
+        "status": status,
+        "department_id": department_id,
+        "date_from": date_from,
+        "date_to": date_to,
+        "mine": mine,
+    }
+
+    pdf_file = PDFReportService.generate_kaizen_list_report(
+        kaizens=kaizens,
+        printed_by=printed_by,
+        filters=filters,
+    )
+
+    return send_file(
+        pdf_file,
+        mimetype="application/pdf",
+        as_attachment=True,
+        download_name="kaizen_list.pdf",
     )
